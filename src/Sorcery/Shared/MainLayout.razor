@@ -1,0 +1,84 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider @ref="@_mudThemeProvider" IsDarkMode="@_isDarkMode" Theme="MatTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudAvatar Image=@Gravatar.For(Gravatar.V0ldek).ToString() Alt="my gravatar" Variant="Variant.Filled"></MudAvatar>
+        <MudText Typo="Typo.h5" Class="ml-3">Mat Gienieczko</MudText>
+        <MudSpacer />
+        <MudToggleIconButton @bind-Toggled="@_isDarkMode" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.LightMode"></MudToggleIconButton>
+        <MudHidden Breakpoint="Breakpoint.Xs">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/V0ldek/Sorcery"></MudIconButton>
+            <MudText Typo="Typo.body2" Class="ps-4"><footer><small>Copyright &copy; @_copyright Mateusz Gienieczko</small></footer></MudText>
+        </MudHidden>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+
+    string _copyright = ComputeCopyright();
+
+    bool _drawerOpen = true;
+
+    bool _isDarkMode = true;
+
+    MudThemeProvider _mudThemeProvider = new();
+
+    MudTheme MatTheme = ConfigureTheme();
+
+    static MudTheme ConfigureTheme()
+    {
+        var theme = new MudTheme();
+
+        theme.Palette.AppbarBackground = Colors.DeepOrange.Darken4;
+        theme.Palette.Primary = Colors.DeepOrange.Default;
+        theme.Palette.PrimaryDarken = Colors.DeepOrange.Darken1;
+        theme.Palette.PrimaryLighten = Colors.DeepOrange.Lighten1;
+        theme.PaletteDark.Primary = Colors.DeepOrange.Default;
+        theme.PaletteDark.PrimaryDarken = Colors.DeepOrange.Darken1;
+        theme.PaletteDark.PrimaryLighten = Colors.DeepOrange.Lighten1;
+
+        theme.Typography.H1.FontSize = "4rem";
+        theme.Typography.H1.LetterSpacing = "-.00833em";
+        theme.Typography.H1.LineHeight = 1.2;
+
+        theme.Typography.Default.FontSize = theme.Typography.Body1.FontSize;
+        theme.Typography.Default.FontWeight = theme.Typography.Body1.FontWeight;
+        theme.Typography.Default.LetterSpacing = theme.Typography.Body1.LetterSpacing;
+        theme.Typography.Default.LineHeight = theme.Typography.Body1.LineHeight;
+        theme.Typography.Default.TextTransform = theme.Typography.Body1.TextTransform;
+
+        return theme;
+    }
+
+    static string ComputeCopyright()
+    {
+        const int startYear = 2022;
+        var year = DateTime.Now.Year;
+        return year == startYear ? startYear.ToString() : $"{startYear} - {year}";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}
