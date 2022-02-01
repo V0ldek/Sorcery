@@ -1,0 +1,120 @@
+﻿@page "/about"
+
+<PageTitle>About Mat Gienieczko</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <MudGrid Justify="Justify.SpaceBetween">
+            <MudItem xs="6">
+                 <MudText Typo="Typo.h1">About me</MudText>
+            </MudItem>
+            <MudItem xs="6" sm="3" Class="ma-auto">
+                <MudAvatarGroup MaxSize="Size.Large" Outlined="true" OutlineColor="Color.Primary">
+                    <MudSpacer />
+                    <MudAvatar Image=@Gravatar.For(Gravatar.V0ldek, 256).ToString() Alt="my gravatar" Size="Size.Large"></MudAvatar>
+                    <MudAvatar Image="/img/me.jpg" Alt="my actual photo" Size="Size.Large" Variant="Variant.Filled"></MudAvatar>
+                </MudAvatarGroup>
+            </MudItem>
+        </MudGrid>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false"/>
+
+        <article id="about-me-article">
+            <MudText GutterBottom="true">I'm Mateusz Gienieczko, on most sites and apps under the nickname of V0ldek.</MudText>
+
+            <MudText GutterBottom="true">
+                I'm a programmer and a computer scientist, by education, choice, and heart. 
+                I have strong opinions about a lot of things, with programming languages probably leading the race. 
+                I hate everything that starts with "Java", I love C#, and I think Rust is genius.
+            </MudText>
+
+            <MudText GutterBottom="true">
+                I'm currently wrapping up my Master's in Computer Science at the University of Warsaw,
+                while also teaching a course on C#.NET. Academically I'm interested in automata, theory of computation,
+                and formal logic. You can find my CV <MudLink Href="/cv">here</MudLink>.
+            </MudText>
+
+            <MudText GutterBottom="true">
+                You can contact me at <code class="language-csharp">String.Format("{0}@@{1}.com", "mat", "gienieczko")</code>
+            </MudText>
+
+            <MudText GutterBottom="true">Here's a gist in the form of a little timeline:</MudText>
+        </article>
+
+        <PrismRenderer ContainerId="about-me-article"/>
+
+        <MudTimeline TimelineAlign="TimelineAlign.Start">
+            <MudTimelineItem>
+                <ItemOpposite>
+                    <MudText Color="Color.Primary" Typo="Typo.h6">2013</MudText>
+                </ItemOpposite>
+                <ItemContent>
+                    <MudPaper Elevation="0" Class="mt-n1">
+                        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Hello, World!</MudText>
+                        <MudText Typo="Typo.caption">
+                            Mat writes his first line of code. This has made a lot of people very angry and been widely regarded as a bad move.
+                        </MudText>
+                    </MudPaper>
+                </ItemContent>
+            </MudTimelineItem>
+            <MudTimelineItem>
+                <ItemOpposite>
+                    <MudText Color="Color.Primary" Typo="Typo.h6">2020</MudText>
+                </ItemOpposite>
+                <ItemContent>
+                    <MudPaper Elevation="0" Class="mt-n1">
+                        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Bachelor's in Computer Science</MudText>
+                        <MudText Typo="Typo.caption">
+                            Thesis: Product Scanner &ndash; 
+                            an image reconstruction app for generating fully textured 3D models of products
+                            with an Azure Kinect camera. Unfortunately proprietary, IP went to <MudLink Href="https://aifi.com/" Typo="Typo.caption">AiFi</MudLink>.
+                        </MudText>
+                    </MudPaper>
+                </ItemContent>
+            </MudTimelineItem>
+            <MudTimelineItem>
+                <ItemOpposite>
+                    <MudText Color="Color.Primary" Typo="Typo.h6">June 2022, hopefully</MudText>
+                </ItemOpposite>
+                <ItemContent>
+                    <MudPaper Elevation="0" Class="mt-n1">
+                        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Master's in Computer Science</MudText>
+                        <MudText Typo="Typo.caption">
+                            Thesis: rapid execution of queries on JSON documents with SIMD.
+                        </MudText>
+                    </MudPaper>
+                </ItemContent>
+            </MudTimelineItem>
+            <MudTimelineItem>
+                <ItemOpposite>
+                   <MudText Color="Color.Primary" Typo="Typo.h6">August 2022</MudText>
+                </ItemOpposite>
+                <ItemContent>
+                    <MudPaper Elevation="0" Class="mt-n1">
+                        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Microsoft</MudText>
+                        <MudText Typo="Typo.caption">
+                        Mat migrates to Dublin, Ireland to work at Microsoft.
+                        </MudText>
+                    </MudPaper>
+                </ItemContent>
+            </MudTimelineItem>
+            <MudTimelineItem Color="Color.Transparent" Variant="Variant.Filled" Elevation="0" Size="Size.Large">
+                <ItemDot>
+                    <MudIcon Icon="@Icons.Material.Filled.MoreVert" Color="Color.Default" Size="Size.Large"></MudIcon>
+                </ItemDot>
+            </MudTimelineItem>
+            <MudTimelineItem HideDot="true">
+                <ItemDot></ItemDot>
+            </MudTimelineItem>
+            <MudTimelineItem>
+                <ItemOpposite>
+                    <MudText Color="Color.Primary" Typo="Typo.h6">2036</MudText>
+                </ItemOpposite>
+                <ItemContent>
+                    <MudText Typo="Typo.caption">
+                        Complete world domination.
+                    </MudText>
+                </ItemContent>
+            </MudTimelineItem>
+        </MudTimeline>
+    </MudPaper>
+</MudContainer>

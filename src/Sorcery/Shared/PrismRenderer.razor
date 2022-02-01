@@ -1,0 +1,22 @@
+﻿@inject IJSRuntime JSRuntime;
+
+@code {
+    [Parameter]
+    public string? ContainerId { get; init; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (ContainerId is null)
+            {
+                await JSRuntime.InvokeVoidAsync("window.Prism.highlightAll");
+            }
+            else
+            {
+                var container = await JSRuntime.InvokeAsync<IJSInProcessObjectReference>("document.getElementById", ContainerId);
+                await JSRuntime.InvokeVoidAsync("window.Prism.highlightAllUnder", container);
+            }
+        }
+    }
+}
