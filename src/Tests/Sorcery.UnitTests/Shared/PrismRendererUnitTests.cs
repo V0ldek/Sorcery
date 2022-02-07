@@ -4,6 +4,7 @@ using Bunit;
 using Microsoft.JSInterop;
 using NSubstitute;
 using Sorcery.Shared;
+using Sorcery.UnitTests.Extensions;
 
 namespace Sorcery.UnitTests.Shared;
 
@@ -14,7 +15,7 @@ public class PrismRendererUnitTests
     private const string PrismHighlightUnderIdentifier = "window.Prism.highlightAllUnder";
 
     [Fact]
-    public void OnFirstRender_WhenNoContainerIdIsSpecified_InvokesPrismHighlightAll()
+    public async Task OnFirstRender_WhenNoContainerIdIsSpecified_InvokesPrismHighlightAll()
     {
         using var ctx = new TestContext();
         var plannedHighlight = ctx.JSInterop.SetupVoid(PrismHighlightAllIdentifier);
@@ -23,10 +24,11 @@ public class PrismRendererUnitTests
         plannedHighlight.SetVoidResult();
 
         plannedHighlight.VerifyInvoke(PrismHighlightAllIdentifier);
+        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
     }
 
     [Fact]
-    public void OnSecondRender_WhenNoContainerIdIsSpecified_MakesNoInvocations()
+    public async Task OnSecondRender_WhenNoContainerIdIsSpecified_MakesNoInvocations()
     {
         using var ctx = new TestContext();
         var plannedHighlight = ctx.JSInterop.SetupVoid(PrismHighlightAllIdentifier);
@@ -38,10 +40,11 @@ public class PrismRendererUnitTests
 
         // If the function was invoked twice this would fail.
         plannedHighlight.VerifyInvoke(PrismHighlightAllIdentifier, 1);
+        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
     }
 
     [Fact]
-    public void OnFirstRender_WhenContainerIdIsSpecified_InvokesPrismHighlightUnder()
+    public async Task OnFirstRender_WhenContainerIdIsSpecified_InvokesPrismHighlightUnder()
     {
         const string GetElementByIdIdentifier = "document.getElementById";
         const string TestElementId = "test-element";
@@ -57,10 +60,11 @@ public class PrismRendererUnitTests
 
         plannedGetById.VerifyInvoke(GetElementByIdIdentifier);
         plannedHighlight.VerifyInvoke(PrismHighlightUnderIdentifier);
+        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
     }
 
     [Fact]
-    public void OnSecondRender_WhenContainerIdIsSpecified_MakesNoInvocations()
+    public async Task OnSecondRender_WhenContainerIdIsSpecified_MakesNoInvocations()
     {
         const string GetElementByIdIdentifier = "document.getElementById";
         const string TestElementId = "test-element";
@@ -79,5 +83,6 @@ public class PrismRendererUnitTests
         // If the function was invoked twice these would fail.
         plannedGetById.VerifyInvoke(GetElementByIdIdentifier, 1);
         plannedHighlight.VerifyInvoke(PrismHighlightUnderIdentifier, 1);
+        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
     }
 }
