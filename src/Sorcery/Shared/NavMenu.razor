@@ -1,4 +1,9 @@
-﻿<MudNavMenu>
+﻿<MudNavMenu Bordered="true">
     <MudNavLink Href="/" Match="NavLinkMatch.All">Welcome page</MudNavLink>
-    <MudNavLink Href="/about" Match="NavLinkMatch.Prefix">About me</MudNavLink>
+
+    <MudNavGroupLink Href="/teaching" Match="NavLinkMatch.Prefix" Expanded="true" Icon="@Icons.Filled.School" Title="Teaching">
+        <MudNavLink Href="/teaching/csharp" Match="NavLinkMatch.Prefix">C#</MudNavLink>
+    </MudNavGroupLink>
+
+    <MudNavLink Href="/about" Match="NavLinkMatch.All">About me</MudNavLink>
 </MudNavMenu>

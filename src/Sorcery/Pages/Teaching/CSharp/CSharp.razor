@@ -1,0 +1,267 @@
+﻿@page "/teaching/csharp"
+
+<PageTitle>Mat Gienieczko &ndash; C#</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <MudText Typo="Typo.h1" Class="mx-auto">C#.NET course</MudText>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+        <MudText GutterBottom="true">
+            C# is a modern, multiparadigm programming language based on the multiplatform .NET environment.
+            It focuses on developer ergonomy and productivity without sacrificing safety thanks to its automated
+            memory management and robust static analysis.
+        </MudText>
+        <MudText GutterBottom="true">
+            The course aims at introducing C# and .NET from the very basics. Prior knowledge of some other general-purpose
+            language is assumed, as well as basic knowledge of programming concepts such as threading,
+            SQL databases and object-orientation. The desired effect at the end is for the student to:
+
+            <MudList>
+                <MudListItem Icon="@Icons.Filled.Check">have written couple hundred of lines of working C#, gaining practical experience;</MudListItem>
+                <MudListItem Icon="@Icons.Filled.Check">have built a full .NET application with UX, data access and business logic for their portfolio;</MudListItem>
+                <MudListItem Icon="@Icons.Filled.Check">
+                    have gained understanding of C#'s design principles and idiomatic usage of the language, its differences
+                    from other general-purpose languages, and why it's a solid choice for modern development;
+                </MudListItem>
+                <MudListItem Icon="@Icons.Filled.Check">have gained more throughout knowledge of the language and ecosystem than is required for a junior position as a C#.NET developer.</MudListItem>
+            </MudList>
+        </MudText>
+
+        <MudText>
+            The course is split into 15 modules and is accompanied by live workshops; however, the course itself is standalone and can be followed individually.
+            All code used in the course is published as interactive notebooks or standalone applications.
+        </MudText>
+
+        <MudText Typo="Typo.h3" Class="mx-auto py-6">Grading</MudText>
+
+        <MudText GutterBottom="true">
+            The grade is based on two components: microassignments, which are given each week at the end of a module, and the final project.
+        </MudText>
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" Centered="true">
+            <MudTabPanel Text="Microassignments" Icon="@Icons.Filled.Assignment">
+                <MudText GutterBottom="true">
+                    Each microassignment is worth <MudText Color="Color.Primary" Inline="true">5</MudText> points. 2 points are for automated testing, 3 are for code quality.
+                    Assignments are given via GitHub Classroom and you will automatically see the results of automated tests when working on your code.
+                    There will be up to 15 microassignments, but the maximum number of points for this module is <MudText Color="Color.Primary" Inline="true">50</MudText>.
+                </MudText>
+                <MudText GutterBottom="true">
+                    I will try to read your code as soon as you push any changes, so doing the assignment early is encouraged. Basically, if you go through
+                    a few rounds of code review with me before the deadline you will most likely get full score. If you submit working but ugly code at the last moment,
+                    you'll probably get at most 2 points. The details of working with GitHub Classroom will be introduced at the end of the first module.
+                </MudText>
+                <MudText GutterBottom="true">
+                    Microassignments are meant to be a continuous feedback loop, both for you, to know how well you have grasped the material, and for me, to know how
+                    bad I am at explaining it. It is therefore very important for the overall health of our course that you're doing them consistently.
+                </MudText>
+                <MudAlert Severity="Severity.Warning">
+                    To pass in the first term you need to get at least <MudText Color="Color.Primary" Inline="true">25</MudText> points for these microassignments!
+                </MudAlert>
+            </MudTabPanel>
+            <MudTabPanel Text="Project" Icon="@Icons.Filled.Source">
+                <MudText GutterBottom="true">
+                    Over the course of the semester you're expected to come up with an idea for a project and implement it in C#.NET using the tools you've learnt.
+                    This can be any application you feel like doing, be it a web app in Blazor, a desktop app in WPF, a CLI application doing something interesting,
+                    or a video game. The app will be graded in four categories &ndash; UI, logic, data layer, and tests. 
+                    Each is worth <MudText Color="Color.Primary" Inline="true">10</MudText> points, and there's additional
+                    10 bonus points if you do something especially interesting. You can expect roughly 5 of those points be for the actual functionality, and 5 as
+                    points for code quality. In total, there's <MudText Color="Color.Primary" Inline="true">50</MudText> points to be gained here.
+                </MudText>
+                <MudList>
+                    <MudListItem Icon="@Icons.Filled.Devices">
+                        <MudText Inline="true"><strong>UI</strong></MudText>: this can be a GUI, but it can also be a command-line interface. The only requirement is that it
+                        has to be .NET-powered &ndash; don't expect points for writing a pure ReactJS app over your .NET API! 
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Filled.Code">
+                        <MudText Inline="true"><strong>Logic</strong></MudText>: the code that operates on data and gives results to be displayed in the UI. This will be
+                        the business logic of your web app, the rules and scripts of your game, or whatever other functionality you want your project to provide.
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Filled.Storage">
+                        <MudText Inline="true"><strong>Data access</strong></MudText>: your database connections, file operations, talking with a cloud data store,
+                        whatever you choose as your data source. If you have a web app, it will probably be a database connection or cloud storage.
+                        If you write a game, it might be the save file system.
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Filled.Science">
+                        <MudText Inline="true"><strong>Tests</strong></MudText>: every part of your logic should be unit tested. Any additional testing, like integration or end-to-end
+                        tests, will also count.
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Filled.Stars">
+                        <MudText Inline="true"><strong>Bonus</strong></MudText>: surprise me.
+                    </MudListItem>
+                </MudList>
+                <MudText GutterBottom="true">
+                    It will be clear from the modules which parts of .NET correspond to which categories of the project. 
+                    Usage of Entity Framework will obviously be graded in data access, while your Blazor components will be UI.
+                </MudText>
+                <MudText>
+                    You can do the project solo or in a pair. The requirements are intentionally informal and not precise &ndash; the point is to do something
+                    cool with C# and .NET and showcase it. In particular, the above are just guidelines. If as your project you want to do something crazy
+                    with .NET that doesn't work well with the grading model then hit me up! The project is supposed to be your opportunity to be creative,
+                    so there's no artificial limitations.
+                </MudText>
+            </MudTabPanel>
+            <MudTabPanel Text="Grade thresholds" Icon="@Icons.Filled.Grade">
+                <MudTable Items="@Thresholds">
+                    <HeaderContent>
+                        <MudTh>Grade</MudTh>
+                        <MudTh>Minimum required points</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Grade">@GradeToString(context.Grade)</MudTd>
+                        <MudTd DataLabel="Minimum required points">@context.Threshold</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudTabPanel>
+            <MudTabPanel Text="Second term rules" Icon="@Icons.Filled.Rule">
+                <MudText GutterBottom="true">
+                    If you fail the first term, you will be given a special assignment to complete until September.
+                    It will be a single, big assignment on GitHub Classroom spanning the entire course. The grade is binary: either you pass all tests or not.
+                    You also need to complete your project &ndash; what "complete" means will be discussed on an individual basis. Either way, the grade in this case
+                    is either pass or fail, meaning either a 3 or a 2.
+                </MudText>
+                <MudText GutterBottom="true">
+                    If you get a passing grade in the first term, you can get a better grade in the second term by improving on your project.
+                    You will have until September to work on it and can ask me for advice and review throughout. The points will be given according
+                    to the same system as in the first term.
+                </MudText>
+                <MudText>
+                    There is no way to regain points for microassignments in the second term.
+                </MudText>
+            </MudTabPanel>
+            <MudTabPanel Text="Grade calculator" Icon="@Icons.Filled.Calculate">
+                <MudText GutterBottom="true">
+                    You can use the below calculator to get your grade based on the points you currently have.
+                </MudText>
+                <MudPaper Outlined="true">
+                    <MudGrid Class="pa-4">
+                        <MudItem xs="12" sm="7">
+                            <MudPaper Class="pa-4">
+                                <MudForm>
+                                    <MudNumericField Label="Points for microassignments" @bind-Value="_calculatorState.MicroassignmentSum"
+                                        Min="0" Max="50" Immediate="true"/>
+                                
+                                    <MudNumericField Label="Points for the project" @bind-Value="_calculatorState.ProjectSum"
+                                        Min="0" Max="50" Immediate="true"/>
+                                </MudForm>
+                            </MudPaper>   
+                        </MudItem>
+                        <MudItem xs="12" sm="5">
+                            <MudPaper Class="pa-4 mud-height-full">
+                                <MudGrid Class="mud-height-full" Justify="Justify.Center">
+                                    <MudItem Class="ma-auto m">
+                                        <MudChip Icon="@Icons.Filled.Functions" Label="true" Color="Color.Primary" DisableRipple="true" Size="Size.Large">
+                                            <MudText Style="min-width: 30px" Align="Align.Center">@_calculatorState.Sum</MudText>
+                                        </MudChip>
+                                    </MudItem>
+                                    <MudItem Class="ma-auto">
+                                    @{
+                                        var color = _calculatorState.MicroassignmentsPassed ? Color.Success : Color.Error;
+                                        var text = _calculatorState.MicroassignmentsPassed ? "Passed!" : "Not passed.";
+                                        <MudChip Icon="@Icons.Filled.Assignment" Label="true" Color="@color" DisableRipple="true" Size="Size.Large">
+                                            <MudText Style="min-width: 90px" Align="Align.Center">@text</MudText>
+                                        </MudChip>
+                                    }
+                                    </MudItem>
+                                    <MudItem Class="ma-auto">
+                                        <MudChip Icon="@Icons.Filled.Grade" Label="true" Style="@GradeStyle(_calculatorState.Grade)" DisableRipple="true" Size="Size.Large">
+                                            <MudText Style="min-width: 30px" Align="Align.Center">@GradeToString(_calculatorState.Grade)</MudText>
+                                        </MudChip>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudTabPanel>
+        </MudTabs>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    CalculatorState _calculatorState = new()
+    {
+        MicroassignmentSum = 25,
+        ProjectSum = 26
+    };
+
+    enum Grade
+    {
+        Two,
+        Three,
+        ThreeAndAHalf,
+        Four,
+        FourAndAHalf,
+        Five,
+        FiveFactorial
+    }
+
+    class CalculatorState
+    {
+        public int MicroassignmentSum { get; set; }
+
+        public int ProjectSum { get; set; }
+
+        public int Sum => MicroassignmentSum + ProjectSum;
+
+        public bool MicroassignmentsPassed => MicroassignmentSum >= 25;
+
+        public Grade Grade
+        {
+            get
+            {
+                if (!MicroassignmentsPassed)
+                {
+                    return Grade.Two;
+                }
+
+                // Default is { Grade.Two, 0 }
+                return Thresholds.LastOrDefault(t => t.Threshold <= Sum).Grade;
+            }
+        }
+    }
+
+    struct GradeThreshold
+    {
+        public Grade Grade { get; init; }
+
+        public int Threshold { get; init; }
+    }
+
+    static List<GradeThreshold> Thresholds = new()
+    {
+        new() { Grade = Grade.Three, Threshold = 51 },
+        new() { Grade = Grade.ThreeAndAHalf, Threshold = 61 },
+        new() { Grade = Grade.Four, Threshold = 71 },
+        new() { Grade = Grade.FourAndAHalf, Threshold = 81 },
+        new() { Grade = Grade.Five, Threshold = 91 },
+        new() { Grade = Grade.FiveFactorial, Threshold = 100 },
+    };
+
+    static string GradeToString(Grade grade) => grade switch
+    {
+        Grade.Two => "2",
+        Grade.Three => "3",
+        Grade.ThreeAndAHalf => "3.5",
+        Grade.Four => "4",
+        Grade.FourAndAHalf => "4.5",
+        Grade.Five => "5",
+        Grade.FiveFactorial => "5!",
+        _ => throw new ArgumentOutOfRangeException(nameof(grade))
+    };
+
+    static string GradeStyle(Grade grade)
+    {
+        var (background, color) = grade switch
+        {
+            Grade.Two => (Colors.Red.Default, Colors.Grey.Lighten5),
+            Grade.Three => (Colors.Amber.Default, Colors.Grey.Darken4),
+            Grade.ThreeAndAHalf => (Colors.Yellow.Default, Colors.Grey.Darken4),
+            Grade.Four => (Colors.Lime.Default, Colors.Grey.Darken4),
+            Grade.FourAndAHalf => (Colors.LightGreen.Default, Colors.Grey.Lighten5),
+            Grade.Five => (Colors.Green.Default, Colors.Grey.Lighten5),
+            Grade.FiveFactorial => (Colors.Green.Darken4, Colors.Grey.Lighten5),
+            _ => throw new ArgumentOutOfRangeException(nameof(grade))
+        };
+
+        return $"background: {background}; color: {color}";
+    }
+}
