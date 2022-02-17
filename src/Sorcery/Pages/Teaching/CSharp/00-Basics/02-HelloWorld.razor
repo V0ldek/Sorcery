@@ -1,0 +1,131 @@
+﻿@page "/teaching/csharp/0-basics/2-hello-world"
+@inject CourseBook CourseBook;
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["hello-world"]">
+    <MudText GutterBottom="true">
+        We'll learn how to build and run a "Hello, World!" program before jumping to the main portion of the
+        course in interactive notebooks.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Structure of a program</MudText>
+    <MudText GutterBottom="true">
+        C# projects consist of two core parts: the sources in <Highlight><code>.cs</code></Highlight> files, and the project configuration
+        in a <Highlight><code>.csproj</code></Highlight> file. If you know Rust, this is very similar to having your sources in <code>.rs</code>
+        and a configuration in <code>Cargo.toml</code>. You usually won't define <code>.csproj</code> yourself, but we will
+        be adding some stuff there on occasion. 
+    </MudText>
+    <MudText GutterBottom="true">
+        The <code>.csproj</code> defines what SDK to use for building your app, which .NET version you are targeting,
+        compilation flags that enable language features, dependencies on other projects, and all the external packages
+        you depend on. Applications usually consist of a few separate projects that depend on each other.
+    </MudText>
+    <MudText GutterBottom="true">
+        Each project is a single, contained compilation unit, called an <Highlight>assembly</Highlight>.
+        The usual output is a <Highlight><code>.dll</code></Highlight> file that contains all the compiled IL 
+        and additional package metadata for the project. The <code>.dll</code> is fully portable
+        &ndash; you can move it to a different machine running a different operating system with a completely different CPU architecture and it will still work.
+        It is also possible to compile into an executable, but that requires you to specify the platform and is not portable.
+    </MudText>        
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">The classic</MudText>
+    <MudText GutterBottom="true">
+        .NET comes preinstalled with a handful of templates for different kinds of applications. The most basic one is <code>console</code>.
+        You use <Code Language="bash">dotnet new</Code> to create a fresh project from a template, passing the name of the project with the <Code>--name</Code>
+        parameter.
+        <CodeBlock Language="bash" Code=@(@"dotnet new console -n ""HelloWorld""")/>
+        This creates a new directory called <code>HelloWorld</code> and a project with this familiar code inside:
+        <CodeBlock Language="csharp" Code="@(@"
+// See https://aka.ms/new-console-template for more information
+Console.WriteLine(""Hello, World!"");")"/>
+        You can run it with <Code Language="bash">dotnet build</Code> and then <Code Language="bash">dotnet run</Code>.
+
+        <MudAlert Variant="Variant.Outlined" Class="my-4">
+            Go ahead and do just that on your machine. Then go into <Highlight><code>Project.cs</code></Highlight>,
+            change the message to something else, and rerun the program.
+        </MudAlert>
+
+        <Asciinema CastName="hello-world"></Asciinema>
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Smoke, mirrors, and sorcery</MudText>
+    <MudText GutterBottom="true">
+        Modern programming languages are complex enough to be indistinguishable from magic (I said modern, C doesn't count).
+        In the one line of code above <em>a lot</em> of magic happens. Let's lift the curtain a bit: the code above is basically equivalent to the following,
+        also valid, C# code:
+        <CodeBlock Code=@(@"
+using System;
+
+namespace HelloWorld;
+
+internal class Program
+{
+static void Main(string[] args)
+{
+    Console.WriteLine(""Hello World!"");
+}
+}
+
+        ")></CodeBlock>
+        Let's go through that line by line.
+    </MudText>
+    <MudList> 
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                The first line is what we call a <Highlight><code>using</code> directive</Highlight>. It tells the compiler to bring into scope
+                all types defined in the <Code>System</Code> namespace. That's another new word &ndash; a <Highlight>namespace</Highlight> is a logical
+                grouping of types and other namespaces. It forms a directory-like structure that helps you organise your code. For example,
+                <Code>System.Collections</Code> defines the basic .NET collections, while things related to regular expressions are located in
+                <Code>System.Text.Regex</Code>. If you know Java's packages &ndash; this is more or less it. Namespaces are in PascalCase.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Line number two is the declaration of our namespace in which the types defined in this file should be located.
+                By convention, the namespace is the same as the directory path. Since <code>Program.cs</code> is located directly
+                in the <code>HelloWorld</code> directory, the namespace is <Code>HelloWorld</Code>. If you wanted to group some components
+                into a namespace <Code>X</Code>, you would create a directory <code>X</code> and move the relevant files there.
+                You should definitely follow that convention, as otherwise the project structure gets very confusing.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Line three declares the <Code>Program</Code> class. The <Code>internal</Code> modifier restricts its visibility &ndash; we will cover that later.
+                Because of line two, the <Code>Program</Code> class is located in the <Code>HelloWorld</Code> namespace. Types are named in PascalCase.
+                Blocks of code such as class bodies are delimited in braces, which in C# we put on separate lines.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Next we declare a <Code>static</Code> method on the <Code>Program</Code> class. It is called <Code>Main</Code>, takes
+                an array of <Code>string</Code> values called <Code>args</Code> as a parameter, and returns nothing (because it's <Code>void</Code>).
+                Methods are also in PascalCase, but their parameters are in camelCase.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Finally, we call the <Code>WriteLine</Code> method on the <Code>Console</Code> class and pass a single string argument to it.
+                Where is <Code>Console</Code> from? Well, its <Highlight>fully qualified name</Highlight> is <Code>System.Console</Code>. Every
+                type has a fully qualified name, which contains its namespace, parent types (if any), and then its name. You can always refer to types
+                by their fully qualified name, but in this case we've brought <Code>Console</Code> into scope with the <Code>using</Code> directive
+                from the first line.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        So there, normally you would have to write all that code to get something printed on screen, but C# allows <Highlight>top-level statements</Highlight>,
+        which means that instead of writing a <Code>Main</Code> method you can write your code script-like, and the entry point will be <Highlight>synthesised</Highlight>
+        for you. Only one file in a project can have top-level statements, as every assembly can have at most one entry point.
+    </MudText>
+    <MudText GutterBottom="true">
+        One notable lie here is that the actual names generated are not <Code>Program</Code> or <Code>Main</Code>, but rather magical names that only the compiler
+        knows &ndash; such names are called <Highlight>unspeakable</Highlight>, because you can't refer to them in regular user code. Get used to that,
+        the C# compiler is a certified level 20 Wizard. But worry not! We will make its magic clear, in time. Well, most of it.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Dive in!</MudText>
+    <MudText GutterBottom="true">
+        Now is the time to download the course repository. You can find it at TODO. Launch Code from the main directory
+        and open up the first notebook: <Highlight>0-basics/3-control-flow.dib</Highlight>. Follow along with the notebook to learn
+        C# basics.
+    </MudText>
+</CourseSection>
+
+@code {
+
+}

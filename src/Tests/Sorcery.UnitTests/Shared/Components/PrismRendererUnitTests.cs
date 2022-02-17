@@ -3,10 +3,10 @@
 using Bunit;
 using Microsoft.JSInterop;
 using NSubstitute;
-using Sorcery.Shared;
+using Sorcery.Shared.Components;
 using Sorcery.UnitTests.Extensions;
 
-namespace Sorcery.UnitTests.Shared;
+namespace Sorcery.UnitTests.Shared.Components;
 
 public class PrismRendererUnitTests
 {

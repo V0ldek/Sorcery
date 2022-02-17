@@ -1,5 +1,5 @@
-/* PrismJS 1.25.0
-https://prismjs.com/download.html#themes=prism-tomorrow&languages=markup+css+clike+javascript+aspnet+bash+bnf+c+csharp+cpp+docker+ebnf+fsharp+git+graphql+haskell+http+java+json+latex+llvm+makefile+powershell+python+cshtml+regex+rust+sql+t4-templating+t4-cs+toml+typescript+wasm+yaml&plugins=show-language+toolbar */
+/* PrismJS 1.26.0
+https://prismjs.com/download.html#themes=prism-tomorrow&languages=markup+css+clike+javascript+aspnet+bash+bnf+c+csharp+cpp+cil+docker+ebnf+fsharp+git+graphql+haskell+http+java+json+latex+llvm+makefile+powershell+python+cshtml+regex+rust+sql+t4-templating+t4-cs+toml+typescript+wasm+yaml&plugins=show-language+toolbar+copy-to-clipboard */
 /// <reference lib="WebWorker"/>
 
 var _self = (typeof window !== 'undefined')
@@ -661,6 +661,9 @@ var Prism = (function (_self) {
 				language: language
 			};
 			_.hooks.run('before-tokenize', env);
+			if (!env.grammar) {
+				throw new Error('The language "' + env.language + '" has no grammar.');
+			}
 			env.tokens = _.tokenize(env.code, env.grammar);
 			_.hooks.run('after-tokenize', env);
 			return Token.stringify(_.util.encode(env.tokens), env.language);
@@ -2277,7 +2280,7 @@ Prism.languages.insertBefore('aspnet', Prism.languages.javascript ? 'script' : '
 		},
 		'variable': insideString.variable,
 		'function': {
-			pattern: /(^|[\s;|&]|[<>]\()(?:add|apropos|apt|apt-cache|apt-get|aptitude|aspell|automysqlbackup|awk|basename|bash|bc|bconsole|bg|bzip2|cal|cat|cfdisk|chgrp|chkconfig|chmod|chown|chroot|cksum|clear|cmp|column|comm|composer|cp|cron|crontab|csplit|curl|cut|date|dc|dd|ddrescue|debootstrap|df|diff|diff3|dig|dir|dircolors|dirname|dirs|dmesg|docker|docker-compose|du|egrep|eject|env|ethtool|expand|expect|expr|fdformat|fdisk|fg|fgrep|file|find|fmt|fold|format|free|fsck|ftp|fuser|gawk|git|gparted|grep|groupadd|groupdel|groupmod|groups|grub-mkconfig|gzip|halt|head|hg|history|host|hostname|htop|iconv|id|ifconfig|ifdown|ifup|import|install|ip|jobs|join|kill|killall|less|link|ln|locate|logname|logrotate|look|lpc|lpr|lprint|lprintd|lprintq|lprm|ls|lsof|lynx|make|man|mc|mdadm|mkconfig|mkdir|mke2fs|mkfifo|mkfs|mkisofs|mknod|mkswap|mmv|more|most|mount|mtools|mtr|mutt|mv|nano|nc|netstat|nice|nl|nohup|notify-send|npm|nslookup|op|open|parted|passwd|paste|pathchk|ping|pkill|pnpm|podman|podman-compose|popd|pr|printcap|printenv|ps|pushd|pv|quota|quotacheck|quotactl|ram|rar|rcp|reboot|remsync|rename|renice|rev|rm|rmdir|rpm|rsync|scp|screen|sdiff|sed|sendmail|seq|service|sftp|sh|shellcheck|shuf|shutdown|sleep|slocate|sort|split|ssh|stat|strace|su|sudo|sum|suspend|swapon|sync|tac|tail|tar|tee|time|timeout|top|touch|tr|traceroute|tsort|tty|umount|uname|unexpand|uniq|units|unrar|unshar|unzip|update-grub|uptime|useradd|userdel|usermod|users|uudecode|uuencode|v|vcpkg|vdir|vi|vim|virsh|vmstat|wait|watch|wc|wget|whereis|which|who|whoami|write|xargs|xdg-open|yarn|yes|zenity|zip|zsh|zypper)(?=$|[)\s;|&])/,
+			pattern: /(^|[\s;|&]|[<>]\()(?:add|apropos|apt|apt-cache|apt-get|aptitude|aspell|automysqlbackup|awk|basename|bash|bc|bconsole|bg|bzip2|cal|cat|cfdisk|chgrp|chkconfig|chmod|chown|chroot|cksum|clear|cmp|column|comm|composer|cp|cron|crontab|csplit|curl|cut|date|dc|dd|ddrescue|debootstrap|df|diff|diff3|dig|dir|dircolors|dirname|dirs|dmesg|docker|docker-compose|du|egrep|eject|env|ethtool|expand|expect|expr|fdformat|fdisk|fg|fgrep|file|find|fmt|fold|format|free|fsck|ftp|fuser|gawk|git|gparted|grep|groupadd|groupdel|groupmod|groups|grub-mkconfig|gzip|halt|head|hg|history|host|hostname|htop|iconv|id|ifconfig|ifdown|ifup|import|install|ip|jobs|join|kill|killall|less|link|ln|locate|logname|logrotate|look|lpc|lpr|lprint|lprintd|lprintq|lprm|ls|lsof|lynx|make|man|mc|mdadm|mkconfig|mkdir|mke2fs|mkfifo|mkfs|mkisofs|mknod|mkswap|mmv|more|most|mount|mtools|mtr|mutt|mv|nano|nc|netstat|nice|nl|node|nohup|notify-send|npm|nslookup|op|open|parted|passwd|paste|pathchk|ping|pkill|pnpm|podman|podman-compose|popd|pr|printcap|printenv|ps|pushd|pv|quota|quotacheck|quotactl|ram|rar|rcp|reboot|remsync|rename|renice|rev|rm|rmdir|rpm|rsync|scp|screen|sdiff|sed|sendmail|seq|service|sftp|sh|shellcheck|shuf|shutdown|sleep|slocate|sort|split|ssh|stat|strace|su|sudo|sum|suspend|swapon|sync|tac|tail|tar|tee|time|timeout|top|touch|tr|traceroute|tsort|tty|umount|uname|unexpand|uniq|units|unrar|unshar|unzip|update-grub|uptime|useradd|userdel|usermod|users|uudecode|uuencode|v|vcpkg|vdir|vi|vim|virsh|vmstat|wait|watch|wc|wget|whereis|which|who|whoami|write|xargs|xdg-open|yarn|yes|zenity|zip|zsh|zypper)(?=$|[)\s;|&])/,
 			lookbehind: true
 		},
 		'keyword': {
@@ -2545,6 +2548,34 @@ delete Prism.languages.c['boolean'];
 	}, Prism.languages.cpp['base-clause']);
 
 }(Prism));
+
+Prism.languages.cil = {
+	'comment': /\/\/.*/,
+
+	'string': {
+		pattern: /(["'])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
+		greedy: true
+	},
+
+	'directive': {
+		pattern: /(^|\W)\.[a-z]+(?=\s)/,
+		lookbehind: true,
+		alias: 'class-name'
+	},
+
+	// Actually an assembly reference
+	'variable': /\[[\w\.]+\]/,
+
+
+	'keyword': /\b(?:abstract|ansi|assembly|auto|autochar|beforefieldinit|bool|bstr|byvalstr|catch|char|cil|class|currency|date|decimal|default|enum|error|explicit|extends|extern|famandassem|family|famorassem|final(?:ly)?|float32|float64|hidebysig|u?int(?:8|16|32|64)?|iant|idispatch|implements|import|initonly|instance|interface|iunknown|literal|lpstr|lpstruct|lptstr|lpwstr|managed|method|native(?:Type)?|nested|newslot|object(?:ref)?|pinvokeimpl|private|privatescope|public|reqsecobj|rtspecialname|runtime|sealed|sequential|serializable|specialname|static|string|struct|syschar|tbstr|unicode|unmanagedexp|unsigned|value(?:type)?|variant|virtual|void)\b/,
+
+	'function': /\b(?:(?:constrained|no|readonly|tail|unaligned|volatile)\.)?(?:conv\.(?:[iu][1248]?|ovf\.[iu][1248]?(?:\.un)?|r\.un|r4|r8)|ldc\.(?:i4(?:\.\d+|\.[mM]1|\.s)?|i8|r4|r8)|ldelem(?:\.[iu][1248]?|\.r[48]|\.ref|a)?|ldind\.(?:[iu][1248]?|r[48]|ref)|stelem\.?(?:i[1248]?|r[48]|ref)?|stind\.(?:i[1248]?|r[48]|ref)?|end(?:fault|filter|finally)|ldarg(?:\.[0-3s]|a(?:\.s)?)?|ldloc(?:\.\d+|\.s)?|sub(?:\.ovf(?:\.un)?)?|mul(?:\.ovf(?:\.un)?)?|add(?:\.ovf(?:\.un)?)?|stloc(?:\.[0-3s])?|refany(?:type|val)|blt(?:\.un)?(?:\.s)?|ble(?:\.un)?(?:\.s)?|bgt(?:\.un)?(?:\.s)?|bge(?:\.un)?(?:\.s)?|unbox(?:\.any)?|init(?:blk|obj)|call(?:i|virt)?|brfalse(?:\.s)?|bne\.un(?:\.s)?|ldloca(?:\.s)?|brzero(?:\.s)?|brtrue(?:\.s)?|brnull(?:\.s)?|brinst(?:\.s)?|starg(?:\.s)?|leave(?:\.s)?|shr(?:\.un)?|rem(?:\.un)?|div(?:\.un)?|clt(?:\.un)?|alignment|castclass|ldvirtftn|beq(?:\.s)?|ckfinite|ldsflda|ldtoken|localloc|mkrefany|rethrow|cgt\.un|arglist|switch|stsfld|sizeof|newobj|newarr|ldsfld|ldnull|ldflda|isinst|throw|stobj|stfld|ldstr|ldobj|ldlen|ldftn|ldfld|cpobj|cpblk|break|br\.s|xor|shl|ret|pop|not|nop|neg|jmp|dup|cgt|ceq|box|and|or|br)\b/,
+
+	'boolean': /\b(?:false|true)\b/,
+	'number': /\b-?(?:0x[0-9a-f]+|\d+)(?:\.[0-9a-f]+)?\b/i,
+
+	'punctuation': /[{}[\];(),:=]|IL_[0-9A-Za-z]+/
+};
 
 (function (Prism) {
 
@@ -4761,6 +4792,7 @@ Prism.languages.wasm = {
 		"tsconfig": "TSConfig",
 		"uscript": "UnrealScript",
 		"uc": "UnrealScript",
+		"uorazor": "UO Razor Script",
 		"uri": "URI",
 		"url": "URL",
 		"vbnet": "VB.Net",
@@ -4817,5 +4849,166 @@ Prism.languages.wasm = {
 		return element;
 	});
 
+}());
+
+(function () {
+
+	if (typeof Prism === 'undefined' || typeof document === 'undefined') {
+		return;
+	}
+
+	if (!Prism.plugins.toolbar) {
+		console.warn('Copy to Clipboard plugin loaded before Toolbar plugin.');
+
+		return;
+	}
+
+	/**
+	 * When the given elements is clicked by the user, the given text will be copied to clipboard.
+	 *
+	 * @param {HTMLElement} element
+	 * @param {CopyInfo} copyInfo
+	 *
+	 * @typedef CopyInfo
+	 * @property {() => string} getText
+	 * @property {() => void} success
+	 * @property {(reason: unknown) => void} error
+	 */
+	function registerClipboard(element, copyInfo) {
+		element.addEventListener('click', function () {
+			copyTextToClipboard(copyInfo);
+		});
+	}
+
+	// https://stackoverflow.com/a/30810322/7595472
+
+	/** @param {CopyInfo} copyInfo */
+	function fallbackCopyTextToClipboard(copyInfo) {
+		var textArea = document.createElement('textarea');
+		textArea.value = copyInfo.getText();
+
+		// Avoid scrolling to bottom
+		textArea.style.top = '0';
+		textArea.style.left = '0';
+		textArea.style.position = 'fixed';
+
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+
+		try {
+			var successful = document.execCommand('copy');
+			setTimeout(function () {
+				if (successful) {
+					copyInfo.success();
+				} else {
+					copyInfo.error();
+				}
+			}, 1);
+		} catch (err) {
+			setTimeout(function () {
+				copyInfo.error(err);
+			}, 1);
+		}
+
+		document.body.removeChild(textArea);
+	}
+	/** @param {CopyInfo} copyInfo */
+	function copyTextToClipboard(copyInfo) {
+		if (navigator.clipboard) {
+			navigator.clipboard.writeText(copyInfo.getText()).then(copyInfo.success, function () {
+				// try the fallback in case `writeText` didn't work
+				fallbackCopyTextToClipboard(copyInfo);
+			});
+		} else {
+			fallbackCopyTextToClipboard(copyInfo);
+		}
+	}
+
+	/**
+	 * Selects the text content of the given element.
+	 *
+	 * @param {Element} element
+	 */
+	function selectElementText(element) {
+		// https://stackoverflow.com/a/20079910/7595472
+		window.getSelection().selectAllChildren(element);
+	}
+
+	/**
+	 * Traverses up the DOM tree to find data attributes that override the default plugin settings.
+	 *
+	 * @param {Element} startElement An element to start from.
+	 * @returns {Settings} The plugin settings.
+	 * @typedef {Record<"copy" | "copy-error" | "copy-success" | "copy-timeout", string | number>} Settings
+	 */
+	function getSettings(startElement) {
+		/** @type {Settings} */
+		var settings = {
+			'copy': 'Copy',
+			'copy-error': 'Press Ctrl+C to copy',
+			'copy-success': 'Copied!',
+			'copy-timeout': 5000
+		};
+
+		var prefix = 'data-prismjs-';
+		for (var key in settings) {
+			var attr = prefix + key;
+			var element = startElement;
+			while (element && !element.hasAttribute(attr)) {
+				element = element.parentElement;
+			}
+			if (element) {
+				settings[key] = element.getAttribute(attr);
+			}
+		}
+		return settings;
+	}
+
+	Prism.plugins.toolbar.registerButton('copy-to-clipboard', function (env) {
+		var element = env.element;
+
+		var settings = getSettings(element);
+
+		var linkCopy = document.createElement('button');
+		linkCopy.className = 'copy-to-clipboard-button';
+		linkCopy.setAttribute('type', 'button');
+		var linkSpan = document.createElement('span');
+		linkCopy.appendChild(linkSpan);
+
+		setState('copy');
+
+		registerClipboard(linkCopy, {
+			getText: function () {
+				return element.textContent;
+			},
+			success: function () {
+				setState('copy-success');
+
+				resetText();
+			},
+			error: function () {
+				setState('copy-error');
+
+				setTimeout(function () {
+					selectElementText(element);
+				}, 1);
+
+				resetText();
+			}
+		});
+
+		return linkCopy;
+
+		function resetText() {
+			setTimeout(function () { setState('copy'); }, settings['copy-timeout']);
+		}
+
+		/** @param {"copy" | "copy-error" | "copy-success"} state */
+		function setState(state) {
+			linkSpan.textContent = settings[state];
+			linkCopy.setAttribute('data-copy-state', state);
+		}
+	});
 }());
 

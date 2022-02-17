@@ -1,0 +1,190 @@
+﻿@page "/teaching/csharp/0-basics/0-dotnet-taxonomy"
+@inject CourseBook CourseBook;
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["dotnet-taxonomy"]">
+    <MudText GutterBottom="true">
+        Here we go! This introduction is going to be a little verbose. I will limit the prose in the following sections,
+        but I feel like at the beginning a more wordy sales pitch is needed.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">C#</MudText>
+    <MudText GutterBottom="true">
+    <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
+        <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true"/>
+    </MudPaper>
+        C# (current version 10, as of this writing) &ndash; language designed in 2000 by a team led by Anders Hejlsberg for Microsoft.
+        He's the madlad that also came up with TypeScript, Delphi, and authored Turbo Pascal.
+    </MudText>
+    <MudText GutterBottom="true">
+        Wikipedia lists C#'s programming paradigms as:
+    </MudText>
+    <MudPaper Elevation="0" Class="my-4 pa-2 d-block" Width="100%" Style="justify-self: right;">
+        <blockquote>
+            <MudIcon Icon="@Icons.Filled.FormatQuote"></MudIcon> 
+            <MudText Inline="true" Class="pl-2" Style=@($"color: {Colors.Grey.Default}; border-left-style: solid; border-right-width: 2px")>
+                <i>structured, imperative, object-oriented, event-driven, task-driven, functional, generic, reflective, concurrent</i>
+            </MudText>
+        </blockquote>
+    </MudPaper>
+    <MudText GutterBottom="true">
+        ... which kinda makes you wonder about the usefulness of such a classification. I'm gonna sell you my take on C#.
+        C#'s main paradigm is <Highlight><em>pragmatism</em></Highlight>.
+        It is oriented towards safety and developer productivity and characterised by:
+    </MudText>
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">memory safety;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">type safety and static type analysis;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">flexibility &ndash; you get a box of ergonomic tools that allow you to solve your problem efficiently...</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">... but designed so that you won't shoot themselves in the foot in the process.</MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        That is, until we decide we want to get rid of that with <Code>dynamic</Code> or <Code>unsafe</Code>, but that will be tackled
+        at the very end of the course <MudIcon Icon="fas fa-smile-wink"/>
+    </MudText>
+    <MudText GutterBottom="true">
+        C# is most often compared to Java, which is due mostly to historical reasons, but also a similar approach to object orientation.
+        However, ever since C# 2.0 was released in 2005, this comparison stopped being accurate, as the languages diverged in their evolution.
+        We will be highlighting those similarities and differences throughout the course, but it is important to remember that C# generously
+        borrows from a lot of different languages. It uses the cumulative knowledge we have in programming language design to improve
+        developer's experience. The design principle of allowing the user to achieve anything and everything in a safe,
+        productive, and easy manner will become apparent as we introduce more and more features.
+    </MudText>
+    <MudText GutterBottom="true">
+        This is C#. Say hello!
+    </MudText>
+    <CodeBlock Code=@(@"System.Console.WriteLine(""Hello, World!"");")></CodeBlock>
+
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">.NET</MudText>
+
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.Xs">
+            <MudCard Style="float: right;" Class="ml-3 mb-3 pa-3" Elevation="5">
+                <MudCardMedia Height="230" Image="img/dotnet-bot.png" Title="dotnet-bot, the .NET mascot">
+                </MudCardMedia>
+                <MudCardContent>
+            <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudCard Class="mx-auto mb-3 pa-3" Style="max-width: 250px" Elevation="5">
+                <MudCardMedia Image="img/dotnet-bot.png" Style="max-width: 250px; max-height: 230px" Title="dotnet-bot, the .NET mascot">
+                </MudCardMedia>
+                <MudCardContent>
+                    <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudHidden>
+    </MudBreakpointProvider>
+           
+    <MudText GutterBottom="true">
+        .NET is a free, cross-platform and open source ecosystem for developers to build modern applications. It's an umbrella term for a whole host of technologies,
+        allowing you to build websites, servers, console apps, mobile apps targeting Android or iOS. The current version as of writing is .NET 6.
+    </MudText>
+    <MudText GutterBottom="true">
+        Most important part (for us at this moment) is the .NET runtime, or <Highlight>Common Language Runtime (CLR)</Highlight>.
+        This is the equivalent of Java's JVM and provides the virtual machine on which all the code runs.
+        Code running on the CLR is also called <Highlight>managed code</Highlight>. In general, the word <em>managed</em>
+        will mean things under the control of the CLR.
+    </MudText>
+    <MudText GutterBottom="true">
+        C# is just one of the languages running on the CLR. The other notable one is Visual Basic,
+        but the interesting one is F#. It is an ML-like functional language for .NET. You might find it
+        familiar if you ever programmed in ML or OCaml.
+    </MudText>
+    <MudText GutterBottom="true">
+        To host multiple languages, the CLR runs bytecode that's called, extremely creatively, <Highlight>Common Intermediate Code (CIL/IL)</Highlight>.
+        This code is what a compiler for C# or F# generates. You will never have to look at IL unless you're digging in the compiler,
+        trying to super-optimise something, or are just curious. And we're all curious, right? It looks like this:
+    </MudText>
+    <CodeBlock Language="cil" Code=@(@"
+.class private auto ansi abstract sealed beforefieldinit '<Program>$'
+extends [System.Private.CoreLib]System.Object
+{
+.method private hidebysig static 
+    void '<Main>$' (
+        string[] args
+    ) cil managed 
+{
+    .maxstack 8
+    .entrypoint
+
+    IL_0000: ldstr ""Hello, World!""
+    IL_0005: call void [System.Console]System.Console::WriteLine(string)
+    IL_000a: ret
+}
+}
+    ")/>        
+    <MudText GutterBottom="true">
+        That is what the compiler generates for the C# Hello World program from above.
+        Well, more or less, I had to lie cause there's a lot of additional metadata in the actual output.
+        By the way &ndash; I will often lie during the course to simplify things, but don't worry, I'll always tell you when it happens.
+        I'm a terrible liar.
+    </MudText>
+    <MudText GutterBottom="true">
+        That is what the compiler generates for the C# Hello World program from above.
+        Well, more or less, I had to lie cause there's a lot of additional metadata in the actual output.
+        By the way &ndash; I will often lie during the course to simplify things, but don't worry, I'll always tell you when it happens.
+        I'm a terrible liar.
+    </MudText>
+    <MudText GutterBottom="true">
+        There are other implementations of CLR than .NET. The notable ones are <Highlight>.NET Framework</Highlight> and the <Highlight>Mono</Highlight> runtime. 
+        .NET Framework is the old .NET that was specific to Windows and closed-source. It is no longer in development, only maintained. Before version 5,
+        .NET was called .NET Core to distinguish it from .NET Framework. Ever since then, all of those projects are unified under the one .NET umbrella.
+    </MudText>
+    <MudText GutterBottom="true">
+        For cross-compatibility it is important to note that the CLR has an accompanying standard, called <Highlight>.NET Standard</Highlight>.
+        It defines the minimum runtime capabilities that all .NET implementations need to have, so if you use only .NET Standard your app is
+        guaranteed to run on all .NET Framework, Mono and future .NET releases.
+    </MudText>
+
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Base Class Library (BCL)</MudText>
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.Xs">
+            <MudCard Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="5">
+                <MudCardMedia Height="150" Image="img/baselibrary.jpg" Title="Base library (?)">
+                </MudCardMedia>
+                <MudCardContent>
+                    <MudText Typo="Typo.caption">"Base library or something, I don't know, I code in C."</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudCard Class="mx-auto mb-3 pa-3" Style="max-width: 300px" Elevation="5">
+                <MudCardMedia Image="img/baselibrary.png" Style="max-width: 300px; max-height: 150px" Title="Base library (?)">
+                </MudCardMedia>
+                <MudCardContent>
+                    <MudText Typo="Typo.caption">"Base library or something, I don't know, I code in C."</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudHidden>
+    </MudBreakpointProvider>
+    <MudText GutterBottom="true">
+        The Base Class Library is similar to C++'s Rust's <Code Language="rust">std</Code> library. It contains the most
+        foundational types and utilities for all other .NET libraries. Things like arrays, base collections, <Code>DateTime</Code>,
+        TCP and HTTP clients, and many more.
+    </MudText>
+    <MudText GutterBottom="true">
+        The BCL is open source and imposes very high quality standards. As with all good standard libraries, it is highly unlikely that
+        you can write custom code that outperforms and equivalent method in the BCL. The BCL is also a very good standard for designing
+        good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
+    </MudText>
+    <MudText GutterBottom="true">
+        The BCL is open source and imposes very high quality standards. As with all good standard libraries, it is highly unlikely that
+        you can write custom code that outperforms and equivalent method in the BCL. The BCL is also a very good standard for designing
+        good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
+    </MudText>
+    <MudText GutterBottom="true">
+        The BCL is open source and imposes very high quality standards. As with all good standard libraries, it is highly unlikely that
+        you can write custom code that outperforms and equivalent method in the BCL. The BCL is also a very good standard for designing
+        good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
+    </MudText>
+    <MudText GutterBottom="true">
+        BCL is specific to the particular .NET implementation, but most of it is part of .NET Standard. That means that every existing
+        .NET implementation shares them, so if you ever need to work on .NET Framework or Mono the library will be the same when it
+        comes to this core components.
+    </MudText>
+</CourseSection>
+
+@code {
+
+}

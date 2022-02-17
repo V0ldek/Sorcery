@@ -1,0 +1,40 @@
+﻿@using Sorcery.ModularCourse;
+
+<PageTitle>@Module.DisplayName</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">        
+        @if (Module.Previous is null)
+        {
+            <ButtonPrevious Link="@Module.Course.Route">
+                Back to <Highlight>@Module.Course.DisplayName</Highlight> introduction.
+            </ButtonPrevious>
+        }
+        else
+        {
+            <ButtonPrevious Link="@Module.Previous.Route">
+                Back to <Highlight>@Module.Previous.DisplayName</Highlight>.
+            </ButtonPrevious>
+        }
+        <MudText Typo="Typo.h1" Class="mx-auto">@Module.DisplayName</MudText>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+        
+        @ChildContent
+        
+        <MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
+        <ButtonNext Link="@Module.Sections[0].Route">
+            Proceed to the first section, <Highlight>@Module.Sections[0].DisplayName</Highlight>!
+        </ButtonNext>
+    </MudPaper>
+
+    <PrismRenderer ContainerId="content-paper"/>
+</MudContainer>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Module Module { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+}

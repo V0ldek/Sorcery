@@ -1,0 +1,14 @@
+﻿<MudPaper Elevation="2" Class="mt-6" Style="float: right;">
+    <MudButton StartIcon="@Icons.Filled.KeyboardDoubleArrowLeft" Size="Size.Medium" Variant="Variant.Text" Link="@Link" Class="pa-4">
+        <MudText Style="margin-top: 1px" Typo="Typo.button">@ChildContent</MudText>
+    </MudButton>
+</MudPaper>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string Link { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

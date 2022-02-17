@@ -1,0 +1,25 @@
+﻿@using Sorcery.ModularCourse;
+
+<PageTitle>@Assignment.DisplayName</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <MudText Typo="Typo.h1" Class="mx-auto">@Assignment.DisplayName</MudText>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+        
+        @ChildContent
+        
+        <MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
+    </MudPaper>
+
+    <PrismRenderer ContainerId="content-paper"/>
+</MudContainer>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Assignment Assignment { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+}

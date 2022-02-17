@@ -1,0 +1,35 @@
+﻿@inject IJSRuntime JSRuntime
+<div id="@_id" class="my-4"></div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string CastName { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public int Cols { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public int Rows { get; set; }
+
+    private Guid _id = Guid.NewGuid();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        if (CastName is null)
+        {
+            throw new ArgumentNullException(nameof(CastName));
+        }
+
+        var dimensions = new { cols = Cols, rows = Rows };
+        var container = await JSRuntime.InvokeAsync<IJSInProcessObjectReference>("document.getElementById", _id.ToString());
+        await JSRuntime.InvokeVoidAsync("AsciinemaPlayer.create", $"asciicast/{CastName}.cast", container, dimensions);
+    }
+}

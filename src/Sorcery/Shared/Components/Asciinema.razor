@@ -1,0 +1,17 @@
+﻿@using Sorcery.Shared.Components.Internal
+
+<MudBreakpointProvider>
+    <MudHidden Breakpoint="Breakpoint.Xs">
+        <AsciinemaPlayer CastName="@CastName" Cols=120 Rows=30/>
+    </MudHidden>
+    <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+        <AsciinemaPlayer CastName="@CastName" Cols=80 Rows=30/>
+    </MudHidden>
+</MudBreakpointProvider>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string CastName { get; set; } = null!;
+}

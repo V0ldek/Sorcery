@@ -1,0 +1,93 @@
+﻿@page "/teaching/csharp/0-basics/1-configuring-your-environment"
+@inject CourseBook CourseBook;
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["configuring-your-environment"]">
+    <MudText GutterBottom="true">
+        Before we start playing with C# we need to first get all the required components. The guide will assume you're using
+        either Windows or Linux. As for MacOS, I don't own one, so I wouldn't be able to test it. Use the resources at the bottom
+        if you're struggling.
+    </MudText>
+    <MudAlert Severity="Severity.Info" Class="mt-2" Variant="Variant.Outlined">
+        Note: this course uses .NET 6. While .NET is backwards-compatible for the most part, keep that in mind
+        if a newer version is already out. It is guaranteed to be <em>incompatible</em> with .NET 5 and .NET Core.
+    </MudAlert>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">.NET, i.e. <Code Language="bash">dotnet</Code></MudText>
+    <MudText GutterBottom="true">
+        The <MudLink Href="https://dotnet.microsoft.com/en-us/download">.NET installation instructions</MudLink> are detailed and
+        guaranteed to be up-to-date, so I won't copy most of it.
+    </MudText>
+    <MudText Typo="Typo.h4" Class="mx-auto py-2">Windows</MudText>
+    <MudText GutterBottom="true">
+        Go to <MudLink Href="https://dotnet.microsoft.com/en-us/download">https://dotnet.microsoft.com/en-us/download</MudLink> and download the .NET SDK for your platform.
+        If you don't have your shell environment configured on Windows, I recommend grabbing <MudLink Href="https://docs.microsoft.com/en-us/windows/terminal/install">Windows Terminal</MudLink>.
+        It will make your life much easier. If I ever show commandline in the tutorial, it will be from Linux via WSL2, but only because Asciinema only works there.
+        However, all <Code Language="bash">dotnet</Code> commands work the same on both platforms.
+    </MudText>
+    <MudText Typo="Typo.h4" Class="mx-auto py-2">Linux</MudText>
+    <MudText GutterBottom="true">
+        Navigate to <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux">https://docs.microsoft.com/en-gb/dotnet/core/install/linux</MudLink> for
+        installation instructions on Linux. If you're using Ubuntu, Debian or something else that manages their dependencies through <Code Language="bash">apt-get</Code> then follow
+        me below. If not you're on your own, but you're using Linux, so you should be used to that.
+    </MudText>
+    <MudText GutterBottom="true">
+        We just need to cast a simple spell and we're golden:
+        <CodeBlock Language="bash" Code=@(@"            
+wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+
+sudo apt-get update; \
+sudo apt-get install -y apt-transport-https && \
+sudo apt-get update && \
+sudo apt-get install -y dotnet-sdk-6.0")/>
+        
+        Here's the output of that on a clean Ubuntu:
+
+        <Asciinema CastName="configuring-your-environment-install"/>
+            
+        <MudAlert Severity="Severity.Info" Class="mt-2" Variant="Variant.Outlined">
+            Be aware that installing <Code Language="bash">dotnet</Code> with <Code Language="bash">snap</Code> is known to be weird
+            and/or fail. If you have issues, there is always the <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux#manual-installation">manual installation</MudLink>
+            path, without a package manager. The best way to do that is the <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux-scripted-manual#scripted-install">dotnet-install.sh</MudLink>
+            script.
+        </MudAlert>
+    </MudText>
+    <MudText Typo="Typo.h4" Class="mx-auto py-2">Verifying</MudText>
+    <MudText GutterBottom="true">
+        To verify that <Code Language="bash">dotnet</Code> is correctly installed, run <Code Language="bash">dotnet --info</Code>. It should look
+        something like this:
+
+        <Asciinema CastName="configuring-your-environment-verify"/>
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Visual Studio Code</MudText>
+    <MudText GutterBottom="true">
+        We will be using VS Code for interactive notebooks and GitHub Classroom integration. 
+        If you already have Code configured, check the extension list to make sure you have them all.
+    </MudText>      
+    <MudText GutterBottom="true">  
+        To install Code, you go to <MudLink Href="https://code.visualstudio.com/Download">https://code.visualstudio.com/Download</MudLink>
+        and select your platform. Once it's installed you should be able to run it from your shell using <Code Language="bash">code &lang;dir&rang;</Code> to open it in the specified
+        directory.
+    </MudText>       
+    <MudText GutterBottom="true">
+        Here are the extensions that we need to install in Code:
+        <MudList>
+            <MudListItem Icon="@Icons.Filled.ChevronRight">
+                C# (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp">Marketplace</MudLink>)
+                &ndash; IDE for C# .NET development
+            </MudListItem>
+            <MudListItem Icon="@Icons.Filled.ChevronRight">
+                .NET Interactive Notebooks (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode">Marketplace</MudLink>)
+                &ndash; to use interactive notebooks in Code.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Filled.ChevronRight">
+                NuGet Gallery (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=patcx.vscode-nuget-gallery">Marketplace</MudLink>)
+                &ndash; for browsing and installing C# libraries.
+            </MudListItem>
+        </MudList>
+    </MudText>
+</CourseSection>
+
+@code {
+
+}

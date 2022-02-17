@@ -1,0 +1,19 @@
+﻿<pre>
+    <code class=@($"language-{Language}")>@_displayCode</code>
+</pre>
+
+@code {
+    /// <summary>
+    ///     Language to use for Prism formatting. Defaults to <code>csharp</code>.
+    /// </summary>
+    [Parameter]
+    public string? Language { get; set; } = "csharp";
+
+    [Parameter]
+    [EditorRequired]
+    public string Code { get; set; } = null!;
+
+    private string _displayCode = null!;
+
+    protected override void OnParametersSet() => _displayCode = Code?.Trim()!;
+}

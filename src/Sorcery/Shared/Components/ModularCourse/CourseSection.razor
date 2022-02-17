@@ -1,0 +1,61 @@
+﻿@using Sorcery.ModularCourse;
+
+<PageTitle>@Section.DisplayName</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        @if (Section.Previous is null)
+        {
+            <ButtonPrevious Link="@Section.Module.Route">
+                Back to <Highlight>@Section.Module.DisplayName</Highlight> introduction.
+            </ButtonPrevious>
+        }
+        else
+        {
+            <ButtonPrevious Link="@Section.Previous.Route">
+                Back to <Highlight>@Section.Previous.DisplayName</Highlight>.
+            </ButtonPrevious>
+        }
+        <MudText Typo="Typo.h1" Class="mx-auto">@Section.DisplayName</MudText>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+        
+        @ChildContent
+        
+        <MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
+        @if (Section.Next is null && Section.Module.Assignment is null && Section.Module.Next is null)
+        {
+            <ButtonNext Link="/teaching">
+                This is the end of the course! You can go back to <Highlight>Teaching</Highlight>, if you want more.
+            </ButtonNext>
+        }
+        else if (Section.Next is null && Section.Module.Assignment is null)
+        { 
+            <ButtonNext Link="@Section.Module.Next!.Route">
+                There is no assignment for this module! Proceed to the next one, <Highlight>@Section.Module.Next.DisplayName</Highlight>!
+            </ButtonNext>  
+        }
+        else if (Section.Next is null)
+        {
+            <ButtonNext Link="@Section.Module.Assignment!.Route">
+                Next up: end-of-module assignment, <Highlight>@Section.Module.Assignment!.DisplayName</Highlight>!
+            </ButtonNext>
+        }
+        else
+        {   
+            <ButtonNext Link="@Section.Next.Route">
+                Next up: <Highlight>@Section.Next.DisplayName</Highlight>!
+            </ButtonNext> 
+        }
+    </MudPaper>
+
+    <PrismRenderer ContainerId="content-paper"/>
+</MudContainer>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Section Section { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+}

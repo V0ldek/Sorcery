@@ -1,6 +1,10 @@
 ﻿@inject IJSRuntime JSRuntime;
 
 @code {
+    /// <summary>
+    ///     HTML id of the element in which code to highlight is located. 
+    ///     If not specified, highlights the entire document.
+    /// </summary>
     [Parameter]
     public string? ContainerId { get; init; }
 

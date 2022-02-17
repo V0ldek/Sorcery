@@ -1,0 +1,12 @@
+﻿<code class=@($"language-{Language}")>@ChildContent</code>
+
+@code {
+    /// <summary>
+    ///     Language to use for Prism formatting. Defaults to <code>csharp</code>.
+    /// </summary>
+    [Parameter]
+    public string? Language { get; set; } = "csharp";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

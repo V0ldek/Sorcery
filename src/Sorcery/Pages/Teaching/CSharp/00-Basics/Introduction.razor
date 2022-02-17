@@ -1,0 +1,25 @@
+﻿@page "/teaching/csharp/0-basics"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["basics"]">
+    <MudText GutterBottom="true">
+        We introduce the basics of programming in C# using interactive notebooks. In this module we will learn:
+    </MudText>
+        
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">what is C#, .NET, and all those others acronyms;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">how to configure your environment;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">how to write a C# program;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">basic built-in types, variables, control-flow, scoping rules;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">arrays, indexing, ranges and the <Code>foreach</Code> statement;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">classes, methods, fields, properties;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">abstract classes, interfaces, inheritance;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">static classes, attributes;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">testing with xUnit;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">how to use GitHub Classroom and submit your first microassignment.</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

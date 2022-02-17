@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/0-basics/3-control-flow"
+@inject CourseBook CourseBook;
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["control-flow"]">
+    <MudText GutterBottom="true">
+        Download the repository from TODO and go through the first notebook, <Highlight>0-basics/3-control-flow.dib</Highlight>, in VS Code.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">In this section we'll cover</MudText>
+        
+    <MudList> 
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Basic built-in types.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Variable declarations and type inference.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Control flow with <Code>if</Code> and loops.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Variable scoping rules.
+            </MudText>
+        </MudListItem>
+    </MudList>
+</CourseSection>
+
+@code {
+
+}
