@@ -1,23 +1,18 @@
-﻿@page "/teaching/csharp/0-basics/3-control-flow"
+﻿@page "/teaching/csharp/0-basics/4-control-flow"
 @inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["basics"]["control-flow"];
+}
 
 <CourseSection Section="@CourseBook.CSharpCourse["basics"]["control-flow"]">
     <MudText GutterBottom="true">
-        Download the repository from TODO and go through the first notebook, <Highlight>0-basics/3-control-flow.dib</Highlight>, in VS Code.
+        Continuing with <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>
+        go through the next notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
     </MudText>
     <MudText Typo="Typo.h3" Class="mx-auto py-2">In this section we'll cover</MudText>
         
-    <MudList> 
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
-            <MudText>
-                Basic built-in types.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
-            <MudText>
-                Variable declarations and type inference.
-            </MudText>
-        </MudListItem>
+    <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
                 Control flow with <Code>if</Code> and loops.
@@ -26,6 +21,11 @@
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
                 Variable scoping rules.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Definite assignment rules.
             </MudText>
         </MudListItem>
     </MudList>

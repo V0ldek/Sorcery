@@ -1,0 +1,41 @@
+﻿@page "/teaching/csharp/0-basics/9-strings"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["basics"]["strings"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Continuing with <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>
+        go through the next notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">In this section we'll cover</MudText>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Basic string operations.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                String comparison.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                <Code>StringBuilder</Code>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                String indexer.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                <Code>nameof</Code>
+            </MudText>
+        </MudListItem>
+    <MudList>
+    </MudList>
+</CourseSection>

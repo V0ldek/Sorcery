@@ -23,7 +23,10 @@
         The usual output is a <Highlight><code>.dll</code></Highlight> file that contains all the compiled IL 
         and additional package metadata for the project. The <code>.dll</code> is fully portable
         &ndash; you can move it to a different machine running a different operating system with a completely different CPU architecture and it will still work.
+        If your project contained an entry point, you can execute the <code>.dll</code> with <Code Language="bash">dotnet run</Code>.
         It is also possible to compile into an executable, but that requires you to specify the platform and is not portable.
+
+        If the project doesn't have an entry point, it's just a library that can be used from other code.
     </MudText>        
     <MudText Typo="Typo.h3" Class="mx-auto py-2">The classic</MudText>
     <MudText GutterBottom="true">
@@ -118,11 +121,13 @@ static void Main(string[] args)
         knows &ndash; such names are called <Highlight>unspeakable</Highlight>, because you can't refer to them in regular user code. Get used to that,
         the C# compiler is a certified level 20 Wizard. But worry not! We will make its magic clear, in time. Well, most of it.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Dive in!</MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Summary</MudText>
     <MudText GutterBottom="true">
-        Now is the time to download the course repository. You can find it at TODO. Launch Code from the main directory
-        and open up the first notebook: <Highlight>0-basics/3-control-flow.dib</Highlight>. Follow along with the notebook to learn
-        C# basics.
+        A single compilation unit in .NET is called an assembly.
+        Instead of a traditional <Code>Main</Code> method, you can write the entry code using top-level statements.
+        In C#, methods are contained within types, and types are grouped into namespaces.
+        You can bring types into scope from different namespaces with a <Code>using</Code> directive.
+        To write things to standard output we use <Code>System.Console.Write</Code> or <Code>System.Console.WriteLine</Code>.
     </MudText>
 </CourseSection>
 

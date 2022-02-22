@@ -1,0 +1,25 @@
+﻿@page "/teaching/csharp/0-basics/10-attributes"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["basics"]["attributes"];
+}
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["attributes"]">
+    <MudText GutterBottom="true">
+        Continuing with <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>
+        go through the next notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">In this section we'll cover</MudText>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Using attributes as metadata.
+            </MudText>
+        </MudListItem>
+    <MudList>
+    </MudList>
+</CourseSection>
+
+@code {
+
+}

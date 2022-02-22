@@ -28,6 +28,7 @@ public sealed class CourseBook
                     new (".NET Taxonomy", "dotnet-taxonomy"),
                     new ("Configuring Your Environment", "configuring-your-environment"),
                     new ("Hello, World!", "hello-world"),
+                    new ("Basic Types", "basic-types"),
                     new ("Control Flow", "control-flow"),
                     new ("Arrays", "arrays"),
                     new ("Classes", "classes"),

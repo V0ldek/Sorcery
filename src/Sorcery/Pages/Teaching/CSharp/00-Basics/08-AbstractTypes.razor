@@ -1,0 +1,35 @@
+﻿@page "/teaching/csharp/0-basics/8-abstract-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["basics"]["abstract-types"];
+}
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["abstract-types"]">
+    <MudText GutterBottom="true">
+        Continuing with <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>
+        go through the next notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Interfaces.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Abstract classes.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Static classes.
+            </MudText>
+        </MudListItem>
+    </MudList>
+</CourseSection>
+
+@code {
+
+}

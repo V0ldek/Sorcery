@@ -1,0 +1,61 @@
+﻿@page "/teaching/csharp/0-basics/3-basic-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["basics"]["basic-types"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Download <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink> 
+        and go through the first notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">In this section we'll cover</MudText>
+        
+    <MudList> 
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Basic built-in types.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Variable declarations and type inference.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Constant locals.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Numeric literals.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Implicit and explicit numeric conversions.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Operators.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Strings and string literals.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                String formatting.
+            </MudText>
+        </MudListItem>
+    </MudList>
+</CourseSection>
+
+@code {
+
+}

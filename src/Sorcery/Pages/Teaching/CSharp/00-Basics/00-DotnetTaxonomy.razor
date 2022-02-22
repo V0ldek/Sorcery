@@ -121,12 +121,6 @@ extends [System.Private.CoreLib]System.Object
         I'm a terrible liar.
     </MudText>
     <MudText GutterBottom="true">
-        That is what the compiler generates for the C# Hello World program from above.
-        Well, more or less, I had to lie cause there's a lot of additional metadata in the actual output.
-        By the way &ndash; I will often lie during the course to simplify things, but don't worry, I'll always tell you when it happens.
-        I'm a terrible liar.
-    </MudText>
-    <MudText GutterBottom="true">
         There are other implementations of CLR than .NET. The notable ones are <Highlight>.NET Framework</Highlight> and the <Highlight>Mono</Highlight> runtime. 
         .NET Framework is the old .NET that was specific to Windows and closed-source. It is no longer in development, only maintained. Before version 5,
         .NET was called .NET Core to distinguish it from .NET Framework. Ever since then, all of those projects are unified under the one .NET umbrella.
@@ -169,19 +163,35 @@ extends [System.Private.CoreLib]System.Object
         good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
     </MudText>
     <MudText GutterBottom="true">
-        The BCL is open source and imposes very high quality standards. As with all good standard libraries, it is highly unlikely that
-        you can write custom code that outperforms and equivalent method in the BCL. The BCL is also a very good standard for designing
-        good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
-    </MudText>
-    <MudText GutterBottom="true">
-        The BCL is open source and imposes very high quality standards. As with all good standard libraries, it is highly unlikely that
-        you can write custom code that outperforms and equivalent method in the BCL. The BCL is also a very good standard for designing
-        good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
-    </MudText>
-    <MudText GutterBottom="true">
         BCL is specific to the particular .NET implementation, but most of it is part of .NET Standard. That means that every existing
         .NET implementation shares them, so if you ever need to work on .NET Framework or Mono the library will be the same when it
         comes to this core components.
+        When talking about BLC we will be implicitly talking about <em>the</em> BCL, so its implementation for .NET 6.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Roslyn</MudText>    
+    <MudPaper MaxHeight="200px" MaxWidth="300px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
+        <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.png" Fluid="true"/>
+    </MudPaper>
+    <MudText GutterBottom="true">
+        Roslyn is the main compiler platform for C# (and Visual Basic). It's open-source and ships with .NET by default.
+        One of its core features is that it's not only a compiler, but also a platform that allows other code to interface
+        with the compilation process, look at the syntax tree of the program, and receive and add diagnostics.
+        This allows creating static analysers, called <Highlight>Roslyn analysers</Highlight>, which allows you to add your own
+        errors, warnings, and quick-fixes for them. This allows integrating your libraries into the language more, as you can
+        detect common mistakes and give users first-class diagnostic messages.
+    </MudText>
+    <MudText GutterBottom="true">
+        Moreover, it also allows you to write an analyser that enforces rules that are specific for your project.
+        In larger projects with many developers there are often implicit usage rules that everyone is expected to follow.
+        Maybe some method is not supposed to be used in some context, or some pattern makes no sense. 
+        Normally there's a note about in the documentation, or the project wiki, or in a comment somewhere.
+        With Roslyn, you can write an analyser that will automatically mark such cases as warnings.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Summary</MudText>
+    <MudText GutterBottom="true">
+        .NET is an environment for developing modern applications in a number of languages targeting .NET.
+        It provides memory safety, a unified type system and a robust standard library &ndash; the BCL.
+        C# is compiled with Roslyn into bytecode called IL and then executed on the CLR.
     </MudText>
 </CourseSection>
 

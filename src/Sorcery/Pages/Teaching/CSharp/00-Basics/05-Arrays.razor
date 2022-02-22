@@ -1,0 +1,40 @@
+﻿@page "/teaching/csharp/0-basics/5-arrays"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["basics"]["arrays"];
+}
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["arrays"]">
+    <MudText GutterBottom="true">
+        Continuing with <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>
+        go through the next notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Declaring and initialising arrays.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Indexing into arrays with <Code>Index</Code> and <Code>Range</Code>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Very basics of a <Code>foreach</Code> loop.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Multidimensional and jagged arrays.
+            </MudText>
+        </MudListItem>
+    </MudList>
+</CourseSection>
+
+@code {
+
+}
