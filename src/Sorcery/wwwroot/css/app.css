@@ -1,6 +1,4 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
-.mud-typography-gutterbottom {
+﻿.mud-typography-gutterbottom {
     margin-bottom: 1em
 }
 
@@ -41,3 +39,47 @@
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+@-webkit-keyframes breathing {
+  0% {
+    -webkit-transform: scale(0.875);
+    transform: scale(0.875);
+    filter: brightness(0.75);
+  }
+
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    filter: brightness(1.25);
+  }
+
+  100% {
+    -webkit-transform: scale(0.875);
+    transform: scale(0.875);
+    filter: brightness(0.75);
+  }
+}
+
+@keyframes breathing {
+  0% {
+    -webkit-transform: scale(0.875);
+    -ms-transform: scale(0.875);
+    transform: scale(0.875);
+    filter: brightness(0.75);
+  }
+
+  50% {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    filter: brightness(1.25);
+  }
+
+  100% {
+    -webkit-transform: scale(0.875);
+    -ms-transform: scale(0.875);
+    transform: scale(0.875);
+    filter: brightness(0.75);
+  }
+}

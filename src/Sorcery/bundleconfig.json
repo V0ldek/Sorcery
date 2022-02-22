@@ -1,0 +1,27 @@
+[
+  {
+    "outputFileName": "wwwroot/css/bundled/bundle.min.css",
+    "inputFiles": [
+      "wwwroot/css/*.css",
+      "wwwroot/css/fontawesome/**/*.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "hacks",
+      "gzip": true,
+      "adjustRelativePaths": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/scripts/bundled/bundle.min.js",
+    "inputFiles": [
+      "wwwroot/scripts/*.js",
+      "!wwwroot/scripts/asciinema-player.min.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "gzip": true,
+      "preserveImportantComments": false
+    }
+  }
+]

@@ -6,23 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Sorcery</title>
     <base href="/" />
-    <link href="css/asciinema-player.css" rel="stylesheet" />
-    <link href="css/prism.css" rel="stylesheet" />
-    <link href="css/katex.css" rel="stylesheet" />
-    <link href="css/roboto.css" rel="stylesheet" />
-    <link href="css/fontawesome/css/all.css" rel="stylesheet" />
     <link href="Sorcery.styles.css" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/bundled/bundle.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div class="ma-auto pa-6" style="height: 100vh; width: 100vw; text-align: center; background-color: #32333dff">
+            <div style="color: #ffffffb2">
+                <h2 class="my-auto" style="font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 400">Loading...</h2>
 
-    <noscript>
-        <h2>JavaScript required :(</h2>
-        <p>Yes, it makes me sad too. JavaScript on this site is limited to bare minimum, but we need it to at least bootstrap the Blazor WebAssembly app.</p>
-    </noscript>
+                <noscript>
+                    <div class="mud-alert mud-alert-outlined-error mud-elevation-0 my-6" style="border: 1px solid #f64e62ff">
+                        <div class="ma-auto" style="color: rgb(244, 47, 70)">
+                            <h2 class="mud-alert-message" style="font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 400">JavaScript required :(</h2>
+                            <p class="mud-alert-message" style="font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 400">Yes, it makes me sad too. JavaScript on this site is limited to bare minimum, but we need it to at least bootstrap the Blazor WebAssembly app.</p>
+                        </div>
+                    </div>
+                </noscript>
+
+                <img class="ma-auto" src="img/icon.png" style="height: 66vmin; width: 66vmin; -webkit-animation: breathing 3s ease-out infinite normal; animation: breathing 3s ease-out infinite normal" />
+                
+            </div>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -31,10 +39,8 @@
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-    <script src="scripts/prism.js" data-manual></script>
     <script src="scripts/asciinema-player.min.js"></script>
-    <script src="scripts/katex.js"></script>
-    <script src="scripts/katex-auto-render.js"></script>
+    <script src="scripts/bundled/bundle.min.js"></script>
 </body>
 
 </html>
