@@ -6,7 +6,7 @@
         We'll learn how to build and run a "Hello, World!" program before jumping to the main portion of the
         course in interactive notebooks.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Structure of a program</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Structure of a program</MudText>
     <MudText GutterBottom="true">
         C# projects consist of two core parts: the sources in <Highlight><code>.cs</code></Highlight> files, and the project configuration
         in a <Highlight><code>.csproj</code></Highlight> file. If you know Rust, this is very similar to having your sources in <code>.rs</code>
@@ -28,7 +28,7 @@
 
         If the project doesn't have an entry point, it's just a library that can be used from other code.
     </MudText>        
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">The classic</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">The classic</MudText>
     <MudText GutterBottom="true">
         .NET comes preinstalled with a handful of templates for different kinds of applications. The most basic one is <code>console</code>.
         You use <Code Language="bash">dotnet new</Code> to create a fresh project from a template, passing the name of the project with the <Code>--name</Code>
@@ -47,7 +47,7 @@ Console.WriteLine(""Hello, World!"");")"/>
 
         <Asciinema CastName="hello-world"></Asciinema>
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Smoke, mirrors, and sorcery</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Smoke, mirrors, and sorcery</MudText>
     <MudText GutterBottom="true">
         Modern programming languages are complex enough to be indistinguishable from magic (I said modern, C doesn't count).
         In the one line of code above <em>a lot</em> of magic happens. Let's lift the curtain a bit: the code above is basically equivalent to the following,
@@ -121,7 +121,7 @@ static void Main(string[] args)
         knows &ndash; such names are called <Highlight>unspeakable</Highlight>, because you can't refer to them in regular user code. Get used to that,
         the C# compiler is a certified level 20 Wizard. But worry not! We will make its magic clear, in time. Well, most of it.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Summary</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
     <MudText GutterBottom="true">
         A single compilation unit in .NET is called an assembly.
         Instead of a traditional <Code>Main</Code> method, you can write the entry code using top-level statements.

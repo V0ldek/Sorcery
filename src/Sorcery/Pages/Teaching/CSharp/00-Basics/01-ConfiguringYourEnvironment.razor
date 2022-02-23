@@ -11,19 +11,19 @@
         Note: this course uses .NET 6. While .NET is backwards-compatible for the most part, keep that in mind
         if a newer version is already out. It is guaranteed to be <em>incompatible</em> with .NET 5 and .NET Core.
     </MudAlert>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">.NET, i.e. <Code Language="bash">dotnet</Code></MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">.NET, i.e. <Code Language="bash">dotnet</Code></MudText>
     <MudText GutterBottom="true">
         The <MudLink Href="https://dotnet.microsoft.com/en-us/download">.NET installation instructions</MudLink> are detailed and
         guaranteed to be up-to-date, so I won't copy most of it.
     </MudText>
-    <MudText Typo="Typo.h4" Class="mx-auto py-2">Windows</MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Windows</MudText>
     <MudText GutterBottom="true">
         Go to <MudLink Href="https://dotnet.microsoft.com/en-us/download">https://dotnet.microsoft.com/en-us/download</MudLink> and download the .NET SDK for your platform.
         If you don't have your shell environment configured on Windows, I recommend grabbing <MudLink Href="https://docs.microsoft.com/en-us/windows/terminal/install">Windows Terminal</MudLink>.
         It will make your life much easier. If I ever show commandline in the tutorial, it will be from Linux via WSL2, but only because Asciinema only works there.
         However, all <Code Language="bash">dotnet</Code> commands work the same on both platforms.
     </MudText>
-    <MudText Typo="Typo.h4" Class="mx-auto py-2">Linux</MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Linux</MudText>
     <MudText GutterBottom="true">
         Navigate to <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux">https://docs.microsoft.com/en-gb/dotnet/core/install/linux</MudLink> for
         installation instructions on Linux. If you're using Ubuntu, Debian or something else that manages their dependencies through <Code Language="bash">apt-get</Code> then follow
@@ -52,14 +52,14 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
             script.
         </MudAlert>
     </MudText>
-    <MudText Typo="Typo.h4" Class="mx-auto py-2">Verifying</MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Verifying</MudText>
     <MudText GutterBottom="true">
         To verify that <Code Language="bash">dotnet</Code> is correctly installed, run <Code Language="bash">dotnet --info</Code>. It should look
         something like this:
 
         <Asciinema CastName="configuring-your-environment-verify"/>
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Visual Studio Code</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Visual Studio Code</MudText>
     <MudText GutterBottom="true">
         We will be using VS Code for interactive notebooks and GitHub Classroom integration. 
         If you already have Code configured, check the extension list to make sure you have them all.
@@ -100,7 +100,7 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
             </MudListItem>
         </MudList>
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Summary</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
     <MudText GutterBottom="true">
         Everything's set up, let's write and run some code!
     </MudText>

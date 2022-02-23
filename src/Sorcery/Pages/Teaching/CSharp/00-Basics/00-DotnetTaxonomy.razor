@@ -6,10 +6,10 @@
         Here we go! This introduction is going to be a little verbose. I will limit the prose in the following sections,
         but I feel like at the beginning a more wordy sales pitch is needed.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">C#</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">C#</MudText>
     <MudText GutterBottom="true">
     <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
-        <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true"/>
+        <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
     </MudPaper>
         C# (current version 10, as of this writing) &ndash; language designed in 2000 by a team led by Anders Hejlsberg for Microsoft.
         He's the madlad that also came up with TypeScript, Delphi, and authored Turbo Pascal.
@@ -20,7 +20,7 @@
     <MudPaper Elevation="0" Class="my-4 pa-2 d-block" Width="100%" Style="justify-self: right;">
         <blockquote>
             <MudIcon Icon="@Icons.Filled.FormatQuote"></MudIcon> 
-            <MudText Inline="true" Class="pl-2" Style=@($"color: {Colors.Grey.Default}; border-left-style: solid; border-right-width: 2px")>
+            <MudText Inline="true" Class="pl-2" Style=@($"color: {Colors.Grey.Darken1}; border-left-style: solid; border-right-width: 2px")>
                 <i>structured, imperative, object-oriented, event-driven, task-driven, functional, generic, reflective, concurrent</i>
             </MudText>
         </blockquote>
@@ -53,7 +53,7 @@
     </MudText>
     <CodeBlock Code=@(@"System.Console.WriteLine(""Hello, World!"");")></CodeBlock>
 
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">.NET</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">.NET</MudText>
 
     <MudBreakpointProvider>
         <MudHidden Breakpoint="Breakpoint.Xs">
@@ -131,7 +131,7 @@ extends [System.Private.CoreLib]System.Object
         guaranteed to run on all .NET Framework, Mono and future .NET releases.
     </MudText>
 
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Base Class Library (BCL)</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Base Class Library (BCL)</MudText>
     <MudBreakpointProvider>
         <MudHidden Breakpoint="Breakpoint.Xs">
             <MudCard Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="5">
@@ -153,24 +153,24 @@ extends [System.Private.CoreLib]System.Object
         </MudHidden>
     </MudBreakpointProvider>
     <MudText GutterBottom="true">
-        The Base Class Library is similar to C++'s Rust's <Code Language="rust">std</Code> library. It contains the most
+        The Base Class Library is similar to C++'s or Rust's <Code Language="rust">std</Code> library. It contains the most
         foundational types and utilities for all other .NET libraries. Things like arrays, base collections, <Code>DateTime</Code>,
         TCP and HTTP clients, and many more.
     </MudText>
     <MudText GutterBottom="true">
         The BCL is open source and imposes very high quality standards. As with all good standard libraries, it is highly unlikely that
-        you can write custom code that outperforms and equivalent method in the BCL. The BCL is also a very good standard for designing
+        you can write custom code that outperforms an equivalent method in the BCL. The BCL is also a very good standard for designing
         good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
     </MudText>
     <MudText GutterBottom="true">
         BCL is specific to the particular .NET implementation, but most of it is part of .NET Standard. That means that every existing
         .NET implementation shares them, so if you ever need to work on .NET Framework or Mono the library will be the same when it
         comes to this core components.
-        When talking about BLC we will be implicitly talking about <em>the</em> BCL, so its implementation for .NET 6.
+        When talking about BCL we will be implicitly talking about <em>the</em> BCL, so its implementation for .NET 6.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Roslyn</MudText>    
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Roslyn</MudText>    
     <MudPaper MaxHeight="200px" MaxWidth="300px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
-        <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true"/>
+        <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true" Height="200" Width="300" />
     </MudPaper>
     <MudText GutterBottom="true">
         Roslyn is the main compiler platform for C# (and Visual Basic). It's open-source and ships with .NET by default.

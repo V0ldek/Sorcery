@@ -6,13 +6,14 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" aria-label="Menu" />
         <MudAvatar Image="/img/v0ldek.webp" Alt="my gravatar" Variant="Variant.Filled"></MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Mat Gienieczko</MudText>
         <MudSpacer />
-        <MudToggleIconButton @bind-Toggled="@_isDarkMode" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.LightMode"></MudToggleIconButton>
+        <MudToggleIconButton @bind-Toggled="@_isDarkMode" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.LightMode" 
+            aria-label="Dark mode toggle"></MudToggleIconButton>
         <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="@GitHub.Sorcery"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="@GitHub.Sorcery" aria-label="GitHub"></MudIconButton>
             <MudText Typo="Typo.body2" Class="ps-4"><footer><small>Copyright &copy; @_copyright Mateusz Gienieczko</small></footer></MudText>
         </MudHidden>
     </MudAppBar>
@@ -44,9 +45,9 @@
         var theme = new MudTheme();
 
         theme.Palette.AppbarBackground = Colors.DeepOrange.Darken4;
-        theme.Palette.Primary = Colors.DeepOrange.Default;
-        theme.Palette.PrimaryDarken = Colors.DeepOrange.Darken1;
-        theme.Palette.PrimaryLighten = Colors.DeepOrange.Lighten1;
+        theme.Palette.Primary = Colors.DeepOrange.Darken2;
+        theme.Palette.PrimaryDarken = Colors.DeepOrange.Darken3;
+        theme.Palette.PrimaryLighten = Colors.DeepOrange.Darken1;
         theme.PaletteDark.Primary = Colors.DeepOrange.Default;
         theme.PaletteDark.PrimaryDarken = Colors.DeepOrange.Darken1;
         theme.PaletteDark.PrimaryLighten = Colors.DeepOrange.Lighten1;
