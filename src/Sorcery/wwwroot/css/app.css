@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: "Terminal Nerd Font";
-    src: url("/css/fonts/MesloLGS NF Regular.woff2") format("truetype");
+    src: url("/css/fonts/MesloLGS NF Regular.woff2") format("woff2");
 }
 
 .asciinema-terminal {
