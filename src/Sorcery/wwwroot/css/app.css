@@ -8,7 +8,7 @@
 }
 
 .asciinema-terminal {
-    font-family: 'Terminal Nerd Font', Consolas, Menlo, 'Bitstream Vera Sans Mono', monospace, 'Powerline Symbols';
+    font-family: 'Terminal Nerd Font', Consolas, Menlo, 'Bitstream Vera Sans Mono', monospace, 'Powerline Symbols' !important;
 }
 
 #blazor-error-ui {

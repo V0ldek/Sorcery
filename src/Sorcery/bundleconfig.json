@@ -2,8 +2,9 @@
   {
     "outputFileName": "wwwroot/css/bundled/bundle.min.css",
     "inputFiles": [
-      "wwwroot/css/*.css",
-      "wwwroot/css/fontawesome/**/*.css"
+      "wwwroot/css/lib/*.css",
+      "wwwroot/css/lib/fontawesome/**/*.css",
+      "wwwroot/css/app.css"
     ],
     "minify": {
       "enabled": true,
@@ -15,8 +16,8 @@
   {
     "outputFileName": "wwwroot/scripts/bundled/bundle.min.js",
     "inputFiles": [
-      "wwwroot/scripts/*.js",
-      "!wwwroot/scripts/asciinema-player.min.js"
+      "wwwroot/scripts/lib/*.js",
+      "!wwwroot/scripts/lib/asciinema-player.min.js"
     ],
     "minify": {
       "enabled": true,
