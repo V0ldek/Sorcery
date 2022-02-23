@@ -1,5 +1,5 @@
 ﻿.mud-typography-gutterbottom {
-    margin-bottom: 1em
+    margin-bottom: 1em !important
 }
 
 @font-face {
@@ -40,6 +40,33 @@
         content: "An error has occurred."
     }
 
+.loading-screen {
+    height: 100vh;
+    width: 100vw;
+    text-align: center;
+    background-color: #32333dff;
+    color: #ffffffb2;
+}
+
+    .loading-screen p, h1, h2 {
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 500;
+    }
+
+    .loading-screen .mud-alert-message {
+        color: rgb(244, 47, 70);
+    }
+
+    .loading-screen .mud-alert-outlined-error {
+        border: 1px solid #f64e62ff;
+    }
+
+    .loading-screen .loading-img {
+        height: 33vmin;
+        width: 33vmin;
+        -webkit-animation: breathing 3s ease-out infinite normal;
+        animation: breathing 3s ease-out infinite normal;
+    }
 
 @-webkit-keyframes breathing {
   0% {

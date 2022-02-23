@@ -4,41 +4,38 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta 
-          name="description" 
+    <meta name="description"
           content="Mat Gienieczko, V0ldek's personal page hosting a free, interactive,
                    deep dive course into the C# language and the .NET platform." />
     <title>Sorcery</title>
     <base href="/" />
-    <link href="Sorcery.styles.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link href="_content/Sorcery.styles.css" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <link href="css/bundled/bundle.min.css" rel="stylesheet" />
 </head>
 
 <body>
     <div id="app">
-        <div class="ma-auto pa-6" style="height: 100vh; width: 100vw; text-align: center; background-color: #32333dff">
-            <div style="color: #ffffffb2">
-                <h2 class="mb-6 my-auto" style="font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 400">Loading...</h2>
+        <div class="loading-screen ma-auto pa-6">
+            <h1 class="mb-6 my-auto">Loading...</h1>
 
-                <noscript>
-                    <div class="mud-alert mud-alert-outlined-error mud-elevation-0 my-6" style="border: 1px solid #f64e62ff">
-                        <div class="ma-auto" style="color: rgb(244, 47, 70)">
-                            <h2 class="mud-alert-message" style="font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 400">JavaScript required :(</h2>
-                            <p class="mud-alert-message" style="font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 400">Yes, it makes me sad too. JavaScript on this site is limited to bare minimum, but we need it to at least bootstrap the Blazor WebAssembly app.</p>
-                        </div>
+            <noscript>
+                <div class="mud-alert mud-alert-outlined-error mud-elevation-0 my-6">
+                    <div class="ma-auto">
+                        <h2 class="mud-alert-message">JavaScript required :(</h2>
+                        <p class="mud-alert-message">Yes, it makes me sad too. JavaScript on this site is limited to bare minimum, but we need it to at least bootstrap the Blazor WebAssembly app.</p>
                     </div>
-                </noscript>
+                </div>
+            </noscript>
 
-                <img class="ma-auto" src="img/icon.png" style="height: 33vmin; width: 33vmin; -webkit-animation: breathing 3s ease-out infinite normal; animation: breathing 3s ease-out infinite normal" />
-                
-            </div>
+            <img class="loading-img ma-auto" src="img/icon.png" />    
         </div>
     </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
+        <a href="/" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>

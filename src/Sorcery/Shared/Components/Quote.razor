@@ -1,0 +1,13 @@
+﻿<MudPaper Elevation="0" Class="my-4 pa-2 d-block" Width="100%" Style="justify-self: right;">
+    <blockquote>
+        <MudIcon Icon="@Icons.Filled.FormatQuote"></MudIcon> 
+        <MudText Inline="true" Class="pl-2" Style=@($"color: {Colors.Grey.Darken1}; border-left-style: solid; border-right-width: 2px")>
+            <i>@ChildContent</i>
+        </MudText>
+    </blockquote>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
