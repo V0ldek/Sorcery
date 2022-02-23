@@ -5,7 +5,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PublishTrimmed>true</PublishTrimmed>
-    <StaticWebAssetBasePath>_content/$(PackageId)</StaticWebAssetBasePath>
   </PropertyGroup>
 
   <ItemGroup>
