@@ -216,11 +216,37 @@ extends [System.Private.CoreLib]System.Object
         Normally there's a note about in the documentation, or the project wiki, or in a comment somewhere.
         With Roslyn, you can write an analyser that will automatically mark such cases as warnings.
     </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">NuGet</MudText>  
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.Xs">
+            <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: right;" Class="mr-3 mb-3 pa-3" Elevation="0">
+                <MudImage Alt="C# sticker" title="C# sticker" Src="img/nuget.svg" Fluid="true" Height="200" Width="200" />
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mr-3 mb-3 pa-3" Elevation="0">
+                <MudImage Alt="C# sticker" title="C# sticker" Src="img/nuget.svg" Fluid="true" Height="200" Width="200" />
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
+    <MudText GutterBottom="true">
+        NuGet is <em>the</em> package manager for .NET. It provides the central repository for all the
+        packages in the .NET world. Anyone can push their own package there and share it with the community.
+        There are also ways of creating private NuGet repositories, which is useful when you want to reuse
+        code across your organisation without making it open-source.
+    </MudText>
+    <MudText GutterBottom="true">
+        .NET packages follow <MudLink Href="https://semver.org/">Semantic Versioning (SemVer)</MudLink>, which makes updates rather painless.
+        Of course, it's not really a statically enforcible standard, so some packages might violate that, but that's semver for you.
+        Turning your library into a package is actually pretty easy and simply requires the developer to associate some metadata with the
+        binaries that they create.
+    </MudText>
     <MudText Typo="Typo.h3" Class="mx-auto py-2">Summary</MudText>
     <MudText GutterBottom="true">
         .NET is an environment for developing modern applications in a number of languages targeting .NET.
         It provides memory safety, a unified type system and a robust standard library &ndash; the BCL.
-        C# is compiled with Roslyn into bytecode called IL and then executed on the CLR.
+        C# is compiled with Roslyn into bytecode called IL and then executed on the CLR. Package management
+        and distribution is done with NuGet.
     </MudText>
 </CourseSection>
 

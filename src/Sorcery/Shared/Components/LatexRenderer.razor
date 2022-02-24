@@ -1,0 +1,39 @@
+﻿@inject IJSRuntime JSRuntime;
+
+@code {
+    /// <summary>
+    ///     HTML id of the element in which math to format is located. 
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public string ContainerId { get; init; } = null!;
+
+    private object _configuration = new
+    {
+        delimiters = new[]
+        {
+            new
+            {
+                left = "$",
+                right = "$",
+                display = false
+            },
+            new
+            {
+                left = "$$",
+                right = "$$",
+                display = true
+            }
+        },
+        throwOnError = true
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var container = await JSRuntime.InvokeAsync<IJSInProcessObjectReference>("document.getElementById", ContainerId);
+            await JSRuntime.InvokeVoidAsync("renderMathInElement", container, _configuration);
+        }
+    }
+}

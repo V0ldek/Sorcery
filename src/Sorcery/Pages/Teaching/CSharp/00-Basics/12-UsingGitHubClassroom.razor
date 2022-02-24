@@ -3,12 +3,66 @@
 
 <CourseSection Section="@CourseBook.CSharpCourse["basics"]["using-github-classroom"]">
     <MudText GutterBottom="true">
-        We won't be using a notebook for this one.
+        Buckle up, it's time for the first assignment! We first need to setup the GitHub
+        Classroom machinery so that you can focus on the code and have tests running automatically for you.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
-        
-    <MudList>
-    </MudList>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">GitHub</MudText>
+    <MudText GutterBottom="true">
+        You should be familiar with git. I assume you know its basics, and if you don't please
+        go read any of the available tutorials and come back.
+    </MudText>    
+    <MudText GutterBottom="true">
+        You need a GitHub account, so go ahead and set it up if you haven't got one. When you set it up,
+        go to the ClassroomIntro assignment with <MudLink Href="https://classroom.github.com/a/NRAHbzVX">this invite</MudLink>.
+        You need to accept the assignment, and then you'll be transported to a repo created just for you.
+        You can also go straight to VS Code.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">What's in an assignment?</MudText>
+    <MudText GutterBottom="true">
+        The assignment's description and goals will be described in the top-level README file.
+        It will also contain any instructions on how to run the project. In this case,
+        there's nothing to say, so it's rather short.
+    </MudText>
+    <MudText GutterBottom="true">
+        Every assignment will be described in more detail on this website, in the assignment section
+        at the end of each module. Your goal is to read it, understand it, and implement
+        what it asks you to implement. The tests in the repository will guide you,
+        but they are <em>not</em> the sole indicator of success.
+    </MudText>
+    <MudText GutterBottom="true">
+        GitHub automatically creates a PR for you, called Feedback. It will automatically
+        update whenever you push a commit, letting me know about your changes and running tests for you.
+        That means that if you start doing the exercise early, I will be able to jump in to your PR and give you feedback.
+        That's basically points for free &ndash; you can fix the mistakes before the deadline and avoid losing points for them.
+        However, I make no promises about the frequency of my feedback on those, after all, there's quite a few of you and I'm
+        not always available.
+    </MudText>
+    <MudText GutterBottom="true">
+        As a reminder: you can get up to 2 points for the tests and 3 for code style. The tests score is visible in the
+        Feedback PR, and will be between 0 and 200 &ndash; divide them by 100 to get your actual points for grading.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">VS Code integration</MudText>
+    <MudText GutterBottom="true">
+        Arguably the coolest feature is VS Code integration. Click the magical "<em>Open in Visual Studio Code</em>"
+        button and you'll get put into VS Code. The first time it will ask you to download some extensions &ndash; let it.
+        On the left hand side there will be the GitHub logo <MudIcon Icon="@Icons.Custom.Brands.GitHub"></MudIcon>.
+        Click it and sign in. You will need to authorise VS Code to login to GitHub.
+    </MudText>
+    <MudText GutterBottom="true">
+        Once you're there, you'll see the list of all your classroom assignments. You can expand them
+        to see the test status, and you can interact with the PR from there. Click around and explore!
+    </MudText>
+    <MudText GutterBottom="true">
+        Under the GitHub icon there's also the Live Share tab. You can invite other students, or me, to do
+        pair-programming and share the code space. I'm not sure how well-refined this feature is, but feel
+        free to try it out!
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <MudText GutterBottom="true">
+        We know how to use GitHub Classroom and its VS Code integration. Complete the test assignment
+        by filling the <Code>Adder</Code> and <Code>HelloWorld</Code> classes to make sure everything
+        is configured correctly.
+    </MudText>
 </CourseSection>
 
 @code {

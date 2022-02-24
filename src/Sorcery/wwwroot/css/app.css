@@ -1,5 +1,4 @@
-﻿@import url('file:///C:\Projects\Sorcery\src\Sorcery\Shared\Components\Quote.razor.css');
-.mud-typography-gutterbottom {
+﻿.mud-typography-gutterbottom {
     margin-bottom: 1em !important
 }
 
@@ -40,6 +39,14 @@
 
     .blazor-error-boundary::after {
         content: "An error has occurred."
+    }
+
+div.code-toolbar > .toolbar {
+    opacity: 1 !important;
+}
+
+    div.code-toolbar > .toolbar > .toolbar-item > button {
+        top: -0.01em
     }
 
 .loading-screen {

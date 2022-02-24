@@ -1,6 +1,19 @@
-﻿<pre>
-    <code class=@($"language-{Language}")>@_displayCode</code>
-</pre>
+﻿@if(FileName is not null)
+{ 
+    <pre data-label="@FileName" class="@(LineNumbers ? "line-numbers" : "")">
+        <code class=@($"language-{Language}")>
+            @_displayCode
+        </code>
+    </pre>
+}
+else
+{
+    <pre class="@(LineNumbers ? "line-numbers" : "")">
+        <code class=@($"language-{Language}")>
+            @_displayCode
+        </code>
+    </pre>
+}
 
 @code {
     /// <summary>
@@ -8,6 +21,18 @@
     /// </summary>
     [Parameter]
     public string? Language { get; set; } = "csharp";
+
+    /// <summary>
+    ///     Whether to display line numbers. Defaults to false.
+    /// </summary>
+    [Parameter]
+    public bool LineNumbers { get; set; }
+
+    /// <summary>
+    ///     Source file name to display. If not given then it's omitted from the overlay.
+    /// </summary>
+    [Parameter]
+    public string? FileName { get; set; }
 
     [Parameter]
     [EditorRequired]
