@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider @ref="@_mudThemeProvider" IsDarkMode="@_isDarkMode" Theme="MatTheme"/>
+<MudThemeProvider @ref="@_mudThemeProvider" IsDarkMode="@_isDarkMode" Theme="_matTheme"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -21,7 +21,9 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        @Body
+        <CascadingValue Value="@ThemeInfo">
+            @Body
+        </CascadingValue>
         <MudScrollToTop>
             <MudFab Color="Color.Dark" Icon="@Icons.Filled.ArrowUpward" />
         </MudScrollToTop>
@@ -38,7 +40,9 @@
 
     MudThemeProvider _mudThemeProvider = new();
 
-    MudTheme MatTheme = ConfigureTheme();
+    MudTheme _matTheme = ConfigureTheme();
+
+    ThemeInfo ThemeInfo => new ThemeInfo(_isDarkMode, _matTheme);
 
     static MudTheme ConfigureTheme()
     {

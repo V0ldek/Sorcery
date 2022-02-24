@@ -8,9 +8,19 @@
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">C#</MudText>
     <MudText GutterBottom="true">
-    <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
-        <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
-    </MudPaper>
+        
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.Xs">
+            <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
+                <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mr-3 mb-3 pa-3" Elevation="0">
+                <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
         C# (current version 10, as of this writing) &ndash; language designed in 2000 by a team led by Anders Hejlsberg for Microsoft.
         He's the madlad that also came up with TypeScript, Delphi, and authored Turbo Pascal.
     </MudText>
@@ -77,11 +87,21 @@
     </MudText>
     <MudText GutterBottom="true">
         Most important part (for us at this moment) is the .NET runtime, or <Highlight>Common Language Runtime (CLR)</Highlight>.
-        This is the equivalent of Java's JVM and provides the virtual machine on which all the code runs.
-        Code running on the CLR is also called <Highlight>managed code</Highlight>. In general, the word <em>managed</em>
-        will mean things under the control of the CLR.
-    </MudText>
-    <MudText GutterBottom="true">
+        What's that?
+
+        <Quote>
+            The Common Language Runtime (CLR) is a complete, high level virtual machine designed to support a broad variety of programming languages and interoperation among them.
+        </Quote>
+
+        And why do we need this virtual machine?
+
+        <Quote>
+            The goal of the CLR is to make programming easy.
+        </Quote>
+
+        Hey, would you look at that, that's also C#'s goal!
+     </MudText>
+      <MudText GutterBottom="true">
         C# is just one of the languages running on the CLR. The other notable one is Visual Basic,
         but the interesting one is F#. It is an ML-like functional language for .NET. You might find it
         familiar if you ever programmed in ML or OCaml.
@@ -99,14 +119,14 @@ extends [System.Private.CoreLib]System.Object
     void '<Main>$' (
         string[] args
     ) cil managed 
-{
-    .maxstack 8
-    .entrypoint
+    {
+        .maxstack 8
+        .entrypoint
 
-    IL_0000: ldstr ""Hello, World!""
-    IL_0005: call void [System.Console]System.Console::WriteLine(string)
-    IL_000a: ret
-}
+        IL_0000: ldstr ""Hello, World!""
+        IL_0005: call void [System.Console]System.Console::WriteLine(string)
+        IL_000a: ret
+    }
 }
     ")/>        
     <MudText GutterBottom="true">
@@ -114,6 +134,11 @@ extends [System.Private.CoreLib]System.Object
         Well, more or less, I had to lie cause there's a lot of additional metadata in the actual output.
         By the way &ndash; I will often lie during the course to simplify things, but don't worry, I'll always tell you when it happens.
         I'm a terrible liar.
+    </MudText>
+    <MudText>
+        Code running under control of the CLR is also called <Highlight>managed code</Highlight>. In general, the word
+        <em>managed</em> in .NET world means "under control of the CLR", and <em>unmanaged</em> means everything else,
+        so for example system code somewhere in the kernel that runs when we try to print to console is unmanaged.
     </MudText>
     <MudText GutterBottom="true">
         There are other implementations of CLR than .NET. The notable ones are <Highlight>.NET Framework</Highlight> and the <Highlight>Mono</Highlight> runtime. 

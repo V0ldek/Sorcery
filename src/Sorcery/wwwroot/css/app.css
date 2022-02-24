@@ -1,4 +1,5 @@
-﻿.mud-typography-gutterbottom {
+﻿@import url('file:///C:\Projects\Sorcery\src\Sorcery\Shared\Components\Quote.razor.css');
+.mud-typography-gutterbottom {
     margin-bottom: 1em !important
 }
 

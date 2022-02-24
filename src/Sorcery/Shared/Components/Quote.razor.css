@@ -1,0 +1,11 @@
+﻿.quote-text {
+    color: #9E9E9E;
+    border-left-style: solid;
+    padding-left: 0.5em;
+}
+
+.quote-text-light {
+    color: #616161;
+    border-left-style: solid;
+    padding-left: 0.5em;
+}

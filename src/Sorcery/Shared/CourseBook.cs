@@ -35,6 +35,7 @@ public sealed class CourseBook
                     new ("Inheritance", "inheritance"),
                     new ("Abstract Types", "abstract-types"),
                     new ("Strings", "strings"),
+                    new ("Enums", "enums"),
                     new ("Attributes", "attributes"),
                     new ("Testing with xUnit", "testing-with-xunit"),
                     new ("Using GitHub Classroom", "using-github-classroom"),
