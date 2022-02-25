@@ -17,7 +17,8 @@
     "outputFileName": "wwwroot/scripts/bundled/bundle.min.js",
     "inputFiles": [
       "wwwroot/scripts/lib/*.js",
-      "!wwwroot/scripts/lib/asciinema-player.min.js"
+      "!wwwroot/scripts/lib/asciinema-player.min.js",
+      "!wwwroot/scripts/lib/katex-auto-render.js"
     ],
     "minify": {
       "enabled": true,
