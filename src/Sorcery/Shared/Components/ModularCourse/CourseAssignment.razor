@@ -1,10 +1,23 @@
 ﻿@using Sorcery.ModularCourse;
 
+@{
+    var previousSection = Assignment.Module.Sections[^1];
+}
+
 <PageTitle>@Assignment.DisplayName</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Large">
-    <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+    <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">            
+        <ButtonPrevious Link="@previousSection.Route">
+            Back to <Highlight>@previousSection.DisplayName</Highlight>.
+        </ButtonPrevious>
         <MudText Typo="Typo.h1" Class="mx-auto">@Assignment.DisplayName</MudText>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+
+        <MudAlert Variant="Variant.Outlined">
+            <MudLink Href="TODO" Target="_blank">GitHub Classroom invitation to the assignment.</MudLink>
+        </MudAlert>
+
         <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
         
         @ChildContent

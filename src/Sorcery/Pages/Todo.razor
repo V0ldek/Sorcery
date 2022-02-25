@@ -1,0 +1,28 @@
+﻿@page "/todo"
+
+<PageTitle>Todo</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <MudText Typo="Typo.h1">
+            Hey! You shouldn't be here!
+        </MudText>
+        <MudAlert Class="my-6" Severity="Severity.Error" Variant="Variant.Outlined">
+            <MudText GutterBottom="true">
+                You're here either because you typed this URL directly, or you just found a dead link
+                that should've been fixed before I deployed the new version of the page.
+            </MudText>            
+            <MudText GutterBottom="true">
+                If it's the latter, I'd appreciate if you could file an issue on 
+                <MudLink Href="@GitHub.Sorcery">GitHub</MudLink> telling me how you got here.
+            </MudText>            
+            <MudText>
+                If it's the former, well, I can't really do anything for you. Enjoy this
+                cute picture of a rabbit, I guess.
+            </MudText>
+        </MudAlert>            
+        <MudPaper MaxHeight="500px" MaxWidth="800px" Class="ma-auto pa-3" Elevation="1">
+                <MudImage Alt="C# sticker" title="C# sticker" Src="img/rabbit.webp" Fluid="true" Height="500" Width="800" />
+        </MudPaper>
+    </MudPaper>
+</MudContainer>
