@@ -10,8 +10,8 @@
 # Without this the project is reported to be mainly JS, which is BS.
 # Mark the vendored scripts explicitly as vendored.
 ###############################################################################
-src/Sorcery/wwwroot/scripts/* linguist-vendored
-src/Sorcery/wwwroot/css/* linguist-vendored
+src/Sorcery/wwwroot/scripts/lib/* linguist-vendored
+src/Sorcery/wwwroot/css/lib/* linguist-vendored
 
 ###############################################################################
 # Set default behavior for command prompt diff.
