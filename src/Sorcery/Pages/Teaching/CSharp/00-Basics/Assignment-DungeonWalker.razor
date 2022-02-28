@@ -153,7 +153,7 @@ public sealed class Modifier
     ")"/>
     <MudList>
         <MudListItem Icon="fas fa-flask">
-            <MudText><Code>HealthPotionLoot</Code> that replenishes a percentage of the hero's initial' <span class="health">health</span>.</MudText>
+            <MudText><Code>HealthPotionLoot</Code> that replenishes a percentage of the hero's max <span class="health">health</span>.</MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-gem">
             <MudText><Code>ChainmailLoot</Code> that increases the hero's <span class="armour">armour</span> by a fixed number.</MudText>
@@ -267,7 +267,7 @@ public abstract class Ability
         </MudListItem>
         <MudListItem Icon="fas fa-dumbbell">
             <MudText Color="Color.Default">
-                <Code>Sturdy</Code> &ndash; all damage received is reduced by half, rounded down, applied after standard <span class="armour">armour</span>
+                <Code>Sturdy</Code> &ndash; when receiving damage, mitigate half of damage received by half, rounded down, applied after standard <span class="armour">armour</span>
                 reduction;
             </MudText>
         </MudListItem>
@@ -305,8 +305,8 @@ public abstract class Ability
         </MudListItem>
         <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
-                <Code>Warlock</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $20$</span>
+                <Code>Warlock</Code> &ndash;
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $40$</span>
                     <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $25$</span>
                     <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span> <Code>MagicDamage</Code>, <Code>Draining</Code>;
             </MudText>
@@ -358,7 +358,7 @@ public abstract class Ability
             <MudText Color="Color.Default">
                 <Code>DarkLord</Code> &ndash; 
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $100$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $50$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $40$</span>
                     <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span> <Code>MagicShield</Code>, <Code>Sturdy</Code>, <Code>Tenacious</Code>;
             </MudText>
         </MudListItem>
