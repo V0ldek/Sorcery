@@ -45,14 +45,18 @@
                 a few rounds of code review with me before the deadline you will most likely get full score. If you submit working but ugly code at the last moment,
                 you'll probably get at most 2 points. The details of working with GitHub Classroom will be introduced at the end of the first module.
             </MudText>
-            <MudText GutterBottom="true">
+            <MudText>
                 Microassignments are meant to be a continuous feedback loop, both for you, to know how well you have grasped the material, and for me, to know how
                 bad I am at explaining it. It is therefore very important for the overall health of our course that you're doing them consistently. The time for them
                 will be up until Tuesday, 18:00, the day before next class.
             </MudText>
-            <MudAlert Severity="Severity.Warning">
+            <MudAlert Class="my-2" Severity="Severity.Warning">
                 To pass in the first term you need to get at least <Highlight>25</Highlight> points for these microassignments!
             </MudAlert>
+            <MudText>
+                Note that this threshold is chosen so that passing automated tests for all microassignments guarantees meeting it.
+                The intention is that you shouldn't have to sweat to pass, but to get a good grade you need to put in work.
+            </MudText>
         </MudTabPanel>
         <MudTabPanel Text="Project" Icon="@Icons.Filled.Source">
             <MudText GutterBottom="true">
@@ -61,36 +65,32 @@
                 or a video game. The app will be graded in four categories &ndash; UI, logic, data layer, and tests. 
                 Each is worth <Highlight>10</Highlight> points, and there's additional
                 10 bonus points if you do something especially interesting. You can expect roughly 5 of those points be for the actual functionality, and 5 as
-                points for code quality. In total, there's <Highlight>50</Highlight> points to be gained here.
+                points for code quality. In total, you can get at most <Highlight>50</Highlight> points for the project.
             </MudText>
             <MudList>
                 <MudListItem Icon="@Icons.Filled.Devices">
                     <MudText>
-                        <strong>UI</strong>: this can be a GUI, but it can also be a command-line interface. The only requirement is that it
-                        has to be .NET-powered &ndash; don't expect points for writing a pure ReactJS app over your .NET API!
+                        <strong>UI</strong> (<Highlight>10</Highlight>): this can be a GUI, but it can also be a command-line interface. 
+                        The only requirement is that it has to be .NET-powered &ndash; don't expect points for writing a pure ReactJS app over your .NET API!
                     </MudText>
                 </MudListItem>
                 <MudListItem Icon="@Icons.Filled.Code">
                     <MudText>
-                        <strong>Logic</strong>: the code that operates on data and gives results to be displayed in the UI. This will be
-                        the business logic of your web app, the rules and scripts of your game, or whatever other functionality you want your project to provide.
-                    </MudText>
-                </MudListItem>
-                <MudListItem Icon="@Icons.Filled.Storage">
-                    <MudText>
-                        <strong>Data access</strong>: your database connections, file operations, talking with a cloud data store,
+                        <strong>Logic</strong> (<Highlight>20</Highlight>): the code that operates on data and gives results to be displayed in the UI. This will be
+                        the business logic of your web app, the rules and scripts of your game, or whatever other functionality you want your project to provide,
+                        as well as your database connections, file operations, talking with a cloud data store,
                         whatever you choose as your data source. If you have a web app, it will probably be a database connection or cloud storage.
                         If you write a game, it might be the save file system.
                     </MudText>
                 </MudListItem>
                 <MudListItem Icon="@Icons.Filled.Science">
                     <MudText>
-                        <strong>Tests</strong>: every part of your logic should be unit tested. Any additional testing, like integration or end-to-end
-                        tests, will also count.
+                        <strong>Tests</strong> (<Highlight>10</Highlight>): every part of your logic should be unit tested. 
+                        Any additional testing, like integration or end-to-end tests, will count as a bonus.
                     </MudText>
                 </MudListItem>
                 <MudListItem Icon="@Icons.Filled.Stars">
-                    <MudText><strong>Bonus</strong>: surprise me.</MudText>
+                    <MudText><strong>Bonus</strong> (<Highlight>???</Highlight>): surprise me.</MudText>
                 </MudListItem>
             </MudList>
             <MudText GutterBottom="true">

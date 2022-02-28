@@ -6,7 +6,29 @@
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+                    <MudText Typo="Typo.h1">
+                        Well, then you are lost!
+                    </MudText>
+                    <MudAlert Class="my-6" Severity="Severity.Error" Variant="Variant.Outlined">
+                        <MudText GutterBottom="true">
+                            You're here either because you typed this URL directly, or you just found a dead link
+                            that should've been fixed before I deployed the new version of the page.
+                        </MudText>            
+                        <MudText GutterBottom="true">
+                            If you're sure this page is ought to be, but it isn't, I'd appreciate if you could file an issue on 
+                            <MudLink Href="@GitHub.Sorcery">GitHub</MudLink> telling me how you got here.
+                        </MudText>            
+                        <MudText>
+                            Other than that, enjoy this cute picture of a rabbit.
+                        </MudText>
+                    </MudAlert>            
+                    <MudPaper MaxHeight="500px" MaxWidth="800px" Class="ma-auto pa-3" Elevation="1">
+                            <MudImage Alt="A cute rabbit" title="A cute rabbit" Src="img/rabbit.webp" Fluid="true" Height="500" Width="800" />
+                    </MudPaper>
+                </MudPaper>
+            </MudContainer>
         </LayoutView>
     </NotFound>
 </Router>
