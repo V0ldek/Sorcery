@@ -231,14 +231,6 @@ public abstract class Ability
                 <Code>Dodge</Code> &ndash; ignore the first enemy attack during an encounter;
             </MudText>
         </MudListItem>
-        <MudListItem Icon="fas fa-droplet">
-            <MudText Color="Color.Default">
-                <Code>Draining</Code> &ndash; heal for <span class="health">$33\%$ of health damage</span> dealt to enemies, rounded down;
-                this is actual damage, not counting damage absorbed by  <span class="armour">armour</span> or <span class="barrier">barrier</span>;
-                this heal applies after damage is processed, so if the character with this ability goes down to <span class="health">$0$ health</span>
-                during a combat round they cannot be healed
-            </MudText>
-        </MudListItem>
         <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
                 <Code>MagicDamage</Code> &ndash; ignore half of the enemy's <span class="armour">armour</span>, rounded down;
@@ -264,7 +256,15 @@ public abstract class Ability
                 <Code>Slow</Code> &ndash; after an attack has to wait a round before attacking again, <em>but</em> base damage
                 of their attacks is doubled, i.e. equal to two times their <span class="damage">attack damage</span>;
             </MudText>
-        </MudListItem>        
+        </MudListItem>
+        <MudListItem Icon="fas fa-droplet">
+            <MudText Color="Color.Default">
+                <Code>Spelldrain</Code> &ndash; heal for <span class="health">$33\%$ of health damage</span> dealt to enemies, rounded down;
+                this is actual damage, not counting damage absorbed by  <span class="armour">armour</span> or <span class="barrier">barrier</span>;
+                this heal applies after damage is processed, first damage of both combatants is applied, and then the character with this
+                ability heals if and only if they are still alive &ndash; no resurrection!
+            </MudText>
+        </MudListItem>
         <MudListItem Icon="fas fa-dumbbell">
             <MudText Color="Color.Default">
                 <Code>Sturdy</Code> &ndash; all damage received is reduced by half, rounded down, applied after standard <span class="armour">armour</span>
