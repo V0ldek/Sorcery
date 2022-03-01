@@ -44,7 +44,16 @@ public interface IRoom
         used for tracking the Hero's achievements. It then processes the encounter, returning
         an <Code>ITurnOutcome</Code>, that can display its information as a string.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Combat</MudText>
+    <MudText GutterBottom="true">
+        Your task will be to fill out the implementation with missing pieces.
+        Existing methods have a default "implementation" of:
+    </MudText>
+    <CodeBlock Code="@("throw new NotImplementedExecption();")"/>
+    <MudText GutterBottom="true">
+        We don't know what the magical <Code>throw</Code> is, but don't worry.
+        Treat this as a placeholder that says "if you ever call this method, please crash, it's not ready yet".
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Combat</MudText>
     <MudText>
         Encounters happen in a <Code>CombatRoom</Code>. Each <Code>Character</Code> in the game has three basic statistics:
     </MudText>
@@ -66,6 +75,7 @@ public interface IRoom
             </MudText>
         </MudListItem>
     </MudList>
+    <LatexRenderer ContainerId="statistics-list" />
     <MudText GutterBottom="true">
         Combat proceeds in rounds. Each round both characters prepare an attack
         and then receive the attacks simultaneously. Damage dealt to the character is the <span class="damage">attack damage</span>
@@ -73,62 +83,88 @@ public interface IRoom
         The character's <span class="health">health</span> is reduced by the damage received.
         Combat continues until either one or both characters die.
     </MudText>
-    <MudText GutterBottom="true">
-        Characters can have various special abilities that modify these rules. The basic characters
-        included with the assignment have none. The logic of combat is implemented in <Code>CombatRoom</Code>:
+    <LatexRenderer ContainerId="combat-description"/>
+    <CodeBlock Code="@("public ITurnOutcome Resolve()")"/>
+    <MudText id="combat-description">
+        When called it must resolve the combat, which results in the Hero and/or Enemy involved in combat to fall to <span class="health">$0$ health</span>.
     </MudText>
-    <LatexRenderer ContainerId="statistics-list" />    
-    <CodeBlock FileName="DungeonWalker/Logic/Rooms/CombatRoom.cs" Code="@(@"
-namespace CSharpBasics.Logic.Rooms;
-
-public sealed class CombatRoom : IRoom
-{
-    private readonly Enemy _enemy;
-
-    public CombatRoom(Enemy enemy) => _enemy = enemy;
-
-    public ITurnOutcome Visit(Hero hero, PlayerStatistics statistics)
-    {
-        hero.OnCombatStart();
-        _enemy.OnCombatStart();
-        var outcome = new CombatOutcome(hero, _enemy);
-
-        while (hero.IsAlive && _enemy.IsAlive)
-        {
-            var playerVsEnemy = hero.PrepareAttack(_enemy);
-            var enemyVsPlayer = _enemy.PrepareAttack(hero);
-
-            var playerVsEnemyOutcome = _enemy.ReceiveAttack(playerVsEnemy);
-            var enemyVsPlayerOutcome = hero.ReceiveAttack(enemyVsPlayer);
-
-            hero.OnDamageDealt(_enemy, playerVsEnemyOutcome);
-            _enemy.OnDamageDealt(hero, enemyVsPlayerOutcome);
-            hero.OnDamageReceived(_enemy, enemyVsPlayerOutcome);
-            _enemy.OnDamageReceived(hero, playerVsEnemyOutcome);
-
-            statistics.EnemyAttacked(playerVsEnemyOutcome);
-            statistics.PlayerAttacked(enemyVsPlayerOutcome);
-
-            outcome.RecordCombatRound(playerVsEnemy, playerVsEnemyOutcome, enemyVsPlayer, enemyVsPlayerOutcome);
-        }
-
-        if (!_enemy.IsAlive)
-        {
-            statistics.RoomCleared();
-        }
-
-        hero.OnCombatEnd();
-        _enemy.OnCombatEnd();
-
-        return outcome;
-    }
-}
+    <MudAlert Class="my-2" Variant="Variant.Outlined">
+        Note that this will require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
+        to allow them to be affected by <Code>Combat</Code>. You can freely extend them with any methods you want,
+        but you cannot change the existing signatures, since the tests are using them.
+    </MudAlert>
+    <MudText>
+        We want combat to be flashy! The <Code>ITurnOutcome</Code> returned by the <Code>Combat.Resolve</Code> method
+        should include some details about how combat proceeded. Here's an example output:
+    </MudText>
+    <CodeBlock Language="plain" Code="@(@"
+Combat! Warrior engages the filthy Orc!
+Hero: Warrior: ❤️ 50 ⚔️ 25 🛡 20
+Enemy: Orc: ❤️ 40 ⚔️ 25 🛡 10
+Combat round 1 begins!
+Warrior attacks Orc for 25 damage.
+Orc attacks Warrior for 25 damage.
+Warrior deals 15 damage to Orc, while 10 damage was avoided.
+Orc deals 5 damage to Warrior, while 20 damage was avoided.
+Hero: Warrior: ❤️ 45 ⚔️ 25 🛡 20
+Enemy: Orc: ❤️ 25 ⚔️ 25 🛡 10
+Combat round 2 begins!
+Warrior attacks Orc for 25 damage.
+Orc attacks Warrior for 25 damage.
+Warrior deals 15 damage to Orc, while 10 damage was avoided.
+Orc deals 5 damage to Warrior, while 20 damage was avoided.
+Hero: Warrior: ❤️ 40 ⚔️ 25 🛡 20
+Enemy: Orc: ❤️ 10 ⚔️ 25 🛡 10
+Combat round 3 begins!
+Warrior attacks Orc for 25 damage.
+Orc attacks Warrior for 25 damage.
+Warrior deals 10 damage to Orc, while 15 damage was avoided.
+Orc deals 5 damage to Warrior, while 20 damage was avoided.
+Hero: Warrior: ❤️ 35 ⚔️ 25 🛡 20
+Enemy: Orc: ❤️ 0 ⚔️ 25 🛡 10
+Enemy vanquished!
     ")"/>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Loot</MudText>
+    <MudText GutterBottom="true">
+        The possible final outcomes are:
+        <MudList Dense="true">
+            <MudListItem>"Enemy vanquished!" &ndash; when the enemy dies and the hero survives;</MudListItem>
+            <MudListItem>"The hero falls!" &ndash; when the hero dies and the enemy survives;</MudListItem>
+            <MudListItem>"The hero falls, but takes the fiend with them!" &ndash; when both die;</MudListItem>
+        </MudList>
+    </MudText>
+    <MudText>
+        Finally, don't forget about statistics! 
+        The <Code>DungeonWalker.Logic.Statistics.PlayerStatistics</Code> class exists to keep track of Hero's progress.
+        Its properties are rather self-explanatory. You need to modify it during combat
+        to keep track of all the damage. You will most likely need to add methods to the <Code>PlayerStatistics</Code> class for that.
+    </MudText>
+    <MudText id="combat-outcome-points">
+        This is tested by the "Combat" test group, worth $0.2$ points.
+    </MudText>
+    <LatexRenderer ContainerId="combat-points"/>
+
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Loot</MudText>
     <MudText>
         Existing rooms are <Code>EmptyRoom</Code>, which does nothing, and the <Code>CombatRoom</Code>.
-        Implement the new <Code>LootRoom</Code>, that contains one of the three possible loot items for the hero:
+        Implement the new <Code>LootRoom</Code>, that contains one of the following possible loot items for the hero:
     </MudText>
+    <MudList>
+        <MudListItem Icon="fas fa-flask">
+            <MudText><Code>HealthPotion</Code> that replenishes a percentage of the hero's max <span class="health">health</span>.</MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-gem">
+            <MudText><Code>Chainmail</Code> that increases the hero's <span class="armour">armour</span> by a fixed number.</MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-shield">
+            <MudText><Code>DamageCrystal</Code> that increases the hero's <span class="damage">damage</span> by a fixed number.</MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-vault">
+            <MudText>
+                <Code>Chest</Code> that implements the <MudLink Href="https://refactoring.guru/design-patterns/composite">composite design pattern</MudLink>.
+                It's a loot that contains other loot and applies all of it to the hero.
+            </MudText>
+        </MudListItem>
+    </MudList>
     <CodeBlock FileName="DungeonWalker/Logic/Loot/ILoot.cs" LineNumbers="true" Code="@(@"
 using DungeonWalker.Logic.Characters;
 
@@ -136,106 +172,60 @@ namespace DungeonWalker.Logic.Loot;
 
 public interface ILoot
 {
-    Modifier CreateModifier(Character character);
-}    
-    ")"/>    
-    <CodeBlock FileName="DungeonWalker/Logic/Characters/Modifier.cs (fragment)" LineNumbers="true" Code="@(@"
-public sealed class Modifier
-{
-    public int HealthBoost { get; init; }
-
-    public int DamageBoost { get; init; }
-
-    public int ArmourBoost { get; init; }
-
-    // ...
+    void ApplyLoot(Hero hero);
 }
     ")"/>
-    <MudList>
-        <MudListItem Icon="fas fa-flask">
-            <MudText><Code>HealthPotionLoot</Code> that replenishes a percentage of the hero's max <span class="health">health</span>.</MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-gem">
-            <MudText><Code>ChainmailLoot</Code> that increases the hero's <span class="armour">armour</span> by a fixed number.</MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-shield">
-            <MudText><Code>DamageCrystalLoot</Code> that increases the hero's <span class="damage">damage</span> by a fixed number.</MudText>
-        </MudListItem>
-    </MudList>
     <MudAlert Class="my-2" Variant="Variant.Outlined">
-        <Code>LootRoom</Code> should have a public constructor that takes an instance of <Code>DungeonWalker.Logic.Loot.ILoot</Code>.
-        Each of the three loot items should implement <Code>ILoot</Code> and have a public constructor that takes 
-        in the strength of the loot: for <Code>HealthPotionLoot</Code> it is a <Code>float</Code>
-        (amount of max <span class="health">health</span> healed), 
-        for the other two it is an `<Code>int</Code> representing the number by which to increase the relevant statistic.
-        It needs to implement <Code>IRoom</Code> and be located in the <Code>DungeonWalker.Logic.Rooms</Code> namespace.
-    </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Abilities</MudText>    
+        This might, again, require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
+        to allow them to be affected by <Code>ILoot</Code>.
+    </MudAlert>   
     <MudText GutterBottom="true">
-        Heroes and enemies will require special abilities. An ability extends the
-        <Code>DungeonWalker.Logic.Abilities.Ability</Code> abstract class.
-        That class contains stub implementations for various events during combat:
+        As the outcome, use the <Code>DungeonWalker.Logic.Rooms.LootRoomOutcome</Code> class:
     </MudText>
-    <CodeBlock FileName="DungeonWalker/Logic/Abilities/Ability.cs" LineNumbers="true" Code="@(@"
-using DungeonWalker.Logic.Characters;
-using DungeonWalker.Logic.Combat;
-
-namespace DungeonWalker.Logic.Abilities;
-
-public abstract class Ability
+    <CodeBlock FileName="DungeonWalker/Logic/Rooms/LootRoomOutcome.cs" LineNumbers="true" Code="@(@"
+public sealed class LootRoomOutcome : ITurnOutcome
 {
-    public virtual Attack ModifyPreparedAttack(Character attacker, Attack attack) => attack;
+    public string Description { get; }
 
-    public virtual AttackOutcome ModifyReceivedAttack(Character defender, AttackOutcome attackOutcome)
-        => attackOutcome;
+    private LootRoomOutcome(string description) => Description = description;
 
-    public virtual void OnModifierReceived(Character character, Modifier modifier)
-    {
-    }
+    private static LootRoomOutcome SingleLoot(string description) =>
+        new($""The room is empty except for a small package. And inside... {description}"");
 
-    public virtual void OnCombatEnd(Character character)
-    {
-    }
+    public static LootRoomOutcome FoundHealthPotion(int hpHealed) =>
+         SingleLoot($""a Health Potion! It restores ❤️ {hpHealed}!"");
 
-    public virtual void OnCombatStart(Character character)
-    {
-    }
+    public static LootRoomOutcome FoundChainmail(int armourGained) =>
+         SingleLoot($""a Chainmail! It grants 🛡 {armourGained}!"");
 
-    public virtual void OnDamageReceived(Character defender, Character attacker, AttackOutcome outcome)
-    {
-    }
+    public static LootRoomOutcome FoundDamageCrystal(int attackDamageGained) =>
+         SingleLoot($""a Damage Crystal! It grants ⚔️ {attackDamageGained}!"");
 
-    public virtual void OnDamageDealt(Character attacker, Character defender, AttackOutcome outcome)
-    {
-    }
-}
-    ")"/>    
+    public static LootRoomOutcome FoundChest(ILoot[] contents) => throw new NotImplementedException();
+}")" />
     <MudText GutterBottom="true">
-        Look at the code in <Code>DungeonWalker.Logic.Characters.Character</Code> to
-        understand exactly how these methods interact with combat.
+        You only need to implement the <Code>FoundChest</Code> method. Here's the expected output
+        for a chest with a potion and a chainmail:
     </MudText>
+    <CodeBlock Language="plain" Code="@(@"
+The room is empty except for a large chest. And inside...
+  - a Health Potion! It restores ❤️ 25!
+  - a Chainmail! It grants 🛡 10!
+    ")" />
+    <MudText id="loot-outcome-points">
+        This is tested by the "Loot" test group, worth $0.2$ points.
+    </MudText>
+    <LatexRenderer ContainerId="loot-points"/>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Dungeons</MudText>
     <MudText>
-        Here's the list of all the abilities you need to implement.
-        Automatic tests will not reference these abilities individually, but they will assume
-        that characters that are supposed to have them indeed do have them.
+
     </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 4. &ndash; Hero abilities</MudText>
+    <MudText>
+
+    </MudText>
+
     <MudList id="abilities-list">
-        <MudListItem Icon="fas fa-coins">
-            <MudText Color="Color.Default">
-                <Code>Bounty</Code> &ndash; permanently gain <span class="damage">$3$</span>
-                additional <span class="damage">attack damage</span> for every enemy defeated;
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-wind">
-            <MudText Color="Color.Default">
-                <Code>Dodge</Code> &ndash; ignore the first enemy attack during an encounter;
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-wand-sparkles">
-            <MudText Color="Color.Default">
-                <Code>MagicDamage</Code> &ndash; ignore half of the enemy's <span class="armour">armour</span>, rounded down;
-            </MudText>
-        </MudListItem>
         <MudListItem Icon="fas fa-hand-sparkles">
             <MudText Color="Color.Default">
                 <Code>MagicShield</Code> &ndash; at the start of combat, gain <span class="barrier">$20$ barrier</span>;
@@ -249,20 +239,6 @@ public abstract class Ability
                 <Code>Piercing</Code> &ndash; decrease enemy <span class="armour">armour</span> by <span class="armour">$5$</span> with every attack;
                 this happens <em>after</em> the attack, so first, damage is mitigated by <span class="armour">armour</span> and then 
                 <span class="armour">armour</span> is decreased by $5$.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-weight-hanging">
-            <MudText Color="Color.Default">
-                <Code>Slow</Code> &ndash; after an attack has to wait a round before attacking again, <em>but</em> base damage
-                of their attacks is doubled, i.e. equal to two times their <span class="damage">attack damage</span>;
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-droplet">
-            <MudText Color="Color.Default">
-                <Code>Spelldrain</Code> &ndash; heal for <span class="health">$33\%$ of health damage</span> dealt to enemies, rounded down;
-                this is actual damage, not counting damage absorbed by  <span class="armour">armour</span> or <span class="barrier">barrier</span>;
-                this heal applies after damage is processed, first damage of both combatants is applied, and then the character with this
-                ability heals if and only if they are still alive &ndash; no resurrection!
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-dumbbell">
@@ -287,14 +263,6 @@ public abstract class Ability
         Add new heroes to the roster, using the abilities defined above:
     </MudText>
     <MudList id="heroes-list">
-        <MudListItem Icon="fas fa-coins">
-            <MudText Color="Color.Default">
-                <Code>BountyHunter</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $15$</span> <Code>Bounty</Code>, <Code>Tenacious</Code>;
-            </MudText>
-        </MudListItem>
         <MudListItem Icon="fas fa-wind">
             <MudText Color="Color.Default">
                 <Code>Rogue</Code> &ndash; 
