@@ -83,11 +83,11 @@ public interface IRoom
         The character's <span class="health">health</span> is reduced by the damage received.
         Combat continues until either one or both characters die.
     </MudText>
-    <LatexRenderer ContainerId="combat-description"/>
     <CodeBlock Code="@("public ITurnOutcome Resolve()")"/>
     <MudText id="combat-description">
         When called it must resolve the combat, which results in the Hero and/or Enemy involved in combat to fall to <span class="health">$0$ health</span>.
     </MudText>
+    <LatexRenderer ContainerId="combat-description"/>
     <MudAlert Class="my-2" Variant="Variant.Outlined">
         Note that this will require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
         to allow them to be affected by <Code>Combat</Code>. You can freely extend them with any methods you want,
@@ -138,7 +138,7 @@ Enemy vanquished!
         Its properties are rather self-explanatory. You need to modify it during combat
         to keep track of all the damage. You will most likely need to add methods to the <Code>PlayerStatistics</Code> class for that.
     </MudText>
-    <MudText id="combat-outcome-points">
+    <MudText id="combat-points">
         This is tested by the "Combat" test group, worth $0.2$ points.
     </MudText>
     <LatexRenderer ContainerId="combat-points"/>
@@ -212,90 +212,84 @@ The room is empty except for a large chest. And inside...
   - a Health Potion! It restores ❤️ 25!
   - a Chainmail! It grants 🛡 10!
     ")" />
-    <MudText id="loot-outcome-points">
+    <MudText id="loot-points">
         This is tested by the "Loot" test group, worth $0.2$ points.
     </MudText>
     <LatexRenderer ContainerId="loot-points"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Dungeons</MudText>
     <MudText>
-
+        There are two room layouts implemented, <Code>Basic</Code> and <Code>Adventure</Code>.
+        Adventure is used for input-output tests and touches all elements of the solution.
+        But they are all rather simple, in that they are just constant rooms you could generate
+        by hand. Create two more interesting ones, both parameterised by a number $n$:
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 4. &ndash; Hero abilities</MudText>
-    <MudText>
-
-    </MudText>
-
-    <MudList id="abilities-list">
-        <MudListItem Icon="fas fa-hand-sparkles">
-            <MudText Color="Color.Default">
-                <Code>MagicShield</Code> &ndash; at the start of combat, gain <span class="barrier">$20$ barrier</span>;
-                damage dealt to this character decreases <span class="barrier">barrier</span> first, before affecting their
-                <span class="health">health</span>; damage dealt to barrier is affected by <span class="armour">armour</span> as normal;
-                at the end of an encounter <span class="barrier">barrier</span> is reduced to $0$.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-heart-crack">
-            <MudText Color="Color.Default">
-                <Code>Piercing</Code> &ndash; decrease enemy <span class="armour">armour</span> by <span class="armour">$5$</span> with every attack;
-                this happens <em>after</em> the attack, so first, damage is mitigated by <span class="armour">armour</span> and then 
-                <span class="armour">armour</span> is decreased by $5$.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-dumbbell">
-            <MudText Color="Color.Default">
-                <Code>Sturdy</Code> &ndash; when receiving damage, mitigate half of damage received by half, rounded down, applied after standard <span class="armour">armour</span>
-                reduction;
-            </MudText>
-        </MudListItem>
+    <MudList>
         <MudListItem Icon="fas fa-hand-fist">
-            <MudText Color="Color.Default">
-                <Code>Tenacious</Code> &ndash; while at or below <span class="health">$25\%$ max health</span> (rounded down), 
-                <span class="damage">attack damage</span> is increased by <span class="damage">$20$</span>.
-            </MudText>
+            <Code>RipAndTear</Code> &ndash; 
+            In the first room there's a Skeleton Warrior. In the second there's
+            a <span class="health">100\% health</span> Health Potion. In the third one there's a Skeleton Warrior.
+            And so on, and so forth, repeat for $n$ rooms.
+        </MudListItem>
+        <MudListItem Icon="fas fa-smile">
+            <Code>FistAndBuckler</Code> &ndash; 
+            In every third room there's a Loot room with a Health Potion for <span class="health">25\% health</span>.
+            In every fifth room there's a Loot romm with a Chest containing a Chainmail and a Damage Crystal,
+            for <span class="armour">$5$ armour</span> and <span class="damage">$5$ attack damage</span>, respectively.
+            If a room falls into both of these categories then it has a Chest with all three items.
+            Every other room is a combat with an Orc, until room $30$, after that the combat
+            is against a Giant. Repeat until $n$ rooms are created.
         </MudListItem>
     </MudList>
-    <LatexRenderer ContainerId="abilities-list" />
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Heroes</MudText>   
-    <MudText GutterBottom="true">
-        First, add the <Code>Tenacious</Code> and <Code>Sturdy</Code> abilities to the <Code>Warrior</Code>.
+    <MudText id="dungeons-points">
+        This is tested by the "Loot" test group, worth $0.2$ points.
     </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 4. &ndash; Heroicly hardened heroes and enormous evil enemies</MudText>
     <MudText>
-        Add new heroes to the roster, using the abilities defined above:
+        First of all, we need to define more heroes for the roster and enemies for them to fight.
+        Now, our Heroes aren't just ordinary blokes. To represent their heroic tenacity,
+        they have a special ability that triggers when they're in dire straits. When at or below
+        <span class="health">$25\%$ max health</span> (rounded down), they gain a special
+        <Highlight>Tenacity</Highlight> statistics buff, different for each Hero.
+        Fill out the <Code>todo</Code> and <Code>todo</Code> static classes to return correct
+        instances for heroes.
     </MudText>
+    <LatexRenderer ContainerId="abilities-list" />
     <MudList id="heroes-list">
         <MudListItem Icon="fas fa-wind">
             <MudText Color="Color.Default">
-                <Code>Rogue</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $40$</span>
+                <Code>Warrior</Code> &ndash; 
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
                     <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $30$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span> <Code>Dodge</Code>, <Code>Piercing</Code>;
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>,
+                    <Highlight>Tenacity</Highlight>: hardened in battle, the Warrior refuses to yield and gains 
+                    <span class="armour">20 armour</span>.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
-                <Code>Warlock</Code> &ndash;
+                <Code>Rogue</Code> &ndash;
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $40$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $25$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span> <Code>MagicDamage</Code>, <Code>Draining</Code>;
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $40$</span>
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span>,
+                    <Highlight>Tenacity</Highlight>: determined to bring the fight to a close, the Rogue strikes
+                    where it hurts and gains <span class="damage">20 attack damage</span>.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hand-sparkles">
             <MudText Color="Color.Default">
                 <Code>Wizard</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $40$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $30$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $5$</span> <Code>MagicDamage</Code>, <Code>MagicShield</Code>;
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $45$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $35$</span>
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $15$</span>
+                    <Highlight>Tenacity</Highlight>: the Wizard channels powerful defensive barriers,
+                    and viciously precise eldritch blasts, gaining <span class="armour">10 armour</span> and
+                    <span class="damage">10 attack damage</span>.
             </MudText>
         </MudListItem>
     </MudList>
-    <LatexRenderer ContainerId="heroes-list" />
-    <MudAlert Class="my-2" Variant="Variant.Outlined">
-        Each of these must be a subtype of <Code>Hero</Code> and have a public parameterless constructor.
-        They should be located in the <Code>DungeonWalker.Logic.Characters.Heroes</Code> namespace.
-    </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Enemies</MudText>    
+    <LatexRenderer ContainerId="heroes-list" /> 
     <MudText>
-        And some enemies for them to fight!
+        And add some enemies for them to fight!
     </MudText>
     <MudList id="enemies-list">
         <MudListItem Icon="fas fa-skull">
@@ -303,7 +297,7 @@ The room is empty except for a large chest. And inside...
                 <Code>SkeletonArcher</Code> &ndash; 
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $20$</span>
                     <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $25$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $5$</span> <Code>Dodge</Code>;
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $5$</span>
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-chess-rook">
@@ -311,7 +305,7 @@ The room is empty except for a large chest. And inside...
                 <Code>Giant</Code> &ndash; 
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
                     <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span> <Code>Slow</Code>;
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-wand-sparkles">
@@ -319,208 +313,19 @@ The room is empty except for a large chest. And inside...
                 <Code>DarkSorcerer</Code> &ndash; 
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $30$</span>
                     <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span> <Code>MagicDamage</Code>;
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span>
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-crown">
             <MudText Color="Color.Default">
                 <Code>DarkLord</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $100$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $40$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span> <Code>MagicShield</Code>, <Code>Sturdy</Code>, <Code>Tenacious</Code>;
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $150$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $50$</span>
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $30$</span>
             </MudText>
         </MudListItem>
     </MudList>
-    <MudAlert Class="my-2" Variant="Variant.Outlined">
-        Each of these must be a subtype of <Code>Enemy</Code> and have a public parameterless constructor.
-        They should be located in the <Code>DungeonWalker.Logic.Characters.Enemies</Code> namespace.
-    </MudAlert>
     <LatexRenderer ContainerId="enemies-list" />
-    <MudText Typo="Typo.h2">Task 4. Adventure</MudText>
-    <MudText GutterBottom="true">
-        Finally, create a <Code>IRoomLayout</Code> of an epic adventure!
-        Create an <Code>Adventure</Code> class in <Code>DungeonWalker.Logic.Dungeons.Layouts</Code>
-        that implements <Code>IRoomLayout</Code> and creates a dungeon with rooms:
-    </MudText>
-    <MudList id="adventure-room-layout">
-        <MudListItem Icon="fas fa-door">
-            <MudText Color="Color.Default">
-                An <Code>EmptyRoom</Code>, we start off slow.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                <Code>CombatRoom</Code> with an <Code>Orc</Code>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-vault">
-            <MudText Color="Color.Default">
-                <Code>LootRoom</Code> with a <Code>ChainmailLoot</Code> for <span class="armour">$10$ armour</span>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                <Code>CombatRoom</Code> with a <Code>DarkSorcerer</Code>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-vault">
-            <MudText Color="Color.Default">
-                <Code>LootRoom</Code> with a <Code>HealthPotionLoot</Code> for <span class="health">$25\%$ health</span>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                <Code>CombatRoom</Code> with an <Code>Orc</Code>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-vault">
-            <MudText Color="Color.Default">
-                <Code>LootRoom</Code> with a powerful <Code>DamageCrystalLoot</Code> for <span class="damage">$15$ damage</span>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                <Code>CombatRoom</Code> with a <Code>SkeletonArcher</Code>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                <Code>CombatRoom</Code> with a <Code>SkeletonWarrior</Code>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-vault">
-            <MudText Color="Color.Default">
-                <Code>LootRoom</Code> with a <Code>HealthPotionLoot</Code> for <span class="health">$25\%$ health</span>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                <Code>CombatRoom</Code> with an <Code>Giant</Code>. This is the guardian of the dungeon's Dark Lord!
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-vault">
-            <MudText Color="Color.Default">
-                <Code>LootRoom</Code> with a full <Code>HealthPotionLoot</Code> for <span class="health">$100\%$ health</span>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-vault">
-            <MudText Color="Color.Default">
-                <Code>LootRoom</Code> with a <Code>DamageCrystalLoot</Code> for <span class="damage">$10$ damage</span>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-vault">
-            <MudText Color="Color.Default">
-                <Code>LootRoom</Code> with a <Code>ChainmailLoot</Code> for <span class="armour">$10$ armour</span>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                This is it, the final boss! A <Code>CombatRoom</Code> with a <Code>DarkLord</Code>!
-            </MudText>
-        </MudListItem>
-    </MudList>
-    <LatexRenderer ContainerId="adventure-room-layout" />
-    <MudText Typo="Typo.h2">Example combat</MudText>
-    <MudText GutterBottom="true" id="example-fight-introduction">
-        For example, consider a combat against a <Code>Giant</Code> by
-        a standard <Code>Warrior</Code> with <Code>Tenacious</Code> and <Code>Sturdy</Code> and stats 
-            <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $18/50$</span>
-            <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $30$</span>
-            <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $25$</span> &ndash; 
-            they picked up a <Code>DamageCrystalLoot</Code> that gave them <span class="damage">$5$ bonus damage</span>, 
-            <Code>ChainmailLoot</Code> for <span class="armour">$5$ armour</span>, but also
-            lost <span class="health">$32$ health</span> already.
-    </MudText>
-    <MudTimeline TimelinePosition="TimelinePosition.Left" id="example-fight-timeline">
-        <MudTimelineItem Size="Size.Medium" Variant="Variant.Filled" Color="Color.Primary" style="text-align: center">
-            <ItemDot>
-                <MudIcon Icon="fas fa-1" Size="Size.Medium" />
-            </ItemDot>
-            <ItemContent>
-                <MudAlert Variant="Variant.Outlined">
-                    <MudList Dense="true">
-                        <MudListItem>
-                            <strong>Warrior</strong>: <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $18/50$</span>
-                                                      <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $30$</span>
-                                                      <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $25$</span>
-                        </MudListItem>
-                        <MudListItem>
-                            <strong>Giant</strong>: <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50/50$</span>
-                                                      <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                                                      <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                        </MudListItem>
-                    </MudList>
-                    <MudText style="text-align: start">
-                        The <Code>Warrior</Code> prepares an attack with <span class="damage">$30$ damage</span> and hits the <Code>Giant</Code> for <span class="health">$10$</span>, 
-                        due to their <span class="armour">armour</span>. The <Code>Giant</Code> hits our hero hard with base <span class="damage">damage $40$</span>  
-                        due to being Slow, which is reduced to <span class="health">$15$</span> by the <Code>Warrior</Code>'s <span class="armour">armour</span>.
-                        Overall, the <Code>Giant</Code> loses <span class="health">$10$ health</span> and the <Code>Warrior</Code> loses <span class="health">$8$ health</span>
-                        after the reduction from <Code>Sturdy</Code>.
-                    </MudText>
-                </MudAlert>
-            </ItemContent>
-        </MudTimelineItem>
-        <MudTimelineItem Size="Size.Medium" Variant="Variant.Filled" Color="Color.Primary" style="text-align: center">
-            <ItemDot>
-                <MudIcon Icon="fas fa-2" Size="Size.Medium"/>
-            </ItemDot>
-            
-            <ItemContent>
-                <MudAlert Variant="Variant.Outlined">
-                    <MudList Dense="true">
-                        <MudListItem>
-                            <strong>Warrior</strong>: <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $10/50$</span>
-                                                      <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                                                      <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $25$</span>
-                        </MudListItem>
-                        <MudListItem>
-                            <strong>Giant</strong>: <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $40/50$</span>
-                                                      <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                                                      <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                        </MudListItem>
-                    </MudList>
-                    <MudText style="text-align: start">
-                        The <Code>Warrior</Code> now gains the bonus from <Code>Tenacious</Code>, due to being below <span class="health">$25\%$ max health</span>, which
-                        in this case is <span class="health">$50 \cdot 0.25 = 12.5$</span>, which rounded down is <span class="health">$12$</span>.
-                        They deliver a massive blow with <span class="damage">$50$ damage</span> to the <Code>Giant</Code>, which is reduced to <span class="health">$30$</span>.
-                        The <Code>Giant</Code> doesn't attack, because they are Slow.
-                    </MudText>
-                </MudAlert>
-            </ItemContent>
-        </MudTimelineItem>
-        <MudTimelineItem Size="Size.Medium" Variant="Variant.Filled" Color="Color.Primary" style="text-align: center">
-            <ItemDot>
-                <MudIcon Icon="fas fa-3" Size="Size.Medium"/>
-            </ItemDot>
-            <ItemContent>
-                <MudAlert Variant="Variant.Outlined">
-                    <MudList Dense="true">
-                        <MudListItem>
-                            <strong>Warrior</strong>: <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $10/50$</span>
-                                                      <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                                                      <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                        </MudListItem>
-                        <MudListItem>
-                            <strong>Giant</strong>: <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $10/50$</span>
-                                                      <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                                                      <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                        </MudListItem>
-                    </MudList>
-                    <MudText style="text-align: start">
-                        The <Code>Warrior</Code> again strikes for <span class="health">$30$</span>.
-                        It's enough to defeat the monster, but before they fall they take one last swing at the <Code>Warrior</Code>,
-                        which removes <span class="health">$8$ health</span>. The <Code>Giant</Code> falls, defeated, leaving the <Code>Warrior</Code>
-                        at the brink of death.
-                    </MudText>
-                    <MudText style="text-align: start">
-                        The combat ends, with the hero being victorious! The <Code>Warrior</Code> survived with <span class="health">$2$ health</span>.
-                    </MudText>
-                </MudAlert>
-            </ItemContent>
-        </MudTimelineItem>
-    </MudTimeline>
-    <LatexRenderer ContainerId="example-fight-introduction"/>
-    <LatexRenderer ContainerId="example-fight-timeline"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
     <MudText GutterBottom="true">
         The solution is divided into three projects, the entry <Code>DungeonWalker</Code>,
@@ -546,9 +351,9 @@ The room is empty except for a large chest. And inside...
         edit the existing test methods you will receive 0 points for tests.
     </MudAlert>
     <MudText>
-        Running the code is described in the README. Remember that the test project will not
-        compile until you provide the required classes. Your first step should be fixing all
-        compile errors from the test project. Here's a little demo:
+        Running the code is described in the README. Remember that the project
+        will crash if you don't complete the implementation. Here's a little demo
+        of a working solution:
     </MudText>
     <Asciinema CastName="dungeon-walker-demo" />
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Style</MudText>
@@ -573,6 +378,12 @@ The room is empty except for a large chest. And inside...
             Standard code guidelines that apply everywhere else also apply in C#:
             avoid code duplication, don't create overly long methods, use methods
             from the standard library where applicable.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Remember that C# is supposed to be simple and elegant.
+            Use the features we know to reduce the amount of code and number
+            of lines. Use expression bodied members, if possible.
+            Use string interpolation instead of manual string addition, if possible.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             Follow best OOP practices. Don't introduce inheritance where it's not needed.
