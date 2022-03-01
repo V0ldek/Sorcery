@@ -124,26 +124,31 @@ Hero: Warrior: ❤️ 35 ⚔️ 25 🛡 20
 Enemy: Orc: ❤️ 0 ⚔️ 25 🛡 10
 Enemy vanquished!
     ")"/>
-    <MudText GutterBottom="true">
+    <MudText>
         The possible final outcomes are:
-        <MudList Dense="true">
-            <MudListItem>"Enemy vanquished!" &ndash; when the enemy dies and the hero survives;</MudListItem>
-            <MudListItem>"The hero falls!" &ndash; when the hero dies and the enemy survives;</MudListItem>
-            <MudListItem>"The hero falls, but takes the fiend with them!" &ndash; when both die;</MudListItem>
-        </MudList>
     </MudText>
+    <MudList Dense="true">
+        <MudListItem>
+            <MudText>"Enemy vanquished!" &ndash; when the enemy dies and the hero survives;</MudText>
+        </MudListItem>
+        <MudListItem>
+            <MudText>"The hero falls!" &ndash; when the hero dies and the enemy survives;</MudText>
+        </MudListItem>
+        <MudListItem>
+            <MudText>"The hero falls, but takes the fiend with them!" &ndash; when both die;</MudText>
+        </MudListItem>
+    </MudList>
     <MudText>
         Finally, don't forget about statistics! 
         The <Code>DungeonWalker.Logic.Statistics.PlayerStatistics</Code> class exists to keep track of Hero's progress.
         Its properties are rather self-explanatory. You need to modify it during combat
         to keep track of all the damage. You will most likely need to add methods to the <Code>PlayerStatistics</Code> class for that.
     </MudText>
-    <MudText id="combat-points">
-        This is tested by the "Combat" test group, worth $0.2$ points.
-    </MudText>
-    <LatexRenderer ContainerId="combat-points"/>
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Combat" test group, worth <Highlight>0.2</Highlight> points.
+    </MudAlert>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Loot</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Loot</MudText>
     <MudText>
         Existing rooms are <Code>EmptyRoom</Code>, which does nothing, and the <Code>CombatRoom</Code>.
         Implement the new <Code>LootRoom</Code>, that contains one of the following possible loot items for the hero:
@@ -152,19 +157,22 @@ Enemy vanquished!
         <MudListItem Icon="fas fa-flask">
             <MudText><Code>HealthPotion</Code> that replenishes a percentage of the hero's max <span class="health">health</span>.</MudText>
         </MudListItem>
-        <MudListItem Icon="fas fa-gem">
+        <MudListItem Icon="fas fa-shield">
             <MudText><Code>Chainmail</Code> that increases the hero's <span class="armour">armour</span> by a fixed number.</MudText>
         </MudListItem>
-        <MudListItem Icon="fas fa-shield">
+        <MudListItem Icon="fas fa-gem">
             <MudText><Code>DamageCrystal</Code> that increases the hero's <span class="damage">damage</span> by a fixed number.</MudText>
         </MudListItem>
-        <MudListItem Icon="fas fa-vault">
+        <MudListItem Icon="fas fa-boxes-stacked" >
             <MudText>
-                <Code>Chest</Code> that implements the <MudLink Href="https://refactoring.guru/design-patterns/composite">composite design pattern</MudLink>.
+                <Code>LootPile</Code> that implements the <MudLink Href="https://refactoring.guru/design-patterns/composite">composite design pattern</MudLink>.
                 It's a loot that contains other loot and applies all of it to the hero.
             </MudText>
         </MudListItem>
     </MudList>
+    <MudText>
+        To implement them use the <Code>ILoot</Code> interface:
+    </MudText>
     <CodeBlock FileName="DungeonWalker/Logic/Loot/ILoot.cs" LineNumbers="true" Code="@(@"
 using DungeonWalker.Logic.Characters;
 
@@ -175,87 +183,117 @@ public interface ILoot
     void ApplyLoot(Hero hero);
 }
     ")"/>
+    <MudText>
+        To complete the implementation, you need to hook up the appropriate creation logic
+        in <Code>LootFactory:</Code>
+    </MudText>
+    <CodeBlock FileName="DungeonWalker/Logic/Factories/LootFactories.cs" LineNumbers Code="@(@"
+using DungeonWalker.Logic.Loot;
+
+namespace DungeonWalker.Logic.Factories;
+
+public static class LootFactory
+{
+    public static ILoot CreateHealthPotion(float heal) => throw new NotImplementedException();
+
+    public static ILoot CreateDamageCrystal(int damage) => throw new NotImplementedException();
+
+    public static ILoot CreateChainmail(int armour) => throw new NotImplementedException();
+
+    public static ILoot CreateLootPile(ILoot[] loot) => throw new NotImplementedException();
+}
+")"/>
     <MudAlert Class="my-2" Variant="Variant.Outlined">
         This might, again, require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
         to allow them to be affected by <Code>ILoot</Code>.
     </MudAlert>   
     <MudText GutterBottom="true">
-        As the outcome, use the <Code>DungeonWalker.Logic.Rooms.LootRoomOutcome</Code> class:
-    </MudText>
-    <CodeBlock FileName="DungeonWalker/Logic/Rooms/LootRoomOutcome.cs" LineNumbers="true" Code="@(@"
-public sealed class LootRoomOutcome : ITurnOutcome
-{
-    public string Description { get; }
-
-    private LootRoomOutcome(string description) => Description = description;
-
-    private static LootRoomOutcome SingleLoot(string description) =>
-        new($""The room is empty except for a small package. And inside... {description}"");
-
-    public static LootRoomOutcome FoundHealthPotion(int hpHealed) =>
-         SingleLoot($""a Health Potion! It restores ❤️ {hpHealed}!"");
-
-    public static LootRoomOutcome FoundChainmail(int armourGained) =>
-         SingleLoot($""a Chainmail! It grants 🛡 {armourGained}!"");
-
-    public static LootRoomOutcome FoundDamageCrystal(int attackDamageGained) =>
-         SingleLoot($""a Damage Crystal! It grants ⚔️ {attackDamageGained}!"");
-
-    public static LootRoomOutcome FoundChest(ILoot[] contents) => throw new NotImplementedException();
-}")" />
-    <MudText GutterBottom="true">
-        You only need to implement the <Code>FoundChest</Code> method. Here's the expected output
-        for a chest with a potion and a chainmail:
+        As the outcome, list every item in the room, which can be either
+        a single item or a pile of other items. Here's the expected output
+        for a pile with a potion and a chainmail:
     </MudText>
     <CodeBlock Language="plain" Code="@(@"
 The room is empty except for a large chest. And inside...
-  - a Health Potion! It restores ❤️ 25!
+  - a Health Potion! It restores ❤️ 17!
   - a Chainmail! It grants 🛡 10!
     ")" />
-    <MudText id="loot-points">
-        This is tested by the "Loot" test group, worth $0.2$ points.
+    <MudText>
+        And also output for loot that looks like this, which shows
+        that piles should be flattened:
     </MudText>
+
+    <MudList Dense="true" Class="my-2">
+        <MudListItem>
+            <MudIcon Size="Size.Small" Icon="fas fa-boxes-stacked mx-1 my-0"/> Pile of:
+                <MudList Dense="true">
+                    <MudListItem>
+                        <MudIcon Size="Size.Small" Icon="fas fa-boxes-stacked mx-1 my-0"/> Pile of:
+                        <MudList Dense="true">
+                            <MudListItem>
+                                <MudIcon Size="Size.Small" Icon="fas fa-gem mx-1 my-0"/> Damage Crystal
+                            </MudListItem>
+                            <MudListItem>
+                                <MudIcon Size="Size.Small" Icon="fas fa-gem mx-1 my-0"/> Damage Crystal
+                            </MudListItem>
+                        </MudList>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudIcon Size="Size.Small" Icon="fas fa-flask mx-1 my-0"/> Health Potion
+                    </MudListItem>
+                </MudList>
+        </MudListItem>
+    </MudList>
+    <CodeBlock Language="plain" Code="@(@"
+The room is empty except for a large chest. And inside...
+  - a Health Potion! It restores ❤️ 17!
+  - a Damage Crystal! It grants ⚔️ 10!
+  - a Damage Crystal! It grants ⚔️ 15!
+    ")" />
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Loot" test group, worth <Highlight>0.2</Highlight> points.
+    </MudAlert>
     <LatexRenderer ContainerId="loot-points"/>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Dungeons</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Dungeons</MudText>
     <MudText>
         There are two room layouts implemented, <Code>Basic</Code> and <Code>Adventure</Code>.
         Adventure is used for input-output tests and touches all elements of the solution.
         But they are all rather simple, in that they are just constant rooms you could generate
-        by hand. Create two more interesting ones, both parameterised by a number $n$:
+        by hand. Create two more interesting ones, both parametrised by a number $n$:
     </MudText>
-    <MudList>
+    <MudList id="dungeon-description">
         <MudListItem Icon="fas fa-hand-fist">
             <Code>RipAndTear</Code> &ndash; 
             In the first room there's a Skeleton Warrior. In the second there's
-            a <span class="health">100\% health</span> Health Potion. In the third one there's a Skeleton Warrior.
+            a <span class="health">$100\%$ health</span> Health Potion. In the third one there's a Skeleton Warrior.
             And so on, and so forth, repeat for $n$ rooms.
         </MudListItem>
         <MudListItem Icon="fas fa-smile">
             <Code>FistAndBuckler</Code> &ndash; 
-            In every third room there's a Loot room with a Health Potion for <span class="health">25\% health</span>.
-            In every fifth room there's a Loot romm with a Chest containing a Chainmail and a Damage Crystal,
+            In every third room there's a Loot room with a Health Potion for <span class="health">$25\%$ health</span>.
+            In every fifth room there's a Loot room with a Chest containing a Chainmail and a Damage Crystal,
             for <span class="armour">$5$ armour</span> and <span class="damage">$5$ attack damage</span>, respectively.
             If a room falls into both of these categories then it has a Chest with all three items.
             Every other room is a combat with an Orc, until room $30$, after that the combat
             is against a Giant. Repeat until $n$ rooms are created.
         </MudListItem>
     </MudList>
-    <MudText id="dungeons-points">
-        This is tested by the "Loot" test group, worth $0.2$ points.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 4. &ndash; Heroicly hardened heroes and enormous evil enemies</MudText>
-    <MudText>
+    <LatexRenderer ContainerId="dungeon-description"/>
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Dungeon" test group, worth <Highlight>0.2</Highlight> points.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 4. &ndash; Heroic hardened heroes and enormous evil enemies</MudText>
+    <MudText id="heroes-description">
         First of all, we need to define more heroes for the roster and enemies for them to fight.
         Now, our Heroes aren't just ordinary blokes. To represent their heroic tenacity,
         they have a special ability that triggers when they're in dire straits. When at or below
         <span class="health">$25\%$ max health</span> (rounded down), they gain a special
         <Highlight>Tenacity</Highlight> statistics buff, different for each Hero.
-        Fill out the <Code>todo</Code> and <Code>todo</Code> static classes to return correct
-        instances for heroes.
+        Fill out the <Code>DungeonWalker.Logic.Factories.HeroFactory</Code> static class to return correct
+        instances for heroes:
     </MudText>
     <LatexRenderer ContainerId="abilities-list" />
     <MudList id="heroes-list">
-        <MudListItem Icon="fas fa-wind">
+        <MudListItem Icon="fas fa-shield-blank">
             <MudText Color="Color.Default">
                 <Code>Warrior</Code> &ndash; 
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
@@ -265,7 +303,7 @@ The room is empty except for a large chest. And inside...
                     <span class="armour">20 armour</span>.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="fas fa-wand-sparkles">
+        <MudListItem Icon="fas fa-wind">
             <MudText Color="Color.Default">
                 <Code>Rogue</Code> &ndash;
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $40$</span>
@@ -287,9 +325,10 @@ The room is empty except for a large chest. And inside...
             </MudText>
         </MudListItem>
     </MudList>
+    <LatexRenderer ContainerId="heroes-description" /> 
     <LatexRenderer ContainerId="heroes-list" /> 
     <MudText>
-        And add some enemies for them to fight!
+        And add some enemies for them to fight in <Code>DungeonWalker.Logic.Factories.EnemyFactory</Code>!
     </MudText>
     <MudList id="enemies-list">
         <MudListItem Icon="fas fa-skull">
@@ -326,6 +365,9 @@ The room is empty except for a large chest. And inside...
         </MudListItem>
     </MudList>
     <LatexRenderer ContainerId="enemies-list" />
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Characters" test group, worth <Highlight>0.2</Highlight> points.
+    </MudAlert>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
     <MudText GutterBottom="true">
         The solution is divided into three projects, the entry <Code>DungeonWalker</Code>,
