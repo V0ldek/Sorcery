@@ -114,6 +114,11 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
     <MudText GutterBottom="true">
         Everything's set up, let's write and run some code!
     </MudText>
+
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-gb/dotnet/core/install", ".NET installation guide (multiplatform)"),
+        ("https://marketplace.visualstudio.com", "VS Code Extension marketplace"),
+    }) />
 </CourseSection>
 
 @code {

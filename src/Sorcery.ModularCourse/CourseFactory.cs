@@ -42,7 +42,11 @@ public sealed class CourseFactory : ICourseFactory
 
             if (moduleSkeleton.Assignment is not null)
             {
-                var assignment = new Assignment(module, moduleSkeleton.Assignment.DisplayName, moduleSkeleton.Assignment.RouteName);
+                var assignment = new Assignment(
+                    module,
+                    moduleSkeleton.Assignment.DisplayName,
+                    moduleSkeleton.Assignment.RouteName,
+                    moduleSkeleton.Assignment.GitHubClassroom);
                 module.Assignment = assignment;
             }
         }

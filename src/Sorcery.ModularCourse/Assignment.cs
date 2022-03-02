@@ -2,7 +2,7 @@
 
 namespace Sorcery.ModularCourse;
 
-public sealed record class Assignment(Module Module, string Title, string RouteName)
+public sealed record class Assignment(Module Module, string Title, string RouteName, string GitHubClassroom)
 {
     public string DisplayName => $"Assignment {Module.Id}. – {Title}";
 

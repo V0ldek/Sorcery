@@ -46,7 +46,7 @@ public interface IRoom
         Your task will be to fill out the implementation with missing pieces.
         Existing methods have a default "implementation" of:
     </MudText>
-    <CodeBlock Code="@("throw new NotImplementedExecption();")"/>
+    <CodeBlock Code="@("throw new NotImplementedException();")"/>
     <MudText GutterBottom="true">
         We don't know what the magical <Code>throw</Code> is, but don't worry.
         Treat this as a placeholder that says "if you ever call this method, please crash, it's not ready yet".
@@ -182,13 +182,13 @@ namespace DungeonWalker.Logic.Factories;
 
 public static class LootFactory
 {
-    public static ILoot CreateHealthPotion(float heal) => throw new NotImplementedException();
+    public static ILoot HealthPotion(float heal) => throw new NotImplementedException();
 
-    public static ILoot CreateDamageCrystal(int damage) => throw new NotImplementedException();
+    public static ILoot DamageCrystal(int damage) => throw new NotImplementedException();
 
-    public static ILoot CreateChainmail(int armour) => throw new NotImplementedException();
+    public static ILoot Chainmail(int armour) => throw new NotImplementedException();
 
-    public static ILoot CreateLootPile(ILoot[] loot) => throw new NotImplementedException();
+    public static ILoot LootPile(ILoot[] loot) => throw new NotImplementedException();
 }
 ")"/>
     <MudAlert Class="my-2" Variant="Variant.Outlined">
@@ -335,45 +335,7 @@ The room is empty except for a large chest. And inside...
         </MudListItem>
     </MudList>
     <LatexRenderer ContainerId="heroes-description" /> 
-    <LatexRenderer ContainerId="heroes-list" /> 
-    <MudText>
-        And add some enemies for them to fight in <Code>DungeonWalker.Logic.Factories.EnemyFactory</Code>!
-    </MudText>
-    <MudList id="enemies-list">
-        <MudListItem Icon="fas fa-skull">
-            <MudText Color="Color.Default">
-                <Code>SkeletonArcher</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $25$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $5$</span>
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-chess-rook">
-            <MudText Color="Color.Default">
-                <Code>Giant</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $40$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-wand-sparkles">
-            <MudText Color="Color.Default">
-                <Code>DarkSorcerer</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span>
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-crown">
-            <MudText Color="Color.Default">
-                <Code>DarkLord</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $150$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $30$</span>
-            </MudText>
-        </MudListItem>
-    </MudList>
-    <LatexRenderer ContainerId="enemies-list" />
+    <LatexRenderer ContainerId="heroes-list" />
     <MudAlert Variant="Variant.Outlined" class="my-2">
         This is tested by the "Characters" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>

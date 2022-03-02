@@ -1,0 +1,20 @@
+﻿<MudText Typo="Typo.h2" Class="mx-auto py-6">Resources</MudText>
+
+<MudPaper Elevation="1">
+    <MudList Clickable="true">
+        @foreach (var (url, name) in Links)
+        {
+            <MudLink Href="@url" Target="_blank">
+                <MudListItem Icon="@Icons.Filled.Link">
+                    @name
+                </MudListItem>   
+            </MudLink>
+        }
+    </MudList>
+</MudPaper>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public IReadOnlyList<(string, string)> Links { get; set; } = Array.Empty<(string, string)>();
+}

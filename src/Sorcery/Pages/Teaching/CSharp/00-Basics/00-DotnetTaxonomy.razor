@@ -248,6 +248,14 @@ extends [System.Private.CoreLib]System.Object
         C# is compiled with Roslyn into bytecode called IL and then executed on the CLR. Package management
         and distribution is done with NuGet.
     </MudText>
+
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
+        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
+        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
+        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
+        ("https://www.nuget.org/", "NuGet Gallery"),
+    })/>
 </CourseSection>
 
 @code {

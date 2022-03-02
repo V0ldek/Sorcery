@@ -28,6 +28,27 @@
         All code used in the course is published as interactive notebooks or standalone applications.
     </MudText>
 
+    <MudText Typo="Typo.h2" Class="mx-auto py-6">Teaser</MudText>
+
+    During the course we will cover:
+
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">C# basics and birds-eye view of the .NET ecosystem;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">the C# type system, reference types, value types;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">exception handling, error handling, null-safety;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">generic types in .NET;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">designing classes, structs, records;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">idiomatic C# patterns, writing well-tested, robust code;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">collections and Language Integrated Query;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">functional programming patterns in C#;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">asynchronous programming;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">parallelism and concurrency;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">flexible database access with EntityFramework;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">modern web applications without JavaScript using Blazor;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">internals of .NET, garbage collection</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">performance-oriented programming in C#</MudListItem>
+    </MudList>
+
     <MudText Typo="Typo.h2" Class="mx-auto py-6">Grading</MudText>
 
     <MudText GutterBottom="true">
@@ -178,6 +199,13 @@
             </MudPaper>
         </MudTabPanel>
     </MudTabs>
+
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/", "C# Documentation"),
+        ("https://www.albahari.com/nutshell/", "C# in a Nutshell, the C# reference book"),
+        ("https://www.libristo.pl/ksiazka/c-10-in-a-nutshell_38318145.html", "C# in a Nutshell 10 from a Polish bookstore"),
+        ("https://docs.microsoft.com/en-us/shows/csharp-101/what-is-c", "C# 101: What is C# (video)"),
+    })/>
 </CourseIntroduction>
 
 @code {

@@ -2,4 +2,4 @@
 
 namespace Sorcery.ModularCourse.Skeletons;
 
-public sealed record class AssignmentSkeleton(string DisplayName, string RouteName);
+public sealed record class AssignmentSkeleton(string DisplayName, string RouteName, string GitHubClassroom);

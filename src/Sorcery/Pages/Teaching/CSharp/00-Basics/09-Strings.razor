@@ -11,6 +11,7 @@
         go through the next notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
                 Basic string operations.
@@ -36,6 +37,8 @@
                 <Code>nameof</Code>
             </MudText>
         </MudListItem>
-    <MudList>
     </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.text.stringbuilder?view=net-6.0", "StringBuilder documentation")
+    })/>
 </CourseSection>
