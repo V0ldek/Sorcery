@@ -38,6 +38,6 @@ public sealed class CourseBook
                     new ("Attributes", "attributes"),
                     new ("Testing with xUnit", "testing-with-xunit"),
                     new ("Using GitHub Classroom", "using-github-classroom"),
-                }, new AssignmentSkeleton ("Dungeon Walker", "dungeon-walker", "https://classroom.github.com/a/7S1aHBvK"))
+                }, null)
             }));
 }
