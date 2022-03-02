@@ -12,10 +12,10 @@
         We are writing an engine for a game, where a hero fights through a dungeon
         filled with various obstacles. A <Highlight>Dungeon</Highlight> is a list of
         <Highlight>Rooms</Highlight>, with one Room being the start point, and each
-        Room except the last having a unique successor. The hero clears the dungeon
-        room by room, advancing to the room's successor when they're done interacting
-        with it. A dungeon takes a <Code>IRoomLayout</Code> as an argument to its constructor,
-        which tells it how to construct the rooms:
+        Room except the last having a unique successor. The <Highlight>Hero</Highlight> clears the Dungeon
+        Room by Room, advancing to the Room's successor when they're done interacting
+        with it. A Dungeon takes a <Code>IRoomLayout</Code> as an argument to its constructor,
+        which tells it how to construct the Rooms:
     </MudText>
     <CodeBlock FileName="DungeonWalker/Logic/Dungeons/IRoomLayout.cs" Code="@(@"
 namespace CSharpBasics.Logic.Dungeons;
@@ -116,10 +116,10 @@ Enemy vanquished!
     </MudText>
     <MudList Dense="true">
         <MudListItem>
-            <MudText>"Enemy vanquished!" &ndash; when the enemy dies and the hero survives;</MudText>
+            <MudText>"Enemy vanquished!" &ndash; when the Enemy dies and the Hero survives;</MudText>
         </MudListItem>
         <MudListItem>
-            <MudText>"The hero falls!" &ndash; when the hero dies and the enemy survives;</MudText>
+            <MudText>"The hero falls!" &ndash; when the Hero dies and the Enemy survives;</MudText>
         </MudListItem>
         <MudListItem>
             <MudText>"The hero falls, but takes the fiend with them!" &ndash; when both die;</MudText>
@@ -129,7 +129,7 @@ Enemy vanquished!
         Finally, don't forget about statistics! 
         The <Code>DungeonWalker.Logic.Statistics.PlayerStatistics</Code> class exists to keep track of Hero's progress.
         Its properties are rather self-explanatory, note only that if the Hero dies during combat,
-        then the room is not counted as cleared, however if both the Hero and the Enemy fall it should count as defeating
+        then the Room is not counted as cleared, however if both the Hero and the Enemy fall it should count as defeating
         an Enemy. 
         You need to modify it during combat, which most likely requires adding methods to the <Code>PlayerStatistics</Code> class.
     </MudText>
@@ -139,23 +139,23 @@ Enemy vanquished!
 
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Loot</MudText>
     <MudText>
-        Existing rooms are <Code>EmptyRoom</Code>, which does nothing, and the <Code>CombatRoom</Code>.
-        Implement the new <Code>LootRoom</Code>, that contains one of the following possible loot items for the hero:
+        Existing Rooms are <Code>EmptyRoom</Code>, which does nothing, and the <Code>CombatRoom</Code>.
+        Implement the new <Code>LootRoom</Code>, that contains one of the following possible Loot items for the Hero:
     </MudText>
     <MudList>
         <MudListItem Icon="fas fa-flask">
-            <MudText><Code>HealthPotion</Code> that replenishes a percentage of the hero's max <span class="health">health</span>.</MudText>
+            <MudText><Code>HealthPotion</Code> that replenishes a percentage of the Hero's max <span class="health">health</span>.</MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-shield">
-            <MudText><Code>Chainmail</Code> that increases the hero's <span class="armour">armour</span> by a fixed number.</MudText>
+            <MudText><Code>Chainmail</Code> that increases the Hero's <span class="armour">armour</span> by a fixed number.</MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-gem">
-            <MudText><Code>DamageCrystal</Code> that increases the hero's <span class="damage">damage</span> by a fixed number.</MudText>
+            <MudText><Code>DamageCrystal</Code> that increases the Hero's <span class="damage">damage</span> by a fixed number.</MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-boxes-stacked" >
             <MudText>
                 <Code>LootPile</Code> that implements the <MudLink Href="https://refactoring.guru/design-patterns/composite">composite design pattern</MudLink>.
-                It's a loot that contains other loot and applies all of it to the hero.
+                It's a Loot that contains other Loot and applies all of it to the Hero.
             </MudText>
         </MudListItem>
     </MudList>
@@ -196,7 +196,7 @@ public static class LootFactory
         to allow them to be affected by <Code>ILoot</Code>.
     </MudAlert>
     <MudText GutterBottom="true" id="description-of-a-damage-crystal-loot">
-        As the outcome, list every item in the room, which can be either
+        As the outcome, list every item in the Room, which can be either
         a single item or a pile of other items. Here's the expected
         output for a single Damage Crystal (strength <span class="damage">$15$</span>).
     </MudText>
@@ -214,7 +214,7 @@ The room is empty except for a large chest. And inside...
   - a Chainmail! It grants 🛡 10!
     ")" />
     <MudText>
-        And also output for loot that looks like this, which shows
+        And also output for Loot that looks like this, which shows
         that piles should be flattened:
     </MudText>
 
@@ -262,27 +262,27 @@ The room is empty except for a large chest. And inside...
     <LatexRenderer ContainerId="loot-points"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Dungeons</MudText>
     <MudText id="dungeon-description">
-        There are two room layouts implemented, <Code>Basic</Code> and <Code>Adventure</Code>.
+        There are two Room layouts implemented, <Code>Basic</Code> and <Code>Adventure</Code>.
         Adventure is used for input-output tests and touches all elements of the solution.
-        But they are all rather simple, in that they are just constant rooms you could generate
+        But they are all rather simple, in that they are just constant Rooms you could generate
         by hand. Create two more interesting ones, both parametrised by a number $n$:
     </MudText>
     <MudList id="dungeon-list">
         <MudListItem Icon="fas fa-hand-fist">
             <Code>RipAndTear</Code> &ndash; 
-            In the first room there's a Skeleton Warrior. In the second there's
+            In the first Room there's a Skeleton Warrior. In the second there's
             a <span class="health">$100\%$ health</span> Health Potion. In the third one there's a Skeleton Warrior.
-            And so on, and so forth, repeat for $n$ rooms.
+            And so on, and so forth, repeat for $n$ Rooms.
         </MudListItem>
         <MudListItem Icon="fas fa-smile">
             <Code>FistAndBucklers</Code> &ndash; 
-            In every third room there's a Loot room with a Health Potion for <span class="health">$25\%$ health</span>.
-            In every fifth room there's a Loot room with a Pile containing a Chainmail and a Damage Crystal, in that order,
+            In every third Room there's a Loot Room with a Health Potion for <span class="health">$25\%$ health</span>.
+            In every fifth Room there's a Loot Room with a Pile containing a Chainmail and a Damage Crystal, in that order,
             for <span class="armour">$5$ armour</span> and <span class="damage">$5$ attack damage</span>, respectively.
-            If a room falls into both of these categories then it has a Pile with all three items,
+            If a Room falls into both of these categories then it has a Pile with all three items,
             Health Potion first, then Chainmail and Damage Crystal.
-            Every room that does not fall into this category is a combat with an Orc,
-            until the $31$-st room &ndash; then the combat switches to be against a Giant. Repeat until $n$ rooms are created.
+            Every Room that does not fall into this category is a combat with an Orc,
+            until the $31$-st Room &ndash; then the combat switches to be against a Giant. Repeat until $n$ Rooms are created.
         </MudListItem>
     </MudList>
     <LatexRenderer ContainerId="dungeon-description"/>
@@ -290,15 +290,15 @@ The room is empty except for a large chest. And inside...
     <MudAlert Variant="Variant.Outlined" class="my-2">
         This is tested by the "Dungeons" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Heroic hardened heroes and enormous evil enemies</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Heroic hardened Heroes</MudText>
     <MudText id="heroes-description">
-        First of all, we need to define more heroes for the roster and enemies for them to fight.
+        In the end we need to define more Heroes for the roster.
         Now, our Heroes aren't just ordinary blokes. To represent their heroic tenacity,
         they have a special ability that triggers when they're in dire straits. When at or below
         <span class="health">$25\%$ max health</span> (rounded down), they gain a special
         <Highlight>Tenacity</Highlight> statistics buff, different for each Hero.
         Fill out the <Code>DungeonWalker.Logic.Factories.HeroFactory</Code> static class to return correct
-        instances for heroes:
+        instances for Heroes:
     </MudText>
     <LatexRenderer ContainerId="abilities-list" />
     <MudList id="heroes-list">
