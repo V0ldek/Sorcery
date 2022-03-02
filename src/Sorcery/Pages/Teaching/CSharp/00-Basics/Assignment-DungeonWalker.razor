@@ -23,8 +23,6 @@ namespace CSharpBasics.Logic.Dungeons;
 public interface IRoomLayout
 {
     IRoom[] CreateRooms();
-
-    string Description { get; }
 }
     ")"/>
     <MudText GutterBottom="true">
@@ -99,28 +97,17 @@ public interface IRoom
     </MudText>
     <CodeBlock Language="plain" Code="@(@"
 Combat! Warrior engages the filthy Orc!
-Hero: Warrior: ❤️ 50 ⚔️ 25 🛡 20
+Hero: Warrior: ❤️ 50 ⚔️ 30 🛡 20
 Enemy: Orc: ❤️ 40 ⚔️ 25 🛡 10
 Combat round 1 begins!
-Warrior attacks Orc for 25 damage.
-Orc attacks Warrior for 25 damage.
-Warrior deals 15 damage to Orc, while 10 damage was avoided.
-Orc deals 5 damage to Warrior, while 20 damage was avoided.
-Hero: Warrior: ❤️ 45 ⚔️ 25 🛡 20
-Enemy: Orc: ❤️ 25 ⚔️ 25 🛡 10
+Warrior attacks Orc for 20 damage, while 10 was avoided.
+Orc attacks Warrior for 5 damage, while 20 was avoided.
+Hero: Warrior: ❤️ 45 ⚔️ 30 🛡 20
+Enemy: Orc: ❤️ 20 ⚔️ 25 🛡 10
 Combat round 2 begins!
-Warrior attacks Orc for 25 damage.
-Orc attacks Warrior for 25 damage.
-Warrior deals 15 damage to Orc, while 10 damage was avoided.
-Orc deals 5 damage to Warrior, while 20 damage was avoided.
-Hero: Warrior: ❤️ 40 ⚔️ 25 🛡 20
-Enemy: Orc: ❤️ 10 ⚔️ 25 🛡 10
-Combat round 3 begins!
-Warrior attacks Orc for 25 damage.
-Orc attacks Warrior for 25 damage.
-Warrior deals 10 damage to Orc, while 15 damage was avoided.
-Orc deals 5 damage to Warrior, while 20 damage was avoided.
-Hero: Warrior: ❤️ 35 ⚔️ 25 🛡 20
+Warrior attacks Orc for 20 damage, while 10 was avoided.
+Orc attacks Warrior for 5 damage, while 20 was avoided.
+Hero: Warrior: ❤️ 40 ⚔️ 30 🛡 20
 Enemy: Orc: ❤️ 0 ⚔️ 25 🛡 10
 Enemy vanquished!
     ")"/>
@@ -141,11 +128,13 @@ Enemy vanquished!
     <MudText>
         Finally, don't forget about statistics! 
         The <Code>DungeonWalker.Logic.Statistics.PlayerStatistics</Code> class exists to keep track of Hero's progress.
-        Its properties are rather self-explanatory. You need to modify it during combat
-        to keep track of all the damage. You will most likely need to add methods to the <Code>PlayerStatistics</Code> class for that.
+        Its properties are rather self-explanatory, note only that if the Hero dies during combat,
+        then the room is not counted as cleared, however if both the Hero and the Enemy fall it should count as defeating
+        an Enemy. 
+        You need to modify it during combat, which most likely requires adding methods to the <Code>PlayerStatistics</Code> class.
     </MudText>
     <MudAlert Variant="Variant.Outlined" class="my-2">
-        This is tested by the "Combat" test group, worth <Highlight>0.2</Highlight> points.
+        This is tested by the "Combat" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
 
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Loot</MudText>
@@ -171,7 +160,7 @@ Enemy vanquished!
         </MudListItem>
     </MudList>
     <MudText>
-        To implement them use the <Code>ILoot</Code> interface:
+        To implement them use the <Code>ILoot</Code> interface. You can add any methods you want to it.
     </MudText>
     <CodeBlock FileName="DungeonWalker/Logic/Loot/ILoot.cs" LineNumbers="true" Code="@(@"
 using DungeonWalker.Logic.Characters;
@@ -180,7 +169,6 @@ namespace DungeonWalker.Logic.Loot;
 
 public interface ILoot
 {
-    void ApplyLoot(Hero hero);
 }
     ")"/>
     <MudText>
@@ -206,11 +194,19 @@ public static class LootFactory
     <MudAlert Class="my-2" Variant="Variant.Outlined">
         This might, again, require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
         to allow them to be affected by <Code>ILoot</Code>.
-    </MudAlert>   
-    <MudText GutterBottom="true">
+    </MudAlert>
+    <MudText GutterBottom="true" id="description-of-a-damage-crystal-loot">
         As the outcome, list every item in the room, which can be either
-        a single item or a pile of other items. Here's the expected output
-        for a pile with a potion and a chainmail:
+        a single item or a pile of other items. Here's the expected
+        output for a single Damage Crystal (strength <span class="damage">$15$</span>).
+    </MudText>
+    <LatexRenderer ContainerId="description-of-a-damage-crystal-loot"/>
+    <CodeBlock Language="plain" Code="@(@"
+The room is empty except for a large chest. And inside...
+  - a Damage Crystal! It grants ⚔️ 15!
+    ")" />
+    <MudText GutterBottom="true">
+        ... for a pile with a potion and a chainmail:
     </MudText>
     <CodeBlock Language="plain" Code="@(@"
 The room is empty except for a large chest. And inside...
@@ -249,18 +245,29 @@ The room is empty except for a large chest. And inside...
   - a Damage Crystal! It grants ⚔️ 10!
   - a Damage Crystal! It grants ⚔️ 15!
     ")" />
+    <MudText>
+        One more corner case, for an empty pile display:
+    </MudText>
+    <CodeBlock Language="plain" Code="@(@"The room is empty except for a large chest. And inside...
+ Bah! It's empty!")"/>
+    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined" class="my-2">
+        Note that the value displayed for a Health Potion is the actual value healed, not
+        the percentage strength of the potion. The buffs are applied in the order in which they
+        appear in the array, in particular if one of the potions restores full health to the character
+        then all subsequent ones give no health. A character's health can never exceed their max health.
+    </MudAlert>
     <MudAlert Variant="Variant.Outlined" class="my-2">
-        This is tested by the "Loot" test group, worth <Highlight>0.2</Highlight> points.
+        This is tested by the "Loot" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
     <LatexRenderer ContainerId="loot-points"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Dungeons</MudText>
-    <MudText>
+    <MudText id="dungeon-description">
         There are two room layouts implemented, <Code>Basic</Code> and <Code>Adventure</Code>.
         Adventure is used for input-output tests and touches all elements of the solution.
         But they are all rather simple, in that they are just constant rooms you could generate
         by hand. Create two more interesting ones, both parametrised by a number $n$:
     </MudText>
-    <MudList id="dungeon-description">
+    <MudList id="dungeon-list">
         <MudListItem Icon="fas fa-hand-fist">
             <Code>RipAndTear</Code> &ndash; 
             In the first room there's a Skeleton Warrior. In the second there's
@@ -268,20 +275,22 @@ The room is empty except for a large chest. And inside...
             And so on, and so forth, repeat for $n$ rooms.
         </MudListItem>
         <MudListItem Icon="fas fa-smile">
-            <Code>FistAndBuckler</Code> &ndash; 
+            <Code>FistAndBucklers</Code> &ndash; 
             In every third room there's a Loot room with a Health Potion for <span class="health">$25\%$ health</span>.
-            In every fifth room there's a Loot room with a Chest containing a Chainmail and a Damage Crystal,
+            In every fifth room there's a Loot room with a Pile containing a Chainmail and a Damage Crystal, in that order,
             for <span class="armour">$5$ armour</span> and <span class="damage">$5$ attack damage</span>, respectively.
-            If a room falls into both of these categories then it has a Chest with all three items.
-            Every other room is a combat with an Orc, until room $30$, after that the combat
-            is against a Giant. Repeat until $n$ rooms are created.
+            If a room falls into both of these categories then it has a Pile with all three items,
+            Health Potion first, then Chainmail and Damage Crystal.
+            Every room that does not fall into this category is a combat with an Orc,
+            until the $31$-st room &ndash; then the combat switches to be against a Giant. Repeat until $n$ rooms are created.
         </MudListItem>
     </MudList>
     <LatexRenderer ContainerId="dungeon-description"/>
+    <LatexRenderer ContainerId="dungeon-list"/>
     <MudAlert Variant="Variant.Outlined" class="my-2">
-        This is tested by the "Dungeon" test group, worth <Highlight>0.2</Highlight> points.
+        This is tested by the "Dungeons" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 4. &ndash; Heroic hardened heroes and enormous evil enemies</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Heroic hardened heroes and enormous evil enemies</MudText>
     <MudText id="heroes-description">
         First of all, we need to define more heroes for the roster and enemies for them to fight.
         Now, our Heroes aren't just ordinary blokes. To represent their heroic tenacity,
@@ -293,16 +302,6 @@ The room is empty except for a large chest. And inside...
     </MudText>
     <LatexRenderer ContainerId="abilities-list" />
     <MudList id="heroes-list">
-        <MudListItem Icon="fas fa-shield-blank">
-            <MudText Color="Color.Default">
-                <Code>Warrior</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $30$</span>
-                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>,
-                    <Highlight>Tenacity</Highlight>: hardened in battle, the Warrior refuses to yield and gains 
-                    <span class="armour">20 armour</span>.
-            </MudText>
-        </MudListItem>
         <MudListItem Icon="fas fa-wind">
             <MudText Color="Color.Default">
                 <Code>Rogue</Code> &ndash;
@@ -311,6 +310,16 @@ The room is empty except for a large chest. And inside...
                     <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span>,
                     <Highlight>Tenacity</Highlight>: determined to bring the fight to a close, the Rogue strikes
                     where it hurts and gains <span class="damage">20 attack damage</span>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-shield-blank">
+            <MudText Color="Color.Default">
+                <Code>Warrior</Code> &ndash; 
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $30$</span>
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>,
+                    <Highlight>Tenacity</Highlight>: hardened in battle, the Warrior refuses to yield and gains 
+                    <span class="armour">20 armour</span>.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hand-sparkles">
@@ -343,14 +352,14 @@ The room is empty except for a large chest. And inside...
             <MudText Color="Color.Default">
                 <Code>Giant</Code> &ndash; 
                     <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
-                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $40$</span>
                     <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
                 <Code>DarkSorcerer</Code> &ndash; 
-                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $30$</span>
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
                     <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $20$</span>
                     <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span>
             </MudText>
@@ -366,7 +375,7 @@ The room is empty except for a large chest. And inside...
     </MudList>
     <LatexRenderer ContainerId="enemies-list" />
     <MudAlert Variant="Variant.Outlined" class="my-2">
-        This is tested by the "Characters" test group, worth <Highlight>0.2</Highlight> points.
+        This is tested by the "Characters" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
     <MudText GutterBottom="true">
@@ -429,6 +438,7 @@ The room is empty except for a large chest. And inside...
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             Follow best OOP practices. Don't introduce inheritance where it's not needed.
+            Seal your classes by default.
             Prefer abstract types to concrete ones as parameters and return types.
             In general, follow <MudLink Href="https://en.wikipedia.org/wiki/SOLID">SOLID</MudLink>.
         </MudListItem>
