@@ -1,0 +1,415 @@
+﻿@page "/teaching/csharp/0-basics/assignment/0-dungeon-walker"
+@inject CourseBook CourseBook;
+
+<CourseAssignment Assignment="@CourseBook.CSharpCourse["basics"].Assignment">
+    <MudText>
+        A hero has entered the dungeon! They must traverse the dark rooms,
+        looking for loot and defeating enemies, all the while avoiding vicious traps.
+        Will they prevail, or will the forces of darkness win this time...?
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
+    <MudText GutterBottom="true">
+        We are writing an engine for a game, where a hero fights through a dungeon
+        filled with various obstacles. A <Highlight>Dungeon</Highlight> is a list of
+        <Highlight>Rooms</Highlight>, with one Room being the start point, and each
+        Room except the last having a unique successor. The <Highlight>Hero</Highlight> clears the Dungeon
+        Room by Room, advancing to the Room's successor when they're done interacting
+        with it. A Dungeon takes a <Code>IRoomLayout</Code> as an argument to its constructor,
+        which tells it how to construct the Rooms:
+    </MudText>
+    <CodeBlock FileName="DungeonWalker/Logic/Dungeons/IRoomLayout.cs" Code="@(@"
+namespace CSharpBasics.Logic.Dungeons;
+
+public interface IRoomLayout
+{
+    IRoom[] CreateRooms();
+}
+    ")"/>
+    <MudText GutterBottom="true">
+        An <Code>IRoom</Code> is where the core of the logic happens.
+    </MudText>    
+    <CodeBlock FileName="DungeonWalker/Logic/Dungeons/IRoomLayout.cs" Code="@(@"
+namespace CSharpBasics.Logic.Rooms;
+
+public interface IRoom
+{
+    public ITurnOutcome Visit(Hero hero, PlayerStatistics statistics);
+}
+
+    ")"/>
+    <MudText GutterBottom="true">
+        It takes in the <Code>Hero</Code> instance and a <Code>PlayerStatistics</Code> object
+        used for tracking the Hero's achievements. It then processes the encounter, returning
+        an <Code>ITurnOutcome</Code>, that can display its information as a string.
+    </MudText>
+    <MudText GutterBottom="true">
+        Your task will be to fill out the implementation with missing pieces.
+        Existing methods have a default "implementation" of:
+    </MudText>
+    <CodeBlock Code="@("throw new NotImplementedException();")"/>
+    <MudText GutterBottom="true">
+        We don't know what the magical <Code>throw</Code> is, but don't worry.
+        Treat this as a placeholder that says "if you ever call this method, please crash, it's not ready yet".
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Combat</MudText>
+    <MudText>
+        Encounters happen in a <Code>CombatRoom</Code>. Each <Code>Character</Code> in the game has three basic statistics:
+    </MudText>
+    <MudList id="statistics-list">
+        <MudListItem Class="health" Icon="fas fa-heart">
+            <MudText Color="Color.Default">
+                <span class="health">Health</span> &ndash; when it falls to $0$ the character dies;
+            </MudText>
+        </MudListItem>
+        <MudListItem Class="damage" Icon="fas fa-bolt-lightning">
+            <MudText Color="Color.Default">
+                <span class="damage">Attack damage</span> &ndash; the base damage of every attack performed by the character;
+            </MudText>
+        </MudListItem>
+        <MudListItem Class="armour" Icon="fas fa-shield-blank">
+            <MudText Color="Color.Default">
+                <span class="armour">Armour</span> &ndash; absorbs damage, every attack against this character has its
+                <span class="damage">damage</span> reduced by the <span class="armour">armour</span> value.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <LatexRenderer ContainerId="statistics-list" />
+    <MudText GutterBottom="true">
+        Combat proceeds in rounds. Each round both characters prepare an attack
+        and then receive the attacks simultaneously. Damage dealt to the character is the <span class="damage">attack damage</span>
+        of the attacker minus the <span class="armour">armour</span> of the defender. 
+        The character's <span class="health">health</span> is reduced by the damage received.
+        Combat continues until either one or both characters die.
+    </MudText>
+    <CodeBlock Code="@("public ITurnOutcome Resolve()")"/>
+    <MudText id="combat-description">
+        When called it must resolve the combat, which results in the Hero and/or Enemy involved in combat to fall to <span class="health">$0$ health</span>.
+    </MudText>
+    <LatexRenderer ContainerId="combat-description"/>
+    <MudAlert Class="my-2" Variant="Variant.Outlined">
+        Note that this will require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
+        to allow them to be affected by <Code>Combat</Code>. You can freely extend them with any methods you want,
+        but you cannot change the existing signatures, since the tests are using them.
+    </MudAlert>
+    <MudText>
+        We want combat to be flashy! The <Code>ITurnOutcome</Code> returned by the <Code>Combat.Resolve</Code> method
+        should include some details about how combat proceeded. Here's an example output:
+    </MudText>
+    <CodeBlock Language="plain" Code="@(@"
+Combat! Warrior engages the filthy Orc!
+Hero: Warrior: ❤️ 50 ⚔️ 30 🛡 20
+Enemy: Orc: ❤️ 40 ⚔️ 25 🛡 10
+Combat round 1 begins!
+Warrior attacks Orc for 20 damage, while 10 was avoided.
+Orc attacks Warrior for 5 damage, while 20 was avoided.
+Hero: Warrior: ❤️ 45 ⚔️ 30 🛡 20
+Enemy: Orc: ❤️ 20 ⚔️ 25 🛡 10
+Combat round 2 begins!
+Warrior attacks Orc for 20 damage, while 10 was avoided.
+Orc attacks Warrior for 5 damage, while 20 was avoided.
+Hero: Warrior: ❤️ 40 ⚔️ 30 🛡 20
+Enemy: Orc: ❤️ 0 ⚔️ 25 🛡 10
+Enemy vanquished!
+    ")"/>
+    <MudText>
+        The possible final outcomes are:
+    </MudText>
+    <MudList Dense="true">
+        <MudListItem>
+            <MudText>"Enemy vanquished!" &ndash; when the Enemy dies and the Hero survives;</MudText>
+        </MudListItem>
+        <MudListItem>
+            <MudText>"The hero falls!" &ndash; when the Hero dies and the Enemy survives;</MudText>
+        </MudListItem>
+        <MudListItem>
+            <MudText>"The hero falls, but takes the fiend with them!" &ndash; when both die;</MudText>
+        </MudListItem>
+    </MudList>
+    <MudText>
+        Finally, don't forget about statistics! 
+        The <Code>DungeonWalker.Logic.Statistics.PlayerStatistics</Code> class exists to keep track of Hero's progress.
+        Its properties are rather self-explanatory, note only that if the Hero dies during combat,
+        then the Room is not counted as cleared, however if both the Hero and the Enemy fall it should count as defeating
+        an Enemy. 
+        You need to modify it during combat, which most likely requires adding methods to the <Code>PlayerStatistics</Code> class.
+    </MudText>
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Combat" test group, worth <Highlight>0.25</Highlight> points.
+    </MudAlert>
+
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Loot</MudText>
+    <MudText>
+        Existing Rooms are <Code>EmptyRoom</Code>, which does nothing, and the <Code>CombatRoom</Code>.
+        Implement the new <Code>LootRoom</Code>, that contains one of the following possible Loot items for the Hero:
+    </MudText>
+    <MudList>
+        <MudListItem Icon="fas fa-flask">
+            <MudText><Code>HealthPotion</Code> that replenishes a percentage of the Hero's max <span class="health">health</span>.</MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-shield">
+            <MudText><Code>Chainmail</Code> that increases the Hero's <span class="armour">armour</span> by a fixed number.</MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-gem">
+            <MudText><Code>DamageCrystal</Code> that increases the Hero's <span class="damage">damage</span> by a fixed number.</MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-boxes-stacked" >
+            <MudText>
+                <Code>LootPile</Code> that implements the <MudLink Href="https://refactoring.guru/design-patterns/composite">composite design pattern</MudLink>.
+                It's a Loot that contains other Loot and applies all of it to the Hero.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <MudText>
+        To implement them use the <Code>ILoot</Code> interface. You can add any methods you want to it.
+    </MudText>
+    <CodeBlock FileName="DungeonWalker/Logic/Loot/ILoot.cs" LineNumbers="true" Code="@(@"
+using DungeonWalker.Logic.Characters;
+
+namespace DungeonWalker.Logic.Loot;
+
+public interface ILoot
+{
+}
+    ")"/>
+    <MudText>
+        To complete the implementation, you need to hook up the appropriate creation logic
+        in <Code>LootFactory:</Code>
+    </MudText>
+    <CodeBlock FileName="DungeonWalker/Logic/Factories/LootFactories.cs" LineNumbers Code="@(@"
+using DungeonWalker.Logic.Loot;
+
+namespace DungeonWalker.Logic.Factories;
+
+public static class LootFactory
+{
+    public static ILoot HealthPotion(float heal) => throw new NotImplementedException();
+
+    public static ILoot DamageCrystal(int damage) => throw new NotImplementedException();
+
+    public static ILoot Chainmail(int armour) => throw new NotImplementedException();
+
+    public static ILoot LootPile(ILoot[] loot) => throw new NotImplementedException();
+}
+")"/>
+    <MudAlert Class="my-2" Variant="Variant.Outlined">
+        This might, again, require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
+        to allow them to be affected by <Code>ILoot</Code>.
+    </MudAlert>
+    <MudText GutterBottom="true" id="description-of-a-damage-crystal-loot">
+        As the outcome, list every item in the Room, which can be either
+        a single item or a pile of other items. Here's the expected
+        output for a single Damage Crystal (strength <span class="damage">$15$</span>).
+    </MudText>
+    <LatexRenderer ContainerId="description-of-a-damage-crystal-loot"/>
+    <CodeBlock Language="plain" Code="@(@"
+The room is empty except for a large chest. And inside...
+  - a Damage Crystal! It grants ⚔️ 15!
+    ")" />
+    <MudText GutterBottom="true">
+        ... for a pile with a potion and a chainmail:
+    </MudText>
+    <CodeBlock Language="plain" Code="@(@"
+The room is empty except for a large chest. And inside...
+  - a Health Potion! It restores ❤️ 17!
+  - a Chainmail! It grants 🛡 10!
+    ")" />
+    <MudText>
+        And also output for Loot that looks like this, which shows
+        that piles should be flattened:
+    </MudText>
+
+    <MudList Dense="true" Class="my-2">
+        <MudListItem>
+            <MudIcon Size="Size.Small" Icon="fas fa-boxes-stacked mx-1 my-0"/> Pile of:
+                <MudList Dense="true">
+                    <MudListItem>
+                        <MudIcon Size="Size.Small" Icon="fas fa-boxes-stacked mx-1 my-0"/> Pile of:
+                        <MudList Dense="true">
+                            <MudListItem>
+                                <MudIcon Size="Size.Small" Icon="fas fa-gem mx-1 my-0"/> Damage Crystal
+                            </MudListItem>
+                            <MudListItem>
+                                <MudIcon Size="Size.Small" Icon="fas fa-gem mx-1 my-0"/> Damage Crystal
+                            </MudListItem>
+                        </MudList>
+                    </MudListItem>
+                    <MudListItem>
+                        <MudIcon Size="Size.Small" Icon="fas fa-flask mx-1 my-0"/> Health Potion
+                    </MudListItem>
+                </MudList>
+        </MudListItem>
+    </MudList>
+    <CodeBlock Language="plain" Code="@(@"
+The room is empty except for a large chest. And inside...
+  - a Health Potion! It restores ❤️ 17!
+  - a Damage Crystal! It grants ⚔️ 10!
+  - a Damage Crystal! It grants ⚔️ 15!
+    ")" />
+    <MudText>
+        One more corner case, for an empty pile display:
+    </MudText>
+    <CodeBlock Language="plain" Code="@(@"The room is empty except for a large chest. And inside...
+ Bah! It's empty!")"/>
+    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined" class="my-2">
+        Note that the value displayed for a Health Potion is the actual value healed, not
+        the percentage strength of the potion. The buffs are applied in the order in which they
+        appear in the array, in particular if one of the potions restores full health to the character
+        then all subsequent ones give no health. A character's health can never exceed their max health.
+    </MudAlert>
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Loot" test group, worth <Highlight>0.25</Highlight> points.
+    </MudAlert>
+    <LatexRenderer ContainerId="loot-points"/>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Dungeons</MudText>
+    <MudText id="dungeon-description">
+        There are two Room layouts implemented, <Code>Basic</Code> and <Code>Adventure</Code>.
+        Adventure is used for input-output tests and touches all elements of the solution.
+        But they are all rather simple, in that they are just constant Rooms you could generate
+        by hand. Create two more interesting ones, both parametrised by a number $n$:
+    </MudText>
+    <MudList id="dungeon-list">
+        <MudListItem Icon="fas fa-hand-fist">
+            <Code>RipAndTear</Code> &ndash; 
+            In the first Room there's a Skeleton Warrior. In the second there's
+            a <span class="health">$100\%$ health</span> Health Potion. In the third one there's a Skeleton Warrior.
+            And so on, and so forth, repeat for $n$ Rooms.
+        </MudListItem>
+        <MudListItem Icon="fas fa-smile">
+            <Code>FistAndBucklers</Code> &ndash; 
+            In every third Room there's a Loot Room with a Health Potion for <span class="health">$25\%$ health</span>.
+            In every fifth Room there's a Loot Room with a Pile containing a Chainmail and a Damage Crystal, in that order,
+            for <span class="armour">$5$ armour</span> and <span class="damage">$5$ attack damage</span>, respectively.
+            If a Room falls into both of these categories then it has a Pile with all three items,
+            Health Potion first, then Chainmail and Damage Crystal.
+            Every Room that does not fall into this category is a combat with an Orc,
+            until the $31$-st Room &ndash; then the combat switches to be against a Giant. Repeat until $n$ Rooms are created.
+        </MudListItem>
+    </MudList>
+    <LatexRenderer ContainerId="dungeon-description"/>
+    <LatexRenderer ContainerId="dungeon-list"/>
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Dungeons" test group, worth <Highlight>0.25</Highlight> points.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Heroic hardened Heroes</MudText>
+    <MudText id="heroes-description">
+        In the end we need to define more Heroes for the roster.
+        Now, our Heroes aren't just ordinary blokes. To represent their heroic tenacity,
+        they have a special ability that triggers when they're in dire straits. When at or below
+        <span class="health">$25\%$ max health</span> (rounded down), they gain a special
+        <Highlight>Tenacity</Highlight> statistics buff, different for each Hero.
+        Fill out the <Code>DungeonWalker.Logic.Factories.HeroFactory</Code> static class to return correct
+        instances for Heroes:
+    </MudText>
+    <LatexRenderer ContainerId="abilities-list" />
+    <MudList id="heroes-list">
+        <MudListItem Icon="fas fa-wind">
+            <MudText Color="Color.Default">
+                <Code>Rogue</Code> &ndash;
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $40$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $40$</span>
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $10$</span>,
+                    <Highlight>Tenacity</Highlight>: determined to bring the fight to a close, the Rogue strikes
+                    where it hurts and gains <span class="damage">20 attack damage</span>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-shield-blank">
+            <MudText Color="Color.Default">
+                <Code>Warrior</Code> &ndash; 
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $50$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $30$</span>
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $20$</span>,
+                    <Highlight>Tenacity</Highlight>: hardened in battle, the Warrior refuses to yield and gains 
+                    <span class="armour">20 armour</span>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-hand-sparkles">
+            <MudText Color="Color.Default">
+                <Code>Wizard</Code> &ndash; 
+                    <span class="health mx-1"><MudIcon Icon="fas fa-heart" Size="@Size.Small" Class="mr-1"/> $45$</span>
+                    <span class="damage mx-1"><MudIcon Icon="fas fa-bolt-lightning" Size="@Size.Small" Class="mr-1"/> $35$</span>
+                    <span class="armour mx-1"><MudIcon Icon="fas fa-shield-blank" Size="@Size.Small" Class="mr-1"/> $15$</span>
+                    <Highlight>Tenacity</Highlight>: the Wizard channels powerful defensive barriers,
+                    and viciously precise eldritch blasts, gaining <span class="armour">10 armour</span> and
+                    <span class="damage">10 attack damage</span>.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <LatexRenderer ContainerId="heroes-description" /> 
+    <LatexRenderer ContainerId="heroes-list" />
+    <MudAlert Variant="Variant.Outlined" class="my-2">
+        This is tested by the "Characters" test group, worth <Highlight>0.25</Highlight> points.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
+    <MudText GutterBottom="true">
+        The solution is divided into three projects, the entry <Code>DungeonWalker</Code>,
+        the logic in <Code>DungeonWalker.Logic</Code> and tests in
+        <Code>DungeonWalker.Logic.Tests</Code>. There's no need for you to look at
+        <Code>DungeonWalker</Code>, in particular it uses many C# features that we haven't covered yet.
+        You shouldn't modify it, as it can cause tests to break.
+    </MudText>
+    <MudText GutterBottom="true">
+        <Code>DungeonWalker.Logic</Code> is the project you should edit.
+        You can add any code there and make changes to the existing code that you deem
+        necessary to complete the assignment.
+    </MudText>
+    <MudText>
+        <Code>DungeonWalker.Logic.Tests</Code> contains the automated tests.
+        They will run automatically when you commit your changes, and you can run them
+        manually with <Code Language="bash">dotnet test</Code>.
+    </MudText>
+    <MudAlert Class="my-2" Severity="Severity.Warning">
+        DO NOT edit the tests! You can freely add your own, but editing the existing
+        graded tests in any way is prohibited. The tests exist so that everyone
+        can have automated feedback and normalised grades for the tests. If you
+        edit the existing test methods you will receive 0 points for tests.
+    </MudAlert>
+    <MudText>
+        Running the code is described in the README. Remember that the project
+        will crash if you don't complete the implementation. Here's a little demo
+        of a working solution:
+    </MudText>
+    <Asciinema CastName="dungeon-walker-demo" />
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Style</MudText>
+    <MudText>
+        More than half of the points are for style.
+        The IDE will handle trivialities like formatting for you,
+        that's not what this is about. We want to make sure that we know
+        how to write clean, idiomatic C# code that would pass serious code review
+        in a professional setting.
+    </MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Use the correct naming convention for a given member.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            DO NOT use abbreviations. If you look at the BCL you won't find monstrosities
+            like <Code Language="C">strcmp</Code> or <Code Language="C">inet_pton</Code>.
+            Only universally recognisable abbreviations of computer terms are allowed, like
+            <Code>HttpClient</Code>, <Code>TcpSocket</Code> or <Code>XmlSerializer</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Standard code guidelines that apply everywhere else also apply in C#:
+            avoid code duplication, don't create overly long methods, use methods
+            from the standard library where applicable.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Remember that C# is supposed to be simple and elegant.
+            Use the features we know to reduce the amount of code and number
+            of lines. Use expression bodied members, if possible.
+            Use string interpolation instead of manual string addition, if possible.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Follow best OOP practices. Don't introduce inheritance where it's not needed.
+            Seal your classes by default.
+            Prefer abstract types to concrete ones as parameters and return types.
+            In general, follow <MudLink Href="https://en.wikipedia.org/wiki/SOLID">SOLID</MudLink>.
+        </MudListItem>
+    </MudList>    
+    <MudText>
+        Remember, submitting code earlier will get you style feedback earlier,
+        which can only improve your grade.
+    </MudText>
+</CourseAssignment>
+@code {
+
+}
