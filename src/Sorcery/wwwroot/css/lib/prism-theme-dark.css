@@ -35,13 +35,17 @@ code[class*="language-"].dark {
 }
 
 pre[class*="language-"].dark {
+    border: 1px solid #555555;
     background: #1e1e1e;
 }
 
 :not(pre) > code[class*="language-"].dark {
-    border-radius: .3em;
-    color: #db4c69;
     background: #1e1e1e;
+    border: 1px solid #555555;
+    color: #db4c69;
+    font-size: .9em;
+    padding: .1em;
+    white-space: normal;
 }
 /*********************************************************
 * Tokens

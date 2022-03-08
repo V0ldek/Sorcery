@@ -1,9 +1,8 @@
 ﻿<pre @attributes="@_preAttributes">
-    <code class="@_codeClass">
+<code class="@_codeClass">
         @_displayCode
     </code>
 </pre>
-
 
 @code {
     /// <summary>
@@ -39,7 +38,7 @@
 
     protected override void OnParametersSet()
     {
-        _codeClass = $"language-{Language} {(ThemeInfo?.IsDarkMode is true ? "dark" : "")}";
+        _codeClass = $"language-{Language} {(ThemeInfo?.IsDarkMode is true ? "dark" : "light")}";
         _displayCode = Code?.Trim()!;
         var preClass = $"language-{Language}";
 
@@ -56,6 +55,10 @@
         if (ThemeInfo?.IsDarkMode is true)
         {
             preClass += " dark";
+        }
+        else
+        {
+            preClass += " light";
         }
 
         _preAttributes["class"] = preClass;

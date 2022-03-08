@@ -3,8 +3,8 @@
  * Inspired by Visual Studio syntax coloring
  */
 
-code[class*="language-"],
-pre[class*="language-"] {
+code[class*="language-"].light,
+pre[class*="language-"].light {
     color: #393A34;
     font-size: 1em;
     text-shadow: none;
@@ -24,114 +24,117 @@ pre[class*="language-"] {
     hyphens: none;
 }
 
-pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
-code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
-    background: #C1DEF1;
-}
+    pre[class*="language-"].light::-moz-selection, pre[class*="language-"].light ::-moz-selection,
+    code[class*="language-"].light::-moz-selection, code[class*="language-"].light ::-moz-selection {
+        background: #C1DEF1;
+    }
 
-pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
-code[class*="language-"]::selection, code[class*="language-"] ::selection {
-    background: #C1DEF1;
-}
+    pre[class*="language-"].light::selection, pre[class*="language-"].light ::selection,
+    code[class*="language-"].light::selection, code[class*="language-"].light ::selection {
+        background: #C1DEF1;
+    }
 
 /* Code blocks */
-pre[class*="language-"] {
+pre[class*="language-"].light {
     border: 1px solid #dddddd;
     background-color: white;
 }
 
 /* Inline code */
-:not(pre) > code[class*="language-"] {
+:not(pre) > code[class*="language-"].light {
     background: #f8f8f8;
     border: 1px solid #dddddd;
+    font-size: .9em;
+    padding: .1em;
+    white-space: normal;
 }
 
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
+.light .token.comment,
+.light .token.prolog,
+.light .token.doctype,
+.light .token.cdata {
     color: #008000;
     font-style: italic;
 }
 
-.token.namespace {
+.light .token.namespace {
     opacity: .7;
 }
 
-.token.string {
+.light .token.string {
     color: #A31515;
 }
 
-.token.punctuation,
-.token.operator {
+.light .token.punctuation,
+.light .token.operator {
     color: #393A34; /* no highlight */
 }
 
-.token.url,
-.token.symbol,
-.token.number,
-.token.boolean,
-.token.variable,
-.token.constant,
-.token.inserted {
+.light .token.url,
+.light .token.symbol,
+.light .token.number,
+.light .token.boolean,
+.light .token.variable,
+.light .token.constant,
+.light .token.inserted {
     color: #36acaa;
 }
 
-.token.atrule,
-.token.keyword,
-.token.attr-value,
-.language-autohotkey .token.selector,
-.language-json .token.boolean,
-.language-json .token.number,
-code[class*="language-css"] {
+.light .token.atrule,
+.light .token.keyword,
+.light .token.attr-value,
+.light .language-autohotkey .token.selector,
+.light .language-json .token.boolean,
+.light .language-json .token.number,
+.light code[class*="language-css"] {
     color: #0000ff;
 }
 
-.token.function {
+.light .token.function {
     color: #393A34;
 }
 
-.token.deleted,
-.language-autohotkey .token.tag {
+.light .token.deleted,
+.light .language-autohotkey .token.tag {
     color: #9a050f;
 }
 
-.token.selector,
-.language-autohotkey .token.keyword {
+.light .token.selector,
+.light .language-autohotkey .token.keyword {
     color: #00009f;
 }
 
-.token.important {
+.light .token.important {
     color: #e90;
 }
 
-.token.important,
-.token.bold {
+.light .token.important,
+.light .token.bold {
     font-weight: bold;
 }
 
-.token.italic {
+.light .token.italic {
     font-style: italic;
 }
 
-.token.class-name,
-.language-json .token.property {
+.light .token.class-name,
+.light .language-json .token.property {
     color: #2B91AF;
 }
 
-.token.tag,
-.token.selector {
+.light .token.tag,
+.light .token.selector {
     color: #800000;
 }
 
-.token.attr-name,
-.token.property,
-.token.regex,
-.token.entity {
+.light .token.attr-name,
+.light .token.property,
+.light .token.regex,
+.light .token.entity {
     color: #ff0000;
 }
 
-.token.directive.tag .tag {
+.light .token.directive.tag .tag {
     background: #ffff00;
     color: #393A34;
 }
@@ -139,18 +142,18 @@ code[class*="language-css"] {
 /* overrides color-values for the Line Numbers plugin
  * http://prismjs.com/plugins/line-numbers/
  */
-.line-numbers.line-numbers .line-numbers-rows {
+.light .line-numbers.line-numbers .line-numbers-rows {
     border-right-color: #a5a5a5;
 }
 
-.line-numbers .line-numbers-rows > span:before {
+.light .line-numbers .line-numbers-rows > span:before {
     color: #2B91AF;
 }
 
 /* overrides color-values for the Line Highlight plugin
 * http://prismjs.com/plugins/line-highlight/
 */
-.line-highlight.line-highlight {
+.light .line-highlight.line-highlight {
     background: rgba(193, 222, 241, 0.2);
     background: -webkit-linear-gradient(left, rgba(193, 222, 241, 0.2) 70%, rgba(221, 222, 241, 0));
     background: linear-gradient(to right, rgba(193, 222, 241, 0.2) 70%, rgba(221, 222, 241, 0));
