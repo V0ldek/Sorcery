@@ -1,0 +1,47 @@
+﻿@page "/teaching/csharp/1-type-system/2-pass-by-reference"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["type-system"]["pass-by-reference"];
+}
+
+<CourseSection Section="@CourseBook.CSharpCourse["type-system"]["pass-by-reference"]">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Pass-by-value vs pass-by-reference.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Pass-by-reference with <Code>out</Code> and <Code>ref</Code>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                The <Code>TryX</Code> pattern.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Ignoring <Code>out</Code> parameters.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
+        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
+        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
+        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
+        ("https://www.nuget.org/", "NuGet Gallery"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

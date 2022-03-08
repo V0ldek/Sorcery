@@ -38,6 +38,13 @@ public sealed class CourseBook
                     new ("Attributes", "attributes"),
                     new ("Testing with xUnit", "testing-with-xunit"),
                     new ("Using GitHub Classroom", "using-github-classroom"),
-                }, new AssignmentSkeleton ("Dungeon Walker", "dungeon-walker", "https://classroom.github.com/a/7S1aHBvK"))
+                }, new AssignmentSkeleton ("Dungeon Walker", "dungeon-walker", "https://classroom.github.com/a/7S1aHBvK")),
+                new ("Type System", "type-system", new SectionSkeleton[]
+                {
+                    new ("Memory", "memory"),
+                    new ("Reference Types and Value Types", "reference-types-and-value-types"),
+                    new ("Pass-by-Reference", "pass-by-reference"),
+                    new ("Equality", "equality"),
+                }, null)
             }));
 }

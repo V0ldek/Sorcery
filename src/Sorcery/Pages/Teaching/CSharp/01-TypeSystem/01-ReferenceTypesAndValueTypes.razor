@@ -1,0 +1,52 @@
+﻿@page "/teaching/csharp/1-type-system/1-reference-types-and-value-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["type-system"]["reference-types-and-value-types"];
+}
+
+<CourseSection Section="@CourseBook.CSharpCourse["type-system"]["reference-types-and-value-types"]">
+    <MudText GutterBottom="true">
+        We're going back to <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>.
+        Go through <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                The difference between reference types and value types.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Declaring custom value types &ndash; <Code>enum</Code> and <Code>struct</Code>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Default values.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Value types and memory management.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Boxing.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
+        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
+        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
+        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
+        ("https://www.nuget.org/", "NuGet Gallery"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

@@ -1,0 +1,24 @@
+﻿@page "/teaching/csharp/1-type-system"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["type-system"]">
+    <MudText GutterBottom="true">
+        We carry on to more advanced features specific to C# and the .NET type system. In this module we will learn:
+    </MudText>
+        
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">how CLR manages memory, basics of Garbage Collection;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">the difference between reference types and value types;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">passing by reference;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">implementing equality (for objects, not people, sorry);</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">nested types;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">exceptions;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">generics;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">nullability, Nullable Reference Types;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">casting, <Code>is</Code>, <Code>as</Code>;</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

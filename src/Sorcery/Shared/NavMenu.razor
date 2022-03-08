@@ -1,6 +1,6 @@
 ﻿@inject CourseBook CourseBook;
 
-<MudNavMenu Bordered="true">
+<MudNavMenu Bordered="true" Dense="true">
     <MudNavLink Href="/" Match="NavLinkMatch.All">Welcome page</MudNavLink>
 
     <MudNavGroupLink Href="/teaching" Match="NavLinkMatch.Prefix" Expanded="true" Icon="@Icons.Filled.School" Title="Teaching">
@@ -12,11 +12,11 @@
                     <MudNavGroupLink Href="@module.Route" Match="NavLinkMatch.Prefix" Expanded="false" Title="@module.DisplayName">
                         @foreach (var section in module.Sections)
                         {
-                            <MudNavLink Class="pr-2" Href="@(section.Route)" Match="NavLinkMatch.All">@(section.DisplayName)</MudNavLink>
+                            <MudNavLink Href="@(section.Route)" Match="NavLinkMatch.All">@(section.DisplayName)</MudNavLink>
                         }
                         @if (module.Assignment is not null)
                         {
-                            <MudNavLink Class="pr-2" Icon="@Icons.Filled.Assignment" Href="@module.Assignment.Route" Match="NavLinkMatch.All">@module.Assignment.DisplayName</MudNavLink>
+                            <MudNavLink Icon="@Icons.Filled.Assignment" Href="@module.Assignment.Route" Match="NavLinkMatch.All">@module.Assignment.DisplayName</MudNavLink>
                         }
                     </MudNavGroupLink>
                 }
