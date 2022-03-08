@@ -24,18 +24,24 @@
         
         <MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
     
-        @if (Assignment.Module.Next is not null)
+        @if (Assignment.Module.Next is null)
+        {
+            <MudButton Link="@Assignment.Module.Course.Route">
+                This is the end of the <Highlight>@Assignment.Module.Course.DisplayName</Highlight>.
+                Click here to return to its main page.
+            </MudButton>
+        }
+        else if (Assignment.Module.Next!.IsHidden)
+        {
+            <ButtonNextHidden>
+                There's another module being worked on, but it's not yet published!
+            </ButtonNextHidden>
+        }
+        else
         {
             <ButtonNext Link="@Assignment.Module.Next.Route">
                 Done? Proceed to the next module, <Highlight>@Assignment.Module.Next.DisplayName</Highlight>!
             </ButtonNext>
-        }
-        else
-        {
-            <MudButton Link="@Assignment.Module.Course.Route">
-                This is the end of the <Highlight>@Assignment.Module.Course.DisplayName</Highlight>.
-                Click here to return to its main page.  
-            </MudButton>
         }
     </MudPaper>
 

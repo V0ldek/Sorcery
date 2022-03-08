@@ -1,0 +1,16 @@
+﻿<MudGrid Justify="Justify.FlexEnd">
+    <MudItem>
+        <MudPaper Elevation="5">
+            <MudButton Size="Size.Large" Variant="Variant.Text" Class="pa-4" Disabled="true">
+                <MudAlert Variant="Variant.Outlined" Severity="Severity.Info">
+                    @ChildContent
+                </MudAlert>
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

@@ -4,6 +4,8 @@ namespace Sorcery.ModularCourse;
 
 public sealed record class Section(Module Module, int Id, string Title, string RouteName)
 {
+    public bool IsHidden { get; init; }
+
     public Section? Next { get; internal set; }
 
     public Section? Previous { get; internal set; }

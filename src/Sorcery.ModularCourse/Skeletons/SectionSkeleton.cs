@@ -2,4 +2,7 @@
 
 namespace Sorcery.ModularCourse.Skeletons;
 
-public sealed record class SectionSkeleton(string DisplayName, string RouteName);
+public sealed record class SectionSkeleton(string DisplayName, string RouteName)
+{
+    public bool IsHidden { get; init; }
+}

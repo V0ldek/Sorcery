@@ -7,14 +7,14 @@
         @foreach (var course in CourseBook.Courses)
         {
             <MudNavGroupLink Href="@course.Route" Match="NavLinkMatch.Prefix" Expanded="false" Title="@course.DisplayName">
-                @foreach (var module in course.Modules)
+                @foreach (var module in course.Modules.Where(s => !s.IsHidden))
                 {
                     <MudNavGroupLink Href="@module.Route" Match="NavLinkMatch.Prefix" Expanded="false" Title="@module.DisplayName">
-                        @foreach (var section in module.Sections)
+                        @foreach (var section in module.Sections.Where(s => !s.IsHidden))
                         {
                             <MudNavLink Href="@(section.Route)" Match="NavLinkMatch.All">@(section.DisplayName)</MudNavLink>
                         }
-                        @if (module.Assignment is not null)
+                        @if (module.Assignment is not null && !module.Assignment.IsHidden)
                         {
                             <MudNavLink Icon="@Icons.Filled.Assignment" Href="@module.Assignment.Route" Match="NavLinkMatch.All">@module.Assignment.DisplayName</MudNavLink>
                         }

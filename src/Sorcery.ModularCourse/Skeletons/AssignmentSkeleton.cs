@@ -2,4 +2,7 @@
 
 namespace Sorcery.ModularCourse.Skeletons;
 
-public sealed record class AssignmentSkeleton(string DisplayName, string RouteName, string GitHubClassroom);
+public sealed record class AssignmentSkeleton(string DisplayName, string RouteName, string GitHubClassroom)
+{
+    public bool IsHidden { get; init; }
+}

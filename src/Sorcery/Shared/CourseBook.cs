@@ -45,6 +45,6 @@ public sealed class CourseBook
                     new ("Reference Types and Value Types", "reference-types-and-value-types"),
                     new ("Pass-by-Reference", "pass-by-reference"),
                     new ("Equality", "equality"),
-                }, null)
+                }, null) { IsHidden = true }
             }));
 }

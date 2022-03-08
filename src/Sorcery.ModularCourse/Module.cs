@@ -6,6 +6,8 @@ public record class Module(Course Course, int Id, string Title, string RouteName
 {
     private readonly List<Section> _sections = new();
 
+    public bool IsHidden { get; init; }
+
     public Assignment? Assignment { get; internal set; }
 
     public string DisplayName => $"{Id}. {Title}";

@@ -22,23 +22,47 @@
         @ChildContent
         
         <MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
-        @if (Section.Next is null && Section.Module.Assignment is null && Section.Module.Next is null)
+        @if (Section.Next is null && Section.Module.Assignment is null)
         {
-            <ButtonNext Link="/teaching">
-                This is the end of the course! You can go back to <Highlight>Teaching</Highlight>, if you want more.
-            </ButtonNext>
-        }
-        else if (Section.Next is null && Section.Module.Assignment is null)
-        { 
-            <ButtonNext Link="@Section.Module.Next!.Route">
-                There is no assignment for this module! Proceed to the next one, <Highlight>@Section.Module.Next.DisplayName</Highlight>!
-            </ButtonNext>  
+            if (Section.Module.Next is null)
+            {
+                <ButtonNext Link="/teaching">
+                    This is the end of the course! You can go back to <Highlight>Teaching</Highlight>, if you want more.
+                </ButtonNext>
+            }
+            else if (Section.Module.Next.IsHidden)
+            {
+                <ButtonNextHidden>
+                    There's another module being worked on, but it's not yet published!
+                </ButtonNextHidden>
+            }
+            else
+            {
+                <ButtonNext Link="@Section.Module.Next!.Route">
+                    There is no assignment for this module! Proceed to the next one, <Highlight>@Section.Module.Next.DisplayName</Highlight>!
+                </ButtonNext>
+            }
         }
         else if (Section.Next is null)
         {
-            <ButtonNext Link="@Section.Module.Assignment!.Route">
-                Next up: end-of-module assignment, <Highlight>@Section.Module.Assignment!.DisplayName</Highlight>!
-            </ButtonNext>
+            if (Section.Module.Assignment!.IsHidden)
+            {
+                <ButtonNextHidden>
+                    Shh, the assignment is a secret! It will be published later.
+                </ButtonNextHidden>
+            }
+            else
+            {
+                <ButtonNext Link="@Section.Module.Assignment!.Route">
+                    Next up: end-of-module assignment, <Highlight>@Section.Module.Assignment!.DisplayName</Highlight>!
+                </ButtonNext>
+            }
+        }
+        else if (Section.Next.IsHidden)
+        {
+            <ButtonNextHidden>
+                The next section is work in progress and not yet published!
+            </ButtonNextHidden>
         }
         else
         {   

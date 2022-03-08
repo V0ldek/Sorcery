@@ -22,21 +22,17 @@
         @ChildContent
         
         <MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
-        @if (Module.Sections.Any())
+        @if (Module.Sections[0].IsHidden)
+        {
+            <ButtonNextHidden>
+                This module's contents are not yet published!
+            </ButtonNextHidden>
+        }
+        else
         {
             <ButtonNext Link="@Module.Sections[0].Route">
                 Proceed to the first section, <Highlight>@Module.Sections[0].DisplayName</Highlight>!
             </ButtonNext>
-        }
-        else
-        {
-            <MudGrid Justify="Justify.FlexEnd">
-                <MudItem>
-                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Elevation="5">
-                        <MudText Style="margin-top: 1px" Typo="Typo.button">This module's contents are not yet published!</MudText>
-                    </MudAlert>
-                </MudItem>
-            </MudGrid>
         }
     </MudPaper>
 
