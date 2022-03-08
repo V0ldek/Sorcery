@@ -7,7 +7,7 @@
         either Windows or Linux. As for MacOS, I don't own one, so I wouldn't be able to test it. Use the resources at the bottom
         if you're struggling.
     </MudText>
-    <MudAlert Severity="Severity.Info" Class="mt-2" Variant="Variant.Outlined">
+    <MudAlert Severity="Severity.Info" Class="my-4" Variant="Variant.Outlined">
         Note: this course uses .NET 6. While .NET is backwards-compatible for the most part, keep that in mind
         if a newer version is already out. It is guaranteed to be <em>incompatible</em> with .NET 5 and .NET Core.
     </MudAlert>
@@ -45,7 +45,7 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
 
         <Asciinema CastName="configuring-your-environment-install"/>
             
-        <MudAlert Severity="Severity.Info" Class="mt-2" Variant="Variant.Outlined">
+        <MudAlert Severity="Severity.Warning" Class="my-4" Variant="Variant.Outlined">
             Be aware that installing <Code Language="bash">dotnet</Code> with <Code Language="bash">snap</Code> is known to be weird
             and/or fail. If you have issues, there is always the <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux#manual-installation">manual installation</MudLink>
             path, without a package manager. The best way to do that is the <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux-scripted-manual#scripted-install">dotnet-install.sh</MudLink>

@@ -1,19 +1,9 @@
-﻿@if(FileName is not null)
-{ 
-    <pre data-label="@FileName" class="@(LineNumbers ? "line-numbers" : "")">
-        <code class=@($"language-{Language}")>
-            @_displayCode
-        </code>
-    </pre>
-}
-else
-{
-    <pre class="@(LineNumbers ? "line-numbers" : "")">
-        <code class=@($"language-{Language}")>
-            @_displayCode
-        </code>
-    </pre>
-}
+﻿<pre @attributes="@_preAttributes">
+    <code class="@_codeClass">
+        @_displayCode
+    </code>
+</pre>
+
 
 @code {
     /// <summary>
@@ -38,7 +28,36 @@ else
     [EditorRequired]
     public string Code { get; set; } = null!;
 
+    [CascadingParameter]
+    protected ThemeInfo? ThemeInfo { get; set; }
+
+    private Dictionary<string, object> _preAttributes = new();
+
+    private string _codeClass = "";
+
     private string _displayCode = null!;
 
-    protected override void OnParametersSet() => _displayCode = Code?.Trim()!;
+    protected override void OnParametersSet()
+    {
+        _codeClass = $"language-{Language} {(ThemeInfo?.IsDarkMode is true ? "dark" : "")}";
+        _displayCode = Code?.Trim()!;
+        var preClass = $"language-{Language}";
+
+        if (FileName is not null)
+        {
+            _preAttributes["data-label"] = FileName;
+        }
+
+        if (LineNumbers)
+        {
+            preClass += " line-numbers";
+        }
+
+        if (ThemeInfo?.IsDarkMode is true)
+        {
+            preClass += " dark";
+        }
+
+        _preAttributes["class"] = preClass;
+    }
 }

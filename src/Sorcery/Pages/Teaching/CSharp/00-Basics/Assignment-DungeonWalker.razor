@@ -86,7 +86,7 @@ public interface IRoom
         When called it must resolve the combat, which results in the Hero and/or Enemy involved in combat to fall to <span class="health">$0$ health</span>.
     </MudText>
     <LatexRenderer ContainerId="combat-description"/>
-    <MudAlert Class="my-2" Variant="Variant.Outlined">
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
         Note that this will require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
         to allow them to be affected by <Code>Combat</Code>. You can freely extend them with any methods you want,
         but you cannot change the existing signatures, since the tests are using them.
@@ -133,7 +133,7 @@ Enemy vanquished!
         an Enemy. 
         You need to modify it during combat, which most likely requires adding methods to the <Code>PlayerStatistics</Code> class.
     </MudText>
-    <MudAlert Variant="Variant.Outlined" class="my-2">
+    <MudAlert Variant="Variant.Outlined" Class="my-4">
         This is tested by the "Combat" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
 
@@ -191,7 +191,7 @@ public static class LootFactory
     public static ILoot LootPile(ILoot[] loot) => throw new NotImplementedException();
 }
 ")"/>
-    <MudAlert Class="my-2" Variant="Variant.Outlined">
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
         This might, again, require changes to the existing classes in <Code>DungeonWalker.Characters</Code>,
         to allow them to be affected by <Code>ILoot</Code>.
     </MudAlert>
@@ -250,13 +250,13 @@ The room is empty except for a large chest. And inside...
     </MudText>
     <CodeBlock Language="plain" Code="@(@"The room is empty except for a large chest. And inside...
  Bah! It's empty!")"/>
-    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined" class="my-2">
+    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined" Class="my-4">
         Note that the value displayed for a Health Potion is the actual value healed, not
         the percentage strength of the potion. The buffs are applied in the order in which they
         appear in the array, in particular if one of the potions restores full health to the character
         then all subsequent ones give no health. A character's health can never exceed their max health.
     </MudAlert>
-    <MudAlert Variant="Variant.Outlined" class="my-2">
+    <MudAlert Variant="Variant.Outlined" Class="my-4">
         This is tested by the "Loot" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
     <LatexRenderer ContainerId="loot-points"/>
@@ -287,7 +287,7 @@ The room is empty except for a large chest. And inside...
     </MudList>
     <LatexRenderer ContainerId="dungeon-description"/>
     <LatexRenderer ContainerId="dungeon-list"/>
-    <MudAlert Variant="Variant.Outlined" class="my-2">
+    <MudAlert Variant="Variant.Outlined" Class="my-4">
         This is tested by the "Dungeons" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Heroic hardened Heroes</MudText>
@@ -336,7 +336,7 @@ The room is empty except for a large chest. And inside...
     </MudList>
     <LatexRenderer ContainerId="heroes-description" /> 
     <LatexRenderer ContainerId="heroes-list" />
-    <MudAlert Variant="Variant.Outlined" class="my-2">
+    <MudAlert Variant="Variant.Outlined" Class="my-4">
         This is tested by the "Characters" test group, worth <Highlight>0.25</Highlight> points.
     </MudAlert>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
@@ -357,7 +357,7 @@ The room is empty except for a large chest. And inside...
         They will run automatically when you commit your changes, and you can run them
         manually with <Code Language="bash">dotnet test</Code>.
     </MudText>
-    <MudAlert Class="my-2" Severity="Severity.Warning">
+    <MudAlert Class="my-4" Severity="Severity.Warning" Variant="Variant.Outlined">
         DO NOT edit the tests! You can freely add your own, but editing the existing
         graded tests in any way is prohibited. The tests exist so that everyone
         can have automated feedback and normalised grades for the tests. If you
