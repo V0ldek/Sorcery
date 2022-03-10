@@ -73,17 +73,33 @@ jobs:
         inlineScript: |
           az network nsg rule create -g ${{ secrets.SORCERY_AZURE_RG_NAME }} --nsg-name ${{ secrets.SORCERY_AZURE_NSG_NAME }} -n GitHubActionDeployJIT --priority 100 \
             --source-address-prefixes ${{ steps.ip.outputs.ipv4 }} --destination-port-ranges 22 --direction Inbound --access Allow --protocol TCP
-    - name: scp to Sorcery-VM
-      uses: appleboy/scp-action@v0.1.2
-      with:       
-        host: ${{ secrets.SORCERY_VM_IP }}
-        key: ${{ secrets.SORCERY_VM_KEY }}
-        source: ./sorcery.tar.gz
-        target: /home/v0ldek/server/release
-    - name: SSH Remote Commands
-      uses: appleboy/ssh-action@v0.1.4
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2.3.1
       with:
-        host: ${{ secrets.SORCERY_VM_IP }}
         key: ${{ secrets.SORCERY_VM_KEY }}
-        script: sudo rm -rf /usr/share/nginx/sorcery/* && sudo tar -xzf /home/v0ldek/server/release/sorcery.tar.gz /usr/share/nginx/sorcery && sudo nginx -s reload
-        script_stop: true
+    - name: scp to Sorcery-VM
+      run: scp ./sorcery.tar.gz "${{ secrets.SORCERY_VM_IP }}:/home/v0ldek/server/release"
+    - name: Restart nginx via SSH
+      run: ssh ${{ secrets.SORCERY_VM_IP }} \
+             sudo rm -rf /usr/share/nginx/sorcery/* && \\
+             sudo tar -xzf /home/v0ldek/server/release/sorcery.tar.gz /usr/share/nginx/sorcery && \\
+             sudo nginx -s reload
+
+  cancelAccess:
+  
+    runs-on: ubuntu-latest
+
+    needs: [deploy]
+    if: always()
+
+    steps:
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.SORCERY_AZURE_CREDENTIALS }}
+    - name: Azure CLI - remove JIT rule
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.34.1
+        inlineScript: |
+          az network nsg rule delete -g ${{ secrets.SORCERY_AZURE_RG_NAME }} --nsg-name ${{ secrets.SORCERY_AZURE_NSG_NAME }} -n GitHubActionDeployJIT
