@@ -82,7 +82,7 @@ jobs:
     - name: scp to Sorcery-VM
       run: scp ./sorcery.tar.gz "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}:/home/v0ldek/server/release"
     - name: Restart nginx via SSH
-      run: ssh ${{ secrets.SORCERY_VM_IP }} \
+      run: ssh "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}" \
              sudo rm -rf /usr/share/nginx/sorcery/* && \\
              sudo tar -xzf /home/v0ldek/server/release/sorcery.tar.gz /usr/share/nginx/sorcery && \\
              sudo nginx -s reload
