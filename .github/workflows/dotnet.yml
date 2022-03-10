@@ -60,7 +60,7 @@ jobs:
         name: sorcery
         path: ./
     - name: scp to Sorcery-VM
-      uses: appleboy/scp-action@v0.0.1
+      uses: appleboy/scp-action@v0.1.2
       with:       
         host: ${{ secrets.SORCERY_VM_IP }}
         key: ${{ secrets.SORCERY_VM_KEY }}
