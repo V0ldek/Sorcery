@@ -23,8 +23,8 @@ public class PrismRendererUnitTests
         var cut = ctx.RenderComponent<PrismRenderer>();
         plannedHighlight.SetVoidResult();
 
-        plannedHighlight.VerifyInvoke(PrismHighlightAllIdentifier);
         await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
+        plannedHighlight.VerifyInvoke(PrismHighlightAllIdentifier);
     }
 
     [Fact]
@@ -38,9 +38,9 @@ public class PrismRendererUnitTests
         // Re-render the component.
         cut.Render();
 
+        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
         // If the function was invoked twice this would fail.
         plannedHighlight.VerifyInvoke(PrismHighlightAllIdentifier, 1);
-        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
     }
 
     [Fact]
@@ -58,9 +58,9 @@ public class PrismRendererUnitTests
         plannedGetById.SetResult(testElementReference);
         plannedHighlight.SetVoidResult();
 
+        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
         plannedGetById.VerifyInvoke(GetElementByIdIdentifier);
         plannedHighlight.VerifyInvoke(PrismHighlightUnderIdentifier);
-        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
     }
 
     [Fact]
@@ -80,9 +80,9 @@ public class PrismRendererUnitTests
         // Re-render the component.
         cut.Render();
 
+        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
         // If the function was invoked twice these would fail.
         plannedGetById.VerifyInvoke(GetElementByIdIdentifier, 1);
         plannedHighlight.VerifyInvoke(PrismHighlightUnderIdentifier, 1);
-        await ctx.ShouldNotHaveThrownRenderingExceptionsAsync();
     }
 }
