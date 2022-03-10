@@ -87,7 +87,7 @@ jobs:
              sudo tar -xzf /home/v0ldek/server/release/sorcery.tar.gz /usr/share/nginx/sorcery && \\
              sudo nginx -s reload
     - name: Azure CLI - remove JIT rule
-      if: ${{ steps.jitAllow.status == 'success' }}
+      if: always()
       uses: azure/CLI@v1
       with:
         azcliversion: 2.34.1
