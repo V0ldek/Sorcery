@@ -59,6 +59,20 @@ jobs:
       with:
         name: sorcery
         path: ./
+    - name: Query public IP
+      id: ip
+      uses: haythem/public-ip@v1.2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.SORCERY_AZURE_CREDENTIALS }}
+    - name: Azure CLI - allow connections from worker
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.34.1
+        inlineScript: |
+          az network nsg rule create -g ${{ secrets.SORCERY_AZURE_RG_NAME }} --nsg-name ${{ secrets.SORCERY_AZURE_NSG_NAME }} -n GitHubActionDeployJIT --priority 100 \
+            --source-address-prefixes ${{ steps.ip.outputs.ipv4 }} --destination-port-ranges 22 --direction Inbound --access Allow --protocol TCP
     - name: scp to Sorcery-VM
       uses: appleboy/scp-action@v0.1.2
       with:       
