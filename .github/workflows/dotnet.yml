@@ -80,7 +80,7 @@ jobs:
         key: ${{ secrets.SORCERY_VM_KEY }}
         known_hosts: ${{ secrets.SORCERY_VM_KNOWN_HOSTS }}
     - name: scp to Sorcery-VM
-      run: scp ./sorcery.tar.gz "${{ secrets.SORCERY_VM_IP }}:/home/v0ldek/server/release"
+      run: scp ./sorcery.tar.gz "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}:/home/v0ldek/server/release"
     - name: Restart nginx via SSH
       run: ssh ${{ secrets.SORCERY_VM_IP }} \
              sudo rm -rf /usr/share/nginx/sorcery/* && \\
