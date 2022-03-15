@@ -1,4 +1,4 @@
-name: Sorcery VM deployment
+name: Sorcery VM DEV deployment
 
 on:
   push:
