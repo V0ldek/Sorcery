@@ -3,7 +3,7 @@
 <div class="mud-nav-group">
     <MudNavLink Href="@Href" Match=@NavLinkMatch.Prefix Icon="@Icon" IconColor="@IconColor">
         <MudGrid Justify="Justify.SpaceBetween">
-            <MudItem>@Title</MudItem>
+            <MudItem Style="max-width: 75%">@Title</MudItem>
             <MudItem Class="pa-0" Style="min-width: 25%">
                 <MudToggleIconButton @bind-Toggled="Expanded" 
                     Icon="@CollapsedIcon" ToggledIcon="@ExpandedIcon" Variant="Variant.Text" 

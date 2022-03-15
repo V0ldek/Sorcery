@@ -1,14 +1,14 @@
-﻿@page "/teaching/csharp/0-basics/8-abstract-types"
+﻿@page "/teaching/csharp/1-object-orientation/2-abstract-types"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["basics"]["abstract-types"];
+    var section = CourseBook.CSharpCourse["object-orientation"]["abstract-types"];
 }
 
-<CourseSection Section="@CourseBook.CSharpCourse["basics"]["abstract-types"]">
+<CourseSection Section="@(section)">
     <MudText GutterBottom="true">
         Continuing with <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>
-        go through the next notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
+        go through the next notebook, <Highlight>@($"{section.Module.Id}-{section.Module.RouteName}/{section.Id}-{section.RouteName}.dib")</Highlight>, in VS Code.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>

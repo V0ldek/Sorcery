@@ -1,14 +1,14 @@
-﻿@page "/teaching/csharp/1-type-system/2-pass-by-reference"
+﻿@page "/teaching/csharp/2-references-and-values/6-pass-by-reference"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["type-system"]["pass-by-reference"];
+    var section = CourseBook.CSharpCourse["references-and-values"]["pass-by-reference"];
 }
 
-<CourseSection Section="@CourseBook.CSharpCourse["type-system"]["pass-by-reference"]">
+<CourseSection Section="@(section)">
     <MudText GutterBottom="true">
         Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
-        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+        <Highlight>@($"{section.Module.Id}-{section.Module.RouteName}/{section.Id}-{section.RouteName}.dib")</Highlight>.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>
@@ -34,11 +34,10 @@
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
-        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
-        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
-        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
-        ("https://www.nuget.org/", "NuGet Gallery"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref#passing-an-argument-by-reference",
+            "Passing an argument by reference (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier",
+            "out parameter modifier (C# reference)")
     })/>
 </CourseSection>
 

@@ -12,7 +12,9 @@ public sealed record class Course(string Title, string RouteName)
 
     public string DisplayName => Title;
 
-    public Module this[string moduleRoute] => Modules.First(m => m.RouteName == moduleRoute);
+    public Module this[string moduleRoute] =>
+        Modules.FirstOrDefault(m => m.RouteName == moduleRoute) ??
+            throw new ArgumentException($"Did not find module {moduleRoute}", nameof(moduleRoute));
 
     internal void AddModule(Module module) => _modules.Add(module);
 }

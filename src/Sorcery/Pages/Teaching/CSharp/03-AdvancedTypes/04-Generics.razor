@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/1-type-system/3-exceptions"
+﻿@page "/teaching/csharp/2-references-and-values/4-generics"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["type-system"]["exceptions"];
+    var course = CourseBook.CSharpCourse["references-and-values"]["generics"];
 }
 
 <CourseSection Section="@course">
@@ -14,32 +14,27 @@
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
-                The <Code>try/catch</Code> block and <Code>throw</Code> instruction.
+                Motivation behind generics.
             </MudText>
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
-                Specifying exception types to catch.
+                Generic types and methods.
             </MudText>
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
-                Rethrowing exceptions.
+                How the compiler treats generics.
             </MudText>
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
-                Defining custom exceptions.
+                Generic constraints.
             </MudText>
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
-                Filtering exceptions with the <Code>when</Code> clause.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
-            <MudText>
-                Defensive programming.
+                Inheriting from generic types.
             </MudText>
         </MudListItem>
     </MudList>

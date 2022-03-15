@@ -1,7 +1,11 @@
-﻿@page "/teaching/csharp/0-basics/11-testing-with-xunit"
+﻿@page "/teaching/csharp/1-object-orientation/5-testing-with-xunit"
 @inject CourseBook CourseBook;
 
-<CourseSection Section="@CourseBook.CSharpCourse["basics"]["testing-with-xunit"]">
+@{
+    var section = CourseBook.CSharpCourse["object-orientation"]["testing-with-xunit"];
+}
+
+<CourseSection Section="@(section)">
     <MudText>
         We won't be using a notebook for this one, as we need an actual project to run the tests.
         In .NET there are three major test frameworks:
@@ -449,7 +453,7 @@ public class CalculatorUnitTests
         I have to admit, that code isn't the cleanest. We have an obvious duplication where we test the code with
         positive and negative modulo for the same absolute values and expect the same result.
         Also, what if we wanted to generate tests? Say I wanted to test that for all numbers from $1$ to $1000$
-        it holds that $x - 1 \equiv x - 1 \mod x$. We know we cannot really do that from <MudLink Href="@CourseBook.CSharpCourse["basics"]["attributes"].Route">@CourseBook.CSharpCourse["basics"]["attributes"].DisplayName</MudLink>, as attributes only accept compile-time constants as arguments. Well, we can, but copy-pasting a thousand lines of
+        it holds that $x - 1 \equiv x - 1 \mod x$. We know we cannot really do that from <MudLink Href="@CourseBook.CSharpCourse["object-orientation"]["attributes"].Route">@CourseBook.CSharpCourse["object-orientation"]["attributes"].DisplayName</MudLink>, as attributes only accept compile-time constants as arguments. Well, we can, but copy-pasting a thousand lines of
         code is not really considered best practice.
     </MudText>
     <MudText GutterBottom="true" id="text-with-math">

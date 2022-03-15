@@ -1,0 +1,38 @@
+﻿@page "/teaching/csharp/2-references-and-values/2-operator-overloading"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["references-and-values"]["operator-overloading"];
+}
+
+<CourseSection Section="@CourseBook.CSharpCourse["references-and-values"]["operator-overloading"]">
+    <MudText GutterBottom="true">
+        We're going back to <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>.
+        Go through <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                How to overload operators.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Declaring regular methods alongside operators for better interoperability.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Sanity checks for operator overloading.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/operator-overloading", "Operator overloading (C# reference)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

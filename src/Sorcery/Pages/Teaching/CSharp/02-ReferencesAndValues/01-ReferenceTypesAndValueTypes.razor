@@ -1,11 +1,11 @@
-﻿@page "/teaching/csharp/1-type-system/1-reference-types-and-value-types"
+﻿@page "/teaching/csharp/2-references-and-values/1-reference-types-and-value-types"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["type-system"]["reference-types-and-value-types"];
+    var course = CourseBook.CSharpCourse["references-and-values"]["reference-types-and-value-types"];
 }
 
-<CourseSection Section="@CourseBook.CSharpCourse["type-system"]["reference-types-and-value-types"]">
+<CourseSection Section="@CourseBook.CSharpCourse["references-and-values"]["reference-types-and-value-types"]">
     <MudText GutterBottom="true">
         We're going back to <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>.
         Go through <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
@@ -39,11 +39,14 @@
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
-        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
-        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
-        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
-        ("https://www.nuget.org/", "NuGet Gallery"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-types",
+            "Value types (C# reference)"),
+        ("Enumeration types (C# reference)", "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/enum"),
+        ("Structure types (C# reference)", "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/struct"),
+        ("default value expressions (C# reference)", "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/default"),
+        ("Boxing and Unboxing (C# Programming Guide)", "https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing"),
+        ("The Stack Is An Implementation Detail, Part One (Eric Lippert)", "https://ericlippert.com/2009/04/27/the-stack-is-an-implementation-detail-part-one/"),
+        ("The Stack Is An Implementation Detail, Part Two (Eric Lippert)", "https://ericlippert.com/2009/05/04/the-stack-is-an-implementation-detail-part-two/")
     })/>
 </CourseSection>
 

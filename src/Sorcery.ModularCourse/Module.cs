@@ -20,7 +20,8 @@ public record class Module(Course Course, int Id, string Title, string RouteName
 
     public IReadOnlyList<Section> Sections => _sections;
 
-    public Section this[string sectionRoute] => Sections.First(m => m.RouteName == sectionRoute);
+    public Section this[string sectionRoute] => Sections.FirstOrDefault(m => m.RouteName == sectionRoute) ??
+            throw new ArgumentException($"Did not find section {sectionRoute} in module {RouteName}", nameof(sectionRoute));
 
     internal void AddSection(Section section) => _sections.Add(section);
 }

@@ -72,7 +72,7 @@
                 will be up until Tuesday, 18:00, the day before next class.
             </MudText>
             <MudAlert Class="my-4" Variant="Variant.Outlined" Severity="Severity.Warning">
-                To pass in the first term you need to get at least <Highlight>20</Highlight> points for these microassignments!
+                To pass in the first term you need to get at least <Highlight>25</Highlight> points for these microassignments!
             </MudAlert>
             <MudText>
                 Note that this threshold is chosen so that passing automated tests for all microassignments guarantees meeting it.
@@ -234,7 +234,7 @@
 
         public int Sum => MicroassignmentSum + ProjectSum;
 
-        public bool MicroassignmentsPassed => MicroassignmentSum >= 20;
+        public bool MicroassignmentsPassed => MicroassignmentSum >= 25;
 
         public Grade Grade
         {

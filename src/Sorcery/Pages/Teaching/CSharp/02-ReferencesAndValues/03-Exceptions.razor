@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/1-type-system/6-casting"
+﻿@page "/teaching/csharp/2-references-and-values/3-exceptions"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["type-system"]["casting"];
+    var course = CourseBook.CSharpCourse["references-and-values"]["exceptions"];
 }
 
 <CourseSection Section="@course">
@@ -14,21 +14,18 @@
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
-                Casting with <Code>as</Code> and <Code>is</Code>.
+                The <Code>throw</Code> instruction.
             </MudText>
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
             <MudText>
-                When to use which cast.
+                Defensive programming.
             </MudText>
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
-        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
-        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
-        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
-        ("https://www.nuget.org/", "NuGet Gallery"),
+        ("https://en.wikipedia.org/wiki/Fail-fast", "Fail-fast (Wikipedia)"),
+        ("https://enterprisecraftsmanship.com/posts/fail-fast-principle/", "Fail Fast Principle (Enterprise Craftsmanship)")
     })/>
 </CourseSection>
 
