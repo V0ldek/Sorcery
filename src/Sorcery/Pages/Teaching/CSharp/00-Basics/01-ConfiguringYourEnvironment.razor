@@ -11,6 +11,11 @@
         Note: this course uses .NET 6. While .NET is backwards-compatible for the most part, keep that in mind
         if a newer version is already out. It is guaranteed to be <em>incompatible</em> with .NET 5 and .NET Core.
     </MudAlert>
+    <MudAlert Severity="Severity.Warning" Class="my-4" Variant="Variant.Outlined">
+        As of this writing the .NET Interactive extension requires .NET 5 installed.
+        You still need .NET 6 for the code, but the interactive runtime itself needs 5.
+        This amounts to downloading the other binary or running <Code Language="bash">apt install dotnet-sdk-5.0</Code>.
+    </MudAlert>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">.NET, i.e. <Code Language="bash">dotnet</Code></MudText>
     <MudText GutterBottom="true">
         The <MudLink Href="https://dotnet.microsoft.com/en-us/download">.NET installation instructions</MudLink> are detailed and

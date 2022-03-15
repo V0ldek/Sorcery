@@ -44,7 +44,11 @@ public sealed class CourseBook
                     new ("Memory", "memory"),
                     new ("Reference Types and Value Types", "reference-types-and-value-types"),
                     new ("Pass-by-Reference", "pass-by-reference"),
+                    new ("Exceptions", "exceptions"),
+                    new ("Generics", "generics"),
+                    new ("Nullability", "nullability"),
+                    new ("Casting", "casting"),
                     new ("Equality", "equality"),
-                }, null) { IsHidden = true }
+                }, null) { IsHidden = false }
             }));
 }

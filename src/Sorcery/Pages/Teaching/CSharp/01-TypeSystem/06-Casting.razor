@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/1-type-system/7-tuples"
+﻿@page "/teaching/csharp/1-type-system/6-casting"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["type-system"]["tuples"];
+    var course = CourseBook.CSharpCourse["type-system"]["casting"];
 }
 
 <CourseSection Section="@course">
@@ -13,7 +13,14 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            
+            <MudText>
+                Casting with <Code>as</Code> and <Code>is</Code>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                When to use which cast.
+            </MudText>
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {

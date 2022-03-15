@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/1-type-system/8-billion-dollar-mistake"
+﻿@page "/teaching/csharp/1-type-system/5-nullability"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["type-system"]["billion-dollar-mistake"];
+    var course = CourseBook.CSharpCourse["type-system"]["nullability"];
 }
 
 <CourseSection Section="@course">
@@ -13,7 +13,29 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            
+            <MudText>
+                The Billion-Dollar Mistake.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Nullable Reference Types.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Null-coalescing operators.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Nullable Value Types &ndash; <Code>Nullable&lang;T&rang;></Code>.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Lifted operators.
+            </MudText>
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {

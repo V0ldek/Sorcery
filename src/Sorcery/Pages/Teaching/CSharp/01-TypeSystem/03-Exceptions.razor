@@ -1,4 +1,4 @@
-﻿@page "/teaching/csharp/1-type-system/5-exceptions"
+﻿@page "/teaching/csharp/1-type-system/3-exceptions"
 @inject CourseBook CourseBook;
 
 @{
@@ -13,7 +13,34 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            
+            <MudText>
+                The <Code>try/catch</Code> block and <Code>throw</Code> instruction.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Specifying exception types to catch.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Rethrowing exceptions.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Defining custom exceptions.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Filtering exceptions with the <Code>when</Code> clause.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Defensive programming.
+            </MudText>
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
