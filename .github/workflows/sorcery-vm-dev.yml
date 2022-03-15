@@ -2,28 +2,11 @@ name: Sorcery VM deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [ dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ dev ]
 
-jobs: 
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-
+jobs:
   publish:
 
     runs-on: ubuntu-latest
@@ -37,18 +20,18 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet publish -c Release -o ./release
+      run: dotnet publish -c Debug -o ./dev
     - name: Compress artifact
-      run: tar -czvf sorcery.tar.gz -C ./release .
+      run: tar -czvf sorcery-dev.tar.gz -C ./dev .
     - name: Upload artifact
       uses: actions/upload-artifact@v3.0.0
       with:
-        name: sorcery
-        path: ./sorcery.tar.gz
+        name: sorcery-dev
+        path: ./sorcery-dev.tar.gz
         if-no-files-found: error
 
   deploy:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/dev'
 
     runs-on: ubuntu-latest
 
@@ -58,7 +41,7 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3.0.0
       with:
-        name: sorcery
+        name: sorcery-dev
         path: ./
     - name: Query public IP
       id: ip
@@ -81,10 +64,10 @@ jobs:
         key: ${{ secrets.SORCERY_VM_KEY }}
         known_hosts: ${{ secrets.SORCERY_VM_KNOWN_HOSTS }}
     - name: scp to Sorcery-VM
-      run: scp ./sorcery.tar.gz "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}:/home/${{ secrets.SORCERY_VM_USER }}/server/release"
+      run: scp ./sorcery-dev.tar.gz "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}:/home/${{ secrets.SORCERY_VM_USER }}/server/dev"
     - name: Restart nginx via SSH
       run: ssh "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}" \
-             "sudo rm -rf /usr/share/nginx/sorcery/* && sudo tar -xzf /home/${{ secrets.SORCERY_VM_USER }}/server/release/sorcery.tar.gz -C /usr/share/nginx/sorcery . && sudo nginx -s reload"
+             "sudo rm -rf /usr/share/nginx/sorcery-dev/* && sudo tar -xzf /home/${{ secrets.SORCERY_VM_USER }}/server/dev/sorcery-dev.tar.gz -C /usr/share/nginx/sorcery-dev . && sudo nginx -s reload"
     - name: Azure CLI - remove JIT rule
       if: always()
       uses: azure/CLI@v1
