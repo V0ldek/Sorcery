@@ -1,4 +1,4 @@
-name: Sorcery VM deployment
+name: Sorcery VM DEV deployment
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    needs: [build, publish]
+    needs: [publish]
 
     steps:
     - name: Download artifact
