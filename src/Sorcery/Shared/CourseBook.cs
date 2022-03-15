@@ -55,7 +55,7 @@ public sealed class CourseBook
                 new ("Generics and Records", "generics-and-records", new SectionSkeleton[]
                 {
                     new ("Generics", "generics"),
-                    new ("Desctructuring", "desctructuring"),
+                    new ("Destructuring", "destructuring"),
                     new ("Tuples", "tuples"),
                     new ("Equality", "equality"),
                     new ("Records", "records"),
