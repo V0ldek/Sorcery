@@ -1,0 +1,93 @@
+name: Sorcery VM deployment
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish -c Release -o ./release
+    - name: Compress artifact
+      run: tar -czvf sorcery.tar.gz -C ./release .
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: sorcery
+        path: ./sorcery.tar.gz
+        if-no-files-found: error
+
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    needs: [build, publish]
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: sorcery
+        path: ./
+    - name: Query public IP
+      id: ip
+      uses: haythem/public-ip@v1.2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.SORCERY_AZURE_CREDENTIALS }}
+    - name: Azure CLI - allow connections from worker
+      id: jitAllow
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.34.1
+        inlineScript: |
+          az network nsg rule create -g ${{ secrets.SORCERY_AZURE_RG_NAME }} --nsg-name ${{ secrets.SORCERY_AZURE_NSG_NAME }} -n GitHubActionDeployJIT --priority 100 \
+            --source-address-prefixes ${{ steps.ip.outputs.ipv4 }} --destination-port-ranges 22 --direction Inbound --access Allow --protocol TCP
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2.3.1
+      with:
+        key: ${{ secrets.SORCERY_VM_KEY }}
+        known_hosts: ${{ secrets.SORCERY_VM_KNOWN_HOSTS }}
+    - name: scp to Sorcery-VM
+      run: scp ./sorcery.tar.gz "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}:/home/${{ secrets.SORCERY_VM_USER }}/server/release"
+    - name: Restart nginx via SSH
+      run: ssh "${{ secrets.SORCERY_VM_USER }}@${{ secrets.SORCERY_VM_IP }}" \
+             "sudo rm -rf /usr/share/nginx/sorcery/* && sudo tar -xzf /home/${{ secrets.SORCERY_VM_USER }}/server/release/sorcery.tar.gz -C /usr/share/nginx/sorcery . && sudo nginx -s reload"
+    - name: Azure CLI - remove JIT rule
+      if: always()
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.34.1
+        inlineScript: |
+          az network nsg rule delete -g ${{ secrets.SORCERY_AZURE_RG_NAME }} --nsg-name ${{ secrets.SORCERY_AZURE_NSG_NAME }} -n GitHubActionDeployJIT
