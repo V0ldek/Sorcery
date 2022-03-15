@@ -16,5 +16,5 @@
     private string _class = "";
 
     protected override void OnParametersSet() =>
-        _class = $"language-{Language} {(ThemeInfo?.IsDarkMode is true ? "dark" : "")}";
+        _class = $"language-{Language} {(ThemeInfo?.IsDarkMode is true ? "dark" : "light")}";
 }
