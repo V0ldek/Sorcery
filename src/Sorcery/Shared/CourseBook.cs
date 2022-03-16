@@ -61,7 +61,10 @@ public sealed class CourseBook
                     new ("Records", "records"),
                     new ("Pattern Matching", "pattern-matching"),
                     new ("Collections", "collections"),
-                }, new AssignmentSkeleton("Superior Strategies", "superior-strategies", "https://gienieczko.com/todo")),
+                }, new AssignmentSkeleton("Superior Strategies", "superior-strategies", "https://gienieczko.com/todo"))
+                {
+                    IsHidden = true
+                },
                 new ("LINQ", "linq", new SectionSkeleton[]
                 {
                     new ("Nested Types", "nested-types"),
@@ -72,18 +75,30 @@ public sealed class CourseBook
                     new ("Lambda Expressions", "lambda-expressions"),
                     new ("LINQ queries", "linq-queries"),
                     new ("Expression API", "expression-api"),
-                }, new AssignmentSkeleton("Darkest Dungeons", "darkest-dungeons", "https://gienieczko.com/todo")),
+                }, new AssignmentSkeleton("Darkest Dungeons", "darkest-dungeons", "https://gienieczko.com/todo"))
+                {
+                    IsHidden = true
+                },
                 new ("Asynchrony", "asynchrony", new SectionSkeleton[]
                 {
                     new ("Task Parallel Library", "task-parallel-library")
-                }, new AssignmentSkeleton("Asynchronous Adventurers", "asynchronous-adventurers", "https://gienieczko.com/todo")),
+                }, new AssignmentSkeleton("Asynchronous Adventurers", "asynchronous-adventurers", "https://gienieczko.com/todo"))
+                {
+                    IsHidden = true
+                },
                 new ("Concurrency", "concurrency", new SectionSkeleton[]
                 {
                     new ("Events", "events"),
-                }, new AssignmentSkeleton("Concurrent Competitivity", "concurrent-competitivity", "https://gienieczko.com/todo")),
+                }, new AssignmentSkeleton("Concurrent Competitivity", "concurrent-competitivity", "https://gienieczko.com/todo"))
+                {
+                    IsHidden = true
+                },
                 new ("Analysers", "analysers", new SectionSkeleton[]
                 {
                     new ("Nullable Static Analysis", "nullable-static-analysis"),
                 }, new AssignmentSkeleton("Advanced Adventure Analysis", "advanced-adventure-analysis", "https://gienieczko.com/todo"))
+                {
+                    IsHidden = true
+                },
             }));
 }
