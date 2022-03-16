@@ -65,20 +65,20 @@ public struct Modifier
     <MudText>
         We also want a readable <Code>ToString</Code> representation, e.g. our friend Chainmail would give this modifier:
     </MudText>
-    <CodeBlock Language="plain" Code="@(@"+5 🛡")" />
+    <CodeBlock Language="plain" Code="@(@"🛡 +5")" />
     
     <MudText>
         A magical sword that grants extraordinary strength could give:
     </MudText>
-    <CodeBlock Language="plain" Code="@(@"+10 ⚔️ +10 ❤️")" />
+    <CodeBlock Language="plain" Code="@(@"❤️ +10 ⚔️ +10")" />
     
     <MudText>
         And a legendary artefact could grant:
     </MudText>
-    <CodeBlock Language="plain" Code="@(@"+15 ⚔️ +15 🛡 +20 ❤️")" />
+    <CodeBlock Language="plain" Code="@(@"❤️ +20 ⚔️ +15 🛡 +15")" />
     
     <MudText GutterBottom="true">
-        In short, just write out the non-zero modifiers in order damage, armour, max health.
+        In short, just write out the non-zero modifiers in order max health, damage, armour.
     </MudText>
     
     <MudText>
@@ -103,8 +103,7 @@ private void EnableTenacity()
 }
 ")"/>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Health</MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Equipment</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Equipment</MudText>
     
     <MudText>
         Not all equipment is equal. There are five distinct types of items the Heroes may equip:
@@ -231,7 +230,7 @@ The room is empty except for a large chest. And inside...
   - a Chainmail! But there's no room for it...
   - a Shortsword! It grants ⚔️ +15 ")" />
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Upgrades</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Upgrades</MudText>
 
     <MudText>
         Every piece of Equipment has a quality level. The quality level provides a multiplier
