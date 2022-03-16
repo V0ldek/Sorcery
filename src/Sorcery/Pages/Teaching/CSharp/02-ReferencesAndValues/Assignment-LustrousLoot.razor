@@ -26,7 +26,7 @@
         to indicate they are not one-timers, but rather permanent additions to the Hero's arsenal.
         It currently has a single property, which returns a <Code>Modifier</Code>:
     </MudText>
-    <CodeBlock FileName="DungeonWalker.Logic/Loot/Equipment/IEquipment.cs", Code="@(@"
+    <CodeBlock FileName="DungeonWalker.Logic/Loot/Equipment/IEquipment.cs" Code="@(@"
 using DungeonWalker.Logic.Characters;
 
 namespace DungeonWalker.Logic.Loot.Equipment;
@@ -39,7 +39,7 @@ public interface IEquipment
     <MudText GutterBottom="true">
         A Modifier is currently a rather dumb type:
     </MudText>
-    <CodeBlock FileName="DungeonWalker.Logic/Characters/Modifier.cs", Code="@(@"
+    <CodeBlock FileName="DungeonWalker.Logic/Characters/Modifier.cs" Code="@(@"
 namespace DungeonWalker.Logic.Characters;
 
 public struct Modifier
@@ -87,7 +87,7 @@ public struct Modifier
         You need to fix the <Code>DisableTenacity</Code> and <Code>EnableTenacity</Code> methods
         to apply the modifier correctly.
     </MudText>
-     <CodeBlock FileName="DungeonWalker.Logic/Characters/Hero.cs", Code="@(@"
+     <CodeBlock FileName="DungeonWalker.Logic/Characters/Hero.cs" Code="@(@"
 //...
 
 private void DisableTenacity()
