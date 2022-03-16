@@ -165,11 +165,13 @@ private void EnableTenacity()
         You need to implement the missing <Code>TryEquip</Code> method on
         the <Code>Hero</Code> class and potentially all inheriting classes.
     </MudText>
-    <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+    
+    <MudAlert Class="my-4" Severity="Severity.Info" Variant="Variant.Outlined">
         You may need to modify the <Code>TestHero</Code> class located in the tests.
         This is allowed and expected. The TestHero can accept any equipment types.
         The tests only ever put at most five items into their equipment.
     </MudAlert>
+
     <MudText>
         The <Code>EquipmentFactory</Code> class has more unimplemented members for you.
         Implement the new possible Equipment drops.
