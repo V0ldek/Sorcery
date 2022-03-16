@@ -149,70 +149,87 @@ private void EnableTenacity()
     </MudText>
     
     <MudList id="equipment-list">
-        <MudListItem>
+        <MudListItem Icon="fas fa-hand-fist">
+            <MudText Color="Color.Default">
+                <Code>ShortSword</Code> &ndash; 
+                    a Melee Weapon parametrised by the amount of damage it grants.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-vest">
             <MudText Color="Color.Default">
                 <Code>Chainmail</Code> &ndash;
                     good old Loot from the previous assignment, only now it's an Armour.
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-hat-wizard">
             <MudText Color="Color.Default">
-                <Code>Damage Crystal</Code> &ndash; 
+                <Code>DamageCrystal</Code> &ndash; 
                     same as above, but now it's a Trinket.
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-shield-blank">
             <MudText Color="Color.Default">
                 <Code>Shield</Code> &ndash; 
                     a Shield parametrised by the amount of armour it gives.
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
                 <Code>Bow</Code> &ndash; 
                     a Ranged Weapon parametrised by the amount of damage it grants.
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-hand-fist">
             <MudText Color="Color.Default">
-                <Code>Shortsword</Code> &ndash; 
-                    a Melee Weapon parametrised by the amount of damage it grants.
-            </MudText>
-        </MudListItem>
-        <MudListItem>
-            <MudText Color="Color.Default">
-                <Code>Two-handed sword</Code> &ndash; 
+                <Code>TwoHandedSword</Code> &ndash; 
                     a Melee Weapon that increases Hero's damage by $20$, but decreases armour by $10$ 
                     (handling such a heavy weapon slows you down and makes you more susceptible to attacks).
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
-                <Code>Staff of Life</Code> &ndash; 
+                <Code>StaffOfLife</Code> &ndash; 
                     a Ranged Weapon that increases Hero's damage by $10$ and their max health by $10$.
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-shield-blank">
             <MudText Color="Color.Default">
-                <Code>Spiked Shield</Code> &ndash; 
+                <Code>SpikedShield</Code> &ndash; 
                     a Shield that increases Hero's damage by $10$ and their armour by $15$.
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-vest">
             <MudText Color="Color.Default">
-                <Code>Titanic Bulwark</Code> &ndash; 
+                <Code>TitanicBulwark</Code> &ndash; 
                     an Armour that decreases Hero's damage by $10$, but increases armour by $20$ and max health by $50$.
             </MudText>
         </MudListItem>
-        <MudListItem>
+        <MudListItem Icon="fas fa-hat-wizard">
             <MudText Color="Color.Default">
-                <Code>Essence of Magic</Code> &ndash; 
+                <Code>EssenceOfMagic</Code> &ndash; 
                     a Trinket that increases Hero's damage by $10$, armour by $5$, and max health by $20$.
             </MudText>
         </MudListItem>
     </MudList>
 
     <LatexRenderer ContainerId="equipment-list"/>
+
+    <MudText GutterBottom="true">
+        A Hero only picks up the Equipment if they have a slot to fit it into.
+        If they do not then the item is ignored.
+    </MudText>
+
+    <MudText>
+        Since picking up Loot can now result in the Hero ignoring it, we need to tweak the Loot messages a bit.
+        Here's an example:
+    </MudText>
+
+    <CodeBlock Language="plain" Code="@(@"
+The room is empty except for a large chest. And inside...
+  - a Health Potion! It restores ❤️ 17!
+  - a Titanic Bulwark! It grants ⚔️ -10 🛡 +20 ❤️ +50!
+  - a Chainmail! But there's no room for it...
+  - a Shortsword! It grants ⚔️ +15 ")" />
 
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; Upgrades</MudText>
 
