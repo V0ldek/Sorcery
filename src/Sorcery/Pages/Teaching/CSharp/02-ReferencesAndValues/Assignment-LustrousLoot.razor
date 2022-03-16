@@ -22,21 +22,25 @@
         will model that.
     </MudText>
     <MudText GutterBottom="true">
-        First, we define an <Code>IEquipment</Code> interface that can be implemented by Loot
+        First, we define an <Code>EquipmentBase</Code> abstract class that can be implemented by items
         to indicate they are not one-timers, but rather permanent additions to the Hero's arsenal.
-        It currently has a single property, which returns a <Code>Modifier</Code>:
+        It has a single property, which returns a <Code>Modifier</Code>, and a <Code>TryUpgrade</Code>
+        method that we will use later:
     </MudText>
     <CodeBlock FileName="DungeonWalker.Logic/Loot/Equipment/IEquipment.cs" Code="@(@"
 using DungeonWalker.Logic.Characters;
 
 namespace DungeonWalker.Logic.Loot.Equipment;
 
-public interface IEquipment
+public abstract class EquipmentBase
 {
-    public Modifier Modifier { get; }
+    public Modifier Modifier => throw new NotImplementedException();
+    
+    public bool TryUpgrade() => throw new NotImplementedException();
 }
     ")"/>
     <MudText GutterBottom="true">
+        As usual, you can freely add stuff to this class, just don't change the two existing signatures.
         A Modifier is currently a rather dumb type:
     </MudText>
     <CodeBlock FileName="DungeonWalker.Logic/Characters/Modifier.cs" Code="@(@"
@@ -76,17 +80,23 @@ public struct Modifier
         And a legendary artefact could grant:
     </MudText>
     <CodeBlock Language="plain" Code="@(@"❤️ +20 ⚔️ +15 🛡 +15")" />
-    
+
     <MudText GutterBottom="true">
         In short, just write out the non-zero modifiers in order max health, damage, armour.
+        If the Modifier is zero across the board, print <Code>"nothing"</Code>.
     </MudText>
     
-    <MudText>
+    <MudText GutterBottom="true">
         To finish working with Modifiers, rework the existing Loot system to use the Modifier type.
-        The Character class has been reworked to have immutable base statistics and a Modifier.
-        You need to fix the <Code>DisableTenacity</Code> and <Code>EnableTenacity</Code> methods
+        The Character class has been reworked to have immutable base statistics and a Modifier, but it is bugged!
+        It can cause the Character to have more health than their max health &ndash; you need to fix that.
+    </MudText>
+    <MudText>
+        You also need to fix the Hero's <Code>DisableTenacity</Code> and <Code>EnableTenacity</Code> methods
         to apply the modifier correctly.
     </MudText>
+
+
      <CodeBlock FileName="DungeonWalker.Logic/Characters/Hero.cs" Code="@(@"
 //...
 
@@ -102,6 +112,15 @@ private void EnableTenacity()
     _isTenacityActive = true;
 }
 ")"/>
+
+    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
+        The tests do not compile until you finish this Task.
+        If you add the required operators to the <Code>Modifier</Code> type they will compile.
+    </MudAlert>
+    
+    <MudAlert Variant="Variant.Outlined" Class="my-4">
+        This is tested by the "Modifiers" test group, worth <Highlight>0.33</Highlight> points.
+    </MudAlert>
 
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Equipment</MudText>
     
@@ -143,17 +162,20 @@ private void EnableTenacity()
     </MudList>
     
     <MudText>
-        The <Code>LootFactory</Code> class has more unimplemented members for you.
-        Implement the new possible Loot drops.
+        You need to implement the missing <Code>TryEquip</Code> method on
+        the <Code>Hero</Code> class and potentially all inheriting classes.
+    </MudText>
+    <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+        You may need to modify the <Code>TestHero</Code> class located in the tests.
+        This is allowed and expected. The TestHero can accept any equipment types.
+        The tests only ever put at most five items into their equipment.
+    </MudAlert>
+    <MudText>
+        The <Code>EquipmentFactory</Code> class has more unimplemented members for you.
+        Implement the new possible Equipment drops.
     </MudText>
     
     <MudList id="equipment-list">
-        <MudListItem Icon="fas fa-hand-fist">
-            <MudText Color="Color.Default">
-                <Code>ShortSword</Code> &ndash; 
-                    a Melee Weapon parametrised by the amount of damage it grants.
-            </MudText>
-        </MudListItem>
         <MudListItem Icon="fas fa-vest">
             <MudText Color="Color.Default">
                 <Code>Chainmail</Code> &ndash;
@@ -164,18 +186,6 @@ private void EnableTenacity()
             <MudText Color="Color.Default">
                 <Code>DamageCrystal</Code> &ndash; 
                     same as above, but now it's a Trinket.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-shield-blank">
-            <MudText Color="Color.Default">
-                <Code>Shield</Code> &ndash; 
-                    a Shield parametrised by the amount of armour it gives.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="fas fa-wand-sparkles">
-            <MudText Color="Color.Default">
-                <Code>Bow</Code> &ndash; 
-                    a Ranged Weapon parametrised by the amount of damage it grants.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hand-fist">
@@ -214,8 +224,13 @@ private void EnableTenacity()
     <LatexRenderer ContainerId="equipment-list"/>
 
     <MudText GutterBottom="true">
+        There's also a missing method in <Code>LootFactory</Code>.
+    </MudText>
+
+    <MudText GutterBottom="true">
         A Hero only picks up the Equipment if they have a slot to fit it into.
-        If they do not then the item is ignored.
+        If they do not then the item is ignored. This logic needs to be placed in
+        <Code>Hero.TryEquip</Code>.
     </MudText>
 
     <MudText>
@@ -226,9 +241,13 @@ private void EnableTenacity()
     <CodeBlock Language="plain" Code="@(@"
 The room is empty except for a large chest. And inside...
   - a Health Potion! It restores ❤️ 17!
-  - a Titanic Bulwark! It grants ⚔️ -10 🛡 +20 ❤️ +50!
-  - a Chainmail! But there's no room for it...
-  - a Shortsword! It grants ⚔️ +15 ")" />
+  - Titanic Bulwark! It grants ❤️ +50 ⚔️ -10 🛡 +20!
+  - Chainmail! But there's no room for it...
+  - Two-handed Sword! It grants ⚔️ +20 🛡 -10!")" />
+  
+    <MudAlert Variant="Variant.Outlined" Class="my-4">
+        This is tested by the "Loot" test group, worth <Highlight>0.33</Highlight> points.
+    </MudAlert>
 
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Upgrades</MudText>
 
@@ -266,12 +285,17 @@ The room is empty except for a large chest. And inside...
         upgrade all Equipment on the Hero to the next level, unless it's already Heroic.
     </MudText>
     <MudText>
-        Implement this system and the <Code>UpgradeRoom</Code>.
+        Implement this system and the <Code>UpgradeRoom</Code>. It should return a nice
+        description of the upgrade operation. A few examples:
     </MudText>
 
     <LatexRenderer ContainerId="quality-levels-list"/>
 
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
+    <MudText>
+        The structure and execution stay the same. The only caveat is that you need to implement
+        the Modifier operators for tests to compile.
+    </MudText>
 </CourseAssignment>
 @code {
 
