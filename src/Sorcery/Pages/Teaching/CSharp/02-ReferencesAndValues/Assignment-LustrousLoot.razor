@@ -6,7 +6,7 @@
         Our tenacious heroes are strong, but not strong enough!
         To defeat their enemies they need reliable equipment and powerful trinkets
         that will enhance their abilities. The Dark Lord's machinery in the dungeon
-        can be used to make the weapons even deadlier and armour even sturdier...
+        can be used to make the weapons even deadlier and <span class="armour">armour</span> even sturdier...
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
     <MudText>
@@ -82,14 +82,14 @@ public struct Modifier
     <CodeBlock Language="plain" Code="@(@"❤️ +20 ⚔️ +15 🛡 +15")" />
 
     <MudText GutterBottom="true">
-        In short, just write out the non-zero modifiers in order max health, damage, armour.
+        In short, just write out the non-zero modifiers in order <span class="health">max health</span>, <span class="damage">damage</span>, <span class="armour">armour</span>.
         If the Modifier is zero across the board, print <Code>"nothing"</Code>.
     </MudText>
     
     <MudText GutterBottom="true">
         To finish working with Modifiers, rework the existing Loot system to use the Modifier type.
         The Character class has been reworked to have immutable base statistics and a Modifier, but it is bugged!
-        It can cause the Character to have more health than their max health &ndash; you need to fix that.
+        It can cause the Character to have more <span class="health">health</span> than their <span class="health">max health</span> &ndash; you need to fix that.
     </MudText>
     <MudText>
         You also need to fix the Hero's <Code>DisableTenacity</Code> and <Code>EnableTenacity</Code> methods
@@ -193,32 +193,32 @@ private void EnableTenacity()
         <MudListItem Icon="fas fa-hand-fist">
             <MudText Color="Color.Default">
                 <Code>TwoHandedSword</Code> &ndash; 
-                    a Melee Weapon that increases Hero's damage by $20$, but decreases armour by $10$ 
+                    a Melee Weapon that increases Hero's <span class="damage">damage</span> by $20$, but decreases <span class="armour">armour</span> by $10$ 
                     (handling such a heavy weapon slows you down and makes you more susceptible to attacks).
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
                 <Code>StaffOfLife</Code> &ndash; 
-                    a Ranged Weapon that increases Hero's damage by $10$ and their max health by $10$.
+                    a Ranged Weapon that increases Hero's <span class="damage">damage</span> by $10$ and their <span class="health">max health</span> by $10$.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-shield-blank">
             <MudText Color="Color.Default">
                 <Code>SpikedShield</Code> &ndash; 
-                    a Shield that increases Hero's damage by $10$ and their armour by $15$.
+                    a Shield that increases Hero's <span class="damage">damage</span> by $10$ and their <span class="armour">armour</span> by $15$.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-vest">
             <MudText Color="Color.Default">
                 <Code>TitanicBulwark</Code> &ndash; 
-                    an Armour that decreases Hero's damage by $10$, but increases armour by $20$ and max health by $50$.
+                    an Armour that decreases Hero's <span class="damage">damage</span> by $10$, but increases <span class="armour">armour</span> by $20$ and <span class="health">max health</span> by $50$.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hat-wizard">
             <MudText Color="Color.Default">
                 <Code>EssenceOfMagic</Code> &ndash; 
-                    a Trinket that increases Hero's damage by $10$, armour by $5$, and max health by $20$.
+                    a Trinket that increases Hero's <span class="damage">damage</span> by $10$, <span class="armour">armour</span> by $5$, and <span class="health">max health</span> by $20$.
             </MudText>
         </MudListItem>
     </MudList>
@@ -266,17 +266,17 @@ The room is empty except for a large chest. And inside...
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.StarHalf">
             <MudText Color="Color.Default">
-                <strong>Uncommon</strong> &ndash; $\times 1.25$ multiplier
+                <strong class="uncommon">Uncommon</strong> &ndash; $\times 1.25$ multiplier
             </MudText>
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.Star">
             <MudText Color="Color.Default">
-                <strong>Rare</strong> &ndash; $\times 1.5$ multiplier
+                <strong class="rare">Rare</strong> &ndash; $\times 1.5$ multiplier
             </MudText>
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.HotelClass">
             <MudText Color="Color.Default">
-                <strong>Heroic</strong> &ndash; $\times 2.0$ multiplier
+                <strong class="heroic">Heroic</strong> &ndash; $\times 2.0$ multiplier
             </MudText>
         </MudListItem>
     </MudList>

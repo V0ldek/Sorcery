@@ -51,7 +51,7 @@ public sealed class CourseBook
                     new ("Nullability", "nullability"),
                     new ("Casting", "casting"),
                     new ("Pass-by-Reference", "pass-by-reference"),
-                }, new AssignmentSkeleton ("Lustrous Loot", "lustrous-loot", "https://gienieczko.com/todo")),
+                }, new AssignmentSkeleton ("Lustrous Loot", "lustrous-loot", "https://classroom.github.com/a/UdxGZ4xr")),
                 new ("Generics and Records", "generics-and-records", new SectionSkeleton[]
                 {
                     new ("Generics", "generics"),
