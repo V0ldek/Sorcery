@@ -87,9 +87,9 @@ public struct Modifier
     </MudText>
     
     <MudText GutterBottom="true">
-        To finish working with Modifiers, rework the existing Loot system to use the Modifier type.
+        To finish working with Modifiers, we need to change how Characters interact with it.
         The Character class has been reworked to have immutable base statistics and a Modifier, but it is bugged!
-        It can cause the Character to have more <span class="health">health</span> than their <span class="health">max health</span> &ndash; you need to fix that.
+        It can cause the Character to have less <span class="health">health</span> than zero &ndash; you need to fix that.
     </MudText>
     <MudText>
         You also need to fix the Hero's <Code>DisableTenacity</Code> and <Code>EnableTenacity</Code> methods
@@ -125,7 +125,8 @@ private void EnableTenacity()
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Equipment</MudText>
     
     <MudText>
-        Not all equipment is equal. There are five distinct types of items the Heroes may equip:
+        Now we rework the existing Loot system to split items between Consumables and Equipment.
+        Not all Equipment is equal. There are five distinct types of items the Heroes may equip:
     </MudText>
     
     <MudList Class="my-2">
