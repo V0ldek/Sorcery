@@ -1,0 +1,30 @@
+﻿@page "/teaching/csharp/3-advanced-types"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["advanced-types"]">
+    <MudText GutterBottom="true">
+        We introduce more advanced types in .NET in form of generics.
+        The overall goal is to introduce the basic BCL collections and how they work.
+        To do that we also need to talk about equality. We finish up with the special
+        record type feature that allows us to avoid boilerplate around creating simple
+        data bags with value equality semantics.
+    </MudText>
+        
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">generic types and methods;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">how nullability interacts with generics;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">referential and structural equality;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">custom equality;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>GetHashCode</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>IEquatable&lang;T&rang;</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">basic collections in the BCL;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">tuples;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">destructuring;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">records;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">pattern matching;</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+
+}
