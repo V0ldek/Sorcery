@@ -1,0 +1,39 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/2-equality"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["equality"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Default equality semantics.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Reference equality vs value equality.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            A case study &ndash; defining rational numbers.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>GetHashCode</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>IEquatable&lang;T&rang;</Code>.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/equality-comparisons", "Equality operators (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/how-to-define-value-equality-for-a-type", "How to define value equality for a class or struct (C# Programming Guide)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

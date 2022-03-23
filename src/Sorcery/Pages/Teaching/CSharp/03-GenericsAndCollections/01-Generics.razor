@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/2-references-and-values/4-generics"
+﻿@page "/teaching/csharp/3-generics-and-collections/1-generics"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["references-and-values"]["generics"];
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["generics"];
 }
 
 <CourseSection Section="@course">
@@ -37,13 +37,15 @@
                 Inheriting from generic types.
             </MudText>
         </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <MudText>
+                Nullability with generics.
+            </MudText>
+        </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
-        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
-        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
-        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
-        ("https://www.nuget.org/", "NuGet Gallery"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics", "Generics on docs.microsoft"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references#generics", "NRTs and generics on docs.microsoft"),
     })/>
 </CourseSection>
 

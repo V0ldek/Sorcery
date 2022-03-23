@@ -52,19 +52,19 @@ public sealed class CourseBook
                     new ("Casting", "casting"),
                     new ("Pass-by-Reference", "pass-by-reference"),
                 }, new AssignmentSkeleton ("Lustrous Loot", "lustrous-loot", "https://classroom.github.com/a/UdxGZ4xr")),
-                new ("Generics and Records", "generics-and-records", new SectionSkeleton[]
+                new ("Generics and Collections", "generics-and-collections", new SectionSkeleton[]
                 {
+                    new ("Indexers", "indexers"),
                     new ("Generics", "generics"),
-                    new ("Destructuring", "destructuring"),
-                    new ("Tuples", "tuples"),
                     new ("Equality", "equality"),
-                    new ("Records", "records"),
-                    new ("Pattern Matching", "pattern-matching"),
+                    new ("Ordering", "ordering"),
+                    new ("Explicit Interface Implementations", "explicit-interface-implementations"),
                     new ("Collections", "collections"),
-                }, new AssignmentSkeleton("Superior Strategies", "superior-strategies", "https://gienieczko.com/todo"))
-                {
-                    IsHidden = true
-                },
+                    new ("Comparers", "comparers"),
+                    new ("Tuples", "tuples"),
+                    new ("Deconstruction", "deconstruction"),
+                    new ("Nested Types", "nested-types"),
+                }, new AssignmentSkeleton("Diverging Dungeons", "diverging-dungeons", "https://classroom.github.com/a/EuwNc18U")),
                 new ("LINQ", "linq", new SectionSkeleton[]
                 {
                     new ("Nested Types", "nested-types"),
