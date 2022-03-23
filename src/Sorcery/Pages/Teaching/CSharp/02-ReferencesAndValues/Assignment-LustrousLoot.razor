@@ -113,12 +113,12 @@ private void EnableTenacity()
 }
 ")"/>
 
-    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
+    <MudAlert Class="my-4" Severity="Severity.Warning" Variant="Variant.Outlined">
         The tests do not compile until you finish this Task.
         If you add the required operators to the <Code>Modifier</Code> type they will compile.
     </MudAlert>
     
-    <MudAlert Variant="Variant.Outlined" Class="my-4">
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "Modifiers" test group, worth <Highlight>0.33</Highlight> points.
     </MudAlert>
 
@@ -165,11 +165,13 @@ private void EnableTenacity()
         You need to implement the missing <Code>TryEquip</Code> method on
         the <Code>Hero</Code> class and potentially all inheriting classes.
     </MudText>
-    <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+    
+    <MudAlert Class="my-4" Severity="Severity.Info" Variant="Variant.Outlined">
         You may need to modify the <Code>TestHero</Code> class located in the tests.
         This is allowed and expected. The TestHero can accept any equipment types.
         The tests only ever put at most five items into their equipment.
     </MudAlert>
+
     <MudText>
         The <Code>EquipmentFactory</Code> class has more unimplemented members for you.
         Implement the new possible Equipment drops.
@@ -286,8 +288,23 @@ The room is empty except for a large chest. And inside...
     </MudText>
     <MudText>
         Implement this system and the <Code>UpgradeRoom</Code>. It should return a nice
-        description of the upgrade operation. A few examples:
+        description of the upgrade operation, omitting all equipment that could not be upgraded.
+        A few examples:
     </MudText>
+
+    <CodeBlock Language="plain" Code="@(@"
+One of the ancient arcane foundries fills this room... The Hero can upgrade their equipment.
+  - Two-handed Sword upgraded to Uncommon! It now grants ⚔️ +25 🛡 -12.
+  - Titanic Bulwark upgraded to Rare! It now grants ❤️ +75 ⚔️ -15 🛡 +30.
+  - Essence of Magic upgraded to Heroic! It now grants ❤️ +40 ⚔️ +20 🛡 +10.
+    ")"/>
+    <CodeBlock Language="plain" Code="@(@"
+One of the ancient arcane foundries fills this room... The Hero can upgrade their equipment.
+However, they don't have any that could be upgraded. Time to move on.")"/>
+
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "Upgrades" test group, worth <Highlight>0.34</Highlight> points.
+    </MudAlert>
 
     <LatexRenderer ContainerId="quality-levels-list"/>
 
