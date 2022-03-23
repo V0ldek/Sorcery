@@ -1,27 +1,28 @@
-﻿@page "/teaching/csharp/3-advanced-types"
+﻿@page "/teaching/csharp/3-generics-and-collections"
 @inject CourseBook CourseBook;
 
-<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["advanced-types"]">
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["generics-and-collections"]">
     <MudText GutterBottom="true">
         We introduce more advanced types in .NET in form of generics.
         The overall goal is to introduce the basic BCL collections and how they work.
-        To do that we also need to talk about equality. We finish up with the special
-        record type feature that allows us to avoid boilerplate around creating simple
-        data bags with value equality semantics.
+        To do that we also need to talk about equality. We also introduce tuples and
+        deconstruction.
     </MudText>
         
     <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">defining indexers;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">generic types and methods;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">how nullability interacts with generics;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">referential and structural equality;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">custom equality;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>GetHashCode</Code>;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>IEquatable&lang;T&rang;</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>IComparable&lang;T&rang;</Code>;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">basic collections in the BCL;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">comparer types <Code>IEqualityComparer&lang;T&rang;</Code> and <Code>IComparer&lang;T&rang;</Code>;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">tuples;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">destructuring;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">records;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">pattern matching;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">deconstruction;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">nested types;</MudListItem>
     </MudList>
 </CourseModuleIntroduction>
 

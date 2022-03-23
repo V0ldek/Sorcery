@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/9-nested-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["nested-types"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            How to declare nested types.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Defining tightly coupled types as nested types.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Hiding implementation details in nested types.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Factory pattern with nested types.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/nested-types", "Nested types design guidelines"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/nested-types", "Nested types (C# Programming Guide)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

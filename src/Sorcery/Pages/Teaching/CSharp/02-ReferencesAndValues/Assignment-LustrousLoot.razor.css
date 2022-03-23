@@ -1,0 +1,27 @@
+﻿.health {
+    color: #F44336 !important;
+}
+
+.damage {
+    color: #FF9800 !important;
+}
+
+.armour {
+    color: #2196F3 !important;
+}
+
+.barrier {
+    color: #009688 !important;
+}
+
+.uncommon {
+    color: #00897B !important
+}
+
+.rare {
+    color: #FFB74D !important
+}
+
+.heroic {
+    color: #8E24AA !important
+}

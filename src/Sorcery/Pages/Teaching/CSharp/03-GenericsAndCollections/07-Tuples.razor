@@ -1,0 +1,32 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/7-tuples"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["tuples"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Creating tuples.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Tuple types and names.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Tuple equality and comparison.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples", "Tuple types (C# Reference)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}
