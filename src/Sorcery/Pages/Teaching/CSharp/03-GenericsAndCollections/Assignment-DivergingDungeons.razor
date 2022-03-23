@@ -14,7 +14,61 @@
         type we'll be able to create complex Dungeons and test different paths through
         it for efficiency.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Graphs</MudText>
+    
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0 &ndash; Run Leaderboard</MudText>
+    <MudText GutterBottom="true">
+        We now want to be able to compare different runs of our Heroes.
+        Since the dungeons now have multiple paths, multiple outcomes are possible.
+        To facilitate this, <Code>PlayerStatistics</Code> have been changed to produce
+        an immutable result at the end of a run, represented by the type <Code>DungeonWalker.Logic.Statistics.RunStatistics</Code>.
+        It contains all the statistics and an identifier that is unique in a single execution of our game.
+    </MudText>
+    <MudText>
+        Your task is to complete its implementation with equality and ordering.
+        The rules for equality are simple: instances are equal if they have the same <Code>Id</Code>.
+        For ordering we compare statistics in order to determine the best run:
+    </MudText>
+    <MudList Class="my-2">
+        <MudListItem Icon="fas fa-dungeon">
+            A Run with more cleared rooms is better (greater); if equal, then
+        </MudListItem>
+        <MudListItem Icon="fas fa-skull-crossbones">
+            the Run with more enemies defeated is better; if equal, then
+        </MudListItem>
+        <MudListItem Icon="fas fa-hand-fist">
+            the Run with more damage dealt is better; if equal, then
+        </MudListItem>
+        <MudListItem Icon="fas fa-heart-crack">
+            the Run with <em>less</em> damage taken is better; if equal, then the Runs are equally good.
+        </MudListItem>
+    </MudList>
+    
+    <MudText>
+        Then, we want to create a Leaderboard. The <Code>BestRunsCollection</Code> type is a mutable
+        collection of Runs that implements the <Code>ICollection&lang;RunStatistics&rang;</Code>
+        interface, and provides a special method: <Code>IEnumerable&lang;(int rank, RunStatistics run)&rang; EnumerateRanking()</Code>.
+        It's supposed to enumerate the Runs from the best to the worst and assign them a rank.
+        The ranks are as in natural leaderboards, an example looks like this:
+    </MudText>
+    <CodeBlock Language="Plain" Code="@(@"
+--------------------------------------
+| 1. | 🚪 8 | ☠️ 2 | ⚔️ 120 | 💔 90  |
+--------------------------------------
+| 2. | 🚪 8 | ☠️ 2 | ⚔️ 108 | 💔 170 |
+--------------------------------------
+| 3. | 🚪 8 | ☠️ 2 | ⚔️ 88  | 💔 73  |
+--------------------------------------
+| 3. | 🚪 8 | ☠️ 2 | ⚔️ 88  | 💔 73  |
+--------------------------------------
+| 5. | 🚪 8 | ☠️ 2 | ⚔️ 78  | 💔 58  |
+--------------------------------------    
+")"/>
+    
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "Statistics" test group, worth <Highlight>0.5</Highlight> point.
+    </MudAlert>
+
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Graphs</MudText>
     <MudText>
         This task is cut out for you. We have a new project, <Code>DungeonWalker.Graphs</Code>,
         defining two interfaces, <Code>IGraph&lang;TLabel&rang;</Code>
@@ -80,59 +134,7 @@ Vertex<TLabel> this[TLabel label] { get; }
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "Graphs" test group, worth <Highlight>1.0</Highlight> point.
     </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1 &ndash; Run Leaderboard</MudText>
-    <MudText GutterBottom="true">
-        We now want to be able to compare different runs of our Heroes.
-        Since the dungeons now have multiple paths, multiple outcomes are possible.
-        To facilitate this, <Code>PlayerStatistics</Code> have been changed to produce
-        an immutable result at the end of a run, represented by the type <Code>DungeonWalker.Logic.Statistics.RunStatistics</Code>.
-        It contains all the statistics and an identifier that is unique in a single execution of our game.
-    </MudText>
-    <MudText>
-        Your task is to complete its implementation with equality and ordering.
-        The rules for equality are simple: instances are equal if they have the same <Code>Id</Code>.
-        For ordering we compare statistics in order to determine the best run:
-    </MudText>
-    <MudList Class="my-2">
-        <MudListItem Icon="fas fa-dungeon">
-            A Run with more cleared rooms is better (greater); if equal, then
-        </MudListItem>
-        <MudListItem Icon="fas fa-skull-crossbones">
-            the Run with more enemies defeated is better; if equal, then
-        </MudListItem>
-        <MudListItem Icon="fas fa-hand-fist">
-            the Run with more damage dealt is better; if equal, then
-        </MudListItem>
-        <MudListItem Icon="fas fa-heart-crack">
-            the Run with <em>less</em> damage taken is better; if equal, then the Runs are equally good.
-        </MudListItem>
-    </MudList>
     
-    <MudText>
-        Then, we want to create a Leaderboard. The <Code>BestRunsCollection</Code> type is a mutable
-        collection of Runs that implements the <Code>ICollection&lang;RunStatistics&rang;</Code>
-        interface, and provides a special method: <Code>IEnumerable&lang;(int rank, RunStatistics run)&rang; EnumerateRanking()</Code>.
-        It's supposed to enumerate the Runs from the best to the worst and assign them a rank.
-        The ranks are as in natural leaderboards, an example looks like this:
-    </MudText>
-    <CodeBlock Language="Plain" Code="@(@"
---------------------------------------
-| 1. | 🚪 8 | ☠️ 2 | ⚔️ 120 | 💔 90  |
---------------------------------------
-| 2. | 🚪 8 | ☠️ 2 | ⚔️ 108 | 💔 170 |
---------------------------------------
-| 3. | 🚪 8 | ☠️ 2 | ⚔️ 88  | 💔 73  |
---------------------------------------
-| 3. | 🚪 8 | ☠️ 2 | ⚔️ 88  | 💔 73  |
---------------------------------------
-| 5. | 🚪 8 | ☠️ 2 | ⚔️ 78  | 💔 58  |
---------------------------------------    
-")"/>
-    
-    <MudAlert Class="my-4" Variant="Variant.Outlined">
-        This is tested by the "Statistics" test group, worth <Highlight>0.5</Highlight> point.
-    </MudAlert>
-
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
     <MudText GutterBottom="true">
         A few new parameters were added to allow for randomising paths through the Dungeon.
