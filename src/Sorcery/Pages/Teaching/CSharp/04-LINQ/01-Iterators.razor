@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/4-linq/1-iterators"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["iterators"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Defining iterators.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Lazy execution.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Guards in iterator methods.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            High-level sketch of iterator implementation.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/iterators#enumeration-sources-with-iterator-methods", "Enumeration sources with iterator methods"),
+        ("https://csharpindepth.com/articles/IteratorBlockImplementation", "Iterator block implementation details: auto-generated state machines (Jon Skeet, C# in Depth)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

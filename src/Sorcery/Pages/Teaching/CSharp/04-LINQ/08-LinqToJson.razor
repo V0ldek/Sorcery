@@ -1,0 +1,29 @@
+﻿@page "/teaching/csharp/4-linq/8-linq-to-json"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["linq-to-json"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Defining custom indexers.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Supporting <Code>Index</Code> and <Code>Range</Code>.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://www.newtonsoft.com/json/help/html/LINQtoJSON.htm", "Json.NET – LINQ to JSON"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

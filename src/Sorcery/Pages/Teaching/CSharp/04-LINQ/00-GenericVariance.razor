@@ -1,0 +1,37 @@
+﻿@page "/teaching/csharp/4-linq/0-generic-variance"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["generic-variance"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The motivation behind variance.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Covariance in generic interfaces.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Contravariance in generic interfaces.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Return-type contravariance.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/covariance-contravariance/", "Covariance and Contravariance (C#)"),
+        ("https://stackoverflow.com/questions/52690945/how-to-add-generic-instance-to-list-of-generic-objects/52691129#52691129", "Why is a list of circles not a list of shapes?"),
+        ("https://ericlippert.com/2013/07/29/a-contravariance-conundrum/", "A contravariance conundrum (Eric Lippert)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

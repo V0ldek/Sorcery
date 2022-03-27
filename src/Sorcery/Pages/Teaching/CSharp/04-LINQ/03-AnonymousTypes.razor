@@ -1,0 +1,33 @@
+﻿@page "/teaching/csharp/4-linq/3-anonymous-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["anonymous-types"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Creating anonymous types.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Anonymous types under the hood.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Anonymous types vs. tuples.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types", "Anonymous Types"),
+        ("https://docs.microsoft.com/en-us/dotnet/standard/base-types/choosing-between-anonymous-and-tuple", "Choosing between anonymous and tuple types"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

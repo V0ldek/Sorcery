@@ -1,0 +1,32 @@
+﻿@page "/teaching/csharp/4-linq/5-lambda-expressions"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["lambda-expressions"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Using lambda expressions.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Captures.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Type conversions and lambdas.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions", "Lambda Expressions (C# reference)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

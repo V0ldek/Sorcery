@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/4-linq/4-delegates"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["delegates"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Delegates as strongly-typed function pointers.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Standard delegate types: <Code>Action</Code> and <Code>Func</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Delegate variance.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Converting method groups to delegates.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/delegates/", "Delegates (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/delegates/using-delegates", "Using Delegates (C# Programming Guide)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

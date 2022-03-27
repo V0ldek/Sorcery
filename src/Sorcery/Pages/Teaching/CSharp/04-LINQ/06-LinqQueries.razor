@@ -1,0 +1,58 @@
+﻿@page "/teaching/csharp/4-linq/6-linq-queries"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["linq-queries"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Basic LINQ operators &ndash; <Code>Select</Code>, <Code>Where</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Sorting with LINQ.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Deferred execution.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Streaming model.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Multiple enumeration.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Complex LINQ operations &ndash; <Code>GroupBy</Code>, <Code>Join</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Query syntax.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Static <Code>Enumerable</Code> sequence generators.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Interop with non-generic <Code>IEnumerable</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            MoreLINQ.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/", "Language Integrated Query (LINQ) (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/linq/write-linq-queries", "Write LINQ queries in C#"),
+        ("https://docs.microsoft.com/en-us/samples/dotnet/try-samples/101-linq-samples/", "101 LINQ samples"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/working-with-linq", "Working with LINQ"),
+        ("https://codeblog.jonskeet.uk/2011/02/23/reimplementing-linq-to-objects-part-45-conclusion-and-list-of-posts/", "Jon Skeet reimplementing LINQ in way too many blog posts"),
+        ("https://morelinq.github.io/", "MoreLINQ"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/4-linq/7-expression-api"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["expression-api"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The <Code>IQueryable&lang;T&rang;</Code> interface.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Lambdas into expression trees.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Expression trees into lambdas.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Expression tree power.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/expression-trees", "Expression Trees"),
+        ("https://tyrrrz.me/blog/expression-trees/", "Working with Expression Trees in C# (Oleksii Holub) (reflection and dynamic vs Expressions)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

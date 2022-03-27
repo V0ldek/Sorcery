@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/4-linq/2-extension-methods"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["extension-methods"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Defining extension methods.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Extending interfaces.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Generic extension methods.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Scoping rules and namespace guidelines.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods", "Extension Methods (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/extension-methods", "Extension Methods (Design Guidelines)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

@@ -67,28 +67,37 @@ public sealed class CourseBook
                 }, new AssignmentSkeleton("Diverging Dungeons", "diverging-dungeons", "https://classroom.github.com/a/EuwNc18U")),
                 new ("LINQ", "linq", new SectionSkeleton[]
                 {
-                    new ("Nested Types", "nested-types"),
+                    new ("Generic Variance", "generic-variance"),
+                    new ("Iterators", "iterators"),
                     new ("Extension Methods", "extension-methods"),
                     new ("Anonymous Types", "anonymous-types"),
-                    new ("Iterators", "iterators"),
                     new ("Delegates", "delegates"),
                     new ("Lambda Expressions", "lambda-expressions"),
-                    new ("LINQ queries", "linq-queries"),
-                    new ("Expression API", "expression-api"),
-                }, new AssignmentSkeleton("Darkest Dungeons", "darkest-dungeons", "https://gienieczko.com/todo"))
+                    new ("LINQ Queries", "linq-queries"),
+                    new ("Expression Trees", "expression-trees"),
+                    new ("LINQ-to-JSON", "linq-to-json"),
+                }, new AssignmentSkeleton("???", "???", "https://gienieczko.com/todo"))
                 {
                     IsHidden = true
                 },
                 new ("Asynchrony", "asynchrony", new SectionSkeleton[]
                 {
-                    new ("Task Parallel Library", "task-parallel-library")
+                    new ("Events", "events"),
+                    new ("Exception Handling", "exception-handling"),
+                    new ("Disposable Resources", "disposable-resources"),
+                    new ("Task Parallel Library", "task-parallel-library"),
+                    new ("Thread Pool", "thread-pool"),
+                    new ("Synchronisation Mechanisms", "synchronisation-mechanisms"),
+                    new ("Cancellation", "cancellation"),
                 }, new AssignmentSkeleton("Asynchronous Adventurers", "asynchronous-adventurers", "https://gienieczko.com/todo"))
                 {
                     IsHidden = true
                 },
                 new ("Concurrency", "concurrency", new SectionSkeleton[]
                 {
-                    new ("Events", "events"),
+                    new ("PLINQ", "plinq"),
+                    new ("Concurrent Collections", "concurrent-collections"),
+                    new ("Blocking Collections", "blocking-collections"),
                 }, new AssignmentSkeleton("Concurrent Competitivity", "concurrent-competitivity", "https://gienieczko.com/todo"))
                 {
                     IsHidden = true
