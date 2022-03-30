@@ -64,6 +64,8 @@ public sealed class CourseBook
                     new ("Tuples", "tuples"),
                     new ("Deconstruction", "deconstruction"),
                     new ("Nested Types", "nested-types"),
+                    new ("HashCode as a Mutable Struct", "hashcode-as-a-mutable-struct"),
+                    new ("Nullable Static Analysis", "nullable-static-analysis"),
                 }, new AssignmentSkeleton("Diverging Dungeons", "diverging-dungeons", "https://classroom.github.com/a/EuwNc18U")),
                 new ("LINQ", "linq", new SectionSkeleton[]
                 {
@@ -71,15 +73,12 @@ public sealed class CourseBook
                     new ("Iterators", "iterators"),
                     new ("Extension Methods", "extension-methods"),
                     new ("Anonymous Types", "anonymous-types"),
-                    new ("Delegates", "delegates"),
-                    new ("Lambda Expressions", "lambda-expressions"),
-                    new ("LINQ Queries", "linq-queries"),
-                    new ("Expression Trees", "expression-trees"),
-                    new ("LINQ-to-JSON", "linq-to-json"),
-                }, new AssignmentSkeleton("???", "???", "https://gienieczko.com/todo"))
-                {
-                    IsHidden = true
-                },
+                    new ("Delegates", "delegates") { IsHidden = true },
+                    new ("Lambda Expressions", "lambda-expressions") { IsHidden = true },
+                    new ("LINQ Queries", "linq-queries") { IsHidden = true },
+                    new ("Expression Trees", "expression-trees") { IsHidden = true },
+                    new ("LINQ-to-JSON", "linq-to-json") { IsHidden = true },
+                }, new AssignmentSkeleton("???", "???", "https://gienieczko.com/todo") { IsHidden = true }),
                 new ("Asynchrony", "asynchrony", new SectionSkeleton[]
                 {
                     new ("Events", "events"),
