@@ -94,10 +94,16 @@
 /// <exception cref=""KeyNotFoundException"">If the graph does not contain a vertex with label <paramref name=""label"" />.</exception>
 Vertex<TLabel> this[TLabel label] { get; }
 ")"/>
-    <MudText>
+    <MudText GutterBottom="true">
         The documentation should be pretty self-documenting (no apologies for the pun).
         Your implementation should fulfil the documentation, as this is what the tests test against.
     </MudText>
+    <MudText>
+         In many cases the documentation is exactly the same as in the interface (or base class)
+         we're implementing. Since the compiler complains about undocumented public members,
+         there's a shortcut to inherit the entire documentation for a given member:
+    </MudText>
+    <CodeBlock Code="@(@"/// <inheritdoc/>")"></CodeBlock>
     <MudText Typo="Typo.h3" Class="mx-auto py-2">Novelty &ndash; Analysers</MudText>
     <MudText>
         You might notice that the compiler is complaining about quite a few more things than usual.
