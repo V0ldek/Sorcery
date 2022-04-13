@@ -46,13 +46,13 @@
         Pick any vertex from the graph and run a depth-first search. We keep the usual status of a vertex as we go:
         <strong>active</strong> if we've recursed down one of its neighbours, <strong>visited</strong> if we already processed all of its non-DFS-parent neighbours, unvisited otherwise. When we consider an edge there are three cases:
         <MudList Dense="true">
-            <MudItem>
+            <MudItem Icon="@Icons.Filled.ChevronRight">
                 our neighbour has already been processed &ndash; ignore it;
             </MudItem>
-            <MudItem>
+            <MudItem Icon="@Icons.Filled.ChevronRight">
                 our neighbour has not been visited before &ndash; continue DFS recursively;
             </MudItem>
-            <MudItem>
+            <MudItem Icon="@Icons.Filled.ChevronRight">
                 neighbour has been visited but is still active &ndash; we have found a cycle, terminate the algorithm.
             </MudItem>
         </MudList>
