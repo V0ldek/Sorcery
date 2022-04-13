@@ -8,7 +8,7 @@ public sealed class CourseBook
 {
     private readonly ICourseFactory _courseFactory;
 
-    public IReadOnlyList<Course> Courses;
+    public IReadOnlyList<Course> Courses { get; }
 
     public CourseBook(ICourseFactory courseFactory)
     {
@@ -73,12 +73,10 @@ public sealed class CourseBook
                     new ("Iterators", "iterators"),
                     new ("Extension Methods", "extension-methods"),
                     new ("Anonymous Types", "anonymous-types"),
-                    new ("Delegates", "delegates") { IsHidden = true },
-                    new ("Lambda Expressions", "lambda-expressions") { IsHidden = true },
-                    new ("LINQ Queries", "linq-queries") { IsHidden = true },
-                    new ("Expression Trees", "expression-trees") { IsHidden = true },
-                    new ("LINQ-to-JSON", "linq-to-json") { IsHidden = true },
-                }, new AssignmentSkeleton("???", "???", "https://gienieczko.com/todo") { IsHidden = true }),
+                    new ("Delegates", "delegates"),
+                    new ("Lambda Expressions", "lambda-expressions"),
+                    new ("LINQ Queries", "linq-queries"),
+                }, new AssignmentSkeleton("Layered Layouts", "layered-layouts", "https://gienieczko.com/todo")),
                 new ("Asynchrony", "asynchrony", new SectionSkeleton[]
                 {
                     new ("Events", "events"),
