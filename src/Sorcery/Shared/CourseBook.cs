@@ -76,7 +76,7 @@ public sealed class CourseBook
                     new ("Delegates", "delegates"),
                     new ("Lambda Expressions", "lambda-expressions"),
                     new ("LINQ Queries", "linq-queries"),
-                }, new AssignmentSkeleton("Layered Layouts", "layered-layouts", "https://gienieczko.com/todo")),
+                }, new AssignmentSkeleton("Layered Layouts", "layered-layouts", "https://classroom.github.com/a/wJNxPTTZ")),
                 new ("Asynchrony", "asynchrony", new SectionSkeleton[]
                 {
                     new ("Events", "events"),
