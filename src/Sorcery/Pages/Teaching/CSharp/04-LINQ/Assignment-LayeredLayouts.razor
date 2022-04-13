@@ -1,0 +1,107 @@
+﻿@page "/teaching/csharp/4-linq/assignment/4-layered-layouts"
+@inject CourseBook CourseBook;
+
+<CourseAssignment Assignment="@CourseBook.CSharpCourse["linq"].Assignment">
+    <MudText>
+        What if the Dark Lord devises a new trick &ndash; Dungeons that loop all over
+        themselves, over and over, trapping Heroes in perpetual madness! No, this is not possible,
+        even the most evil entity would not create a Dungeon that is not topologically sortable.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
+    <MudText GutterBottom="true">
+        While having a generic graph structure sure is cool, not all graphs are suitable Dungeons
+        for our game. Dungeons should be easily traversable via a single path from an entry room
+        to the end, without the ability to enter the same room more than once. In other words,
+        it should be an acyclic graph.
+    </MudText>
+    <MudText>
+        A natural representation of such a Dungeon is a series of layers. Think the map from Slay the Spire,
+        if you're familiar with the game. At each layer there's a number of reachable rooms, and each edge
+        leads into a room from a higher layer. At the bottom are the entrances, at the top is the exit.
+    </MudText>            
+    
+    <MudCard Style="align-self: center" Class="my-3 pa-3" Elevation="5">
+        <MudCardMedia Height="500" Image="img/slaythespiremap.webp" Title="Example Slay the Spire map">
+        </MudCardMedia>
+        <MudCardContent>
+            <MudText Typo="Typo.caption">Example layered graph map from Slay the Spire</MudText>
+        </MudCardContent>
+    </MudCard>
+    <MudText>
+        In this assignment your task is to implement an algorithm that decides if a graph is acyclic,
+        and if yes partitions the vertices into layers, as described.
+    </MudText>
+    
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Algorithm</MudText>
+    <MudText GutterBottom="true">
+        In graph theory parlance the problem we want to solve is called <strong>topological sorting</strong>
+        &ndash; ordering vertices in such a manner that every edge goes from left to right, or deciding that
+        the graph has a cycle and it cannot be done. Once we do that,
+        it's easy to divide the graph into layers by simply traversing vertices in order and calculating
+        shortest paths. There's a number of different algorithms for this, and you are free to use your
+        favourite, if you have one. If not, here's the arguably simplest one, attributed to Tarjan.
+    </MudText>
+    <MudText GutterBottom="true">
+        We will construct a list of vertices in <em>reverse</em> topological order. First, initialize it to an empty list.
+        Pick any vertex from the graph and run a depth-first search. We keep the usual status of a vertex as we go:
+        <strong>active</strong> if we've recursed down one of its neighbours, <strong>visited</strong> if we already processed all of its non-DFS-parent neighbours, unvisited otherwise. When we consider an edge there are three cases:
+        <MudList Dense="true">
+            <MudItem>
+                our neighbour has already been processed &ndash; ignore it;
+            </MudItem>
+            <MudItem>
+                our neighbour has not been visited before &ndash; continue DFS recursively;
+            </MudItem>
+            <MudItem>
+                neighbour has been visited but is still active &ndash; we have found a cycle, terminate the algorithm.
+            </MudItem>
+        </MudList>
+        Once we consider all the edges, mark the vertex as visited and add it to the result list. 
+        Once all vertices in the graph are visited, we return the reversed list as our result.
+    </MudText>
+    <MudText GutterBottom="true">    
+        That the algorithm indeed constructs a valid topological order follows from properties of a DFS,
+        I leave the proof as an exercise. Finding the layers is now straightforward &ndash; every vertex
+        with no edges is in layer zero. Every neighbour of a vertex in layer zero is in layer one. Continue
+        until all edges are considered. Because neighbours are always to the right in the topological order,
+        this calculation can be easily done in a single traversal of the sorted vertex list.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Topological Sort</MudText>
+    <MudText>
+        Your job is pretty simple &ndash; complete the implementation in <Code>DungeonWalker.Graphs.Algorithms.TopologicalSort&lang;TLabel&rang;</Code>. The missing method is:
+    </MudText>
+    <CodeBlock Code="@(@"
+public bool TrySort([NotNullWhen(true)] out TopologicalSortResult<TLabel>? result)
+")"/>
+    <MudText>
+        The method return <Code>false</Code> if the graph is acyclic, otherwise
+        it returns <Code>true</Code> and fills in the layered result.
+    </MudText>
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "TopologicalSort" test group, worth <Highlight>1</Highlight> point.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Performance Considerations</MudText>
+    <MudText GutterBottom="true">
+        There are additional tests for much larger graphs. You can consider the first part as worth
+        half points, and this part as worth the other half.
+    </MudText>
+    <MudText id="stack-size-description" GutterBottom="true">
+        When a graph has a lot of vertices, the size of the stack of a recursive DFS can also grow large.
+        The stack of a single .NET thread is usually limited by one megabyte, which means that using
+        as little as $4$ bytes per vertex in a DFS of depth $10^5$ is enough to overflow it (because a return
+        pointer must always remain on the stack and it takes $8$ bytes).
+    </MudText>
+    <MudText>
+        Therefore, the main issue for these tests is not speed, but the stack limit. The solution is conceptually
+        simple &ndash; we need to create an explicit <Code>Stack&lang;T&rang;</Code> and use it instead of recursion.
+        That should be enough to pass the tests, no need to fiddle with microoptimisations. We will tackle performance
+        fun in a later module <MudIcon Icon="fas fa-smile-wink"/>.
+    </MudText>
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "TopologicalSortPerformance" test group, worth <Highlight>1</Highlight> point.
+    </MudAlert>
+    <LatexRenderer ContainerId="stack-size-description"/>
+</CourseAssignment>
+@code {
+
+}
