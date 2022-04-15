@@ -79,7 +79,7 @@
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Topological Sort</MudText>
     <MudText>
-        Your job is pretty simple &ndash; complete the implementation in <Code>DungeonWalker.Graphs.Algorithms.TopologicalSort&lang;TLabel&rang;</Code>. The missing method is:
+        Your job is pretty simple &ndash; complete the implementation in <Code>DungeonWalker.Graphs.Algorithms.TopologicalSort&lt;TLabel&gt;</Code>. The missing method is:
     </MudText>
     <CodeBlock Code="@(@"
 public bool TrySort([NotNullWhen(true)] out TopologicalSortResult<TLabel>? result)
@@ -104,7 +104,7 @@ public bool TrySort([NotNullWhen(true)] out TopologicalSortResult<TLabel>? resul
     </MudText>
     <MudText>
         Therefore, the main issue for these tests is not speed, but the stack limit. The solution is conceptually
-        simple &ndash; we need to create an explicit <Code>Stack&lang;T&rang;</Code> and use it instead of recursion.
+        simple &ndash; we need to create an explicit <Code>Stack&lt;T&gt;</Code> and use it instead of recursion.
         That should be enough to pass the tests, no need to fiddle with microoptimisations. We will tackle performance
         fun in a later module <MudIcon Icon="fas fa-smile-wink"/>.
     </MudText>
