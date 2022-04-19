@@ -81,9 +81,10 @@ public sealed class CourseBook
                     new ("Events", "events"),
                     new ("Exception Handling", "exception-handling"),
                     new ("Disposable Resources", "disposable-resources"),
-                    new ("Task Parallel Library", "task-parallel-library"),
+                    new ("Async and Await", "async-and-await"),
                     new ("Thread Pool", "thread-pool"),
                     new ("Synchronisation Mechanisms", "synchronisation-mechanisms"),
+                    new ("Concurrent Collections", "concurrent-collections"),
                     new ("Cancellation", "cancellation"),
                 }, new AssignmentSkeleton("Asynchronous Adventurers", "asynchronous-adventurers", "https://gienieczko.com/todo"))
                 {
