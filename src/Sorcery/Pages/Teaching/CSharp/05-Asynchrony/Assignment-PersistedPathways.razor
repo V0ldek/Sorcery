@@ -1,0 +1,241 @@
+﻿@page "/teaching/csharp/5-asynchrony/assignment/5-persisted-pathways"
+@inject CourseBook CourseBook;
+
+<CourseAssignment Assignment="@CourseBook.CSharpCourse["asynchrony"].Assignment">
+    <MudText>
+        Does a Dungeon exist in objective reality, or is it merely a trick, a figment
+        of a Hero's imagination? We must make the dark pathways concrete and visible to
+        all!
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
+    <MudText GutterBottom="true">
+        Main variety in our game comes from different possible Dungeons. Keeping
+        them all just as classes hardwired in the application code is limiting.
+        We'd like to have a lot of Dungeons, be able to share new ones with our users,
+        maybe even allow them to construct their own. In this assignment we take a first step towards that goal,
+        by persisting our maps on disk with the local filesystem.
+    </MudText>
+    
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">JSON Serialisation</MudText>
+    <MudText GutterBottom="true">
+        First we need to make our graph serializable. There are two major libraries in .NET
+        when it comes to JSON processing, the long established 
+        <MudLink Href="https://www.newtonsoft.com/json"><Code>Json.NET</Code></MudLink>, and the
+        newer <Code>System.Text.Json</Code>, which is part of the BCL. We will use the latter
+        for this assignment.
+    </MudText>
+    <MudText>
+        To persist our graphs we need a more suited representation than
+        the <Code>Graph&lt;IRoom&gt;</Code> class. In a new project, <Code>DungeonWalker.DataLayer</Code>,
+        we define the type <Code>GraphTemplate&lt;TLabel&gt;</Code>, with only two simple properties:
+    </MudText>
+    <CodeBlock FileName="src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs" Code=@"(@"
+    /// <summary>
+    ///     Gets the labels of vertices of the graph.
+    /// </summary>
+    public IReadOnlyList<TLabel> Vertices { get; init; }
+
+    /// <summary>
+    ///     Gets the edges of the graph in the form of an adjacency list.
+    ///     The `i`-th list contains the number `j` if and only if there exists and edge
+    ///     between vertices number `i` and `j` from <see cref="GraphTemplate{TLabel}.Vertices"/>
+    ///     in the graph.
+    /// </summary>
+    public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
+    ")"/>
+    <MudText id="text-with-four-cycle">
+        This is a simple encoding via adjacency lists. For example, a $4$-cycle could be encoded like this:
+    </MudText>
+    <CodeBlock Language="json" Code=@"(@"
+{
+    ""vertices"": [ ""vertex1"", ""vertex2"", ""vertex3"", ""vertex4"" ],
+    ""adjacencyList"": [
+        [ 2 ],
+        [ 3 ],
+        [ 4 ],
+        [ 1 ]
+    ]
+}
+    ")"/>
+    <MudText>
+        The heavy lifting of getting the <Code>IRoot</Code> labels to serialize is already done.
+        Your job is to implement the conversion from <Code>IGraph&lt;TLabel&gt;</Code> to <Code>GraphTemplate&lt;TLabel&gt;</Code>
+        and vice-versa. All of these are located in <code>src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs</code>.
+    </MudText>
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "Serialization" test group, worth <Highlight>1</Highlight> point.
+    </MudAlert>
+    <LatexRenderer ContainerId="text-with-four-cycle"/>
+    
+    <MudText GutterBottom="true">
+        To serialize and deserialize with <Code>System.Text.Json</Code> we use the <MudLink Href="https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer?view=net-6.0"><Code>JsonSerializer</Code></MudLink> class. It has a lot of overloads for
+        <Code>Serialize</Code> and <Code>Deserialize</Code> methods, including async overloads, cancellation support,
+        reading directly to streams, etc.
+    </MudText>
+    <MudText>
+        Serialization is governed by a set of base converters that serialize basic types, and also any
+        .NET object by just taking its public properties and mapping them into a JSON object. There can also
+        be custom converters that manually take control of reading and writing separate JSON tokens.
+        There are also some basic options, like whether to include whitespace (prettify the output),
+        and whether to use PascalCase or camelCase for property names. These are all put into a
+        <Code>JsonSerializerOptions</Code> object that can be passed to the serialization methods.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">File System Repository</MudText>
+    <MudText>
+        The interface that we need to implement is:
+    </MudText>
+    <CodeBlock FileName="src/DungeonWalker.DataLayer/IDungeonRepository.cs" Code=@"(@"
+using DungeonWalker.Logic.Dungeons;
+
+namespace DungeonWalker.DataLayer;
+
+/// <summary>
+///     Repository for graph-based dungeon room layouts.
+/// </summary>
+public interface IDungeonRepository
+{
+    /// <summary>
+    ///     Save an <see cref="IGraphRoomLayout"/>, using <see cref="IGraphRoomLayout.Name"/>
+    ///     as the key.
+    /// </summary>
+    /// <param name="dungeon">Dungeon layout to save.</param>
+    /// <returns>
+    ///     Task representing the asynchronous save operation.
+    /// </returns>
+    /// <remarks>
+    ///     If a dungeon with the same name already exists, it is overwritten.
+    /// </remarks>
+    /// <exception cref="DungeonRepositoryException">
+    ///     If an exception occurs while serializing the dungeon or saving the result
+    ///     to the underlying storage.
+    /// </exception>
+    Task SaveGraphDungeonAsync(IGraphRoomLayout dungeon);
+
+    /// <summary>
+    ///     Save an <see cref="IGraphRoomLayout"/>, using <see cref="IGraphRoomLayout.Name"/>
+    ///     as the key.
+    /// </summary>
+    /// <param name="dungeon">Dungeon layout to save.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the save operation.</param>
+    /// <returns>
+    ///     Task representing the asynchronous save operation.
+    /// </returns>
+    /// <remarks>
+    ///     If a dungeon with the same name already exists, it is overwritten.
+    /// </remarks>
+    /// <exception cref="DungeonRepositoryException">
+    ///     If an exception occurs while serializing the dungeon or saving the result
+    ///     to the underlying storage.
+    /// </exception>
+    Task SaveGraphDungeonAsync(IGraphRoomLayout dungeon, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Lookup a graph-based dungeon by key and return it as an instance of
+    ///     <see cref="IGraphRoomLayout"/>.
+    /// </summary>
+    /// <param name="name">Key to look for.</param>
+    /// <returns>
+    ///     A task containing an instance of a previously saved <see cref="IGraphRoomLayout"/>, if it exists.
+    ///     If it does not exists, <code>null</code>.
+    /// </returns>
+    /// <exception cref="DungeonRepositoryException">
+    ///     If an exception occurs while reading the dungeon from the underlying
+    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    /// </exception>
+    Task<IGraphRoomLayout?> LoadGraphDungeonAsync(string name);
+
+    /// <summary>
+    ///     Lookup a graph-based dungeon by key and return it as an instance of
+    ///     <see cref="IGraphRoomLayout"/>.
+    /// </summary>
+    /// <param name="name">Key to look for.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the load operation.</param>
+    /// <returns>
+    ///     A task containing an instance of a previously saved <see cref="IGraphRoomLayout"/>, if it exists.
+    ///     If it does not exists, <code>null</code>.
+    /// </returns>
+    /// <exception cref="DungeonRepositoryException">
+    ///     If an exception occurs while reading the dungeon from the underlying
+    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    /// </exception>
+    Task<IGraphRoomLayout?> LoadGraphDungeonAsync(string name, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     List all available keys of dungeons in the repository.
+    /// </summary>
+    /// <returns>
+    ///     A task containing a sequence of all keys that are contained in the repository.
+    /// </returns>
+    /// <exception cref="DungeonRepositoryException">
+    ///     If an exception occurs while reading the dungeon from the underlying
+    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    /// </exception>
+    Task<IReadOnlyCollection<string>> ListNamesAsync();
+
+    /// <summary>
+    ///     List all available keys of dungeons in the repository.
+    /// </summary>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the list operation.</param>
+    /// <returns>
+    ///     A task containing a sequence of all keys that are contained in the repository.
+    /// </returns>
+    /// <exception cref="DungeonRepositoryException">
+    ///     If an exception occurs while reading the dungeon from the underlying
+    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    /// </exception>
+    Task<IReadOnlyCollection<string>> ListNamesAsync(CancellationToken cancellationToken);
+}
+    ")"/>
+    <MudText GutterBottom="true">
+        Save, load, and list all. You need to implement <Code>FileSystemDungeonRepository</Code>, located
+        in yet another project, <Code>DungeonWalker.DataLayer.FileSystem</Code>. It should implement this
+        interface using the local filesystem as database storage. The constructor takes a directory path,
+        which is the location of all saved Dungeons.
+    </MudText>
+    <MudText GutterBottom="true">
+        The <Code>_options</Code> private field contains the aforementioned <Code>JsonSerializerOptions</Code>
+        object that you should use for all serialisation operations. Best not to modify it, it is already configured
+        to be compatible with the tests and to have converters required for serialising our game data, like
+        <Code>IRoom</Code> and <Code>ILoot</Code> objects.
+    </MudText>
+    <MudText>
+        The solution code is pretty short when written correctly, but requires care to get right.
+        Remember all the things we talked about in this module, as well as defensive programming patterns.'
+        Remember that:
+    </MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            All I/O operations on the filesystem may fail.
+            The exceptions called by this must be wrapped in a <Code>FileSystemRepositoryException</Code>
+            that inherits from <Code>DungeonRepositoryException</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Precondition checks for <Code>async</Code> operations should happen synchronously.
+            There are no tests for this, but I will point that out during code review. Use the local method pattern
+            to deal with that.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            All system file handles are expensive resources and must be properly disposed of.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The <Code>CancellationToken</Code> instances passed to the methods should be used for
+            all async operations that support cancellation.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Always choose the async overload for operations on the filesystem.
+        </MudListItem>
+    </MudList>
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "FileSystemRepository" test group, worth <Highlight>2</Highlight> points.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">File System Repository</MudText>
+    <MudText>
+        Finally, there is a demo that runs the code on some actual Dungeons on your local filesystem
+        and test the entire repository. It's located in a new console project, <Code>DungeonWalker.FileSystemRepositoryDemo</Code>.
+        Here's the output on a model solution:
+    </MudText>
+    <Asciinema CastName="TODO"/>
+</CourseAssignment>
+@code {
+
+}
