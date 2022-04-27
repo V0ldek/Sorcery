@@ -29,7 +29,7 @@
         the <Code>Graph&lt;IRoom&gt;</Code> class. In a new project, <Code>DungeonWalker.DataLayer</Code>,
         we define the type <Code>GraphTemplate&lt;TLabel&gt;</Code>, with only two simple properties:
     </MudText>
-    <CodeBlock FileName="src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs" Code=@"(@"
+    <CodeBlock FileName="src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs" Code="@(@"
     /// <summary>
     ///     Gets the labels of vertices of the graph.
     /// </summary>
@@ -38,7 +38,7 @@
     /// <summary>
     ///     Gets the edges of the graph in the form of an adjacency list.
     ///     The `i`-th list contains the number `j` if and only if there exists and edge
-    ///     between vertices number `i` and `j` from <see cref="GraphTemplate{TLabel}.Vertices"/>
+    ///     between vertices number `i` and `j` from <see cref=""GraphTemplate{TLabel}.Vertices""/>
     ///     in the graph.
     /// </summary>
     public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
@@ -46,7 +46,7 @@
     <MudText id="text-with-four-cycle">
         This is a simple encoding via adjacency lists. For example, a $4$-cycle could be encoded like this:
     </MudText>
-    <CodeBlock Language="json" Code=@"(@"
+    <CodeBlock Language="json" Code="@(@"
 {
     ""vertices"": [ ""vertex1"", ""vertex2"", ""vertex3"", ""vertex4"" ],
     ""adjacencyList"": [
@@ -84,7 +84,7 @@
     <MudText>
         The interface that we need to implement is:
     </MudText>
-    <CodeBlock FileName="src/DungeonWalker.DataLayer/IDungeonRepository.cs" Code=@"(@"
+    <CodeBlock FileName="src/DungeonWalker.DataLayer/IDungeonRepository.cs" Code="@(@"
 using DungeonWalker.Logic.Dungeons;
 
 namespace DungeonWalker.DataLayer;
@@ -95,35 +95,35 @@ namespace DungeonWalker.DataLayer;
 public interface IDungeonRepository
 {
     /// <summary>
-    ///     Save an <see cref="IGraphRoomLayout"/>, using <see cref="IGraphRoomLayout.Name"/>
+    ///     Save an <see cref=""IGraphRoomLayout""/>, using <see cref=""IGraphRoomLayout.Name""/>
     ///     as the key.
     /// </summary>
-    /// <param name="dungeon">Dungeon layout to save.</param>
+    /// <param name=""dungeon"">Dungeon layout to save.</param>
     /// <returns>
     ///     Task representing the asynchronous save operation.
     /// </returns>
     /// <remarks>
     ///     If a dungeon with the same name already exists, it is overwritten.
     /// </remarks>
-    /// <exception cref="DungeonRepositoryException">
+    /// <exception cref=""DungeonRepositoryException"">
     ///     If an exception occurs while serializing the dungeon or saving the result
     ///     to the underlying storage.
     /// </exception>
     Task SaveGraphDungeonAsync(IGraphRoomLayout dungeon);
 
     /// <summary>
-    ///     Save an <see cref="IGraphRoomLayout"/>, using <see cref="IGraphRoomLayout.Name"/>
+    ///     Save an <see cref=""IGraphRoomLayout""/>, using <see cref=""IGraphRoomLayout.Name""/>
     ///     as the key.
     /// </summary>
-    /// <param name="dungeon">Dungeon layout to save.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the save operation.</param>
+    /// <param name=""dungeon"">Dungeon layout to save.</param>
+    /// <param name=""cancellationToken"">The <see cref=""CancellationToken""/> that can be used to cancel the save operation.</param>
     /// <returns>
     ///     Task representing the asynchronous save operation.
     /// </returns>
     /// <remarks>
     ///     If a dungeon with the same name already exists, it is overwritten.
     /// </remarks>
-    /// <exception cref="DungeonRepositoryException">
+    /// <exception cref=""DungeonRepositoryException"">
     ///     If an exception occurs while serializing the dungeon or saving the result
     ///     to the underlying storage.
     /// </exception>
@@ -131,32 +131,32 @@ public interface IDungeonRepository
 
     /// <summary>
     ///     Lookup a graph-based dungeon by key and return it as an instance of
-    ///     <see cref="IGraphRoomLayout"/>.
+    ///     <see cref=""IGraphRoomLayout""/>.
     /// </summary>
-    /// <param name="name">Key to look for.</param>
+    /// <param name=""name"">Key to look for.</param>
     /// <returns>
-    ///     A task containing an instance of a previously saved <see cref="IGraphRoomLayout"/>, if it exists.
+    ///     A task containing an instance of a previously saved <see cref=""IGraphRoomLayout""/>, if it exists.
     ///     If it does not exists, <code>null</code>.
     /// </returns>
-    /// <exception cref="DungeonRepositoryException">
+    /// <exception cref=""DungeonRepositoryException"">
     ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
     /// </exception>
     Task<IGraphRoomLayout?> LoadGraphDungeonAsync(string name);
 
     /// <summary>
     ///     Lookup a graph-based dungeon by key and return it as an instance of
-    ///     <see cref="IGraphRoomLayout"/>.
+    ///     <see cref=""IGraphRoomLayout""/>.
     /// </summary>
-    /// <param name="name">Key to look for.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the load operation.</param>
+    /// <param name=""name"">Key to look for.</param>
+    /// <param name=""cancellationToken"">The <see cref=""CancellationToken""/> that can be used to cancel the load operation.</param>
     /// <returns>
-    ///     A task containing an instance of a previously saved <see cref="IGraphRoomLayout"/>, if it exists.
+    ///     A task containing an instance of a previously saved <see cref=""IGraphRoomLayout""/>, if it exists.
     ///     If it does not exists, <code>null</code>.
     /// </returns>
-    /// <exception cref="DungeonRepositoryException">
+    /// <exception cref=""DungeonRepositoryException"">
     ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
     /// </exception>
     Task<IGraphRoomLayout?> LoadGraphDungeonAsync(string name, CancellationToken cancellationToken);
 
@@ -166,29 +166,36 @@ public interface IDungeonRepository
     /// <returns>
     ///     A task containing a sequence of all keys that are contained in the repository.
     /// </returns>
-    /// <exception cref="DungeonRepositoryException">
+    /// <exception cref=""DungeonRepositoryException"">
     ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
     /// </exception>
     Task<IReadOnlyCollection<string>> ListNamesAsync();
 
     /// <summary>
     ///     List all available keys of dungeons in the repository.
     /// </summary>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the list operation.</param>
+    /// <param name=""cancellationToken"">The <see cref=""CancellationToken""/> that can be used to cancel the list operation.</param>
     /// <returns>
     ///     A task containing a sequence of all keys that are contained in the repository.
     /// </returns>
-    /// <exception cref="DungeonRepositoryException">
+    /// <exception cref=""DungeonRepositoryException"">
     ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref="IGraphRoomLayout"/> instance.
+    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
     /// </exception>
     Task<IReadOnlyCollection<string>> ListNamesAsync(CancellationToken cancellationToken);
 }
     ")"/>
     <MudText GutterBottom="true">
-        Save, load, and list all. You need to implement <Code>FileSystemDungeonRepository</Code>, located
-        in yet another project, <Code>DungeonWalker.DataLayer.FileSystem</Code>. It should implement this
+        Save, load, and list all. We first want to implement <Code>DungeonRepositoryBase</Code>,
+        which will take care of translating <Code>IGraphRoomLayout</Code> to and from a <Code>GraphTemplate&lt;RoomTemplate&rt;</Code>.
+        Use the <Code>RoomTemplate.FromRoom</Code> static method and your implementation of <Code>GraphTemplate</Code>.
+        To create a <Code>IGraphRoomLayout</Code> from a graph you can use the <Code>GraphTemplate.Select</Code> method
+        and the  <Code>DungeonWalker.Logic.Dungeons.PredefinedGraphRoomLayout</Code> class.
+    </MudText>
+    <MudText GutterBottom="true">
+        Finally, you need to implement <Code>FileSystemDungeonRepository</Code>, located
+        in yet another project, <Code>DungeonWalker.DataLayer.FileSystem</Code>. It extends <Code>DungeonRepositoryBase</Code>
         interface using the local filesystem as database storage. The constructor takes a directory path,
         which is the location of all saved Dungeons.
     </MudText>
@@ -234,7 +241,10 @@ public interface IDungeonRepository
         and test the entire repository. It's located in a new console project, <Code>DungeonWalker.FileSystemRepositoryDemo</Code>.
         Here's the output on a model solution:
     </MudText>
-    <Asciinema CastName="TODO"/>
+    <Asciinema CastName="persisted-pathways-demo"/>
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This demo is worth <Highlight>1</Highlight> point.
+    </MudAlert>
 </CourseAssignment>
 @code {
 
