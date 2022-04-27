@@ -1,0 +1,41 @@
+﻿@page "/teaching/csharp/5-asynchrony/5-thread-pool"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["thread-pool"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            What is the <Code>ThreadPool</Code>?
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Executing code on the <Code>ThreadPool</Code> with <Code>Task.Run</Code>.
+        </MudListItem>
+        <MudListItem>
+            Brief implementation sketch.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/threading/the-managed-thread-pool", "The managed thread pool"),
+        ("https://devblogs.microsoft.com/pfxteam/task-run-vs-task-factory-startnew/", "Task.Run vs Task.Factory.StartNew (Stephen Taub)"),
+        ("https://blog.stephencleary.com/2013/10/taskrun-etiquette-and-proper-usage.html", "Task.Run Etiquette and Proper Usage (Stephen Cleary)"),
+        ("https://blog.stephencleary.com/2013/08/startnew-is-dangerous.html", "StartNew is dangerous (Stephen Cleary)"),
+        ("https://devblogs.microsoft.com/pfxteam/when-at-last-you-await/", "When at last you await (Stephen Taub)"),
+        ("https://mattwarren.org/2017/04/13/The-CLR-Thread-Pool-Thread-Injection-Algorithm/", "The CLR Thread Pool 'Thread Injection' Algorithm (Matt Warren)"),
+        (
+            "https://www.researchgate.net/publication/228977836_Optimizing_concurrency_levels_in_the_net_threadpool_A_case_study_of_controller_design_and_implementation",
+            "Optimizing concurrency levels in the. net threadpool: A case study of controller design and implementation (Whitepaper)"
+        ),
+    })/>
+</CourseSection>
+
+@code {
+
+}

@@ -1,0 +1,37 @@
+﻿@page "/teaching/csharp/5-asynchrony/3-disposable-resources"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["disposable-resources"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Why we need explicit cleanup.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The <Code>System.IO.File</Code> API.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>IDisposable</Code>, <Code>using</Code> blocks and declarations.
+        </MudListItem>
+        <MudListItem>
+            Implementing <Code>IDisposable</Code>.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/events/", "Events (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose", "Implement a Dispose method"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-statement", "using statement (C# Reference)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

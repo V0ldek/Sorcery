@@ -1,0 +1,34 @@
+﻿@page "/teaching/csharp/5-asynchrony/1-events"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["events"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Manually implementing the observer pattern.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The <Code>event</Code> members.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Multicast delegates.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/events/", "Events (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/delegates/how-to-combine-delegates-multicast-delegates", "How to combine delegates (Multicast Delegates) (C# Programming Guide)"),
+        ("https://refactoring.guru/design-patterns/observer", "Observer Design Pattern (Refactoring Guru)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

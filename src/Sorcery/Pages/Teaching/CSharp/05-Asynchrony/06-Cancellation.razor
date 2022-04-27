@@ -1,0 +1,39 @@
+﻿@page "/teaching/csharp/5-asynchrony/6-cancellation"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["cancellation"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Cooperative cancellation.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>CancellationToken</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>CancellationTokenSource</Code>.
+        </MudListItem>
+        <MudListItem>
+            Cancelling async methods.
+        </MudListItem>
+        <MudListItem>
+            Cancelling non-async methods.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/threading/cancellation-in-managed-threads", "Cancellation in Managed Threads"),
+        ("https://blog.stephencleary.com/2022/02/cancellation-1-overview.html", "Cancellation (Stephen Cleary)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

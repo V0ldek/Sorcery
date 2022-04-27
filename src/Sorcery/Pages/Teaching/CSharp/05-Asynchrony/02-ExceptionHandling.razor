@@ -1,0 +1,38 @@
+﻿@page "/teaching/csharp/5-asynchrony/2-exception-handling"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["exception-handling"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The <Code>try</Code>, <Code>catch</Code> blocks.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Creating custom exceptions.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Filtering exceptions with <Code>when</Code>.
+        </MudListItem>
+        <MudListItem>
+            The <Code>finally</Code> block.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/exceptions/", "Exceptions and Exception Handling (C# Fundamentals)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/exceptions/exception-handling", "Exception Handling (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/delegates/how-to-combine-delegates-multicast-delegates", "How to combine delegates (Multicast Delegates) (C# Programming Guide)"),
+        ("https://ericlippert.com/2008/09/10/vexing-exceptions/", "Vexing Exceptions (Eric Lippert)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}
