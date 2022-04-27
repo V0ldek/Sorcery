@@ -1,3 +1,5 @@
 {
-    "csharp.semanticHighlighting.enabled": true
+    "csharp.semanticHighlighting.enabled": true,
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false
 }

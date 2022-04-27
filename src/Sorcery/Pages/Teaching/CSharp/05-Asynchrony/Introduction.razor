@@ -1,0 +1,30 @@
+﻿@page "/teaching/csharp/5-asynchrony"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["asynchrony"]">
+    <MudText GutterBottom="true">
+        The goal of this module is to introduce <Code>async</Code> and <Code>await</Code>,
+        the standard way of dealing with long running and I/O bound operations. We will
+        also need to cover some basics of multithreaded execution. In this module we will learn:
+    </MudText>
+        
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">simple <Code>Thread</Code> usage;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">the <Code>lock</Code> statement</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">events;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">exception handling, <Code>catch</Code>, <Code>finally</Code> blocks;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">disposable resources, <Code>IDisposable</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">asynchrony;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>Task</Code>, <Code>Task&lt;TResult&rt;</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>async</Code>, <Code>await</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>Task.WhenAll</Code>, <Code>Task.WhenAny</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">intuition behind <Code>await</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">the <Code>ThreadPool</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">entering the pool with <Code>Task.Run</Code> and <Code>Task.Factory.StartNew</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">supporting cancellation with <Code>CancellationToken</Code> and <Code>CancellationTokenSource</Code>.</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

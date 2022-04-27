@@ -1,0 +1,29 @@
+﻿@page "/teaching/csharp/4-linq/7-local-methods"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["local-methods"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Declaring local methods.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Using local methods to separate preconditions from iterators.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/local-functions", "Local functions (C# Programming Guide)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

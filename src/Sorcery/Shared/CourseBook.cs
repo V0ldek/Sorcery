@@ -75,20 +75,18 @@ public sealed class CourseBook
                     new ("Delegates", "delegates"),
                     new ("Lambda Expressions", "lambda-expressions"),
                     new ("LINQ Queries", "linq-queries"),
+                    new ("Local Methods", "local-methods"),
                 }, new AssignmentSkeleton("Layered Layouts", "layered-layouts", "https://classroom.github.com/a/wJNxPTTZ")),
                 new ("Asynchrony", "asynchrony", new SectionSkeleton[]
                 {
+                    new ("Simple Threading", "simple-threading"),
                     new ("Events", "events"),
                     new ("Exception Handling", "exception-handling"),
                     new ("Disposable Resources", "disposable-resources"),
-                    new ("Task Parallel Library", "task-parallel-library"),
+                    new ("Async and Await", "async-and-await"),
                     new ("Thread Pool", "thread-pool"),
-                    new ("Synchronisation Mechanisms", "synchronisation-mechanisms"),
                     new ("Cancellation", "cancellation"),
-                }, new AssignmentSkeleton("Asynchronous Adventurers", "asynchronous-adventurers", "https://gienieczko.com/todo"))
-                {
-                    IsHidden = true
-                },
+                }, new AssignmentSkeleton("Persisted Pathways", "persisted-pathways", "https://classroom.github.com/a/OsaBB_jJ")),
                 new ("Concurrency", "concurrency", new SectionSkeleton[]
                 {
                     new ("PLINQ", "plinq"),

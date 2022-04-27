@@ -1,0 +1,57 @@
+﻿@page "/teaching/csharp/5-asynchrony/4-async-and-await"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["async-and-await"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            What is an asynchronous operation.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Why asynchrony is useful.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>Task</Code> and <Code>Task&lt;TResult&rt;</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>async</Code> and <Code>await</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Task combinators &ndash; <Code>Task.WhenAll</Code>, <Code>Task.WhenAny</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Async state machines.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Intuition behind <Code>await</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Precondition checks in <Code>async</Code> methods.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Holding resources across <Code>await</Code>.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://blog.stephencleary.com/2012/02/async-and-await.html", "Introduction to async and await (Stephen Cleary)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/async", "Asynchronous programming"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/await/", "await operator (C# reference)"),
+        ("https://blog.stephencleary.com/2012/07/dont-block-on-async-code.html", "Don't Block ON Asynchronous Code (Stephen Cleary)"),
+        ("https://blog.stephencleary.com/2012/12/dont-block-in-asynchronous-code.html", "Don't Block IN Asynchronous Code (Stephen Cleary)"),
+        ("https://blog.stephencleary.com/2013/11/there-is-no-thread.html", "There Is No Thread (Stephen Cleary)"),
+        ("https://blog.stephencleary.com/2016/12/eliding-async-await.html", "Eliding Async and Await (Stephen Cleary)"),
+        ("https://blog.stephencleary.com/2014/04/a-tour-of-task-part-0-overview.html", "Tour of Task (Stephen Cleary, long series)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}
