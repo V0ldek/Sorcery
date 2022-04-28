@@ -30,18 +30,18 @@
         we define the type <Code>GraphTemplate&lt;TLabel&gt;</Code>, with only two simple properties:
     </MudText>
     <CodeBlock FileName="src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs" Code="@(@"
-    /// <summary>
-    ///     Gets the labels of vertices of the graph.
-    /// </summary>
-    public IReadOnlyList<TLabel> Vertices { get; init; }
+/// <summary>
+///     Gets the labels of vertices of the graph.
+/// </summary>
+public IReadOnlyList<TLabel> Vertices { get; init; }
 
-    /// <summary>
-    ///     Gets the edges of the graph in the form of an adjacency list.
-    ///     The `i`-th list contains the number `j` if and only if there exists and edge
-    ///     between vertices number `i` and `j` from <see cref=""GraphTemplate{TLabel}.Vertices""/>
-    ///     in the graph.
-    /// </summary>
-    public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
+/// <summary>
+///     Gets the edges of the graph in the form of an adjacency list.
+///     The `i`-th list contains the number `j` if and only if there exists and edge
+///     between vertices number `i` and `j` from <see cref=""GraphTemplate{TLabel}.Vertices""/>
+///     in the graph.
+/// </summary>
+public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
     ")"/>
     <MudText id="text-with-four-cycle">
         This is a simple encoding via adjacency lists. For example, a $4$-cycle could be encoded like this:
