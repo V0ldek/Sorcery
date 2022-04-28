@@ -70,7 +70,7 @@ public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
     <MudText GutterBottom="true">
         To serialize and deserialize with <Code>System.Text.Json</Code> we use the <MudLink Href="https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer?view=net-6.0"><Code>JsonSerializer</Code></MudLink> class. It has a lot of overloads for
         <Code>Serialize</Code> and <Code>Deserialize</Code> methods, including async overloads, cancellation support,
-        reading directly to streams, etc.
+        writing directly to streams, etc.
     </MudText>
     <MudText>
         Serialization is governed by a set of base converters that serialize basic types, and also any
@@ -188,7 +188,7 @@ public interface IDungeonRepository
     ")"/>
     <MudText GutterBottom="true">
         Save, load, and list all. We first want to implement <Code>DungeonRepositoryBase</Code>,
-        which will take care of translating <Code>IGraphRoomLayout</Code> to and from a <Code>GraphTemplate&lt;RoomTemplate&rt;</Code>.
+        which will take care of translating <Code>IGraphRoomLayout</Code> to and from a <Code>GraphTemplate&lt;RoomTemplate&gt;</Code>.
         Use the <Code>RoomTemplate.FromRoom</Code> static method and your implementation of <Code>GraphTemplate</Code>.
         To create a <Code>IGraphRoomLayout</Code> from a graph you can use the <Code>GraphTemplate.Select</Code> method
         and the  <Code>DungeonWalker.Logic.Dungeons.PredefinedGraphRoomLayout</Code> class.
@@ -207,7 +207,7 @@ public interface IDungeonRepository
     </MudText>
     <MudText>
         The solution code is pretty short when written correctly, but requires care to get right.
-        Remember all the things we talked about in this module, as well as defensive programming patterns.'
+        Remember all the things we talked about in this module, as well as defensive programming patterns.
         Remember that:
     </MudText>
     <MudList>
