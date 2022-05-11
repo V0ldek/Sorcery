@@ -1,0 +1,39 @@
+﻿@page "/teaching/csharp/5-asynchrony/7-async-interfaces-and-valuetask"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["async-interfaces-and-valuetask"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>IAsyncDisposable</Code>, <Code>await using</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>IAsyncEnumerable&lt;T&gt;</Code>, <Code>async</Code> iterators, <Code>await foreach</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Async LINQ with <Code>System.Linq.Async</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>ValueTask</Code> for mostly synchronous returns
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-disposeasync", "Implementing DisposeAsync"),
+        ("https://docs.microsoft.com/en-us/archive/msdn-magazine/2019/november/csharp-iterating-with-async-enumerables-in-csharp-8",
+            "Iterating with Async Enumerables in C# 8"),
+        ("https://devblogs.microsoft.com/dotnet/understanding-the-whys-whats-and-whens-of-valuetask/", 
+            "Understanding the Whys, Whats, and Whens of ValueTask")
+    })/>
+</CourseSection>
+
+@code {
+
+}
