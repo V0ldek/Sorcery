@@ -87,6 +87,12 @@ public sealed class CourseBook
                     new ("Thread Pool", "thread-pool"),
                     new ("Cancellation", "cancellation"),
                 }, new AssignmentSkeleton("Persisted Pathways", "persisted-pathways", "https://classroom.github.com/a/OsaBB_jJ")),
+                new ("Entity Framework", "entity-framework", new SectionSkeleton[]
+                {
+                    new ("Expression Trees", "expression-trees"),
+                    new ("LINQ to SQL", "linq-to-sql"),
+                    new ("Navigation Properties", "navigation-properties"),
+                }, new AssignmentSkeleton("", "", "https://gienieczko.com/todo") { IsHidden = true },
                 new ("Concurrency", "concurrency", new SectionSkeleton[]
                 {
                     new ("PLINQ", "plinq"),
