@@ -93,22 +93,9 @@ public sealed class CourseBook
                     new ("Expression Trees", "expression-trees"),
                     new ("LINQ to SQL", "linq-to-sql"),
                     new ("Navigation Properties", "navigation-properties"),
-                }, new AssignmentSkeleton("", "", "https://gienieczko.com/todo") { IsHidden = true },
-                new ("Concurrency", "concurrency", new SectionSkeleton[]
-                {
-                    new ("PLINQ", "plinq"),
-                    new ("Concurrent Collections", "concurrent-collections"),
-                    new ("Blocking Collections", "blocking-collections"),
-                }, new AssignmentSkeleton("Concurrent Competitivity", "concurrent-competitivity", "https://gienieczko.com/todo"))
-                {
-                    IsHidden = true
-                },
-                new ("Analysers", "analysers", new SectionSkeleton[]
-                {
-                    new ("Nullable Static Analysis", "nullable-static-analysis"),
-                }, new AssignmentSkeleton("Advanced Adventure Analysis", "advanced-adventure-analysis", "https://gienieczko.com/todo"))
-                {
-                    IsHidden = true
-                },
+                    new ("Inheritance", "inheritance"),
+                    new ("Tracking", "tracking"),
+                    new ("Transactions", "transactions"),
+                }, new AssignmentSkeleton("", "", "https://gienieczko.com/todo") { IsHidden = true }),
             }));
 }
