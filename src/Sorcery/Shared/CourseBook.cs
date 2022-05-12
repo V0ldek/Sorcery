@@ -1,4 +1,4 @@
-﻿ // Licensed under MIT, copyright Mateusz Gienieczko, all rights reserved.
+﻿// Licensed under MIT, copyright Mateusz Gienieczko, all rights reserved.
 using Sorcery.ModularCourse;
 using Sorcery.ModularCourse.Skeletons;
 
@@ -95,22 +95,6 @@ public sealed class CourseBook
                     new ("Inheritance", "inheritance"),
                     new ("Tracking", "tracking"),
                     new ("Transactions", "transactions"),
-                }, new AssignmentSkeleton("", "", "https://gienieczko.com/todo") { IsHidden = true },
-                new ("Concurrency", "concurrency", new SectionSkeleton[]
-                {
-                    new ("PLINQ", "plinq"),
-                    new ("Concurrent Collections", "concurrent-collections"),
-                    new ("Blocking Collections", "blocking-collections"),
-                }, new AssignmentSkeleton("Concurrent Competitivity", "concurrent-competitivity", "https://gienieczko.com/todo"))
-                {
-                    IsHidden = true
-                },
-                new ("Analysers", "analysers", new SectionSkeleton[]
-                {
-                    new ("Nullable Static Analysis", "nullable-static-analysis"),
-                }, new AssignmentSkeleton("Advanced Adventure Analysis", "advanced-adventure-analysis", "https://gienieczko.com/todo"))
-                {
-                    IsHidden = true
-                },
+                }, new AssignmentSkeleton("", "", "https://gienieczko.com/todo") { IsHidden = true }),
             }));
 }
