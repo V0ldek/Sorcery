@@ -1,0 +1,30 @@
+﻿@page "/teaching/csharp/6-entity-framework"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["entity-framework"]">
+    <MudText GutterBottom="true">
+        Time to learn the other part of LINQ &ndash; the <Code>IQueryable&lt;T&rt;</Code>
+        interface and LINQ-to-SQL, using Entity Framework. In this module we will learn:
+    </MudText>
+        
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">expression trees, the <Code>Expression</Code> type hierarchy;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>IQueryable&lt;T&gt;</Code> and <Code>IQueryProvider</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">database providers;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">Database First;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">Code First;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">defining a <Code>DbContext</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">migrations;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">querying with LINQ-to-SQL;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">modelling relations with navigation properties;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">implicit <Code Language="sql">JOIN</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">explicit <Code Language="sql">JOIN</Code> with <Code>Include</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">modelling inheritance;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">change tracking;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">transactions.</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

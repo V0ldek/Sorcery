@@ -1,0 +1,35 @@
+﻿@page "/teaching/csharp/6-entity-framework/1-linq-to-sql"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["entity-framework"]["linq-to-sql"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Defining a model and a <Code>DbContext</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Migrations.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Querying <Code>DbSet&lt;TEntity&gt;</Code> with LINQ.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/ef/core/dbcontext-configuration/", "DbContext Lifetime, Configuration, and Initialization (EF Docs)"),
+        ("https://docs.microsoft.com/en-us/ef/core/modeling/", "Creating and configuring a model (EF Docs)"),
+        ("https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli", "Migrations Overview (EF Docs)"),
+        ("https://docs.microsoft.com/en-us/ef/core/querying/", "Querying Data (EF Docs)"),
+     })/>
+</CourseSection>
+
+@code {
+
+}

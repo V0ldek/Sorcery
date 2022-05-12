@@ -1,0 +1,37 @@
+﻿@page "/teaching/csharp/6-entity-framework/4-tracking"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["entity-framework"]["tracking"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Entity changes tracking.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>DbContext</Code> lifetime and the Unit of Work pattern.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Referential equality as source-of-truth.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>AsNoTracking</Code>.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/ef/core/change-tracking/", "Change Tracking in EF Core (EF Docs)"),
+        ("https://docs.microsoft.com/en-us/ef/core/querying/tracking", "Tracking vs. No-Tracking Queries (EF Docs)"),
+        ("https://docs.microsoft.com/en-us/ef/core/change-tracking/identity-resolution", "Identity Resolution in EF Core (EF Docs)"),
+     })/>
+</CourseSection>
+
+@code {
+
+}
