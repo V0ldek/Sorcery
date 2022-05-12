@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/6-entity-framework/7-expression-api"
+﻿@page "/teaching/csharp/6-entity-framework/2-navigation-properties"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["entity-framework"]["expression-trees"];
+    var course = CourseBook.CSharpCourse["entity-framework"]["navigation-properties"];
 }
 
 <CourseSection Section="@course">
@@ -13,22 +13,21 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            The <Code>IQueryable&lang;T&rang;</Code> interface.
+            Defining one-to-many/many-to-many relationships.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Lambdas into expression trees.
+            Querying related data with implict <Code Language="sql">JOIN</Code>s.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Expression trees into lambdas.
+            Explicit <Code Language="sql">JOIN</Code>s with <Code>Include</Code>.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Expression tree power.
+            Nullable analysis and navigation properties.
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/csharp/expression-trees", "Expression Trees"),
-        ("https://tyrrrz.me/blog/expression-trees/", "Working with Expression Trees in C# (Oleksii Holub) (reflection and dynamic vs Expressions)"),
-    })/>
+        ("https://docs.microsoft.com/en-us/ef/core/dbcontext-configuration/", "DbContext Lifetime, Configuration, and Initialization"),
+     })/>
 </CourseSection>
 
 @code {

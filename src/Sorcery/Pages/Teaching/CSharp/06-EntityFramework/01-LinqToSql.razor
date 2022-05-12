@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/6-entity-framework/7-expression-api"
+﻿@page "/teaching/csharp/6-entity-framework/1-linq-to-sql"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["entity-framework"]["expression-trees"];
+    var course = CourseBook.CSharpCourse["entity-framework"]["linq-to-sql"];
 }
 
 <CourseSection Section="@course">
@@ -13,22 +13,18 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            The <Code>IQueryable&lang;T&rang;</Code> interface.
+            Defining a model and a <Code>DbContext</Code>.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Lambdas into expression trees.
+            Migrations.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Expression trees into lambdas.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Expression tree power.
+            Querying <Code>DbSet&lt;TEntity&gt;</Code> with LINQ.
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/csharp/expression-trees", "Expression Trees"),
-        ("https://tyrrrz.me/blog/expression-trees/", "Working with Expression Trees in C# (Oleksii Holub) (reflection and dynamic vs Expressions)"),
-    })/>
+        ("https://docs.microsoft.com/en-us/ef/core/dbcontext-configuration/", "DbContext Lifetime, Configuration, and Initialization"),
+     })/>
 </CourseSection>
 
 @code {

@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/6-entity-framework/7-expression-api"
+﻿@page "/teaching/csharp/6-entity-framework/4-tracking"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["entity-framework"]["expression-trees"];
+    var course = CourseBook.CSharpCourse["entity-framework"]["tracking"];
 }
 
 <CourseSection Section="@course">
@@ -13,22 +13,21 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            The <Code>IQueryable&lang;T&rang;</Code> interface.
+            Entity changes tracking.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Lambdas into expression trees.
+            <Code>DbContext</Code> lifetime and the Unit of Work pattern.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Expression trees into lambdas.
+            Referential equality as source-of-truth.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Expression tree power.
+            <Code>AsNoTracking</Code>.
         </MudListItem>
     </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/csharp/expression-trees", "Expression Trees"),
-        ("https://tyrrrz.me/blog/expression-trees/", "Working with Expression Trees in C# (Oleksii Holub) (reflection and dynamic vs Expressions)"),
-    })/>
+        ("https://docs.microsoft.com/en-us/ef/core/dbcontext-configuration/", "DbContext Lifetime, Configuration, and Initialization"),
+     })/>
 </CourseSection>
 
 @code {
