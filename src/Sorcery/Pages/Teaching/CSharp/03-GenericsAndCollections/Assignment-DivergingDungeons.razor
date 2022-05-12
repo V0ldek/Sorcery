@@ -45,8 +45,8 @@
     
     <MudText>
         Then, we want to create a Leaderboard. The <Code>BestRunsCollection</Code> type is a mutable
-        collection of Runs that implements the <Code>ICollection&lang;RunStatistics&rang;</Code>
-        interface, and provides a special method: <Code>IEnumerable&lang;(int rank, RunStatistics run)&rang; EnumerateRanking()</Code>.
+        collection of Runs that implements the <Code>ICollection&lt;RunStatistics&gt;</Code>
+        interface, and provides a special method: <Code>IEnumerable&lt;(int rank, RunStatistics run)&gt; EnumerateRanking()</Code>.
         It's supposed to enumerate the Runs from the best to the worst and assign them a rank.
         The ranks are as in natural leaderboards, an example looks like this:
     </MudText>
@@ -71,12 +71,12 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Graphs</MudText>
     <MudText>
         This task is cut out for you. We have a new project, <Code>DungeonWalker.Graphs</Code>,
-        defining two interfaces, <Code>IGraph&lang;TLabel&rang;</Code>
-        and <Code>IGraphBuilder&lang;TLabel&rang;</Code>, as well as two basic types, <Code>Vertex&lang;TLabel&rang;</Code>
-        and <Code>Edge&lang;TLabel&rang;</Code>. You need to fill out their implementations. Bulk of the work is in
+        defining two interfaces, <Code>IGraph&lt;TLabel&gt;</Code>
+        and <Code>IGraphBuilder&lt;TLabel&gt;</Code>, as well as two basic types, <Code>Vertex&lt;TLabel&gt;</Code>
+        and <Code>Edge&lt;TLabel&gt;</Code>. You need to fill out their implementations. Bulk of the work is in
         <code>Graph.cs</code>, where we need to implement both the graph and the builder.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Novelty &ndash; XML comments</MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Novelty &ndash; XML Comments</MudText>
     <MudText>
         The code differs in one major aspect from what you've seen thus far &ndash; it has documentation!
         In C# we document public members in a structured manner with XML comments.

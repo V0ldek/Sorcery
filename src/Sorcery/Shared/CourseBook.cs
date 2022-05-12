@@ -86,6 +86,7 @@ public sealed class CourseBook
                     new ("Async and Await", "async-and-await"),
                     new ("Thread Pool", "thread-pool"),
                     new ("Cancellation", "cancellation"),
+                    new ("Async Interfaces and ValueTask", "async-interfaces-and-valuetask"),
                 }, new AssignmentSkeleton("Persisted Pathways", "persisted-pathways", "https://classroom.github.com/a/OsaBB_jJ")),
                 new ("Entity Framework", "entity-framework", new SectionSkeleton[]
                 {

@@ -29,32 +29,43 @@
     </MudCard>
     <MudText>
         In this assignment your task is to implement an algorithm that decides if a graph is acyclic,
-        and if yes partitions the vertices into layers, as described.
+        and if yes partitions the vertices into layers, as described below.
     </MudText>
     
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Algorithm</MudText>
-    <MudText GutterBottom="true">
+    <MudText>
         In graph theory parlance the problem we want to solve is called <strong>topological sorting</strong>
         &ndash; ordering vertices in such a manner that every edge goes from left to right, or deciding that
         the graph has a cycle and it cannot be done. Once we do that,
         it's easy to divide the graph into layers by simply traversing vertices in order and calculating
-        shortest paths. There's a number of different algorithms for this, and you are free to use your
-        favourite, if you have one. If not, here's the arguably simplest one, attributed to Tarjan.
+        shortest paths. The recursive definition of layers is as follows:
     </MudText>
+    <MudList id="layers-definition">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            the layer $0$ is exactly the vertices without any incoming edges;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            the layer $i + 1$ is exactly the vertices that have a direct edge incoming from
+            some vertex in layer $i$.
+        </MudListItem>
+    </MudList>
+    <LatexRenderer ContainerId="layers-definition"/>
     <MudText GutterBottom="true">
+        There's a number of different algorithms for this, and you are free to use your
+        favourite, if you have one. If not, here's the arguably simplest one, attributed to Tarjan.
         We will construct a list of vertices in <em>reverse</em> topological order. First, initialize it to an empty list.
         Pick any vertex from the graph and run a depth-first search. We keep the usual status of a vertex as we go:
         <strong>active</strong> if we've recursed down one of its neighbours, <strong>visited</strong> if we already processed all of its non-DFS-parent neighbours, unvisited otherwise. When we consider an edge there are three cases:
         <MudList Dense="true">
-            <MudItem Icon="@Icons.Filled.ChevronRight">
+            <MudListItem Icon="@Icons.Filled.ChevronRight">
                 our neighbour has already been processed &ndash; ignore it;
-            </MudItem>
-            <MudItem Icon="@Icons.Filled.ChevronRight">
+            </MudListItem>
+            <MudListItem Icon="@Icons.Filled.ChevronRight">
                 our neighbour has not been visited before &ndash; continue DFS recursively;
-            </MudItem>
-            <MudItem Icon="@Icons.Filled.ChevronRight">
+            </MudListItem>
+            <MudListItem Icon="@Icons.Filled.ChevronRight">
                 neighbour has been visited but is still active &ndash; we have found a cycle, terminate the algorithm.
-            </MudItem>
+            </MudListItem>
         </MudList>
         Once we consider all the edges, mark the vertex as visited and add it to the result list. 
         Once all vertices in the graph are visited, we return the reversed list as our result.
@@ -68,13 +79,13 @@
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Topological Sort</MudText>
     <MudText>
-        Your job is pretty simple &ndash; complete the implementation in <Code>DungeonWalker.Graphs.Algorithms.TopologicalSort&lang;TLabel&rang;</Code>. The missing method is:
+        Your job is pretty simple &ndash; complete the implementation in <Code>DungeonWalker.Graphs.Algorithms.TopologicalSort&lt;TLabel&gt;</Code>. The missing method is:
     </MudText>
     <CodeBlock Code="@(@"
 public bool TrySort([NotNullWhen(true)] out TopologicalSortResult<TLabel>? result)
 ")"/>
     <MudText>
-        The method return <Code>false</Code> if the graph is acyclic, otherwise
+        The method return <Code>false</Code> if the graph has a cycle, otherwise
         it returns <Code>true</Code> and fills in the layered result.
     </MudText>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
@@ -93,7 +104,7 @@ public bool TrySort([NotNullWhen(true)] out TopologicalSortResult<TLabel>? resul
     </MudText>
     <MudText>
         Therefore, the main issue for these tests is not speed, but the stack limit. The solution is conceptually
-        simple &ndash; we need to create an explicit <Code>Stack&lang;T&rang;</Code> and use it instead of recursion.
+        simple &ndash; we need to create an explicit <Code>Stack&lt;T&gt;</Code> and use it instead of recursion.
         That should be enough to pass the tests, no need to fiddle with microoptimisations. We will tackle performance
         fun in a later module <MudIcon Icon="fas fa-smile-wink"/>.
     </MudText>
