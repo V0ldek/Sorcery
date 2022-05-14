@@ -1,249 +1,217 @@
-﻿@page "/teaching/csharp/5-asynchrony/assignment/5-persisted-pathways"
+﻿@page "/teaching/csharp/6-entity-framework/assignment/6-eldritch-entities"
 @inject CourseBook CourseBook;
 
-<CourseAssignment Assignment="@CourseBook.CSharpCourse["asynchrony"].Assignment">
+<CourseAssignment Assignment="@CourseBook.CSharpCourse["entity-framework"].Assignment">
     <MudText>
-        Does a Dungeon exist in objective reality, or is it merely a trick, a figment
-        of a Hero's imagination? We must make the dark pathways concrete and visible to
-        all!
+        Feeble text documents are not enough to convince the Heroes that those Dungeons can be beaten.
+        We need something more tangible, a pattern that can be seen and studied. A schema.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
     <MudText GutterBottom="true">
-        Main variety in our game comes from different possible Dungeons. Keeping
-        them all just as classes hardwired in the application code is limiting.
-        We'd like to have a lot of Dungeons, be able to share new ones with our users,
-        maybe even allow them to construct their own. In this assignment we take a first step towards that goal,
-        by persisting our maps on disk with the local filesystem.
+        The goal of this assignment is to implement the <Code>IDungeonRepository</Code> interface known from
+        the <MudLink Href="@CourseBook.CSharpCourse["asynchrony"].Assignment!.Route">previous assignment</MudLink>,
+        but using Entity Framework with an SQLite database.
     </MudText>
-    
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">JSON Serialisation</MudText>
+    <MudText>
+        First we will need to define a slightly different model of a graph, more suited for a relational database.
+        This is a common pattern in designing well-decoupled software, where there are multiple models of data
+        suited for different tasks with mappings defined between them. We will also have to deal with <Code>LootPile</Code>
+        being a pain for a relational model. In the end we will have to save and load our graphs with a well-designed LINQ query.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Graph Model</MudText>
     <MudText GutterBottom="true">
-        First we need to make our graph serializable. There are two major libraries in .NET
-        when it comes to JSON processing, the long established 
-        <MudLink Href="https://www.newtonsoft.com/json"><Code>Json.NET</Code></MudLink>, and the
-        newer <Code>System.Text.Json</Code>, which is part of the BCL. We will use the latter
-        for this assignment.
+        Our model in <Code>DungeonWalker.DataLayer.Serialization</Code> requires the vertices to be persisted in an order,
+        since that order is used in the adjacency list encoding. However, to persist an ordered collection in a relational database
+        we need to explicitly define a model that will keep the ordinal number with the elements &ndash; there is no built-in solution.
+    </MudText>
+    <MudPaper MaxHeight="500px" MaxWidth="50%" Style="float: left" Class="mr-3 mb-3 pa-3" Elevation="5">
+        <MudImage Alt="ERD diagram of the database" title="ERD diagram of the database" Src="img/dungeonwalker-database-schema.webp" Fluid="true" Height="500" Width="500" />
+    </MudPaper>
+    <MudText GutterBottom="true">
+        The .NET classes are already defined for you. We will use the same <Code>RoomTemplate</Code> hierarchy for rooms and loot,
+        but the graph is redefined in <Code>DungeonWalker.DataLayer.Sql.Model</Code>. All data and navigation properties are already
+        defined, there is no need to modify the types in any way.
+    </MudText>
+    <MudText GutterBottom="true">
+        You need to define the actual model in <Code>DungeonWalkerDbContext.OnModelCreating</Code>. It should use <MudLink Href="https://docs.microsoft.com/en-us/ef/core/modeling/inheritance#table-per-hierarchy-and-discriminator-configuration">TPH inheritance</MudLink>
+        for both rooms and loot. The core entity is <Code>Graph&lt;RoomTemplate&gt;</Code> and will be the one queried in the repository implementation.
+        Included is an ERD diagram of the expected database schema.
     </MudText>
     <MudText>
-        To persist our graphs we need a more suited representation than
-        the <Code>Graph&lt;IRoom&gt;</Code> class. In a new project, <Code>DungeonWalker.DataLayer</Code>,
-        we define the type <Code>GraphTemplate&lt;TLabel&gt;</Code>, with only two simple properties:
+        After you create a model, generate the migration and call it <code>DungeonGraphs</code>. Then setup a local SQLite database. 
+        This is done with the following magic spells, ran from the root solution directory:
     </MudText>
-    <CodeBlock FileName="src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs" Code="@(@"
-    /// <summary>
-    ///     Gets the labels of vertices of the graph.
-    /// </summary>
-    public IReadOnlyList<TLabel> Vertices { get; init; }
+    <CodeBlock Language="PowerShell" Code="@(@"
+dotnet ef migrations add DungeonGraphs --project ./src/DungeonWalker.DataLayer.Sql
+dotnet ef database update --project ./src/DungeonWalker.DataLayer.Sql
+    ")"/>
+    <MudText>
+        This assumes you have the <code>dotnet-ef</code> tool installed. As a reminder, we install it with:
+    </MudText>
+    <CodeBlock Language="PowerShell" Code="@(@"
+dotnet tool install --global dotnet-ef
+    ")"/>
+    <MudText>
+        The database is created as <code>DungeonWalker.db</code> in your local user folder.
+    </MudText>
+    <MudList>
+        <MudListItem Icon="fa-brands fa-windows">On Windows, it's in your user's <code>AppData\Local</code> directory.</MudListItem>
+        <MudListItem Icon="fa-brands fa-linux">On Linux, it's in the <code>/home/{user}/.local/share</code> directory.</MudListItem>
+        <MudListItem Icon="fa-brands fa-apple">On OSX, it's in the <code>/Users/{user}/.local/share</code> directory.</MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        You can connect to the database from the outside, which should be useful for debugging. I recommend <MudLink Href="https://dbeaver.io/download/">DBeaver</MudLink>,
+        (Community Edition), an open-source database tool. Its usage is straightforward, the only hard thing is 
+        <MudLink Href="https://programmersought.com/article/24818171626/">installing the dark mode</MudLink>.
+    </MudText>
+    <MudText>
+        And to drive the point home even more, here's the migration script generated from the expected model. You can get
+        yours with <Code Language="PowerShell">dotnet ef migrations script --project ./src/DungeonWalker.DataLayer.Sql</Code>.
+    </MudText>
+    <CodeBlock Language="SQL" Code="@(@"
+CREATE TABLE IF NOT EXISTS ""__EFMigrationsHistory"" (
+    ""MigrationId"" TEXT NOT NULL CONSTRAINT ""PK___EFMigrationsHistory"" PRIMARY KEY,
+    ""ProductVersion"" TEXT NOT NULL
+);
 
-    /// <summary>
-    ///     Gets the edges of the graph in the form of an adjacency list.
-    ///     The `i`-th list contains the number `j` if and only if there exists and edge
-    ///     between vertices number `i` and `j` from <see cref=""GraphTemplate{TLabel}.Vertices""/>
-    ///     in the graph.
-    /// </summary>
-    public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
+BEGIN TRANSACTION;
+
+CREATE TABLE ""Graph"" (
+    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Graph"" PRIMARY KEY AUTOINCREMENT,
+    ""Name"" TEXT NOT NULL
+);
+
+CREATE TABLE ""Loot"" (
+    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Loot"" PRIMARY KEY AUTOINCREMENT,
+    ""Discriminator"" TEXT NOT NULL,
+    ""LootPileLootTemplateId"" INTEGER NULL,
+    ""Armour"" INTEGER NULL,
+    ""AttackDamage"" INTEGER NULL,
+    ""HealPercentage"" REAL NULL,
+    ""PredefinedLootName"" TEXT NULL,
+    CONSTRAINT ""FK_Loot_Loot_LootPileLootTemplateId"" FOREIGN KEY (""LootPileLootTemplateId"") REFERENCES ""Loot"" (""Id"")
+);
+
+CREATE TABLE ""Room"" (
+    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_Room"" PRIMARY KEY AUTOINCREMENT,
+    ""Discriminator"" TEXT NOT NULL,
+    ""EnemyType"" TEXT NULL,
+    ""LootDataId"" INTEGER NULL,
+    CONSTRAINT ""FK_Room_Loot_LootDataId"" FOREIGN KEY (""LootDataId"") REFERENCES ""Loot"" (""Id"")
+);
+
+CREATE TABLE ""GraphVertex"" (
+    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_GraphVertex"" PRIMARY KEY AUTOINCREMENT,
+    ""GraphId"" INTEGER NOT NULL,
+    ""OrdinalNumber"" INTEGER NOT NULL,
+    CONSTRAINT ""FK_GraphVertex_Graph_GraphId"" FOREIGN KEY (""GraphId"") REFERENCES ""Graph"" (""Id"") ON DELETE CASCADE,
+    CONSTRAINT ""FK_GraphVertex_Room_Id"" FOREIGN KEY (""Id"") REFERENCES ""Room"" (""Id"") ON DELETE CASCADE
+);
+
+CREATE TABLE ""GraphEdge"" (
+    ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_GraphEdge"" PRIMARY KEY AUTOINCREMENT,
+    ""SourceId"" INTEGER NOT NULL,
+    ""TargetId"" INTEGER NOT NULL,
+    CONSTRAINT ""FK_GraphEdge_GraphVertex_SourceId"" FOREIGN KEY (""SourceId"") REFERENCES ""GraphVertex"" (""Id"") ON DELETE CASCADE,
+    CONSTRAINT ""FK_GraphEdge_GraphVertex_TargetId"" FOREIGN KEY (""TargetId"") REFERENCES ""GraphVertex"" (""Id"") ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX ""IX_Graph_Name"" ON ""Graph"" (""Name"");
+
+CREATE INDEX ""IX_GraphEdge_SourceId"" ON ""GraphEdge"" (""SourceId"");
+
+CREATE INDEX ""IX_GraphEdge_TargetId"" ON ""GraphEdge"" (""TargetId"");
+
+CREATE UNIQUE INDEX ""IX_GraphVertex_GraphId_OrdinalNumber"" ON ""GraphVertex"" (""GraphId"", ""OrdinalNumber"");
+
+CREATE INDEX ""IX_Loot_LootPileLootTemplateId"" ON ""Loot"" (""LootPileLootTemplateId"");
+
+CREATE UNIQUE INDEX ""IX_Room_LootDataId"" ON ""Room"" (""LootDataId"");
+
+INSERT INTO ""__EFMigrationsHistory"" (""MigrationId"", ""ProductVersion"")
+VALUES ('20220513135121_DungeonGraphs', '6.0.5');
+
+COMMIT;
     ")"/>
-    <MudText id="text-with-four-cycle">
-        This is a simple encoding via adjacency lists. For example, a $4$-cycle could be encoded like this:
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is NOT tested by any test groups. You can verify soundness manually by consulting the script and ERD diagram.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Loot Pile Issue</MudText>
+    <MudText GutterBottom="true">
+        There's an issue we need to tackle before we save the graph to our database. Currently the loot is a very complex
+        object that can potentially be an arbitrary tree of <Code>LootPile</Code> entities. Retrieving such a structure from
+        the database is complex. By default we would have to write a recursive query that traverses the levels of the tree.
+        Another way would be to denormalise the database and include enough data that we could extract the entire tree at once.
+        To keep things simple and less tedious, we ditch the idea of nested <Code>LootPile</Code> objects for the purposes
+        of this assignment.
     </MudText>
-    <CodeBlock Language="json" Code="@(@"
-{
-    ""vertices"": [ ""vertex1"", ""vertex2"", ""vertex3"", ""vertex4"" ],
-    ""adjacencyList"": [
-        [ 2 ],
-        [ 3 ],
-        [ 4 ],
-        [ 1 ]
-    ]
-}
-    ")"/>
     <MudText>
-        The heavy lifting of getting the <Code>IRoot</Code> labels to serialize is already done.
-        Your job is to implement the conversion from <Code>IGraph&lt;TLabel&gt;</Code> to <Code>GraphTemplate&lt;TLabel&gt;</Code>
-        and vice-versa. All of these are located in <code>src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs</code>.
+        To do that, you need to ensure two things. First, implement the <Code>LootPileLootTemplate.Flatten()</Code> method
+        that returns an equivalent, flattened <Code>LootPileLootTemplate</Code>. Flattened here means that we only leave a single
+        root <Code>LootPileLootTemplate</Code> and all the leaves of the original tree become immediate children of the pile.
+        For example, the loot pile:
+        <CodeBlock Language="plain" Code="@(@"
+- LootPile
+  - Chainmail +25
+  - LootPile
+    - DamageCrystal +10
+    - LootPile
+      - TwoHandedSword
+      - EssenceOfMagic
+  - HealthPotion 50%
+    ")"/>
+    becomes:
+        <CodeBlock Language="plain" Code="@(@"
+- LootPile
+  - Chainmail +25
+  - DamageCrystal +10
+  - TwoHandedSword
+  - EssenceOfMagic
+  - HealthPotion 50%
+    ")"/>
+    The order of the objects is arbitrary. Secondly, before saving a graph
+    you will have to make sure to flatten all the rooms first using <Code>LootRoomTemplate.FlattenLootPiles</Code>.
     </MudText>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
-        This is tested by the "Serialization" test group, worth <Highlight>1</Highlight> point.
+        This is tested by the "LootPileSerialization" test group, worth <Highlight>0.5</Highlight> points.
     </MudAlert>
-    <LatexRenderer ContainerId="text-with-four-cycle"/>
-    
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; SQL Repository</MudText>
     <MudText GutterBottom="true">
-        To serialize and deserialize with <Code>System.Text.Json</Code> we use the <MudLink Href="https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer?view=net-6.0"><Code>JsonSerializer</Code></MudLink> class. It has a lot of overloads for
-        <Code>Serialize</Code> and <Code>Deserialize</Code> methods, including async overloads, cancellation support,
-        reading directly to streams, etc.
+        Finish the implementation of <Code>DungeonWalker.FileSystem.Sql.SqlDungeonRepository</Code>, inheriting
+        from <Code>DungeonRepositoryBase</Code> defined in the previous assignment. Any exceptions thrown during accessing the
+        database should be rethrown wrapped in <Code>SqlRepositoryException</Code>.
     </MudText>
     <MudText>
-        Serialization is governed by a set of base converters that serialize basic types, and also any
-        .NET object by just taking its public properties and mapping them into a JSON object. There can also
-        be custom converters that manually take control of reading and writing separate JSON tokens.
-        There are also some basic options, like whether to include whitespace (prettify the output),
-        and whether to use PascalCase or camelCase for property names. These are all put into a
-        <Code>JsonSerializerOptions</Code> object that can be passed to the serialization methods.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">File System Repository</MudText>
-    <MudText>
-        The interface that we need to implement is:
-    </MudText>
-    <CodeBlock FileName="src/DungeonWalker.DataLayer/IDungeonRepository.cs" Code="@(@"
-using DungeonWalker.Logic.Dungeons;
-
-namespace DungeonWalker.DataLayer;
-
-/// <summary>
-///     Repository for graph-based dungeon room layouts.
-/// </summary>
-public interface IDungeonRepository
-{
-    /// <summary>
-    ///     Save an <see cref=""IGraphRoomLayout""/>, using <see cref=""IGraphRoomLayout.Name""/>
-    ///     as the key.
-    /// </summary>
-    /// <param name=""dungeon"">Dungeon layout to save.</param>
-    /// <returns>
-    ///     Task representing the asynchronous save operation.
-    /// </returns>
-    /// <remarks>
-    ///     If a dungeon with the same name already exists, it is overwritten.
-    /// </remarks>
-    /// <exception cref=""DungeonRepositoryException"">
-    ///     If an exception occurs while serializing the dungeon or saving the result
-    ///     to the underlying storage.
-    /// </exception>
-    Task SaveGraphDungeonAsync(IGraphRoomLayout dungeon);
-
-    /// <summary>
-    ///     Save an <see cref=""IGraphRoomLayout""/>, using <see cref=""IGraphRoomLayout.Name""/>
-    ///     as the key.
-    /// </summary>
-    /// <param name=""dungeon"">Dungeon layout to save.</param>
-    /// <param name=""cancellationToken"">The <see cref=""CancellationToken""/> that can be used to cancel the save operation.</param>
-    /// <returns>
-    ///     Task representing the asynchronous save operation.
-    /// </returns>
-    /// <remarks>
-    ///     If a dungeon with the same name already exists, it is overwritten.
-    /// </remarks>
-    /// <exception cref=""DungeonRepositoryException"">
-    ///     If an exception occurs while serializing the dungeon or saving the result
-    ///     to the underlying storage.
-    /// </exception>
-    Task SaveGraphDungeonAsync(IGraphRoomLayout dungeon, CancellationToken cancellationToken);
-
-    /// <summary>
-    ///     Lookup a graph-based dungeon by key and return it as an instance of
-    ///     <see cref=""IGraphRoomLayout""/>.
-    /// </summary>
-    /// <param name=""name"">Key to look for.</param>
-    /// <returns>
-    ///     A task containing an instance of a previously saved <see cref=""IGraphRoomLayout""/>, if it exists.
-    ///     If it does not exists, <code>null</code>.
-    /// </returns>
-    /// <exception cref=""DungeonRepositoryException"">
-    ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
-    /// </exception>
-    Task<IGraphRoomLayout?> LoadGraphDungeonAsync(string name);
-
-    /// <summary>
-    ///     Lookup a graph-based dungeon by key and return it as an instance of
-    ///     <see cref=""IGraphRoomLayout""/>.
-    /// </summary>
-    /// <param name=""name"">Key to look for.</param>
-    /// <param name=""cancellationToken"">The <see cref=""CancellationToken""/> that can be used to cancel the load operation.</param>
-    /// <returns>
-    ///     A task containing an instance of a previously saved <see cref=""IGraphRoomLayout""/>, if it exists.
-    ///     If it does not exists, <code>null</code>.
-    /// </returns>
-    /// <exception cref=""DungeonRepositoryException"">
-    ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
-    /// </exception>
-    Task<IGraphRoomLayout?> LoadGraphDungeonAsync(string name, CancellationToken cancellationToken);
-
-    /// <summary>
-    ///     List all available keys of dungeons in the repository.
-    /// </summary>
-    /// <returns>
-    ///     A task containing a sequence of all keys that are contained in the repository.
-    /// </returns>
-    /// <exception cref=""DungeonRepositoryException"">
-    ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
-    /// </exception>
-    Task<IReadOnlyCollection<string>> ListNamesAsync();
-
-    /// <summary>
-    ///     List all available keys of dungeons in the repository.
-    /// </summary>
-    /// <param name=""cancellationToken"">The <see cref=""CancellationToken""/> that can be used to cancel the list operation.</param>
-    /// <returns>
-    ///     A task containing a sequence of all keys that are contained in the repository.
-    /// </returns>
-    /// <exception cref=""DungeonRepositoryException"">
-    ///     If an exception occurs while reading the dungeon from the underlying
-    ///     storage or deserializing it to an <see cref=""IGraphRoomLayout""/> instance.
-    /// </exception>
-    Task<IReadOnlyCollection<string>> ListNamesAsync(CancellationToken cancellationToken);
-}
-    ")"/>
-    <MudText GutterBottom="true">
-        Save, load, and list all. We first want to implement <Code>DungeonRepositoryBase</Code>,
-        which will take care of translating <Code>IGraphRoomLayout</Code> to and from a <Code>GraphTemplate&lt;RoomTemplate&rt;</Code>.
-        Use the <Code>RoomTemplate.FromRoom</Code> static method and your implementation of <Code>GraphTemplate</Code>.
-        To create a <Code>IGraphRoomLayout</Code> from a graph you can use the <Code>GraphTemplate.Select</Code> method
-        and the  <Code>DungeonWalker.Logic.Dungeons.PredefinedGraphRoomLayout</Code> class.
-    </MudText>
-    <MudText GutterBottom="true">
-        Finally, you need to implement <Code>FileSystemDungeonRepository</Code>, located
-        in yet another project, <Code>DungeonWalker.DataLayer.FileSystem</Code>. It extends <Code>DungeonRepositoryBase</Code>
-        interface using the local filesystem as database storage. The constructor takes a directory path,
-        which is the location of all saved Dungeons.
-    </MudText>
-    <MudText GutterBottom="true">
-        The <Code>_options</Code> private field contains the aforementioned <Code>JsonSerializerOptions</Code>
-        object that you should use for all serialisation operations. Best not to modify it, it is already configured
-        to be compatible with the tests and to have converters required for serialising our game data, like
-        <Code>IRoom</Code> and <Code>ILoot</Code> objects.
-    </MudText>
-    <MudText>
-        The solution code is pretty short when written correctly, but requires care to get right.
-        Remember all the things we talked about in this module, as well as defensive programming patterns.'
-        Remember that:
+        Hints and warnings:
     </MudText>
     <MudList>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            All I/O operations on the filesystem may fail.
-            The exceptions called by this must be wrapped in a <Code>FileSystemRepositoryException</Code>
-            that inherits from <Code>DungeonRepositoryException</Code>.
+            Remember that the save semantics are "overwrite if exists". For a database that means that you need to
+            first remove a graph with the given name, if it exists.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Precondition checks for <Code>async</Code> operations should happen synchronously.
-            There are no tests for this, but I will point that out during code review. Use the local method pattern
-            to deal with that.
+            @{
+                var navigation = CourseBook.CSharpCourse["entity-framework"]["navigation-properties"];
+            }
+            The relation model is quite deep. You will need to use stuff described in <MudLink Href="@(navigation.Route)">@(navigation.DisplayName)</MudLink>,
+            including <Code>ThenInclude</Code>, which you can find in the linked resource: <MudLink Href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager">Eager Loading of Related Data</MudLink>.
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            All system file handles are expensive resources and must be properly disposed of.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
-            The <Code>CancellationToken</Code> instances passed to the methods should be used for
-            all async operations that support cancellation.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
-            Always choose the async overload for operations on the filesystem.
+            During loading, try to perform as much simplification as possible inside the query. If you need only a list of numbers
+            of vertices to reconstruct the graph, <Code Language="SQL">SELECT</Code> only the numbers, not all the edges. If you need
+            to sort some data, try to sort it on the database instead of locally.
         </MudListItem>
     </MudList>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
-        This is tested by the "FileSystemRepository" test group, worth <Highlight>2</Highlight> points.
+        This is tested by the "SqlDungeonRepository" test group, worth <Highlight>1</Highlight> point.
     </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">File System Repository</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Demo</MudText>
     <MudText>
-        Finally, there is a demo that runs the code on some actual Dungeons on your local filesystem
-        and test the entire repository. It's located in a new console project, <Code>DungeonWalker.FileSystemRepositoryDemo</Code>.
-        Here's the output on a model solution:
+        As before, there is a demo. It's located in a new console project, <Code>DungeonWalker.SqlRepositoryDemo</Code>.
+        The expected output is as before, only that there might be some logging information from the database in between.
     </MudText>
-    <Asciinema CastName="persisted-pathways-demo"/>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
-        This demo is worth <Highlight>1</Highlight> point.
+        This demo is worth <Highlight>0.5</Highlight> points.
     </MudAlert>
 </CourseAssignment>
 @code {

@@ -16,7 +16,7 @@
         by persisting our maps on disk with the local filesystem.
     </MudText>
     
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">JSON Serialisation</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; JSON Serialisation</MudText>
     <MudText GutterBottom="true">
         First we need to make our graph serializable. There are two major libraries in .NET
         when it comes to JSON processing, the long established 
@@ -80,7 +80,7 @@ public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
         and whether to use PascalCase or camelCase for property names. These are all put into a
         <Code>JsonSerializerOptions</Code> object that can be passed to the serialization methods.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">File System Repository</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; File System Repository</MudText>
     <MudText>
         The interface that we need to implement is:
     </MudText>
@@ -235,7 +235,7 @@ public interface IDungeonRepository
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "FileSystemRepository" test group, worth <Highlight>2</Highlight> points.
     </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">File System Repository</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Demo</MudText>
     <MudText>
         Finally, there is a demo that runs the code on some actual Dungeons on your local filesystem
         and test the entire repository. It's located in a new console project, <Code>DungeonWalker.FileSystemRepositoryDemo</Code>.
