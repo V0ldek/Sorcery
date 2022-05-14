@@ -96,7 +96,7 @@ public sealed class CourseBook
                     new ("Inheritance", "inheritance"),
                     new ("Tracking", "tracking"),
                     new ("Transactions", "transactions"),
-                }, new AssignmentSkeleton("Eldritch Entities", "eldritch-entities", "https://gienieczko.com/todo") { IsHidden = true }),
+                }, new AssignmentSkeleton("Eldritch Entities", "eldritch-entities", "https://classroom.github.com/a/jzcb-qq0")),
                 new ("Darkness yet to come", "darkness-yet-to-come", new SectionSkeleton[]
                 {
                     new ("", "")

@@ -201,7 +201,43 @@ COMMIT;
             of vertices to reconstruct the graph, <Code Language="SQL">SELECT</Code> only the numbers, not all the edges. If you need
             to sort some data, try to sort it on the database instead of locally.
         </MudListItem>
+        <MudListItem>
+            To display queries and other diagnostic information from the database, use the <Code>DungeonWalkerDbContext</Code>'s
+            constructor overload with <Code>LogLevel</Code>, specifying <Code>Information</Code> or even <Code>Debug</Code>.
+        </MudListItem>
     </MudList>
+    <MudText>
+        Here's a small query that can help you dump a saved graph using SQL, so you can verify the database structure from outside C#.
+    </MudText>
+    <CodeBlock Language="SQL" Code="@(@"
+WITH RawRooms
+AS
+(
+  SELECT r.Id, gv.OrdinalNumber, (SUBSTR(r.Discriminator, 1, LENGTH(r.Discriminator) - 8)) || gv.OrdinalNumber AS Name
+	FROM Graph g
+	JOIN GraphVertex gv
+	  ON g.Id = gv.GraphId
+	JOIN Room r
+	  ON r.Id = gv.Id
+	WHERE g.Name = 'Test Graph'
+  ORDER BY gv.OrdinalNumber
+)
+SELECT 
+	rr.Id AS RoomId,
+	rr.Name AS Name,
+	rd.EnemyType AS Combat,
+	l.Discriminator AS LootType,
+	l.PredefinedLootName AS PredefinedLootName,
+	pl.Discriminator AS NestedLootType,
+	pl.PredefinedLootName AS NestedLootPredefinedName
+  FROM RawRooms rr
+  JOIN Room rd
+    ON rr.Id = rd.Id
+  LEFT JOIN Loot l
+    ON rd.LootDataId = l.Id
+  LEFT JOIN Loot pl
+    ON l.Id = pl.LootPileLootTemplateId
+ORDER BY rr.OrdinalNumber")"/>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "SqlDungeonRepository" test group, worth <Highlight>1</Highlight> point.
     </MudAlert>
