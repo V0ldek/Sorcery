@@ -1,0 +1,32 @@
+﻿@page "/teaching/csharp/7-aspnet-core"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["aspnet-core"]">
+    <MudText GutterBottom="true">
+        In this module we will meet <MudLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet">ASP.NET Core</MudLink>,
+        the leading framework for creating web applications in .NET. This module will focus on creating web APIs,
+        but there are many ways to create interactive web pages as well, with the cutting-edge being
+        <MudLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">Blazor</MudLink>,
+        allowing us to create SPA applications <em>in C#, without writing any JavaScript</em>.
+    </MudText>
+    <MudText GutterBottom="true">
+        Unfortunately, we cannot use notebooks for this module. Running ASP.NET Core requires a different SDK
+        than regular .NET programs and cannot be easily emulated from a notebook.
+    </MudText>
+    <MudText>
+        In this module we will learn:
+    </MudText>
+        
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">setup a minimal HTTP server;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            define a model that can be seemlessly mapped from REST requests and into REST responses;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">dependency injection;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">Swagger;</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+
+}
