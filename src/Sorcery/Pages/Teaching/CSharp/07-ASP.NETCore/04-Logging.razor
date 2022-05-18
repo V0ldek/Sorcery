@@ -1,0 +1,69 @@
+﻿@page "/teaching/csharp/7-aspnet-core/4-logging"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["aspnet-core"]["logging"];
+}
+
+<CourseSection Section="@course">
+    <MudText>
+        Let's talk about logging. Collecting structured logs is <em>very</em> important
+        to be able to make sense of a deployed application. When we have the software locally
+        debugging is easy, we can plug in the debugger and see everything. On production
+        you have nothing aside from the logs you configure.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Injecting Loggers</MudText>
+    <MudText>
+        By default, <Code>Microsoft.Extensions.Logging</Code> is used as the logging provider.
+        To get a logger we depend on <Code>ILogger&lt;T&gt;</Code>, where <Code>T</Code> is
+        the type to which we are injecting the logger.
+    </MudText>
+    <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
+private readonly IDungeonRepository _repository;
+
+private readonly ILogger<DungeonController> _logger;
+
+public DungeonController(IDungeonRepository repository, ILogger<DungeonController> logger) =>
+    (_repository, _logger) = (repository, logger);
+    ")" />
+    <MudText>
+        This might seem unintuitive, but the idea is that we want a logger that specifically knows
+        what type is using it so that it can include that metadata in the logs. That's why all the logs
+        you see in the output start with
+    </MudText>
+    <CodeBlock Language="plain" Code="@(@"
+info: DungeonWalker.Api.Controllers.DungeonController[0]
+    ")" />
+    <MudText>
+        This is called a log <em>category</em>. We can create more granular categories by injecting
+        <Code>ILoggerFactory</Code> instead and calling <Code>CreateLogger</Code>. To log something
+        we call <Code>Log</Code> with an appropriate <Code>LogLevel</Code>, or, more conveniently,
+        call <Code>LogX</Code> where <Code>X</Code> is the level.
+    </MudText>
+    <CodeBlock Code="@(@"
+_logger.LogInformation(""Fetching Dungeon {Id}..."", id);
+_logger.LogError(""Unexpected exception performing operation."");
+_logger.LogCritical(""Could not connect to the application database."");
+    ")" />
+    <MudText>
+        There are 5 logging levels.
+    </MudText>
+    <MudList>
+        <MudListItem Icon=""></MudListItem>
+    </MudList>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <MudText>
+        We've learnt how to map values from the outside to our .NET models be it from route, query or body.
+        We also know how to document return values for API endpoints.
+   </MudText>
+    <Resources Links=@(new [] {
+        (
+            "https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-6.0",
+            "Logging in .NET Core and ASP.NET Core"
+        )
+    }) />
+</CourseSection>
+
+@code {
+
+}
