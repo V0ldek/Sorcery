@@ -42,7 +42,7 @@ public async Task<ActionResult<DungeonView>> GetDungeonAsync(int id)
 
     return dungeon.ToView();
 }
-    ")"/>
+    ")" />
     <MudText>
         A few things here:
     </MudText>
@@ -67,9 +67,32 @@ public async Task<ActionResult<DungeonView>> GetDungeonAsync(int id)
         You can test out the endpoint in Swagger, remember to run the <code>seed</code> endpoint first.
     </MudText>
     <MudPaper Class="my-4 pa-4 d-flex justify-center align-center" Elevation="5">
-        <MudImage Alt="Adder Swagger" ObjectPosition="ObjectPosition.Center" 
-            Fluid="true" Src="/img/dungeon-swagger-get-by-id.webp" ObjectFit="ObjectFit.Fill"/>
+        <MudImage Alt="Adder Swagger" ObjectPosition="ObjectPosition.Center"
+                  Fluid="true" Src="/img/dungeon-swagger-get-by-id.webp" ObjectFit="ObjectFit.Fill" />
     </MudPaper>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Swagger &ndash; return values</MudText>
+    <MudText>
+        If we look at the Swagger docs of this new endpoint we will only see status code 200 documented.
+        To inform Swagger that there is a different return code we just need to add one doc line to the
+        XML comment:
+    </MudText>
+    <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" 
+        Code="@(@"
+/// <summary>
+///     Get a Dungeon by ID.
+/// </summary>
+/// <param name=""id"">ID to query by.</param>
+/// <returns>
+///     Task representing the asynchronous GET operation.
+/// </returns>
+/// <response code=""404"">If the Dungeon with given ID does not exist.</response>
+//   ^^^^^^^^
+[HttpGet]
+[Route(""/dungeons/{id}"")]
+[ProducesResponseType(200)] // <--
+[ProducesResponseType(404)] // <--
+public async Task<ActionResult<DungeonView>> GetDungeonAsync(int id)
+    ")" />
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Parameters from query</MudText>
     <MudText>
         Let's create a more complex query method that will fetch some parameters from the query string.
@@ -95,7 +118,7 @@ public async Task<IReadOnlyCollection<DungeonRun>> QueryRunsAsync(DungeonRunQuer
 
     return await result.ToListAsync();
 }
-    ")"/>
+    ")" />
     <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
 /// <summary>
 ///     Query a DungeonRun, filtering by name and/or hero class.
@@ -120,31 +143,160 @@ public async Task<ActionResult<IEnumerable<DungeonRunView>>> QueryRunsAsync(
 
     return dungeonRuns.Select(d => d.ToView()).ToList();
 }
-    ")"/>    
+    ")" />
     <MudText>
-        The parameters in the method get mapped from the query. So if we query 
+        The parameters in the method get mapped from the query. So if we query
         <MudLink Href="https://localhost:10443/runs?dungeonName=Adventure&heroClass=Warrior">
             https://localhost:10443/runs?dungeonName=Adventure&heroClass=Warrior
         </MudLink>
         it will map to <Code>dungeonName = "Adventure", heroClass = "Warrior"</Code>.
-        If we omit one of the parameters, like         
+        If we omit one of the parameters, like
         <MudLink Href="https://localhost:10443/runs?heroClass=Warrior">
             https://localhost:10443/runs?heroClass=Warrior
         </MudLink>
         it will map to <Code>dungeonName = null, heroClass = "Warrior"</Code>.
         If we omit both, <MudLink Href="https://localhost:10443/runs">https://localhost:10443/runs</MudLink>,
         both will map to <Code>null</Code>.
-   </MudText>
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Mapping complex types</MudText>
+    <MudText GutterBottom="true">
+        We can also map to complex types by putting the attributes on its properties
+        and then using that complex type as the argument. So by putting <Code>FromQueryAttribute</Code>
+        on the <Code>DungeonRunQueryParameters.DungeonName</Code> and <Code>DungeonRunQueryParameters.HeroClass</Code>
+        properties, then we could just use <Code>DungeonRunQueryParameters</Code> as the parameter.
+    </MudText>
+    <MudText>
+        A more interesting case would be a POST request with a body. Let's allow users to post new runs
+        into the system.
+    </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
     <MudText>
         We've met Swagger, which is the standard UI we will use to test and debug our APIs.
+    </MudText>
+    <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
+/// <summary>
+///     Record a DungeonRun in the system.
+/// </summary>
+/// <param name=""dungeonRun"">Data of the Run.</param>
+/// <returns>
+///     Task representing the asynchronous POST operation.
+/// </returns>
+[HttpPost]
+[Route(""runs"")]
+public async Task<ActionResult> PostAsync([FromBody] DungeonRunPost dungeonRun)
+{
+    var result = await _repository.CreateDungeonRunAsync(dungeonRun);
+
+    if (result.IsSuccess)
+    {
+        return CreatedAtAction(""GetDungeonRun"", new { id = result.Value }, null);
+    }
+    else
+    {
+        return Problem(result.Error.Message, statusCode: (int)result.Error.Code);
+    }
+}
+    ")"/>
+    <MudText>
+        The rest is boring implementation details. First, note <Code>CreatedAtAction</Code> &ndash;
+        it allows us to return a 201 Created response with a link to the resource just created based
+        on an action. Two, note the standardised response based on <MudLink Href="https://datatracker.ietf.org/doc/html/rfc7807">
+        Problem Details</MudLink>. Now we can play with the requests:
+    </MudText>
+    <CodeBlock Language="powershell" Code="@(@"
+> curl -X POST https://localhost:10443/Dungeon/seed -i
+HTTP/1.1 200 OK
+Content-Length: 0
+Date: Wed, 18 May 2022 09:42:10 GMT
+Server: Kestrel
+
+> curl -X 'POST' `
+  'https://localhost:10443/Dungeon/runs' `
+  -H 'accept: */*' `
+  -H 'Content-Type: application/json' `
+  -d '{
+  ""roomsCleared"": 10,
+  ""damageDealt"": 200,
+  ""dungeonName"": ""Adventure"",
+  ""heroClass"": ""Wizard""
+}'
+HTTP/1.1 201 Created
+Content-Length: 0
+Date: Wed, 18 May 2022 09:44:47 GMT
+Server: Kestrel
+Location: https://localhost:10443/runs/7
+
+> curl https://localhost:10443/runs/7
+{""id"":7,""roomsCleared"":10,""damageDealt"":200,""dungeonName"":""Adventure"",""heroClass"":""Wizard""}
+
+> curl -X 'POST' `
+  'https://localhost:10443/Dungeon/runs' `
+  -H 'accept: */*' `
+  -H 'Content-Type: application/json' `
+  -d '{
+  ""roomsCleared"": 10,
+  ""damageDealt"": 200,
+  ""dungeonName"": ""Adventure"",
+  ""heroClass"": ""Bicycle Repairman""
+}'
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json; charset=utf-8
+Date: Wed, 18 May 2022 09:46:16 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+{""type"":""https://tools.ietf.org/html/rfc7231#section-6.5.1"",""title"":""Bad Request"",""status"":400,""detail"":""Hero class Bicycle Repairman does not exist."",""traceId"":""00-fc21637a1c5f26a341c08814f0a38521-5c2aa73f624971c6-00""}
+    ")" />
+    <MudText>
+        Okay, at the end, let's look at the implementation of the repository method.
+    </MudText>
+    <CodeBlock FileName="DungeonWalker.DataLayer/DungeonRepository.cs" Code="@(@"
+public async Task<Result<int, ApiError>> CreateDungeonRunAsync(DungeonRunPost dungeonRun)
+{
+    ArgumentNullException.ThrowIfNull(dungeonRun);
+
+    Dungeon? dungeon = await
+        _dbContext.Dungeons.SingleOrDefaultAsync(d => d.Name == dungeonRun.DungeonName);
+
+    if (dungeon is null)
+    {
+        return Fail(new($""Dungeon {dungeonRun.DungeonName} does not exist.""));
+    }
+
+    Hero? hero = await
+        _dbContext.Heroes.SingleOrDefaultAsync(h => h.Name == dungeonRun.HeroClass);
+
+    if (hero is null)
+    {
+        return Fail(new($""Hero class {dungeonRun.HeroClass} does not exist.""));
+    }
+
+    DungeonRun run = new(dungeon, hero, dungeonRun.RoomsCleared, dungeonRun.DamageDealt);
+    _dbContext.DungeonRuns.Add(run);
+
+    await _dbContext.SaveChangesAsync();
+
+    return Result.Success<int, ApiError>(run.Id);
+
+    static Result<int, ApiError> Fail(ApiError error) => Result.Failure<int, ApiError>(error);
+}
+    ")"/>
+    <MudText>
+        I pulled a sneaky on ya here. I installed the <MudLink Href="https://www.nuget.org/packages/CSharpFunctionalExtensions/">
+        CSharpFunctionalExtensions</MudLink> package to get access to the <Code>Result</Code> types. You should definitely
+        check out that package, as it makes handling errors much easier.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <MudText>
+        We've learnt how to map values from the outside to our .NET models be it from route, query or body.
+        We also know how to document return values for API endpoints.
    </MudText>
     <Resources Links=@(new [] {
         (
             "https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0",
             "Get started with Swashbuckle and ASP.NET Core"
         ),
-    })/>
+    }) />
 </CourseSection>
 
 @code {
