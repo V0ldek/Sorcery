@@ -100,8 +100,10 @@ public sealed class CourseBook
                 new ("ASP.NET Core", "aspnet-core", new SectionSkeleton[]
                 {
                     new ("Minimal HTTP server", "minimal-http-server"),
-
-                }, new AssignmentSkeleton("", "", "")),
+                    new ("Dependency Injection", "dependency-injection"),
+                    new ("Swagger", "swagger"),
+                    new ("Model Binding", "model-binding"),
+                }, new AssignmentSkeleton("", "", "") { IsHidden = true }),
                 new ("Darkness yet to come", "darkness-yet-to-come", new SectionSkeleton[]
                 {
                     new ("", "")

@@ -1,0 +1,152 @@
+﻿@page "/teaching/csharp/7-aspnet-core/3-model-binding"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["aspnet-core"]["model-binding"];
+    var entityFrameworkModule = CourseBook.CSharpCourse["entity-framework"];
+}
+
+<CourseSection Section="@course">
+    <MudText>
+        Interesting API endpoints usually take some data. That data comes from multiple
+        sources in an HTTP request &ndash; the route, query parameters, request body, etc.
+        Converting between the incoming data and .NET types to use in actions is called <em>model binding</em>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Simple GET by ID</MudText>
+    <MudText>
+        We have the <code>DungeonWalker.Api</code> solution setup with the example Dungeon database from
+        <MudLink Href="@entityFrameworkModule.Route">@entityFrameworkModule.DisplayName</MudLink>. Let's setup
+        a standard query-by-id endpoint.
+    </MudText>
+    <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
+/// <summary>
+///     Get a Dungeon by ID.
+/// </summary>
+/// <param name=""id"">ID to query by.</param>
+/// <returns>
+///     Task representing the asynchronous GET operation.
+/// </returns>
+[HttpGet]
+[Route(""/dungeons/{id}"")]
+public async Task<ActionResult<DungeonView>> GetDungeonAsync(int id)
+{
+    _logger.LogInformation(""Fetching Dungeon {Id}..."", id);
+
+    var dungeon = await _repository.GetDungeonAsync(id);
+
+    if (dungeon is null)
+    {
+        _logger.LogInformation(""Dungeon {Id} not found."", id);
+        return NotFound();
+    }
+
+    return dungeon.ToView();
+}
+    ")"/>
+    <MudText>
+        A few things here:
+    </MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The <Code>RouteAttribute</Code> specifies a parameter named <Code>id</Code>
+            that gets mapped from the last part of the URL. So <code>/dungeon/dungeons/3</code> will map to this action with
+            parameter <Code>id = 3</Code>. That parameter is mapped to the method's parameter with the same name.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The return type is <Code>ActionResult&lt;DungeonView&gt;</Code>. This is a special ASP.NET Core type
+            that represents a bunch of possible responses. There's an implicit conversion from <Code>T</Code> to
+            <Code>ActionResult&lt;T&gt;</Code>, as well as conversions from things like <Code>NotFoundResult</Code>,
+            <Code>BadRequestResult</Code>, etc.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            We can return different HTTP responses using helper methods defined on <Code>ControllerBase</Code>.
+            In this case we return a 404 Not Found if a Dungeon with given ID does not exist.
+        </MudListItem>
+    </MudList>
+    <MudText>
+        You can test out the endpoint in Swagger, remember to run the <code>seed</code> endpoint first.
+    </MudText>
+    <MudPaper Class="my-4 pa-4 d-flex justify-center align-center" Elevation="5">
+        <MudImage Alt="Adder Swagger" ObjectPosition="ObjectPosition.Center" 
+            Fluid="true" Src="/img/dungeon-swagger-get-by-id.webp" ObjectFit="ObjectFit.Fill"/>
+    </MudPaper>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Parameters from query</MudText>
+    <MudText>
+        Let's create a more complex query method that will fetch some parameters from the query string.
+    </MudText>
+    <CodeBlock FileName="DungeonWalker.DataLayer/DungeonRepository.cs" Code="@(@"
+public async Task<IReadOnlyCollection<DungeonRun>> QueryRunsAsync(DungeonRunQueryParameters parameters)
+{
+    ArgumentNullException.ThrowIfNull(parameters);
+
+    IQueryable<DungeonRun> result = _dbContext.DungeonRuns
+        .Include(r => r.Dungeon)
+        .Include(r => r.Hero);
+
+    if (parameters.DungeonName is not null)
+    {
+        result = result.Where(r => r.Dungeon.Name == parameters.DungeonName);
+    }
+
+    if (parameters.HeroClass is not null)
+    {
+        result = result.Where(r => r.Hero.Name == parameters.HeroClass);
+    }
+
+    return await result.ToListAsync();
+}
+    ")"/>
+    <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
+/// <summary>
+///     Query a DungeonRun, filtering by name and/or hero class.
+/// </summary>
+/// <param name=""dungeonName"">
+///     Return only DungeonRuns of this Dungeon.
+/// </param>
+/// <param name=""heroClass"">
+///     Return only DungeonRuns of this Hero class.
+/// </param>
+/// <returns></returns>
+[HttpGet]
+[Route(""/runs"")]
+public async Task<ActionResult<IEnumerable<DungeonRunView>>> QueryRunsAsync(
+    [FromQuery] string? dungeonName,
+    [FromQuery] string? heroClass
+)
+{
+    _logger.LogInformation(""Querying runs of {HeroClass} in {DungeonName}"", heroClass, dungeonName);
+
+    var dungeonRuns = await _repository.QueryRunsAsync(new(dungeonName, heroClass));
+
+    return dungeonRuns.Select(d => d.ToView()).ToList();
+}
+    ")"/>    
+    <MudText>
+        The parameters in the method get mapped from the query. So if we query 
+        <MudLink Href="https://localhost:10443/runs?dungeonName=Adventure&heroClass=Warrior">
+            https://localhost:10443/runs?dungeonName=Adventure&heroClass=Warrior
+        </MudLink>
+        it will map to <Code>dungeonName = "Adventure", heroClass = "Warrior"</Code>.
+        If we omit one of the parameters, like         
+        <MudLink Href="https://localhost:10443/runs?heroClass=Warrior">
+            https://localhost:10443/runs?heroClass=Warrior
+        </MudLink>
+        it will map to <Code>dungeonName = null, heroClass = "Warrior"</Code>.
+        If we omit both, <MudLink Href="https://localhost:10443/runs">https://localhost:10443/runs</MudLink>,
+        both will map to <Code>null</Code>.
+   </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <MudText>
+        We've met Swagger, which is the standard UI we will use to test and debug our APIs.
+   </MudText>
+    <Resources Links=@(new [] {
+        (
+            "https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0",
+            "Get started with Swashbuckle and ASP.NET Core"
+        ),
+    })/>
+</CourseSection>
+
+@code {
+
+}
