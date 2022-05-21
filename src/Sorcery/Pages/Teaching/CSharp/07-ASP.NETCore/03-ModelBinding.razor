@@ -169,10 +169,6 @@ public async Task<ActionResult<IEnumerable<DungeonRunView>>> QueryRunsAsync(
         A more interesting case would be a POST request with a body. Let's allow users to post new runs
         into the system.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText>
-        We've met Swagger, which is the standard UI we will use to test and debug our APIs.
-    </MudText>
     <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
 /// <summary>
 ///     Record a DungeonRun in the system.
