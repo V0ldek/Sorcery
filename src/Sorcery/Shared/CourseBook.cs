@@ -104,7 +104,7 @@ public sealed class CourseBook
                     new ("Swagger", "swagger"),
                     new ("Model Binding", "model-binding"),
                     new ("Logging", "logging")
-                }, new AssignmentSkeleton("Adventure Programming Interface", "adventure-programming-interface", "") { IsHidden = true }),
+                }, new AssignmentSkeleton("Adventure Programming Interface", "adventure-programming-interface", "https://classroom.github.com/a/56Il3Yao")),
                 new ("Darkness yet to come", "darkness-yet-to-come", new SectionSkeleton[]
                 {
                     new ("", "")
