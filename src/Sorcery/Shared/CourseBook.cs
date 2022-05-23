@@ -103,7 +103,8 @@ public sealed class CourseBook
                     new ("Dependency Injection", "dependency-injection"),
                     new ("Swagger", "swagger"),
                     new ("Model Binding", "model-binding"),
-                }, new AssignmentSkeleton("", "", "") { IsHidden = true }),
+                    new ("Logging", "logging")
+                }, new AssignmentSkeleton("Adventure Programming Interface", "adventure-programming-interface", "") { IsHidden = true }),
                 new ("Darkness yet to come", "darkness-yet-to-come", new SectionSkeleton[]
                 {
                     new ("", "")

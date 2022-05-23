@@ -291,6 +291,16 @@ info: DungeonWalker.Api.Controllers.WeatherForecastController[0]
         in <code>Program.cs</code> is a middleware. There are preimplemented middlewares for common things like
         cookies, CORS, cache, compression, sessions, etc. There's a ton more available as NuGet packages.
     </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Cancellation</MudText>
+    <MudText GutterBottom="true">
+        ASP.NET Core injects <Code>CancellationToken</Code> values corresponding to the outside request
+        into controller actions, as long as they have an appropriate parameter. Supporting cancellation in ASP.NET
+        Core requires simply adding that last <Code>CancellationToken cancellationToken</Code> parameter to your method.
+    </MudText>
+    <MudText>
+        You should always use it. There's no sense in wasting server resources when the outgoing request was cancelled
+        by the user.
+    </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
     <MudText>
         We know how to setup the skeleton for an HTTP server, complete with HTTPS support. We know what routing is and
