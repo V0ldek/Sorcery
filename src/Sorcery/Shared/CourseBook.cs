@@ -96,7 +96,7 @@ public sealed class CourseBook
                     new ("Inheritance", "inheritance"),
                     new ("Tracking", "tracking"),
                     new ("Transactions", "transactions"),
-                }, new AssignmentSkeleton("Eldritch Entities", "eld ritch-entities", "https://classroom.github.com/a/jzcb-qq0")),
+                }, new AssignmentSkeleton("Eldritch Entities", "eldritch-entities", "https://classroom.github.com/a/jzcb-qq0")),
                 new ("ASP.NET Core", "aspnet-core", new SectionSkeleton[]
                 {
                     new ("Minimal HTTP server", "minimal-http-server"),
