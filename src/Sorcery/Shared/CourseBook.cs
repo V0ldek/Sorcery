@@ -96,7 +96,7 @@ public sealed class CourseBook
                     new ("Inheritance", "inheritance"),
                     new ("Tracking", "tracking"),
                     new ("Transactions", "transactions"),
-                }, new AssignmentSkeleton("Eldritch Entities", "eldritch-entities", "https://classroom.github.com/a/jzcb-qq0")),
+                }, new AssignmentSkeleton("Eldritch Entities", "eld ritch-entities", "https://classroom.github.com/a/jzcb-qq0")),
                 new ("ASP.NET Core", "aspnet-core", new SectionSkeleton[]
                 {
                     new ("Minimal HTTP server", "minimal-http-server"),
@@ -105,6 +105,15 @@ public sealed class CourseBook
                     new ("Model Binding", "model-binding"),
                     new ("Logging", "logging")
                 }, new AssignmentSkeleton("Adventure Programming Interface", "adventure-programming-interface", "https://classroom.github.com/a/56Il3Yao")),
+                new ("Reflection", "reflection", new SectionSkeleton[]
+                {
+                    new ("Types and Instances", "types-and-instances"),
+                    new ("Members", "members"),
+                    new ("Attributes", "attributes"),
+                    new ("Caller Info Attributes", "caller-info-attributes"),
+                    new ("Dynamic", "dynamic"),
+                    new ("Advanced Unit Testing", "advanced-unit-testing"),
+                }, new AssignmentSkeleton("", "", "") { IsHidden = true }),
                 new ("Darkness yet to come", "darkness-yet-to-come", new SectionSkeleton[]
                 {
                     new ("", "")

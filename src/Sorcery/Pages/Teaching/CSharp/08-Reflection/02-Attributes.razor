@@ -1,0 +1,43 @@
+﻿@page "/teaching/csharp/8-reflection/2-attributes"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["reflection"]["attributes"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Obtaining attribute metadata.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Defining custom attributes.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Using attribute metadata at runtime.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/attributes/accessing-attributes-by-using-reflection",
+            "Accessing Attributes by Using Reflection"
+        ),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/attributes/creating-custom-attributes",
+            "Creating Custom Attributes"
+        ),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/attributes/how-to-create-a-c-cpp-union-by-using-attributes",
+            "How to create a C/C++ union by using attributes"
+        )
+    })/>
+</CourseSection>
+
+@code {
+
+}

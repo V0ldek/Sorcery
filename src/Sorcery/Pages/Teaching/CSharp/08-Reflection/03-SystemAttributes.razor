@@ -1,0 +1,43 @@
+﻿@page "/teaching/csharp/8-reflection/3-system-attributes"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["reflection"]["system-attributes"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Attributes interpreted by the compiler at callsites.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Attributes influencing codegen.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Nullable static analysis attributes.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/caller-information",
+            "Determine caller information using attributes interpreted by the C# compiler"
+        ),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis",
+            "Attributes for null-state static analysis interpreted by the C# compiler"
+        ),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/global",
+            "Assembly level attributes interpreted by the C# compiler"
+        )
+    })/>
+</CourseSection>
+
+@code {
+
+}

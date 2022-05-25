@@ -1,0 +1,169 @@
+﻿@page "/teaching/csharp/8-reflection/5-advanced-unit-testing"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["reflection"]["advanced-unit-testing"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        We're moving outside of notebooks to learn how to unit test more complex code.
+        The notebook contains the scaffold with a small library <Code>ClassLib</Code>
+        and the <Code>ClassLib.Tests</Code> project referencing it. We will be adding tests to
+        that project. Familiarise yourself with the <Code>ClassLib.Service</Code> class,
+        it has one short method that we will be testing.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Testing for Exceptions</MudText>
+    <MudText>
+        We would first like to test that passing <Code>null</Code> to the method
+        results in an <Code>ArgumentNullException</Code>. All test frameworks
+        have some assertion that tests this, in case of xUnit it's one of
+    </MudText>
+    <MudList Dense="true">
+        <MudListItem>
+            <Code>Assert.Throws&lt;TException&gt;</Code>
+        </MudListItem>
+        <MudListItem>
+            <Code>Assert.ThrowsAsync&lt;TException&gt;</Code>
+        </MudListItem>
+        <MudListItem>
+            <Code>Assert.ThrowsAny&lt;TException&gt;</Code>
+        </MudListItem>
+        <MudListItem>
+            <Code>Assert.ThrowsAnyAsync&lt;TException&gt;</Code>
+        </MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        They all take a delegate, and the <Code>Async</Code> versions expect a function returning an awaitable.
+        The regular versions check if the thrown exception is exactly of a given type, whereas the <Code>Any</Code>
+        version checks that the exception is any subtype of <Code>TException</Code>. The methods return the exception
+        (wrapped in a <Code>Task</Code> for async counterparts) if additional examination is needed.
+    </MudText>
+    <MudText>
+        To test our service we need an instance of <Code>IRepository</Code>. We could create an empty implementation
+        ourselves, but it's about time to learn about mocking.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Mocking</MudText>
+    <MudText GutterBottom="true">
+        Mocking is the general solution to the problem of dependencies. When unit testing a service
+        we want to <em>mock</em> all the dependencies to get them out of the picture, and focus the
+        tests on the particular class ("system under test").
+    </MudText>
+    <MudText>
+        A mocked dependency is simply called a mock. You might also encounter names "stub" or "fake",
+        but, and I love this quote from wikipedia:
+    </MudText>
+    <Quote>
+        Classification between mocks, fakes, and stubs is highly inconsistent across the literature.<sup>[1][2][3][4][5][6]</sup>
+        Consistent among the literature, though, is that they all represent a production object 
+        in a testing environment by exposing the same interface. 
+    </Quote>
+    <MudText>
+        In more down-to-earth words, the distinction is meaningless and we should all just say "mock", since it
+        has a concise definition and additional subdivisions lead to nothing besides confusion.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2"><Code>NSubstitute</Code></MudText>
+    <MudText GutterBottom="true">
+        There are many mocking frameworks, the most popular being <Code>Moq</Code>. I prefer
+        the second-most popular, <Code>NSubstitute</Code>, which has a nicer interface.
+        The choice is pretty much preference.
+    </MudText>
+    <MudText>
+        The idea is to construct a special subtype of a given abstract type and instantiate it.
+        By default, it does nothing. Then we can setup its methods to return predefined values
+        or exhibit predefined behaviour.
+    </MudText>
+    <CodeBlock Code="@(@"
+using NSubstitute;
+
+IRepository repo = Substitute.For<IRepository>();
+")"/>
+    <MudText>
+        To define behaviour we use the following syntax. Think of it as a pattern. 
+        The arguments can either be concrete values, in which case they are matched by equality, 
+        or a special <Code>Arg.Any</Code> value that matches any argument.
+    </MudText>
+    <CodeBlock Code="@(@"
+using NSubstitute;
+
+Item item = new Item(""testId"", ""testValue"");
+IRepository repo = Substitute.For<IRepository>();
+repo.GetByIdAsync(""testId"").Returns(item)
+")"/>
+    <MudText>
+        Going back to our test, now we have all the tools we need to test our exception.
+    </MudText>
+    <CodeBlock Code="@(@"
+[Fact]
+public async Task QueryAsync_GivenNull_ThrowsArgumentNullException()
+{
+    var repo = Substitute.For<IRepository>();
+    var sut = new Service(repo);
+
+    var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => sut.QueryAsync(null!));
+
+    Assert.Equal(""id"", exception.ParamName);
+}        
+")"/>
+    <MudText>
+        This succeeds, but is incorrect. We want to throw that exception <em>synchronously</em>,
+        remember all the stuff about lazy coroutines? The correct test is like this:
+    </MudText>
+    
+    <CodeBlock Code="@(@"
+[Fact]
+public void QueryAsync_GivenNull_ThrowsArgumentNullExceptionSynchronously()
+{
+    var repo = Substitute.For<IRepository>();
+    var sut = new Service(repo);
+
+    var exception = Assert.Throws<ArgumentNullException>(void () =>
+    {
+        var _ = sut.QueryAsync(null!);
+    });
+
+    Assert.Equal(""id"", exception.ParamName);
+}
+")"/>
+    <MudText>
+        This one fails. Convert the method in <Code>Service</Code> to correctly
+        throw the precondition sychronously before carrying on.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Happy path</MudText>
+    <MudText>
+        We can now test the happy path of our code by using the <Code>Returns</Code>
+        mocking method.
+    </MudText>
+     <CodeBlock Code="@(@"
+[Fact]
+public async void QueryAsync_GivenIdOfExistingItem_ReturnsSuccessWithItem()
+{
+    var item = new Item(""testId"", ""testValue"");
+    var repo = Substitute.For<IRepository>();
+    repo.GetByIdAsync(""testId"").Returns(item);
+    var sut = new Service(repo);
+
+    var result = await sut.QueryAsync(""testId"");
+
+    Assert.Equal(item, result);
+}
+")"/>
+    <MudText>
+        You should be able to write a test for when the repository returns <Code>null</Code> by yourself now.
+    </MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Happy path</MudText>
+    <MudText>
+        The last bit is to write a test for when the repository fails with an exception.
+        The cases for synchronous exceptions are very easy.
+
+        <em>This tutorial will be finished at a later notice.</em>
+    </MudText>
+    <Resources Links=@(new [] {
+        ("https://nsubstitute.github.io/", "NSubstitute"),
+
+    })/>
+</CourseSection>
+
+@code {
+
+}

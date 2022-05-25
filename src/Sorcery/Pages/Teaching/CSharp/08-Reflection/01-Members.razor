@@ -1,0 +1,41 @@
+﻿@page "/teaching/csharp/8-reflection/1-members"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["reflection"]["members"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>BindingFlags</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>MemberInfo</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Invoking methods via <Code>MethodInfo</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Invoking methods via a constructed delegate.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Accessing properties.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Accessing fields.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://dejanstojanovic.net/aspnet/2019/february/making-reflection-in-net-work-faster/", "Making Reflection in .NET work faster"),
+    })/>
+</CourseSection>
+
+@code {
+
+}
