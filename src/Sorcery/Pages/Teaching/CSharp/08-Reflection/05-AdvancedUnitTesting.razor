@@ -136,7 +136,7 @@ public void QueryAsync_GivenNull_ThrowsArgumentNullExceptionSynchronously()
     </MudText>
      <CodeBlock Code="@(@"
 [Fact]
-public async void QueryAsync_GivenIdOfExistingItem_ReturnsSuccessWithItem()
+public async Task QueryAsync_GivenIdOfExistingItem_ReturnsSuccessWithItem()
 {
     var item = new Item(""testId"", ""testValue"");
     var repo = Substitute.For<IRepository>();
@@ -151,15 +151,105 @@ public async void QueryAsync_GivenIdOfExistingItem_ReturnsSuccessWithItem()
     <MudText>
         You should be able to write a test for when the repository returns <Code>null</Code> by yourself now.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Happy path</MudText>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Synchronous Failure</MudText>
     <MudText>
         The last bit is to write a test for when the repository fails with an exception.
-        The cases for synchronous exceptions are very easy.
+        The case for a synchronous exception is very easy.
+    </MudText>
+     <CodeBlock Code="@(@"
+[Fact]
+public async Task QueryAsync_GivenIdOfExistingItem_ReturnsSuccessWithItem()
+{
+    var exception = new Exception(""Test exception"");
+    var repo = Substitute.For<IRepository>();
+    repo.GetByIdAsync(""testId"").Returns(Task.FromException<Item?>(exception));
+    var sut = new Service(repo);
 
-        <em>This tutorial will be finished at a later notice.</em>
+    var result = await sut.QueryAsync(""testId"");
+
+    Assert.True(result.IsFailure, ""Expected failure."");
+    Assert.Equal(exception, result.Error);
+}
+")"/>
+    <MudText Typo="Typo.h3" Class="mx-auto py-2">Asynchronous completion</MudText>
+    <MudText GutterBottom="true">
+        Now, if we want to test an asynchronous case there is a small helper
+        method, <Code>Task.Yield</Code>, to help us. It returns a task that does nothing except forcing us to
+        yield execution back and become truly asynchronous. So it is ideal for both an asynchronous
+        success and failure scenario.
+    </MudText>
+    <CodeBlock Code="@(@"
+[Fact]
+public async Task QueryAsync_WhenRepositoryAsynchronouslyReturnsItem_ReturnsSuccessWithItem()
+{
+    var item = new Item(""testId"", ""testValue"");
+    var repo = Substitute.For<IRepository>();
+    repo.GetByIdAsync(""testId"")!.Returns(async _ =>
+    {
+        await Task.Yield();
+        return item;
+    });
+    var sut = new Service(repo);
+
+    var result = await sut.QueryAsync(""testId"");
+
+    Assert.Equal(item, result);
+}
+")"/>
+    <CodeBlock Code="@(@"
+[Fact]
+public async Task QueryAsync_WhenRepositoryThrowsAsynchronousException_ReturnsFailureWithException()
+{
+    var exception = new Exception();
+    var repo = Substitute.For<IRepository>();
+    repo.GetByIdAsync(""testId"").Returns(async _ =>
+    {
+        await Task.Yield();
+        throw exception;
+    });
+    var sut = new Service(repo);
+
+    var result = await sut.QueryAsync(""testId"");
+
+    Assert.True(result.IsFailure, ""Expected failure."");
+    Assert.Equal(exception, result.Error);
+}
+")"/>
+    <MudText>
+        You should now write a test for asynchronous <Code>null</Code> return by yourself.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">How It's Done</MudText>
+    <MudText GutterBottom="true">
+        Under the hood, <Code>NSubstitute</Code> uses reflection magic to achieve its effects.
+        Not only does it examine the contents of the abstract type that we are trying to mock
+        to find out what methods need to be supported, it actually <em>emits</em> code to facilitate
+        a mock.
+    </MudText>
+    <MudText GutterBottom="true">
+        <Code>NSubstitute</Code> uses the <Code>Castle.DynamicProxy</Code> library to create proxies for
+        types that we want to be mocked. Their implementation is fairly simple &ndash; a type is examined
+        to find out what methods need proxying and then code is emitted so that when a proxied method
+        gets called all the call information is gathered and a different method is called with all that info.
+        This is done by emitting IL at runtime.
+    </MudText>
+    <MudText>
+        Using the <Code>System.Reflection.Emit</Code> namespace one can emit entire assemblies at runtime.
+        There are facilities for creating types, members of those types, and creating methods on-the-fly
+        by directly emitting IL. This is also the core namespace used by Source Generators.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Advanced Scenarios</MudText>
+    <MudText>
+        Sometimes more advanced scenarios need to be supported by mocking frameworks.
+        We can configure what happens when a method is called with given arguments,
+        we can trigger sideeffects on-call, etc. However, it's important to remember
+        that at some point, if your usage of a mocking framework becomes overly complex,
+        it might be a good idea to just fall back and define your own test class that encapsulates
+        the test logic, instead of relying on non-trivial dependencies between mocked calls.
     </MudText>
     <Resources Links=@(new [] {
         ("https://nsubstitute.github.io/", "NSubstitute"),
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.reflection.emit?view=net-6.0", "System.Reflection.Emit"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview", "Source Generators"),
 
     })/>
 </CourseSection>
