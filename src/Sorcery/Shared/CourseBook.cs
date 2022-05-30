@@ -118,9 +118,9 @@ public sealed class CourseBook
                 }, new AssignmentSkeleton("", "", "") { IsHidden = true }),
                 new ("Performance", "performance", new SectionSkeleton[]
                 {
+                    new ("Garbage Collection Details", "garbage-collection-details"),
                     new ("Benchmarking", "benchmarking"),
                     new ("Profiling", "profiling"),
-                    new ("Garbage Collection Details", "garbage-collection-details"),
                     new ("Ref Structs", "ref-structs"),
                     new ("Parallelism", "parallelism"),
                     new ("Unsafe", "unsafe"),

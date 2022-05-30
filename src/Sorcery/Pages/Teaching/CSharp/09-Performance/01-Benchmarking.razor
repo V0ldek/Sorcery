@@ -1,0 +1,20 @@
+﻿@page "/teaching/csharp/9-performance/1-benchmarking"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["performance"]["benchmarking"];
+}
+
+<CourseSection Section="@course">
+    <MudText>
+        
+    </MudText>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
+        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0", "ASP.NET Core Middleware"),
+    })/>
+</CourseSection>
+
+@code {
+
+}
