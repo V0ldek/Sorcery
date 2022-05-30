@@ -1,0 +1,41 @@
+﻿@page "/teaching/csharp/8-reflection"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["reflection"]">
+    <MudText GutterBottom="true">
+        The ability to self-reflect is very important, not only for humans.
+        Reflection in .NET allows many metadata driven solutions that we otherwise
+        take for granted. All testing frameworks, ASP.NET, Entity Framework, JSON serializers,
+        and who knows what else depend on reflection.
+    </MudText>
+    <MudText GutterBottom="true">
+        Reflection used correctly is relatively fast and very powerful. Used incorrectly
+        it becomes an ugly hack. Reflection performance is much lower than regular code,
+        sometimes orders of magnitude slower. This is by design &ndash; the design goals
+        of the CLR explicitly state that reflection being fast in all cases is <em>not</em>
+        a goal.
+    </MudText>
+    <MudText>
+        In this module we will learn:
+    </MudText>
+
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">retrieving type metadata;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            retrieving metadata for members;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">invoking methods via reflection;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">modifying fields and properties via reflection;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">retrieving attribute metadata;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">defining custom attributes;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">using attributes at runtime;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">Caller Info Attributes;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">system attributes;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">the Dynamic Language Runtime;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">calling Python from .NET;</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

@@ -1,0 +1,52 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/12-pattern-matching"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["pattern-matching"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>is</Code> expressions and <Code>switch</Code> expressions.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The <Code>var</Code> pattern.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Constant patterns.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The discard pattern.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Type patterns.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Positional patterns.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Relational patterns.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Pattern combinators.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Property patterns.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/pattern-matching", "Pattern matching overview"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/patterns", "Patterns (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/pattern-matching", "Tutorial: Use pattern matching to build type-driven and data-driven algorithms"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

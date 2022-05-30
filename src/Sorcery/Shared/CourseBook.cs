@@ -65,6 +65,8 @@ public sealed class CourseBook
                     new ("Deconstruction", "deconstruction"),
                     new ("Nested Types", "nested-types"),
                     new ("HashCode as a Mutable Struct", "hashcode-as-a-mutable-struct"),
+                    new ("Records", "records"),
+                    new ("Pattern Matching", "pattern-matching"),
                 }, new AssignmentSkeleton("Diverging Dungeons", "diverging-dungeons", "https://classroom.github.com/a/EuwNc18U")),
                 new ("LINQ", "linq", new SectionSkeleton[]
                 {
@@ -114,6 +116,19 @@ public sealed class CourseBook
                     new ("Dynamic", "dynamic"),
                     new ("Advanced Unit Testing", "advanced-unit-testing"),
                 }, new AssignmentSkeleton("", "", "") { IsHidden = true }),
+                new ("Performance", "performance", new SectionSkeleton[]
+                {
+                    new ("Benchmarking", "benchmarking"),
+                    new ("Profiling", "profiling"),
+                    new ("Garbage Collection Details", "garbage-collection-details"),
+                    new ("Ref Structs", "ref-structs"),
+                    new ("Parallelism", "parallelism"),
+                    new ("Unsafe", "unsafe"),
+                    new ("Finalizers", "finalizers"),
+                }, new AssignmentSkeleton("", "", "") { IsHidden = true })
+                {
+                    IsHidden = false
+                },
                 new ("Darkness yet to come", "darkness-yet-to-come", new SectionSkeleton[]
                 {
                     new ("", "")
