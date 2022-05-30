@@ -122,6 +122,7 @@ public sealed class CourseBook
                     new ("Benchmarking", "benchmarking"),
                     new ("Profiling", "profiling"),
                     new ("Ref Structs", "ref-structs"),
+                    new ("Array pooling", "array-pooling"),
                     new ("Parallelism", "parallelism"),
                     new ("Unsafe", "unsafe"),
                     new ("Finalizers", "finalizers"),

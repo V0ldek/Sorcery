@@ -1,0 +1,129 @@
+﻿@page "/teaching/csharp/9-performance/0-garbage-collection-details"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["performance"]["garbage-collection-details"];
+    var previousGcSection = CourseBook.CSharpCourse["references-and-values"]["memory"];
+    var arrayPoolingSection = CourseBook.CSharpCourse["performance"]["array-pooling"];
+    var finalizersSection = CourseBook.CSharpCourse["performance"]["finalizers"];
+}
+
+<CourseSection Section="@course">
+    <MudText>
+        We talked about how the .NET Garbage Collector works briefly in
+        <MudLink Href="@previousGcSection.Route">@previousGcSection.DisplayName</MudLink>.
+        Before we talk about performance, however, we need to dive a little bit deeper into GC internals.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Talkin' 'bout My Generation</MudText>
+    <MudText GutterBottom="true">
+        The .NET GC is a <Highlight>generational</Highlight> GC. It divides the managed heap into three chunks called
+        <Highlight>generations</Highlight> (and the LoC, explained below), that are collected separately.
+        This comes from an observation that most objects in an ordinary applications are very short lived,
+        while some of them are very long lived. It is important to often clean the short-lived ones,
+        to maintain a low memory footprint, while the long lived objects
+        are unlikely to be collected, so there's no need to look at them most of the time.
+    </MudText>
+    <MudList Class="py-2">
+        <MudListItem Icon="fas fa-0">
+            <MudText>
+                A newly allocated object lands in Generation 0. This is the short-lived generation &ndash; in .NET mortality
+                of newborns is even worse than it was in the middle ages. Generation 0 is cleaned most often, and the cleanup
+                is very cheap, because it always empties the generation. That's right &ndash; an object is either dead and
+                gets collected, or it survives and is <Highlight>promoted</Highlight> to Generation 1.
+            </MudText>
+            <MudText>
+                This segment of the heap contains the throwaway object that we allocate for a moment,
+                use as a local variable and then discard, etc.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-1">
+            <MudText>
+                Generation 1 is a buffer. It is collected more rarely than Gen0, but other than that it works the same.
+                When a collection occurs objects are either collected or promoted to Generation 2. This and Gen0 are
+                called <Highlight>ephemeral generations</Highlight>.
+            </MudText>
+            <MudText>
+                This is a buffer generation that will is principle contain some runaways from Gen0 that were lucky
+                and survived a collection there.
+            </MudText>
+        </MudListItem>
+        <MudListItem Icon="fas fa-2">
+            <MudText>
+                Generation 2 is for veterans that survived two collections. It is rarely collected and is the most expensive
+                one to collect. A collection of Gen2 is called a <Highlight>full</Highlight> GC collection. This is a thing to avoid.
+                An object in Gen2 stays in Gen2 until it dies. 
+            </MudText>
+            <MudText>
+                This generation should contain really long-lived objects that are supposed to be used throughout
+                a large chunk of an application's lifetime. All singleton and static objects will be here.
+            </MudText>
+        </MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        When a collection occurs, objects may be <Highlight>compacted</Highlight>. The heap is basically a list of
+        fragments of memory, some of which are allocated objects, others being empty space. When an allocation
+        is requested, an empty slot with required size must be found. When a lot of objects are collected,
+        the memory gets fragmented, with many holes between allocated objects. At some point the GC may decide
+        to compact the memory by moving the objects around in memory. This is the most expensive
+        part of a GC, because it requires the collector to go around and update all references to an object that is being moved.
+    </MudText>
+    <MudText>
+        The GC works best when most objects are short-lived. The goal is to keep the ratio of Gen2 collections
+        to Gen0 collections low. Gen1 doesn't matter too much, it's there to serve as a buffer. In a perfect world
+        all collections are Gen0. Remember that collections are triggered by memory pressure &ndash; the allocator
+        has a buffer for allocations that it uses until it is spent, and then calls the collector to clean stuff
+        up. The collector runs a Gen0 collection and inspects how much memory was reclaimed. If it is too little,
+        it runs a Gen1 collection. If that is not enough, a full collection occurs.
+    </MudText>
+    <MudText id="loh" Typo="Typo.h2" Class="mx-auto py-2">Large Object Heap</MudText>
+    <MudText GutterBottom="true">
+        If an object is larger than some threshold (on Windows it's $85,000$ bytes), it is considered a large object.
+        Large objects get a completely separate portion of the heap for themselves, called the Large Object Heap.
+        LOH gets collected as part of a Gen2 collection. Large objects are usually arrays &ndash; pretty hard
+        to build up $85$ kilo out of references and value types.
+    </MudText>
+    <MudText>
+        Allocating big arrays is expensive, because their memory has to be zeroed on allocation.
+        This can take milliseconds when we're talking about megabytes of memory, which is incomparably
+        higher than a regular small allocation that takes nanoseconds. To alleviate that, the strategy
+        is to allocate big objects up-front and keep them on the LOH, then reuse them instead of reallocating.
+    </MudText>
+    <LatexRenderer ContainerId="loh"/>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Finalizer</MudText>
+    <MudText>
+        The dreaded finalizer is a piece of code that is supposed to run at the end of an instance's lifetime.
+        Most objects don't have finalizers, and thus when they go out of scope the GC simply murders them and
+        siezes its memory. If it has a finalizer, however, it is first put on the <Highlight>finalization queue</Highlight>.
+        The runtime will try its best to run that finalizer. After it is run, the object will be collected.
+        Finalizers are hairy and scary, and you should almost never use them. We talk about
+        their intended usage in <MudLink Href="@finalizersSection.Route">@finalizersSection.DisplayName</MudLink>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            More allocations &ndash; more collections. Decreasing allocations can improve performance by
+            reducing GC time.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            Allocating a lot of long-lived objects is a surefire way of killing your app's performance
+            by increasing the frequency of Gen2 collections.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            The Large Object Heap is best when it's not touched. We will talk on how to achieve that
+            in <MudLink Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</MudLink>.
+        </MudListItem>
+        <MudListItem>
+            Finalizers have a detrimental effect on GC performance, but are sometimes crucial.
+            Rule of thumb number one &ndash; don't declare finalizers. More on that in 
+            <MudLink Href="@finalizersSection.Route">@finalizersSection.DisplayName</MudLink>.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/", "Garbage collection (index)"),
+        ("https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals", "Fundamentals of garbage collection")
+    })/>
+</CourseSection>
+
+@code {
+
+}
