@@ -1,41 +1,45 @@
-﻿@page "/teaching/csharp/8-reflection"
+﻿@page "/teaching/csharp/9-performance"
 @inject CourseBook CourseBook;
 
-<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["reflection"]">
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["performance"]">
     <MudText GutterBottom="true">
-        The ability to self-reflect is very important, not only for humans.
-        Reflection in .NET allows many metadata driven solutions that we otherwise
-        take for granted. All testing frameworks, ASP.NET, Entity Framework, JSON serializers,
-        and who knows what else depend on reflection.
+        C# is a jack-of-all-trades language, and performance is a very important factor for the
+        runtime and the BCL. Being a compiled language, it's in a completely different weight class
+        than Python for performance, and thanks to sensible generics it gets a major upperhand over
+        Java.
     </MudText>
     <MudText GutterBottom="true">
-        Reflection used correctly is relatively fast and very powerful. Used incorrectly
-        it becomes an ugly hack. Reflection performance is much lower than regular code,
-        sometimes orders of magnitude slower. This is by design &ndash; the design goals
-        of the CLR explicitly state that reflection being fast in all cases is <em>not</em>
-        a goal.
+        Even though C# is fast by default, there are many techniques that allow us to squeeze
+        out last bits of CPU speed from our code <em>without</em> sacrificing type and memory safety.
+        Thanks to advanced tooling measuring and profiling C# is a breeze, and the ever-evolving
+        language support for performance critical facilities like <Code>Span</Code> and other ref structs
+        gives ample opportunities for optimisation.
+    </MudText>
+    <MudText GutterBottom="true">
+        In the end, C# allows us to ditch memory safety for a while to do pointer-twiddling on stuff
+        that requires twiddling pointers. While rarely used in most applications (I've never written production
+        code with <Code>unsafe</Code>), in others this is bread-and-butter.
     </MudText>
     <MudText>
         In this module we will learn:
     </MudText>
 
     <MudList Class="d-block my-4" DisablePadding="true">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">retrieving type metadata;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">how to reliably benchmark .NET code;</MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            retrieving metadata for members;
+            how to profile C# code with Visual Studio (and alternatives);
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">invoking methods via reflection;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">modifying fields and properties via reflection;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">retrieving attribute metadata;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">defining custom attributes;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">using attributes at runtime;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">Caller Info Attributes;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">system attributes;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">the Dynamic Language Runtime;</MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">calling Python from .NET;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">more details about Garbage Collection;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>ref struct</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>Span&lt;T&gt;</Code> and <Code>Memory&lt;T&gt;</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>stackalloc</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">PLINQ;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">concurrent collections;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight"><Code>unsafe</Code>;</MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">finalizers.</MudListItem>
     </MudList>
 </CourseModuleIntroduction>
 
 @code {
-
+    
 }
