@@ -112,7 +112,7 @@ public sealed class CourseBook
                     new ("Types and Instances", "types-and-instances"),
                     new ("Members", "members"),
                     new ("Attributes", "attributes"),
-                    new ("Caller Info Attributes", "caller-info-attributes"),
+                    new ("System Attributes", "system-attributes"),
                     new ("Dynamic", "dynamic"),
                     new ("Advanced Unit Testing", "advanced-unit-testing"),
                 }, new AssignmentSkeleton("", "", "") { IsHidden = true }),
