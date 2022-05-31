@@ -95,7 +95,9 @@
     </MudText>
     <MudText>
         BenchmarkDotNet allows us to focus on providing good benchmark data and configuring <em>what</em> we want to benchmark,
-        while taking care of all the <em>how</em> for us.
+        while taking care of all the <em>how</em> for us. It is the standard tool in the .NET world for reliable benchmarks.
+        The .NET team itself uses it to measure performance gains in the BCL, in ASP.NET Core, etc. When you want to prove
+        to someone that something is faster, the BenchmarkDotNet results table is the way.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Case Study</MudText>
     <MudText id="problem-statement" GutterBottom="true">
@@ -180,13 +182,16 @@
         JITted, the JITter runs optimisations, the CPU cache gets loaded for the first time, etc. Therefore we run the code a few
         times first to reach a stable state where further runs will give us repeatable results. 
     </MudText>
-    <MudText>
+    <MudText id="statistical-analysis">
         In the end, the framework gives us statistical analysis of the data. It discards data it considers outlying, calculates standard
         statistics for a given method/params configuration, including the mean, standard deviation, median, quartiles, etc.
         The output is given, by default, as Markdown and HTML, which makes it very easy to embed the result table into documentation
         or a website. I also included the RPlot explorer to get some pretty charts that can be compiled with R. This is controlled
-        by the attributes at the top of the class. The <Code>MemoryDiagnoserAttribute</Code> gives us GC diagnosis.
+        by the attributes at the top of the class. The <Code>MemoryDiagnoserAttribute</Code> gives us GC diagnosis, and the statistical
+        column performs a $p$-value test on the results. As the goal we state that we want results to be meaningful if they point
+        towards one of the implementations being $5\%$ slower or faster than the baseline.
     </MudText>
+    <LatexRenderer ContainerId="statistical-analysis"/>
     <CodeBlock Language="ini" Code="@(
 @"
 BenchmarkDotNet=v0.13.1, OS=ubuntu 20.04
@@ -194,10 +199,10 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
 .NET SDK=6.0.300
   [Host]   : .NET 6.0.5 (6.0.522.21309), X64 RyuJIT
   .NET 6.0 : .NET 6.0.5 (6.0.522.21309), X64 RyuJIT"
-)"/>
+                        )"/>
     <CodeBlock Language="ini" Code="@("Job=.NET 6.0  Runtime=.NET 6.0")"/>
     <MudSimpleTable Class="my-4" Dense="true" Bordered="true" Striped="true" Style="overflow-x: auto;">
-<thead><tr><th>      Method</th><th>RemoveMode</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>MannWhitney(5%)/p-values</th><th>RatioSD</th><th>Allocated</th>
+<thead><tr><th>      Method</th><th>RemoveMode</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>MannWhitney(3%)/p-values</th><th>RatioSD</th><th>Allocated</th>
 </tr>
 </thead><tbody><tr><td>FromLongestSearch</td><td>All</td><td>72.439 ms</td><td>0.6309 ms</td><td>0.5593 ms</td><td>1.00</td><td>Base: ?|?</td><td>0.00</td><td>6,720 B</td>
 </tr><tr><td>FromShortestSearch</td><td>All</td><td>7.712 ms</td><td>0.0273 ms</td><td>0.0228 ms</td><td>0.11</td><td>Faster: 1.0000|0.0000</td><td>0.00</td><td>445 B</td>
@@ -213,8 +218,45 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
         <MudImage Height="500" Width="500" Alt="BenchmarkDotNet Bar Chart" ObjectPosition="ObjectPosition.Center" 
             Fluid="true" Src="/img/substring-search-benches-bar-chart.webp" ObjectFit="ObjectFit.Fill"/>
     </MudPaper>
+    <MudText GutterBottom="true" id="result-statistics">
+        The most important statistics are the mean and error. Because humans are bad at interpreting complex data,
+        we get a single number describing the relation of an implementation to the base &ndash; the ratio.
+        The interpretation is simple &ndash; when we use <Code>RemoveMode.All</Code>, the from-shortest
+        solution takes $0.11x$ the time of the base, which means it's around $\frac{1}{0.11} \approx 9$ times
+        faster. This is the rough estimate of how good our optimisation is, and is usually enough to draw conclusions.
+        If we see a ratio that is significantly lower than $1$, it is fair to assume that our optimisation was beneficial.
+        If we see a ratio higher than $1$, then it was probably not.
+        Memory analysis shows us how much memory is allocated per run by our method. If we had a more complex, long-running
+        method we will also see the number of collections for each generation.
+    </MudText>
+    <MudText id="p-values">
+        The statistical test is once you want to be <em>really</em> serious about your analysis, usually
+        when we're talking about optimisations that we expect to give us, let's say, $3\%$ speedup.
+        Then it's hard to determine just looking at the numbers whether our new code actually has a different
+        performance distribution that is better than the baseline, or did we just luck out on a few runs
+        and are deceiving ourselves with a better ratio. For that we have good old statistical analysis with
+        $p$-values. This will tell us whether one of the implementations is actually better, or if the results
+        are pretty much random noise.
+    </MudText>
+    <LatexRenderer ContainerId="result-statistics"/>
+    <LatexRenderer ContainerId="p-values"/>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Testing Optimisations</MudText>
     <MudText>
-        The most important statistics are the mean and error. 
+        Let's make an optimisation to our <Code>FromShortestSearch</Code> algorithm.
+        We can make it skip over things more &ndash; if we match a short substring it makes
+        sense to start the search for a longer one from the same spot, since the previous
+        indices were already checked and did not match. This is implemented in <Code>FromShortestWithEliminationSearch</Code>.
+        To test if it is better, comment the bench for <Code>FromLongestSearch</Code> and make <Code>FromShortestSearch</Code>
+        the baseline, then uncomment the <Code>FromShortestWithEliminationSearch</Code> bench. On my machine
+        it is slightly faster for the <Code>0.0</Code> case and <em>much</em> faster for the <Code>0.5</Code> case.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Benchmarking Golden Rules</MudText>
+    <MudText>
+        
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <MudText>
+
     </MudText>
     <Resources Links=@(new [] {
         ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
