@@ -7,7 +7,214 @@
 
 <CourseSection Section="@course">
     <MudText>
-        
+        When dealing with performance there are three golden rules that we need to follow to make sure
+        we reach our goals. These are:
+    </MudText>
+    <MudList Class="py-2">
+        <MudListItem Icon="@Icons.Filled.CandlestickChart">
+            Measure,
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.TrendingUp">
+            Measure, and
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.QueryStats">
+            Measure.
+        </MudListItem>
+    </MudList>
+    <MudText id="measurement-importance">
+        Sounds cliché, but measuring is the difference between random trial and a scientist actually working
+        towards solving a problem. When we make a change we want to be able to tell with certainty that it causes
+        a performance improvement. And when it does, we want to have the bragging rights to point to measurements
+        and say "see, I improved performance by $67\%$".
+    </MudText>
+    <LatexRenderer ContainerId="measurement-importance"/>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">BenchmarkDotNet</MudText>
+    <MudText>
+        C# is a managed language, which makes things both easier and harder. It's easier to profile our code
+        because the runtime can support the tooling better than as if we were running compiled machine code.
+        It's harder, because all the layers between the code and runtime, the JITter, etc. Doing that by
+        hand and accounting for all the different factors is <em>hard</em>. Quoting from
+        <MudLink Href="https://github.com/dotnet/BenchmarkDotNet/tree/5e62756c126980ecde9e4779b3c320b3225381ee#automation=">
+        BenchmarkDotNet README
+        </MudLink>:
+    </MudText>
+    <Quote>
+        Let's think about what should you do in a typical case.
+        First, you should perform a pilot experiment and determine the best number of method invocations.
+        Next, you should execute several warm-up iterations and ensure that your benchmark achieved a steady state.
+        After that, you should execute the main iterations and calculate some basic statistics.
+        If you calculate some values in your benchmark, you should use it somehow to prevent the dead code elimination.
+        If you use loops, you should care about an effect of the loop unrolling on your results 
+        (which may depend on the processor architecture).
+        Once you get results, you should check for some special properties of the obtained performance 
+        distribution like multimodality or extremely high outliers.
+        You should also evaluate the overhead of your infrastructure and deduct it from your results.
+        If you want to test several environments, you should perform the measurements in each of them and manually aggregate the results.
+    </Quote>
+    <MudText GutterBottom="true">
+        Benchmarking is a domain of science. We need to run the code many times under controlled conditions,
+        gather the results, and perform data analysis on it. We need a <Highlight>baseline</Highlight>,
+        which will be our control group, and modified code that we hypothesise should be slower or faster
+        (or, in more precise terms, we have the null hypothesis that we want to disprove).
+        Then we perform the experiment &ndash; measure &ndash; and check the results. Benchmarks, just like
+        good scientific experiments, should be reliable, repeatable, verifiable by others, and controlled
+        for bias and inadvertent influencing of the results.
+    </MudText>
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.Xs">
+            <MudCard Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="5">
+                <MudCardMedia Height="200" Style="width: 400px; max-width: 500px; max-height: 200px" Image="img/benchmark-dot-net-logo.webp" Title="BenchmarkDotNet logo">
+                </MudCardMedia>
+                <MudCardContent>
+            <MudText Typo="Typo.caption">BenchmarkDotNet &ndash; Powerful .NET library for benchmarking.</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudCard Class="mx-auto mb-3 pa-3" Style="max-width: 400px" Elevation="5">
+                <MudCardMedia Image="img/benchmark-dot-net-logo.webp" Style="background-size: contain; max-width: 400px; max-height: 200px" Title="BenchmarkDotNet logo">
+                </MudCardMedia>
+                <MudCardContent>
+                    <MudText Typo="Typo.caption">BenchmarkDotNet &ndash; Powerful .NET library for benchmarking.</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudHidden>
+    </MudBreakpointProvider>
+    <MudText GutterBottom="true">
+        For very simple benchmarks, once we've seen before in a few modules, the good ol' <Code>System.Diagnostics.Stopwatch</Code>
+        is good enough. If we want to show a difference between a method executing for a second and for ten seconds, a <Code>Stopwatch</Code>
+        is enough. But when we want to be precise, and when the operation times start falling into the milli, micro, <em>nanosecond</em>
+        range, the <Code>Stopwatch</Code> is basically useless. It's like trying to measure differences in atom sizes with a ruler.
+        The solution is there, and its name is <Highlight>BenchmarkDotNet</Highlight>. 
+        <MudText Inline="true" Typo="Typo.subtitle1">
+        <em>
+            Note, you could also try to use <Code>DateTime.Now</Code> as a timestamping mechanism, but it's strictly
+            worse than <Code>Stopwatch</Code> and also yikes.
+        </em>
+        </MudText>
+    </MudText>
+    <MudText>
+        BenchmarkDotNet allows us to focus on providing good benchmark data and configuring <em>what</em> we want to benchmark,
+        while taking care of all the <em>how</em> for us.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Case Study</MudText>
+    <MudText id="problem-statement" GutterBottom="true">
+        In the notebook repository you can find the <code>CaseStudy</code> directory with an example algorithm that we'll
+        be playing around with and measure. The problem statement is simple: given a pattern $p$ and an input string $w$,
+        find the longest possible substring of $p$ that occurs in $w$; if there are multiple substrings of the same length,
+        return the one that starts the earliest in $p$. So, for example, given $p = \mathit{alakot}$ and $w = \mathit{ma kota ala}$
+        we want $\mathit{ala}$ as the result. The substring $\mathit{kot}$ also occurs in $w$, but it is later in $p$ than $\mathit{ala}$.
+    </MudText>
+    <LatexRenderer ContainerId="problem-statement" />
+    <MudText id="implementations" GutterBottom="true">
+        There are two implementations in <Code>BenchmarkDemo.Library</Code>, the <Code>SimpleSearch</Code> and <Code>FromShortestSearch</Code>.
+        They are both the same brute-force algorithm &ndash; iterate through lengths and check each substring of a given length. They differ
+        in iteration direction &ndash; <Code>FromLongestSearch</Code> searches from the longest substring (the whole $p$) and returns the first
+        that works, while <Code>FromShortestSearch</Code> starts from $1$-letter substrings and goes up, returning the largest it finds along the way.
+        The first search cheats because it can return early as soon as it finds a valid substring. The second search also cheats, because once
+        it doesn't find any matches for some length it knows there can't be any longer matches, so it returns early as well.
+    </MudText>
+    <LatexRenderer ContainerId="implementations" />
+    <MudText>
+        <Code>BenchmarkDemo</Code> contains the <Code>BenchmarkDotNet</Code> code. The entry point is trivial:
+    </MudText>
+<CodeBlock Code="@("BenchmarkRunner.Run<Benches>();")"/>
+    <MudText id="benchmark-description">
+        The <Code>Benches</Code> class contains the benchmarks. We use a file located in <code>/data/words.txt</code>, containing
+        around $5$MB of English words, separated with newlines. As the pattern, we use "interrelationships" ($18$ characters), which 
+        <MudLink Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
+            scores quite highly in terms of valid substrings contained within it
+        </MudLink>. We also use a special switch called <Code>RemoveMode</Code>. There are four:
+    </MudText>
+    <LatexRenderer ContainerId="benchmark-description" />
+    <MudList Class="py-2">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>RemoveMode.None</Code> &ndash; search through unchanged input;
+        </MudListItem>
+        <MudListItem id="remove-mode-only-longest" Icon="@Icons.Filled.ChevronRight">
+            <Code>RemoveMode.OnlyLongest</Code> &ndash; replaces "interrelationship", "interrelationships" and "interrelationship's"
+            in the input with 'x' characters; this makes sure that the longest substring contained within the input is "interrelations"
+            ($14$ characters), so both solutions need to do some work to find it.
+        </MudListItem>
+        <MudListItem id="remove-mode-all-long" Icon="@Icons.Filled.ChevronRight">
+            <Code>RemoveMode.AllLong</Code> &ndash; additionally removes "interrelation", "interrelations",
+            "relationship", and "relationships". The longest match is "relations" ($9$ characters).
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>RemoveMode.All</Code> &ndash; removes all substrings, so that the result is an empty string.
+        </MudListItem>
+    </MudList>
+    <LatexRenderer ContainerId="remove-mode-only-longest" />
+    <LatexRenderer ContainerId="remove-mode-all-long" />
+    <MudText GutterBottom="true">
+        The <Code>RemoveMode</Code> property is marked with the <Code>ParamsAttribute</Code>.
+        This way we can parameterise our benchmark. This can be applied on many properties, and the framework
+        will generate a benchmark for each combination of parameters.
+    </MudText>
+    <MudText GutterBottom="true">
+        Then there are the benchmark targets,
+        which have the <Code>BenchmarkAttribute</Code> slapped. It is important that the return value of the 
+        benchmark method is the same as the benchmarked method's and the result of the target is returned from the benchmark.
+        This is because we don't want the compiler to optimise any unused values away. We marked one of the implementations
+        as the <Highlight>baseline</Highlight>, which means the method to which we compare all others. This is usually
+        the standard/current implementation that we want to optimise so that we can see how our new code fares against it.
+    </MudText>
+    <MudText GutterBottom="true">
+        Setup of parameters and any facilities required by the benchmarked code is done in a method marked with a
+        <Code>GlobalSetupAttribute</Code>. Any code that is not germane to the benchmarked logic but is required to setup
+        the experiment should go here. In this case we read the input file and apply the <Code>RemoveMode</Code>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Running the benchmark</MudText>
+    <MudText>
+        To run the benchmark we need to compile our code in the Release configuration, which enables optimisations
+        and disables debugging support &ndash; in Debug configuration the compiler inserts a lot of production-irrelevant
+        code that improves debugging experience.
+    </MudText>
+    <CodeBlock Language="powershell" Code="dotnet run --project .\BenchmarkDemo\ --configuration Release"/>
+    <MudText GutterBottom="true">
+        And then the fun begins. BenchmarkDotNet automatically does all the hard stuff for us, it pilots the code
+        to find out how many operations it needs to perform per sample to get relevant results &ndash; if a single operation
+        executes very fast, the timestamp granularity can be too low to get accurate measurements, so we need to run the code
+        multiple times and calculate the mean. Then there is warmup, where we run the code multiple times to stabilise and move
+        to a <em>warm state</em>. When we first run a method what happens is a so-called <em>cold start</em>. The code needs to be
+        JITted, the JITter runs optimisations, the CPU cache gets loaded for the first time, etc. Therefore we run the code a few
+        times first to reach a stable state where further runs will give us repeatable results. 
+    </MudText>
+    <MudText>
+        In the end, the framework gives us statistical analysis of the data. It discards data it considers outlying, calculates standard
+        statistics for a given method/params configuration, including the mean, standard deviation, median, quartiles, etc.
+        The output is given, by default, as Markdown and HTML, which makes it very easy to embed the result table into documentation
+        or a website. I also included the RPlot explorer to get some pretty charts that can be compiled with R. This is controlled
+        by the attributes at the top of the class. The <Code>MemoryDiagnoserAttribute</Code> gives us GC diagnosis.
+    </MudText>
+    <CodeBlock Language="ini" Code="@(
+@"
+BenchmarkDotNet=v0.13.1, OS=ubuntu 20.04
+Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical cores
+.NET SDK=6.0.300
+  [Host]   : .NET 6.0.5 (6.0.522.21309), X64 RyuJIT
+  .NET 6.0 : .NET 6.0.5 (6.0.522.21309), X64 RyuJIT"
+)"/>
+    <CodeBlock Language="ini" Code="@("Job=.NET 6.0  Runtime=.NET 6.0")"/>
+    <MudSimpleTable Class="my-4" Dense="true" Bordered="true" Striped="true" Style="overflow-x: auto;">
+<thead><tr><th>      Method</th><th>RemoveMode</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>MannWhitney(5%)/p-values</th><th>RatioSD</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>FromLongestSearch</td><td>All</td><td>72.439 ms</td><td>0.6309 ms</td><td>0.5593 ms</td><td>1.00</td><td>Base: ?|?</td><td>0.00</td><td>6,720 B</td>
+</tr><tr><td>FromShortestSearch</td><td>All</td><td>7.712 ms</td><td>0.0273 ms</td><td>0.0228 ms</td><td>0.11</td><td>Faster: 1.0000|0.0000</td><td>0.00</td><td>445 B</td>
+</tr><tr><td>FromLongestSearch</td><td>AllLong</td><td>242.322 ms</td><td>0.6648 ms</td><td>0.5893 ms</td><td>1.00</td><td>Base: ?|?</td><td>0.00</td><td>2,736 B</td>
+</tr><tr><td>FromShortestSearch</td><td>AllLong</td><td>78.608 ms</td><td>0.2504 ms</td><td>0.2091 ms</td><td>0.32</td><td>Faster: 1.0000|0.0000</td><td>0.00</td><td>984 B</td>
+</tr><tr><td>FromLongestSearch</td><td>OnlyLongest</td><td>87.106 ms</td><td>0.2350 ms</td><td>0.2083 ms</td><td>1.00</td><td>Base: ?|?</td><td>0.00</td><td>937 B</td>
+</tr><tr><td>FromShortestSearch</td><td>OnlyLongest</td><td>62.988 ms</td><td>0.1893 ms</td><td>0.1678 ms</td><td>0.72</td><td>Faster: 1.0000|0.0000</td><td>0.00</td><td>994 B</td>
+</tr><tr><td>FromLongestSearch</td><td>None</td><td>3.661 ms</td><td>0.0284 ms</td><td>0.0252 ms</td><td>1.00</td><td>Base: ?|?</td><td>0.00</td><td>5 B</td>
+</tr><tr><td>FromShortestSearch</td><td>None</td><td>43.193 ms</td><td>0.2467 ms</td><td>0.2307 ms</td><td>11.80</td><td>Slower: 0.0000|1.0000</td><td>0.09</td><td>840 B</td>
+</tr></tbody>
+    </MudSimpleTable>
+    <MudPaper Class="my-4 pa-4 d-flex justify-center align-center" Elevation="5">
+        <MudImage Height="500" Width="500" Alt="BenchmarkDotNet Bar Chart" ObjectPosition="ObjectPosition.Center" 
+            Fluid="true" Src="/img/substring-search-benches-bar-chart.webp" ObjectFit="ObjectFit.Fill"/>
+    </MudPaper>
+    <MudText>
+        The most important statistics are the mean and error. 
     </MudText>
     <Resources Links=@(new [] {
         ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
