@@ -1,0 +1,27 @@
+﻿@page "/teaching/csharp/9-performance/4-the-in-modifier"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["performance"]["the-in-modifier"];
+}
+
+<CourseSection Section="@course">
+    <MudText>
+        
+    </MudText>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/in-parameter-modifier", "in parameter modifier (C# Reference)"),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/write-safe-efficient-code#use-the-in-parameter-modifier",
+            "Write safe and efficient C# code – Use the in parameter modifier"
+        ),
+        (
+            "https://devblogs.microsoft.com/premier-developer/the-in-modifier-and-the-readonly-structs-in-c/",
+            "The ‘in’-modifier and the readonly structs in C# (Sergey Tepliakov)"
+        ),
+    })/>
+</CourseSection>
+
+@code {
+
+}

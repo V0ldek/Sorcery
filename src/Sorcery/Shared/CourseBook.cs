@@ -122,15 +122,15 @@ public sealed class CourseBook
                     new ("Benchmarking", "benchmarking"),
                     new ("Profiling", "profiling"),
                     new ("Ref Structs", "ref-structs"),
+                    new ("The in modifier", "the-in-modifier"),
                     new ("Array pooling", "array-pooling"),
-                    new ("Parallelism", "parallelism"),
                     new ("Unsafe", "unsafe"),
                     new ("Finalizers", "finalizers"),
                 }, new AssignmentSkeleton("", "", "") { IsHidden = true })
                 {
                     IsHidden = false
                 },
-                new ("Darkness yet to come", "darkness-yet-to-come", new SectionSkeleton[]
+                new ("Concurrency", "concurrency", new SectionSkeleton[]
                 {
                     new ("", "")
                 }, null)

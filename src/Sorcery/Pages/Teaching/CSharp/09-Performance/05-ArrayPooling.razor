@@ -1,8 +1,8 @@
-﻿@page "/teaching/csharp/9-performance/4-array-pooling"
+﻿@page "/teaching/csharp/9-performance/5-parallelism"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["performance"]["array-pooling"];
+    var course = CourseBook.CSharpCourse["performance"]["parallelism"];
 }
 
 <CourseSection Section="@course">
@@ -10,7 +10,7 @@
         
     </MudText>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
+        ("https://adamsitnik.com/Array-Pool/", "Pooling large arrays with ArrayPool (Adam Sitnik)"),
         ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0", "ASP.NET Core Middleware"),
     })/>
 </CourseSection>

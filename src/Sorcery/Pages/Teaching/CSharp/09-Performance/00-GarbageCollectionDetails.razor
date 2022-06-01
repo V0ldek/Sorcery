@@ -60,12 +60,12 @@
         </MudListItem>
     </MudList>
     <MudText GutterBottom="true">
-        When a collection occurs, objects may be <Highlight>compacted</Highlight>. The heap is basically a list of
-        fragments of memory, some of which are allocated objects, others being empty space. When an allocation
-        is requested, an empty slot with required size must be found. When a lot of objects are collected,
-        the memory gets fragmented, with many holes between allocated objects. At some point the GC may decide
-        to compact the memory by moving the objects around in memory. This is the most expensive
-        part of a GC, because it requires the collector to go around and update all references to an object that is being moved.
+        When a collection occurs, objects may be <Highlight>compacted</Highlight>. 
+        Without compaction, the heap would basically be a list of fragments of memory, some of which are allocated objects, 
+        others being empty space. When an allocation is requested, an empty slot with required size must be found. 
+        When a lot of objects are collected, the memory may get fragmented, with many holes between allocated objects. 
+        Therefore the GC compacts the memory after collection, moving the objects around in memory. This is the most expensive
+        part of a GC, because it requires the collector to copy data and then go around and update all references to an object that is being moved.
     </MudText>
     <MudText>
         The GC works best when most objects are short-lived. The goal is to keep the ratio of Gen2 collections
@@ -82,11 +82,15 @@
         LOH gets collected as part of a Gen2 collection. Large objects are usually arrays &ndash; pretty hard
         to build up $85$ kilo out of references and value types.
     </MudText>
-    <MudText>
+    <MudText GutterBottom="true">
         Allocating big arrays is expensive, because their memory has to be zeroed on allocation.
         This can take milliseconds when we're talking about megabytes of memory, which is incomparably
-        higher than a regular small allocation that takes nanoseconds. To alleviate that, the strategy
+        higher than a regular small allocation that takes nanoseconds. 
+        Moreover, the LOH is not compacted by default. The items here are deemed so large that it is less expensive to do
+        the free-list algorithm than move the objects around. Therefore, allocating and deallocating large arrays
+        can cause LOH fragmentation and degrade performance. To alleviate that, the strategy
         is to allocate big objects up-front and keep them on the LOH, then reuse them instead of reallocating.
+        We cover that in <MudLink Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</MudLink>.
     </MudText>
     <LatexRenderer ContainerId="loh"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Finalizer</MudText>
