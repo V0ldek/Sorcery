@@ -1,14 +1,24 @@
-﻿@page "/teaching/csharp/9-performance/5-parallelism"
+﻿@page "/teaching/csharp/9-performance/5-array-pooling"
 @inject CourseBook CourseBook;
 
 @{
-    var course = CourseBook.CSharpCourse["performance"]["parallelism"];
+    var course = CourseBook.CSharpCourse["performance"]["array-pooling"];
 }
 
 <CourseSection Section="@course">
-    <MudText>
-        
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
     </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            the core <Code>ArrayPool&lt;T&gt;</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            the nicer <Code>MemoryPool&lt;T&gt;</Code>.
+        </MudListItem>
+    </MudList>
     <Resources Links=@(new [] {
         ("https://adamsitnik.com/Array-Pool/", "Pooling large arrays with ArrayPool (Adam Sitnik)"),
         ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0", "ASP.NET Core Middleware"),

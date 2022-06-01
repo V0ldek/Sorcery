@@ -126,28 +126,28 @@
         around $5$MB of English words, separated with newlines. As the pattern, we use "interrelationships" ($18$ characters), which 
         <MudLink Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
             scores quite highly in terms of valid substrings contained within it
-        </MudLink>. We also use a special switch called <Code>RemoveMode</Code>. There are four:
+        </MudLink>. We also use a special switch that determines the size of the result
+        by replacing parts of the input with garbage. There are four:
     </MudText>
     <LatexRenderer ContainerId="benchmark-description" />
-    <MudList Class="py-2">
+    <MudList id="remove-modes" Class="py-2">
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            <Code>RemoveMode.None</Code> &ndash; search through unchanged input;
+            $1.0$ &ndash; search through unchanged input, which contains the word "interrelationships";
         </MudListItem>
-        <MudListItem id="remove-mode-only-longest" Icon="@Icons.Filled.ChevronRight">
-            <Code>RemoveMode.OnlyLongest</Code> &ndash; replaces "interrelationship", "interrelationships" and "interrelationship's"
-            in the input with 'x' characters; this makes sure that the longest substring contained within the input is "interrelations"
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            $0.75$ &ndash; replaces "interrelationship", "interrelationships" and "interrelationship's"
+            in the input with '#' characters; this makes sure that the longest substring contained within the input is "interrelations"
             ($14$ characters), so both solutions need to do some work to find it.
         </MudListItem>
-        <MudListItem id="remove-mode-all-long" Icon="@Icons.Filled.ChevronRight">
-            <Code>RemoveMode.AllLong</Code> &ndash; additionally removes "interrelation", "interrelations",
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            $0.5$ &ndash; additionally removes "interrelation", "interrelations",
             "relationship", and "relationships". The longest match is "relations" ($9$ characters).
         </MudListItem>
         <MudListItem Icon="@Icons.Filled.ChevronRight">
-            <Code>RemoveMode.All</Code> &ndash; removes all substrings, so that the result is an empty string.
+            $0.0$ &ndash; removes all substrings of "interrelationships", so that the result is an empty string.
         </MudListItem>
     </MudList>
-    <LatexRenderer ContainerId="remove-mode-only-longest" />
-    <LatexRenderer ContainerId="remove-mode-all-long" />
+    <LatexRenderer ContainerId="remove-modes"/>
     <MudText GutterBottom="true">
         The <Code>RemoveMode</Code> property is marked with the <Code>ParamsAttribute</Code>.
         This way we can parameterise our benchmark. This can be applied on many properties, and the framework
@@ -241,15 +241,16 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
     <LatexRenderer ContainerId="result-statistics"/>
     <LatexRenderer ContainerId="p-values"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Testing Optimisations</MudText>
-    <MudText>
+    <MudText id="optimisation">
         Let's make an optimisation to our <Code>FromShortestSearch</Code> algorithm.
         We can make it skip over things more &ndash; if we match a short substring it makes
         sense to start the search for a longer one from the same spot, since the previous
         indices were already checked and did not match. This is implemented in <Code>FromShortestWithEliminationSearch</Code>.
         To test if it is better, comment the bench for <Code>FromLongestSearch</Code> and make <Code>FromShortestSearch</Code>
         the baseline, then uncomment the <Code>FromShortestWithEliminationSearch</Code> bench. On my machine
-        it is slightly faster for the <Code>0.0</Code> case and <em>much</em> faster for the <Code>0.5</Code> case.
+        it is slightly faster for the $0.0$ case and it allocates much less memory for $0.75$.
     </MudText>
+    <LatexRenderer ContainerId="optimisation"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Benchmarking Golden Rules</MudText>
     <MudList Class="py-2">
         <MudListItem Icon="@Icons.Filled.ChevronRight">

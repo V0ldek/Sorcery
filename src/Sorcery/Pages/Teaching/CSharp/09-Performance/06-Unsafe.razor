@@ -6,12 +6,37 @@
 }
 
 <CourseSection Section="@course">
-    <MudText>
-        
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
     </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>unsafe</Code> contexts;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            pinning with <Code>fixed</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            pointers;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            unsafe <Code>stackalloc</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            function pointers;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>nint</Code> and <Code>nuint</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            the <Code>Unsafe</Code> class.
+        </MudListItem>
+    </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0", "ASP.NET Core Middleware"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code", "Unsafe code, pointer types, and function pointers (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe?view=net-6.0", "Unsafe class"),
     })/>
 </CourseSection>
 

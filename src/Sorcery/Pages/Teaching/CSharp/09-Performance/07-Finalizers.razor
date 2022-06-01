@@ -6,12 +6,28 @@
 }
 
 <CourseSection Section="@course">
-    <MudText>
-        
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
     </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            why we should not use finalizers;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            how to not use finalizers;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            how to not use finalizers even when you need a finalizer with <Code>SafeHandle</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            just don't.
+        </MudListItem>
+    </MudList>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0", "ASP.NET Core Middleware"),
+        ("https://ericlippert.com/2015/05/18/when-everything-you-know-is-wrong-part-one/", "When Everything You Know Is Wrong I (Eric Lippert)"),
+        ("https://ericlippert.com/2015/05/21/when-everything-you-know-is-wrong-part-two/", "When Everything You Know Is Wrong II (Eric Lippert)"),
     })/>
 </CourseSection>
 
