@@ -115,7 +115,7 @@ public sealed class CourseBook
                     new ("System Attributes", "system-attributes"),
                     new ("Dynamic", "dynamic"),
                     new ("Advanced Unit Testing", "advanced-unit-testing"),
-                }, new AssignmentSkeleton("", "", "") { IsHidden = true }),
+                }, new AssignmentSkeleton("Adventurers, Assemble", "adventurers-assemble", "https://classroom.github.com/a/2vmvDNX8")),
                 new ("Performance", "performance", new SectionSkeleton[]
                 {
                     new ("Garbage Collection Details", "garbage-collection-details"),

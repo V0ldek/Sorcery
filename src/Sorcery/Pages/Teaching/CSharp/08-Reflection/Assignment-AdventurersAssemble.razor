@@ -1,0 +1,155 @@
+﻿@page "/teaching/csharp/8-reflection/assignment/8-adventurers-assemble"
+@inject CourseBook CourseBook;
+
+<CourseAssignment Assignment="@CourseBook.CSharpCourse["reflection"].Assignment">
+    <MudText>
+        With plenty of Dungeons to clear, our Heroes are spread thin! Reinforcements are needed
+        from outside lands. As new candidates come while others are adventuring, will you help
+        them assemble into a formidable party?
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
+    <MudText GutterBottom="true">
+        We will be implementing a simple mod system for our game that will allow users to provide
+        their own Hero classes in separate assemblies.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Goal</MudText>
+    <MudText GutterBottom="true">
+        In <Code>DungeonWalker.Extensibility</Code> we defined a <Code>HeroClassAttribute</Code>.
+        It can be applied to any <Code>Hero</Code> class to mark it as one of Dungeon Walker Heroes.
+        It has a single required property, <Code>Name</Code>, which will uniquely define the Hero (it can be
+        different from the display name).
+    </MudText>
+    <MudText>
+        All of the work needs to happen in <Code>DungeonWalker.DataLayer.Dynamic.HeroRepository</Code>.
+        It should allow us to load a given type into the repository, or load all Hero types in a given assembly.
+        To be approprietly loaded, a type needs to:
+    </MudText>
+    <MudList Class="my-2">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            be tagged with the <Code>HeroClassAttribute</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            be a subclass of <Code>DungeonWalker.Logic.Characters.Hero</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            have a parameterless constructor;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            have a name specified in the attribute not conflicting with any previously loaded Hero.
+        </MudListItem>
+    </MudList>
+    <MudText>
+        To test this, we have an assembly completely outside of our main code. It is located in the <code>dynamic</code>
+        directory. Two correct <Code>Hero</Code> subclasses are defined there, <Code>Valid.Paladin</Code>
+        and <Code>Valid.BountyHunter</Code>. In the <Code>Invalid</Code> namespace there are types that do not
+        satisfy one or more of the above requirements. As a first setup thing, compile this project and put the artifacts
+        in a directory that will be used by the rest of the code:
+    </MudText>
+    <CodeBlock Language="powershell" Code="@(@"
+dotnet publish ./dynamic/Outside.Heroes -o ./dynamic/bin
+    ")"/>
+    <MudText GutterBottom="true">
+        It will compile the assembly and put it in <code>dynamic/bin/Outside.Heroes.dll</code>.
+        Note that there is no dependency from any of the projects in <code>src</code> to this one.
+        The <Code>Outside.Heroes</Code> does depend on <Code>DungeonWalker.Extensibility</Code> and <Code>DungeonWalker.Logic</Code>
+        to define the Heroes, but Dungeon Walker has no idea that Outside exists.
+    </MudText>
+    <MudText>
+        The <Code>HeroRepository</Code>, when constructed, loads all Hero classes defined in the base game,
+        and then uses configuration options to dynamically load outside assemblies from a path.
+        Details of how assembly loading works are not really riveting, but if you're interested in them
+        then you can read <MudLink Href="https://docs.microsoft.com/en-us/dotnet/core/dependency-loading/understanding-assemblyloadcontext">this article</MudLink>.
+        In the end, we get an <Code>Assembly</Code> object that we can then query for types.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; <Code>HeroRepository</Code></MudText>
+    <MudText>
+        Implement the missing functions:
+    </MudText>
+    <MudList Class="my-2">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>GetHeroAsync</Code>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>LoadAllHeroesFromAssembly</Code>
+        </MudListItem>        
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>LoadHeroClass</Code>
+        </MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        The get method will probably not be truly asynchronous, as a reminder, <Code>Task.FromResult</Code> is used
+        to produce <Code>Task</Code> instances from synchronous results. The name used to query for Heroes is the one
+        provided in their <Code>HeroClassAttribute</Code>.
+    </MudText>
+    <MudText>
+        Your solution should handle errors in two ways. First of all, the associated <Code>_logger</Code>
+        instance has extension methods defined for all of the failure cases we defined:
+    </MudText>
+    <MudList Class="my-2">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>FailedToLoadHeroClassDueToNoAttribute</Code>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>FailedToLoadHeroClassDueToLackOfAParameterlessConstructor</Code>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>FailedToLoadHeroClassDueToNotSubclassingHero</Code>
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>FailedToLoadHeroClassDueToConflictingName</Code>
+        </MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        You need to log these failures when they occur (there are tests for that this time around).
+        If they happen when loading all types from an assembly, these should be soft errors &ndash;
+        we don't want our application to crash because of mistakes from an outside assembly. On the other
+        hand, when a type is being loaded through <Code>LoadHeroClass(Type)</Code>, you need to throw
+        a <Code>DynamicLoaderException</Code>.
+    </MudText>
+    <MudText>
+        Note that your implementation should be relatively efficient. We assume that we will load
+        the assemblies once, but create the Heroes potentially many times. A solution that just stores
+        the <Code>ConstructorInfo</Code> and calls it every time a <Code>Hero</Code> is requested
+        will not be sufficient. You need to either create an expression tree and compile it into a delegate
+        (see <MudLink Href="https://docs.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression.new?view=net-6.0">Expression.New</MudLink>),
+        or use a helper function that will call the constructor of a given <Code>T: new()</Code>, take its <Code>MethodInfo</Code>
+        and compile it with <Code>CreateDelegate</Code>.
+    </MudText>
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "HeroRepository" test group, worth <Highlight>1.5</Highlight> points.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; API tests</MudText>
+    <MudText GutterBottom="true">
+        To test these features, use the <code>/heroes</code> endpoint that returns a list of all
+        Hero names from the system. Because dependencies are lazily resolved, you need to call this
+        endpoint for any loading of the <Code>Outside.Heroes</Code> assembly to happen. Use the logs
+        to make sure the code does what you want it to do.
+    </MudText>
+    <MudText>
+        Finally, we can play the game from the console by running the main project:
+    </MudText>
+    <CodeBlock Language="powershell" Code="@(@"
+dotnet run --project .\src\DungeonWalker\ -- run -d MagicalMaze -h Paladin -n 10
+    ")"/>
+    <MudText>
+        This requires the API to be running in the background (easiest way is to run it in a separate terminal session).
+        You can also list the Heroes from there by calling
+    </MudText>
+    <CodeBlock Language="powershell" Code="@(@"
+dotnet run --project .\src\DungeonWalker\ -- heroes
+    ")"/>
+    <MudText>
+        This will be tested with the <Code>test_dynamic_heroes</Code> script located in the main directory.
+        It clears out the database, seeds it again, and then calls the <code>/heroes</code> endpoint.
+        The expected output is:
+    </MudText>
+    <CodeBlock Language="json" Code="@(@"
+[""BountyHunter"",""Paladin"",""Rogue"",""Warrior"",""Wizard""]
+    ")"/>
+    <MudAlert Class="my-4" Variant="Variant.Outlined">
+        This test is worth <Highlight>0.5</Highlight> points.
+    </MudAlert>
+</CourseAssignment>
+@code {
+
+}

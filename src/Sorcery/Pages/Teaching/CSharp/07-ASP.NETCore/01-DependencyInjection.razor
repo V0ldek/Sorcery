@@ -52,7 +52,7 @@ dotnet run --project ./Adder.Api
         Now we can <code>curl</code> seeding the database and the sum:
     </MudText>
     <CodeBlock Language="plain" Code="@(@"
-curl https://localhost:20443/adder/seed
+curl -X POST https://localhost:20443/adder/seed
 curl https://localhost:20443/adder/sum
 5
     ")"/>
