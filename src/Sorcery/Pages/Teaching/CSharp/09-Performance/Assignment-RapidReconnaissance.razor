@@ -1,0 +1,77 @@
+﻿@page "/teaching/csharp/9-performance/assignment/9-rapid-reconnaissance"
+@inject CourseBook CourseBook;
+
+<CourseAssignment Assignment="@CourseBook.CSharpCourse["performance"].Assignment">
+    <MudText>
+        To prepare for excursions our Heroes send small recon squads. They report on the
+        Dungeon's size, enemy numbers, and how shiny the loot inside is. Recon is accurate,
+        but not too swift. The Heroes are tired of waiting &ndash; we need to work on that!
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
+    <MudText GutterBottom="true">
+        We will be optimising a single algorithm evaluating a Dungeon.
+        It is defined recursively, taking evaluations of rooms that have incoming edges
+        to the current one, and looking at the room's type and contents.
+        Your goal will be to optimise it, which we will measure with <Code>DungeonWalker.Evaluation.Benches</Code>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Optimisation</MudText>
+    <MudText GutterBottom="true">
+        The project defining our algorithm is <Code>DungeonWalker.Evaluation</Code>.
+        The types to look at are <Code>GraphDungeonEvaluator</Code> and <Code>Value</Code>.
+        This is a very open-ended task &ndash; your job is to decrease the ratio of the benchmark
+        for these types with respect to the baseline (<Code>GraphDungeonEvaluatorBaseline</Code> and <Code>ValueBaseline</Code>).
+        Here's what you may and may not do to achieve that.
+    </MudText>
+    <MudList Class="my-2">
+        <MudListItem Icon="@Icons.Filled.Close">
+            You may not change the benchmark, <Code>GraphDungeonEvaluatorBaseline</Code>, <Code>ValueBaseline</Code>,
+            or <Code>SprawlingStronghold</Code> code.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.Close">
+            You may not change the signature of the static <Code>Evaluate</Code> method.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.Close">
+            You may not change the equality contract or the primary constructor or <Code>Value</Code>.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.Close">
+            You may not break any tests in the solution.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.Check">
+            You may change <Code>GraphDungeonEvaluator</Code> and <Code>Value</Code> implementations
+            in any way except for the exclusions above.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.Check">
+            You may change the implementations of other graph algorithms in the solution, like
+            the <Code>TopologicalSort</Code>.
+        </MudListItem>
+    </MudList>
+    <MudText>
+        Anything else is allowed, including unsafe code. To run the benchmark use:
+    </MudText>
+    <CodeBlock Language="powershell" Code="@(@"
+dotnet run --project .\src\DungeonWalker.Evaluation.Benches --configuration Release
+    ")"/>
+    <MudText GutterBottom="true">
+        The results of the model solution on this bench are as follows:
+    </MudText>    
+    <MudSimpleTable Class="my-4" Dense="true" Bordered="true" Striped="true" Style="overflow-x: auto;">
+<thead><tr><th>      Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>Gen 0</th><th>Gen 1</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>BaselineEvaluator</td><td>2.562 s</td><td>0.0208 s</td><td>0.0194 s</td><td>1.00</td><td>7000.0000</td><td>2000.0000</td><td>172 MB</td>
+</tr><tr><td>NewEvaluator</td><td>1.793 s</td><td>0.0028 s</td><td>0.0026 s</td><td>0.70</td><td>1000.0000</td><td>-</td><td>41 MB</td>
+</tr></tbody>
+    </MudSimpleTable>
+    <MudAlert id="alert1" Class="my-4" Variant="Variant.Outlined">
+        Your solution will be graded for style, as always, but the $3.0$ points usually given for tests will be given based on the optimisations ratio
+        with this straight-forward formula: $(1.0 - \mathit{ratio}) \cdot 10$, capped at $3.0$.
+    </MudAlert>
+    <MudAlert id="alert2" Class="my-4" Variant="Variant.Outlined" Severity="Severity.Info">
+        If your solution vastly exceeds the model $30\%$ speedup there will be bonus points awarded, decided on a case-by-case basis
+        once all solutions are examined.
+    </MudAlert>
+    <LatexRenderer ContainerId="alert1"/>
+    <LatexRenderer ContainerId="alert2"/>
+</CourseAssignment>
+@code {
+
+}

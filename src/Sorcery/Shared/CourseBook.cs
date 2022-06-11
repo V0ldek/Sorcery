@@ -126,10 +126,7 @@ public sealed class CourseBook
                     new ("Array pooling", "array-pooling"),
                     new ("Unsafe", "unsafe"),
                     new ("Finalizers", "finalizers"),
-                }, new AssignmentSkeleton("", "", "") { IsHidden = true })
-                {
-                    IsHidden = false
-                },
+                }, new AssignmentSkeleton("Rapid Reconnaissance", "rapid-reconnaissance", "https://classroom.github.com/a/K2SHpi1A")),
                 new ("Concurrency", "concurrency", new SectionSkeleton[]
                 {
                     new ("", "")
