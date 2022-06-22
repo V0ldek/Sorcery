@@ -1,0 +1,31 @@
+﻿@page "/teaching/csharp/10-concurrency/1-concurrent-collections"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["concurrency"]["concurrent-collections"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>System.Collections.Concurrent</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>BlockingCollection</Code> as producer-consumer communication channel.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/collections/thread-safe/", "Thread-Safe Collections"),
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.collections.concurrent.blockingcollection-1?view=net-6.0", "BlockingCollection<T>"),
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.collections.concurrent?view=net-6.0", "System.Collections.Concurrent Namespace"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

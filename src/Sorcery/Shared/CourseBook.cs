@@ -122,17 +122,17 @@ public sealed class CourseBook
                     new ("Benchmarking", "benchmarking"),
                     new ("Profiling", "profiling"),
                     new ("Ref Structs", "ref-structs"),
-                    new ("The in modifier", "the-in-modifier"),
-                    new ("Array pooling", "array-pooling"),
+                    new ("The in Modifier", "the-in-modifier"),
+                    new ("Array Pooling", "array-pooling"),
                     new ("Unsafe", "unsafe"),
                     new ("Finalizers", "finalizers"),
                 }, new AssignmentSkeleton("Rapid Reconnaissance", "rapid-reconnaissance", "https://classroom.github.com/a/K2SHpi1A")),
                 new ("Concurrency", "concurrency", new SectionSkeleton[]
                 {
-                    new ("", "")
-                }, null)
-                {
-                    IsHidden = true
-                }
+                    new ("Synchronisation", "synchronisation"),
+                    new ("Concurrent Collections", "concurrent-collections"),
+                    new ("PLINQ", "plinq"),
+                    new ("Channels", "channels"),
+                }, new AssignmentSkeleton("Simultaneous Simulations", "simultaneous-simulations", "https://classroom.github.com/a/LVDh8dWM"))
             }));
 }

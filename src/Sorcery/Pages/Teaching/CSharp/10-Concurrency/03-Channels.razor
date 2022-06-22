@@ -1,0 +1,26 @@
+﻿@page "/teaching/csharp/10-concurrency/3-channels"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["concurrency"]["channels"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            asynchronous communication.
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://devblogs.microsoft.com/dotnet/an-introduction-to-system-threading-channels/", "An Introduction to System.Threading.Channels (Stephen Toub)")
+    })/>
+</CourseSection>
+
+@code {
+
+}

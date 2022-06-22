@@ -1,0 +1,47 @@
+﻿@page "/teaching/csharp/10-concurrency/0-synchronisation"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["concurrency"]["synchronisation"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            <Code>lock</Code> statement and the <Code>Monitor</Code> static class;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            nonexclusive locking with semaphores;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            lazy initialisation with <Code>Lazy&lt;T&gt;</Code>;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            nonblocking synchronisation;
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            thread-safety for free!
+        </MudListItem>
+    </MudList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/statements/lock", "lock statement"),
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.threading.interlocked?view=net-6.0", "Interlocked Class"),
+        (
+            "https://www.albahari.com/threading/part2.aspx",
+            "Basic Synchronization (Joseph Albahari)"
+        ),
+        (
+            "https://www.albahari.com/threading/part4.aspx",
+            "Advanced Threading (Joseph Albahari)"
+        ),
+    })/>
+</CourseSection>
+
+@code {
+
+}
