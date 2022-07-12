@@ -26,8 +26,8 @@
         {
             if (Section.Module.Next is null)
             {
-                <ButtonNext Link="/teaching">
-                    This is the end of the course! You can go back to <Highlight>Teaching</Highlight>, if you want more.
+                <ButtonNext Link="@Section.Module.Course.EndRoute">
+                    This is the end of the course! Proceed to the summary of @Section.Module.Course.DisplayName.
                 </ButtonNext>
             }
             else if (Section.Module.Next.IsHidden)

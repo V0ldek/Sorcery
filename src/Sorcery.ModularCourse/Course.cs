@@ -10,6 +10,8 @@ public sealed record class Course(string Title, string RouteName)
 
     public string Route => RouteHelper.BuildRoute("/teaching", RouteName);
 
+    public string EndRoute => RouteHelper.BuildRoute("/teaching", RouteName, "the-end");
+
     public string DisplayName => Title;
 
     public Module this[string moduleRoute] =>

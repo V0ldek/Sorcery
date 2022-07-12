@@ -1,0 +1,117 @@
+﻿@page "/teaching/csharp/the-end"
+@inject CourseBook CourseBook;
+
+<CourseEnd Course="@CourseBook.CSharpCourse">
+    <MudText GutterBottom="true">
+        Congratulations on reaching the end of the course!
+    </MudText>
+    <MudText GutterBottom="true">
+        C# is a modern, multiparadigm programming language based on the multiplatform .NET environment.
+        It focuses on developer ergonomics and productivity without sacrificing safety thanks to its automated
+        memory management and robust static analysis.
+    </MudText>
+    <MudText GutterBottom="true">
+        My hope is that the course made all of these points clear. In the end we've even seen that all of this can be achieved
+        without sacrificing too much performance. In the end, .NET is 
+        <MudLink Href="https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=plaintext"><em>fast</em></MudLink>.
+    </MudText>
+
+    <MudText Typo="Typo.h2" Class="mx-auto py-6">What now?</MudText>
+    
+    <MudText GutterBottom="true">
+        You've completed the course, but the course was in no way complete. There are many topics that we haven't discussed
+        due to lack of time. For example, I'd really like to had covered Blazor, but there was no way for me to give the topic
+        its justice without sacrificing other important modules. However, you are now equipped with all basic tools of the C# language.
+        We've covered many advanced topics as well, so be proud &ndash; asynchrony and reflection are not easy to wrap one's head around,
+        and many .NET developers have little idea on their details!
+    </MudText>
+
+    <MudText GutterBottom="true">
+        In this closing section I would like to give you pointers for further exploration of the .NET ecosystem.
+        The framework has come a long way in the past few years, and it is set to be rapidly expanding in the coming
+        time as well. Honestly, now is a very exciting time to be a C# developer! First, let me direct you to
+        <MudLink Href="https://devblogs.microsoft.com/dotnet/">devblogs.microsoft.com</MudLink>. It's the go-to site
+        for news and high-quality technical blogs by engineers of the language and core framework components alike.
+        Many resources linked in the various sections of the course go there, since the quality of posts by people like
+        Stephen Toub or Mads Torgersen cannot be overstated.
+    </MudText>
+    
+    <MudText GutterBottom="true">
+        Next, check out the community! There is a <MudLink Href="https://www.reddit.com/r/dotnet/">.NET Reddit</MudLink>,
+        and, perhaps more importantly, an official <MudLink Href="https://aka.ms/dotnet-discord">.NET Discord</MudLink>.
+        It's a way for everyone to interact with other .NET dev elopers, as well as directly with members of the .NET Foundation
+        who work on core parts of the ecosystem. From there it should be easy to find resources that most interest you!
+    </MudText>
+
+    <MudText GutterBottom="true">
+        When it comes to technologies, it is important to stay at the top of your game. This is what differentiates
+        good engineers from the best &ndash; the best know their tools very well! C# and .NET get a new major version
+        release every November, and they coincide with <MudLink Href="https://www.dotnetconf.net/">.NET Conf</MudLink>
+        &ndash; a virtual event celebrating the release. It has panels organised by both the .NET community and Microsoft.
+        In particular, every year it kicks out with a presentation on new features coming to .NET, new major version of C#,
+        and new versions of ASP.NET, Entity Framework, and other core libraries.
+    </MudText>
+
+    <MudText>
+        Below I have also linked introductory resources to many areas that were not covered in the course, but might be of your interest.
+        In .NET you can create virtually anything you want &ndash; and I hope the course convinced you that it's pretty fun to do so!
+        Thank you for going through this course, and have fun developing. And remember &ndash; the best way to learn a language is to
+        write your next project in it!
+    </MudText>
+
+    <MudTabs Class="pa-4" Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" Centered="true">
+        <MudTabPanel Text="Web UI" Icon="fas fa-globe">
+            <MudText GutterBottom="true">
+                <Highlight>Blazor</Highlight> is a web UI framework for .NET which allows you to program front-end in C#, without that awful JavaScript.
+                This site is built in Blazor! If you know HTML and basics of web programming, Blazor will be very easy to get into.
+            </MudText>
+            <MudText>
+                Start your journey with Blazor <MudLink Href="https://dotnet.microsoft.com/en-us/learn/aspnet/blazor-tutorial/intro">with the tutorial</MudLink>.
+            </MudText>
+        </MudTabPanel>
+        <MudTabPanel Text="Desktop apps" Icon="fas fa-desktop">
+            <MudText GutterBottom="true">
+                <Highlight>WPF</Highlight>, Windows Presentation Foundation, is a UI framework for desktop applications that combines C# and
+                XAML (an extended version of XML) for front-end programming. A well-established and robust framework, WPF doesn't lack resources
+                to learn from.
+            </MudText>
+            <MudText>
+                Start your journey with WPF <MudLink Href="https://docs.microsoft.com/en-us/dotnet/desktop/wpf/get-started/create-app-visual-studio?view=netdesktop-6.0">with the tutorial</MudLink>.
+            </MudText>
+        </MudTabPanel>
+        <MudTabPanel Text="Mobile apps" Icon="fas fa-mobile-screen-button">
+            <MudText GutterBottom="true">
+                <Highlight>Xamarin</Highlight> is a cross-platform framework for building mobile apps for both Android and iOS. It uses XAML
+                to construct the user interface
+            </MudText>
+            <MudText>
+                Start your journey with Xamarin <MudLink Href="https://dotnet.microsoft.com/en-us/learn/xamarin/hello-world-tutorial/intro">with the tutorial</MudLink>.
+            </MudText>
+        </MudTabPanel>
+        <MudTabPanel Text="Cross-platform apps" Icon="fas fa-circle-nodes">
+            <MudText GutterBottom="true">
+                <Highlight>MAUI</Highlight>, Multi-platform App UI, is a versatile framework allowing you to create native mobile and desktop apps
+                with a single shared codebase. This is a hot new framework, so it doesn't have full IDE support yet, but it's the way to build cross-platform
+                apps in C# moving forward.
+            </MudText>
+            <MudText>
+                Start your journey with MAUI <MudLink Href="https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/intro">with the tutorial</MudLink>.
+            </MudText>
+        </MudTabPanel>
+        <MudTabPanel Text="Games" Icon="fas fa-gamepad">
+            
+            <MudText GutterBottom="true">
+                <Highlight>Unity</Highlight>, is a game engine. Its scripts are written in C#, with advanced frameworks specifically for game design.
+                Programming in Unity's C# is pretty different from regular C#, since many steps have to be taken to assure maximum performance
+                &ndash; in a game every operation performed in the main loop must count!
+            </MudText>
+            <MudText>
+                Start your journey with Unity <MudLink Href="https://unity.com/how-to/programming-unity">with the introduction page</MudLink>.
+            </MudText>
+        </MudTabPanel>
+    </MudTabs>
+</CourseEnd>
+
+@code {
+
+}
