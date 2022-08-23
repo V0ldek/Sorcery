@@ -1,0 +1,22 @@
+﻿@page "/teaching/csharp/11-blazor"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["blazor"]">
+    <MudText GutterBottom="true">
+        This module is a stub and exists mainly to host the second-term assignment.
+        To not make it a purely repetitive excercise, we are going to introduce a real UI application as a part of it.
+        You will not need to change anything in the UI to pass the assignment, but investigating the front-end code is a useful
+        learning experience.
+    </MudText>
+    <MudText>
+        In this module we will learn:
+    </MudText>
+
+    <MudList Class="d-block my-4" DisablePadding="true">
+        <MudListItem Icon="@Icons.Filled.ChevronRight">what is Blazor and how it works.</MudListItem>
+    </MudList>
+</CourseModuleIntroduction>
+
+@code {
+    
+}

@@ -1,0 +1,199 @@
+﻿@page "/teaching/csharp/11-blazor/assignment/11-elector"
+@inject CourseBook CourseBook;
+
+<CourseAssignment Assignment="@CourseBook.CSharpCourse["blazor"].Assignment">
+    <MudText>
+        Change of pace &ndash; we are leaving the DungeonWalker project alone.
+        In this assignment you will implement the backend of <Highlight>Elector</Highlight>, an election system/simulator,
+        and as an aside learn why First-Past-the-Post is an awful voting system.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
+    <MudText GutterBottom="true">
+        The application is a Blazor website with an ASP.NET Core backend server. The server is connected to an SQLite
+        database, with Entity Framework serving as data layer infrastructure.
+        <MudList>
+            <MudListItem>
+                <Code>Elector.Client</Code> contains the Blazor app. You will not need to modify anything here,
+                but you can. There are no tests for the client.
+            </MudListItem>
+            <MudListItem>
+                <Code>Elector.Server</Code> is the ASP.NET Core server. You will need to work on the controllers defined here.
+                It also contains SignalR hubs in the <Code>Hubs</Code> namespace. SignalR is a WebSocket framework that
+                allows asynchronous communication between the server and the client. You won't need to touch SignalR components,
+                or know how they work, but they're really nifty &ndash; links to learn more are in the Resources section at the bottom.
+            </MudListItem>
+            <MudListItem>
+                <Code>Elector.ViewModels</Code> contains view models that the server uses to communicate with the client, while the client
+                displays the information contained within them. You won't need to change those, but you will be constructing instances
+                of those types.
+            </MudListItem>
+            <MudListItem>
+                <Code>Elector.Voting</Code> contains logic for generating random ballots. This is provided for you and needs no modifications.
+            </MudListItem>
+            <MudListItem>
+                <Code>Elector.System</Code> contains logic for deciding an election's outcome based on gathered votes. You will be implementing this logic.
+            </MudListItem>
+            <MudListItem>
+                <Code>Elector.Data</Code> contains repositories and the database context. You will be implementing the repositories and database model.
+            </MudListItem>
+            <MudListItem>
+                <Code>Elector.Dependencies</Code> is our usual dependency injection project that registers all different services from other projects.
+            </MudListItem>
+            <MudListItem>
+                <Code>Elector.Shared</Code> contains some general-usefullness utilities.
+            </MudListItem>
+
+        </MudList>
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0.0. &ndash; Understand Single Transferable Vote (STV)</MudText>
+    <MudText GutterBottom="true">
+        STV is the most popular ranked-choice voting system. Ranked choice means that ballots (the forms that a single voter gets to fill in)
+        are filled with a ranked list of candidates instead of a single checkmark next to the most favoured candidate. This makes elections more
+        representative and avoids power consolidation.
+    </MudText>
+    <MudText id="math1" GutterBottom="true">
+        Imagine a system where there are three parties, Red, Blue, and Yellow. Red gets around $45\%$
+        of the popular vote, Blue gets $40\%$ and Yellow also gets $15\%$, and we have single-winner elections, e.g. presidential elections.
+        In First-Past-the-Post (FPtP), Red wins in a landslide. But it turns out that Yellow voters would much rather see a Blue candidate than a Red one.
+        In FPtP Yellow effectively jeopardises Blue's chances, by taking away its electorate. This encourages big parties, limiting representation.
+        <em>Any similarities to the electorial shitshow of any well-known, big country is entirely not coincidental.</em>
+    </MudText>
+    <MudText GutterBottom="true">
+        In a ranked-choice voting system, the Yellow voters would be able to specify Blue as their second choice. In SVT, their votes would be transfered
+        to the Blue party and help them win. There are many different ranked-choice system, and SVT is not necessarily the best one, but it is rather simple
+        to understand.
+    </MudText>
+    <MudText id="math2"  GutterBottom="true">
+        Every ballot contains a list of votes, where some candidates are given a preference. Those preferences create an ordered list.
+        So, a ballot by a Yellow voter could give preference $1$ to Yellow, $2$ to Blue, and no preference to $Red$.
+    </MudText>
+    <MudAlert Class="my-4" Variant="Variant.Outlined" Severity="Severity.Warning">
+        For the purposes of this excercise, any ballot that contains no preferences or assigns the same ordinal to multiple candidates is an invalid vote.
+    </MudAlert>
+    <MudText id="math3" GutterBottom="true">
+        After the votes are gathered, the outcome is determined in rounds. First, a quota is established &ndash; the required number of votes for a candidate
+        to be elected. There are many choices for the quota, but we will be using the Droop quota, formulated as:
+
+        $$\lfloor \frac{\text{valid votes}}{\text{available seats} + 1} \rfloor + 1$$
+
+        To understand its justification, see that for a single seat (single-winner elections) the quota is simply the majority of votes.
+    </MudText>
+    <LatexRenderer ContainerId="math1" />
+    <LatexRenderer ContainerId="math2" />
+    <LatexRenderer ContainerId="math3" />
+    <MudText>
+        The election now proceeds in rounds.
+    </MudText>
+    <MudList>
+        <MudListItem Icon="fas fa-one">
+            Take all remaining ballots and assign them to the first candidate in order of preference that has not yet been elected or eliminated.
+            If a ballot contains no such candidates, it is <em>exhausted</em> and <em>discarded</em>.
+        </MudListItem>
+        <MudListItem Icon="fas fa-two">
+            If there are as many candidates as seats remaining, elect all remaining candidates and end the election.
+        </MudListItem>
+        <MudListItem Icon="fas fa-three">
+            Otherwise, if no candidate has at least as many votes as the quota, eliminate the candidate with the lowest number of votes.
+            All of their ballots return to the pool of remaining ballots. Go to 1.
+        </MudListItem>
+        <MudListItem Icon="fas fa-four">
+            Otherwise, elect all candidates that have enough votes. For each such candidate, calculate the <em>surplus</em> of votes,
+            i.e. how many votes above quota they have. Then look at all of their votes and gather the <em>transferable</em> votes,
+            i.e. votes that have a next-preference candidate that is not yet elected or eliminated (in other words, will not be exhausted
+            if returned to the pool). All other votes are non-transferrable and stay with the candidate.
+        </MudListItem>
+        <MudListItem Icon="fas fa-five">
+            If there are at most as many transferable votes as the surplus, then the operation is simple &ndash; transfer all ballots to their
+            next-preference candidate.
+        </MudListItem>
+        <MudListItem Icon="fas fa-six">
+            Otherwise, for each next-preference candidate only a fraction of votes is transfered. The exact number is calculated as:
+
+            $$\lfloor \frac{\text{transferable votes for next-preference}}{\text{total transferable votes}} \rfloor \cdot \text{surplus}$$
+
+            The votes to be transfered are selected at random.
+        </MudListItem>
+        <MudListItem Icon="fas fa-seven">
+            If any seats remain, start the next round (go to 1). Otherwise, end.
+        </MudListItem>
+    </MudList>
+    <MudText>
+        Note that there are many ways of transfering votes under STV, including ones that consider fractional votes. Again, this one is the simplest,
+        so we will go with it for the purposes of the exercise. It's also the one that most implementations of STV use, for example for the Irish lower-house
+        elections or for the Australian senate.
+    </MudText>
+    <MudAlert id="alert1" Class="my-4" Variant="Variant.Outlined">
+        This is tested by the "ConcurrentStatistics" test group, worth <Highlight>1.5</Highlight> points.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0.1. &ndash; Understand the architecture and the user flow</MudText>
+    <MudText>
+        A user creates an election through the Elections screen by supplying a name, number of seats, and the number of voters.
+        The election can be in one of five states:
+    </MudText>
+    <MudList>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            NotStarted &ndash; just after creation.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            GatheringVotes &ndash; ballots are being added to the election.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            GatheredVotes &ndash; all ballots are added, waiting.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            CalculatingOutcome &ndash; running the algorithm to determine winners of the election.
+        </MudListItem>
+        <MudListItem Icon="@Icons.Filled.ChevronRight">
+            CalculatedOutcome &ndash; election ended, winners decided.
+        </MudListItem>
+    </MudList>
+    <MudText GutterBottom="true">
+        After an election is created, the user can add candidates. After that, they click the Start button to begin
+        gathering votes.
+    </MudText>
+    <MudText GutterBottom="true">
+        Underneath, a few things happen. The controller action simply posts a message to an asynchronous queue.
+        Then a <Code>BackgroundService</Code>, <Code>VotesGatheringService</Code>,
+        picks up the task to gather ballots. A <Code>BackgroundService</Code>
+        is a piece of code that continuously runs in the background of an ASP.NET Core server. In our case, there
+        are two such workers &ndash; one coordinates generating votes, the other calculating outcomes.
+        A background service can run tasks independent of the front-end, so even if a user gets bored
+        waiting for results and closes their browser, the worker will continue churning away on the server.
+    </MudText>
+    <MudText GutterBottom="true">
+        The service coordinates all the changes between the <Code>IBallotSource</Code> generating ballots,
+        the repositories from <Code>Elector.Data</Code>, and the SignalR Hub. The ballot source is already implemented
+        and creates a stream of pseudorandomly generated ballots, with a small chance of generating an invalid one.
+        All ballots need to be persisted in the database. The ballots are flushed in batches of $100$. Every flush,
+        a message is posted to the SignalR Hub. The message is sent to the front-end, so that it can update the vote screen.
+    </MudText>
+    <MudText>
+        After votes are gathered, the user can click a button to calculate the outcome.
+        This posts another task to a queue that is consumed by a <Code>OutcomeCalculationService</Code>.
+        Then an STV algorithm is ran that reports its progress every round to tell the user which candidates
+        are elected and which are eliminated in a very similar manner &ndash; status is persisted in the database,
+        updates posted to the SignalR Hub.
+    </MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Controller Actions</MudText>
+    <MudText GutterBottom="true">
+        We should now utilise this thread-safe collection in the <Code>GameEngine</Code> located in
+        <Code>DungeonWalker.Logic.Execution</Code>. The <Code>RunMultiple</Code> method heuristically checks
+        whether multithreading would be beneficial &ndash; at least ten times as many items as CPU cores.
+        The fallback version is a simple sequential loop.
+    </MudText>
+    <MudText>
+        Your entire task is to implement <Code>RunMany</Code> using the <Code>ConcurrentBestRunsCollection</Code>
+        for collecting results and PLINQ for processing. Note that there are no correctness tests for this
+        &ndash; you will need to manually run the Play endpoind through the Swagger API, or by using the
+        <code>test_multiple_runs</code> script.
+    </MudText>
+    <MudAlert id="alert1" Class="my-4" Variant="Variant.Outlined">
+        The script successfully executing is worth <Highlight>0.5</Highlight> points, the output is not checked.
+    </MudAlert>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Repositories</MudText>
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 3. &ndash; STV algorithm</MudText>
+
+</CourseAssignment>
+@code {
+
+}
