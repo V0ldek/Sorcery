@@ -106,7 +106,7 @@
             If there are at most as many transferable votes as the surplus, then the operation is simple &ndash; transfer all ballots to their
             next-preference candidate.
         </MudListItem>
-        <MudListItem Icon="fas fa-six">
+        <MudListItem id="math4" Icon="fas fa-six">
             Otherwise, for each next-preference candidate only a fraction of votes is transfered. The exact number is calculated as:
 
             $$\lfloor \frac{\text{transferable votes for next-preference}}{\text{total transferable votes}} \rfloor \cdot \text{surplus}$$
@@ -117,6 +117,7 @@
             If any seats remain, start the next round (go to 1). Otherwise, end.
         </MudListItem>
     </MudList>
+    <LatexRenderer ContainerId="math4" />
     <MudText>
         Note that there are many ways of transfering votes under STV, including ones that consider fractional votes. Again, this one is the simplest,
         so we will go with it for the purposes of the exercise. It's also the one that most implementations of STV use, for example for the Irish lower-house

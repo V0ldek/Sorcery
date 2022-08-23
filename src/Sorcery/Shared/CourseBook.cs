@@ -133,6 +133,10 @@ public sealed class CourseBook
                     new ("Concurrent Collections", "concurrent-collections"),
                     new ("PLINQ", "plinq"),
                     new ("Channels", "channels"),
-                }, new AssignmentSkeleton("Simultaneous Simulations", "simultaneous-simulations", "https://classroom.github.com/a/LVDh8dWM"))
+                }, new AssignmentSkeleton("Simultaneous Simulations", "simultaneous-simulations", "https://classroom.github.com/a/LVDh8dWM")),
+                new ("Blazor", "blazor", new SectionSkeleton[]
+                {
+                    new ("Summary", "summary"),
+                }, new AssignmentSkeleton("Elector (2nd Term)", "elector", ""))
             }));
 }
