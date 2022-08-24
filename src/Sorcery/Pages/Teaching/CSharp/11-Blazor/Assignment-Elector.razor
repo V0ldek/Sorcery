@@ -224,8 +224,19 @@
         and invalid ballots, as well as the number of first-preference votes for each candidate, so the number of ballots
         with that candidate marked as first preference. As a challenge, try to do it in two database queries only (this is not checked)!
     </MudText>
+    <MudPaper MaxHeight="500px" MaxWidth="50%" Style="float: left" Class="mr-3 mb-3 pa-3" Elevation="5">
+        <MudImage Alt="ERD diagram of the database" title="ERD diagram of the database" Src="img/elector-database-schema.webp" Fluid="true" Height="500" Width="500" />
+    </MudPaper>
     <MudText>
-        After this is implemented you should be able to run the app end-to-end. There a number of tests that rely on the API to run in the background.
+        After this is implemented you should be able to run the app end-to-end. As a reminder, to setup the database
+        properly you need to generate a migration and then apply it.
+    </MudText>
+    <CodeBlock Language="powershell" Code=@(@"
+dotnet ef migrations add Initial --project ./src/Elector.Data
+dotnet ef database update --project ./src/Elector.Data    
+    ")/>
+    <MudText>
+        There a number of tests that rely on the API to run in the background.
         First, run the server in a terminal window, then run the <Code>Elector.ApiTests</Code> test project. You can also use the <code>api_tests</code>
         script in the <code>tests</code> directory to automatically run the suite. There is also a PowerShell script <code>create_test_elections</code>
         that creates the two complex test cases from the <Code>Elector.ApiTests</Code> suite that you can then manually debug, skipping the tedious

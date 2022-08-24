@@ -137,6 +137,8 @@ public sealed class CourseBook
                 new ("Blazor", "blazor", new SectionSkeleton[]
                 {
                     new ("Summary", "summary"),
-                }, new AssignmentSkeleton("Elector (2nd Term)", "elector", ""))
+                    new ("Hosted Services", "hosted-services"),
+                    new ("SignalR", "signalr"),
+                }, new AssignmentSkeleton("Elector (2nd Term)", "elector", "https://classroom.github.com/a/C4elbIgX"))
             }));
 }
