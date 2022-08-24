@@ -7,21 +7,23 @@
 
 <CourseSection Section="@course">
     <MudText GutterBottom="true">
-        Next one in <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>:
-        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+        Blazor is a powerful framework that allows us to write web UI components in .NET and compile them to
+        WebAssembly, the native browser language. This means you can write your application entirely in C# and never
+        write a single line of JS ever again!
+    </MudText>
+    <MudText GutterBottom="true">
+        You can create standalone Blazor applications and host them without a fully-fledged ASP.NET Core server.
+        This is in fact how this website is hosted! In the case of our assignment, we host it with an ASP.NET Core server.
+        The client then talks to the server just like a normal client would, invoking HTTP requests to the exposed API.
+    </MudText>
+    <MudText>
+        This is an extremely powerful setup. Instead of a separated development experience, where there is a traditional backend
+        server and then a frontend webpage written in React, Angular, or your other favourite JS framework, you have a unified
+        solution written in .NET.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/statements/lock", "lock statement"),
-        ("https://docs.microsoft.com/en-us/dotnet/api/system.threading.interlocked?view=net-6.0", "Interlocked Class"),
-        (
-            "https://www.albahari.com/threading/part2.aspx",
-            "Basic Synchronization (Joseph Albahari)"
-        ),
-        (
-            "https://www.albahari.com/threading/part4.aspx",
-            "Advanced Threading (Joseph Albahari)"
-        ),
+               ("https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor", "Blazor main page")
     })/>
 </CourseSection>
 
