@@ -111,7 +111,8 @@
 
             $$\lfloor \frac{\text{transferable votes for next-preference}}{\text{total transferable votes}} \rfloor \cdot \text{surplus}$$
 
-            The votes to be transfered are selected at random.
+            The votes to be transfered are selected at random. Remaining votes are exhausted.
+            See the warning in Task 2. for details.
         </MudListItem>
         <MudListItem Icon="fas fa-seven">
             If any seats remain, start the next round (go to 1). Otherwise, end.
@@ -158,13 +159,14 @@
         A background service can run tasks independent of the front-end, so even if a user gets bored
         waiting for results and closes their browser, the worker will continue churning away on the server.
     </MudText>
-    <MudText GutterBottom="true">
+    <MudText id="batch-math" GutterBottom="true">
         The service coordinates all the changes between the <Code>IBallotSource</Code> generating ballots,
         the repositories from <Code>Elector.Data</Code>, and the SignalR Hub. The ballot source is already implemented
         and creates a stream of pseudorandomly generated ballots, with a small chance of generating an invalid one.
         All ballots need to be persisted in the database. The ballots are flushed in batches of $100$. Every flush,
         a message is posted to the SignalR Hub. The message is sent to the front-end, so that it can update the vote screen.
     </MudText>
+    <LatexRenderer ContainerId="batch-math"/>
     <MudText>
         After votes are gathered, the user can click a button to calculate the outcome.
         This posts another task to a queue that is consumed by a <Code>OutcomeCalculationService</Code>.
@@ -202,6 +204,17 @@
         If you're unsure about corner cases, check the <Code>SingleTransferableVoteSystemUnitTests</Code>.
         They contain a plain-English explanation of all the test cases to guide your debugging.
     </MudText>
+    <MudAlert id="alert5" Class="my-4" Variant="Variant.Outlined" Severity="Severity.Warning">
+        The transfer votes step in the algorithm is inherently nondeterministic &ndash; a number
+        of votes are transfered, but it is not clear which to choose and which to leave exhausted.
+        In the real world, ballots are selected at random, which is thought to be a fair allocation.
+        Here, to make our algorithm deterministic and for the tests to pass,
+        <strong>always consider ballots in the order of ascending Id values</strong>.
+        That means that when we want to transfer $N$ out of $N + K$ votes to a given candidate,
+        the $N$ votes with smallest Ids are chosen to be transferred, while the $K$ votes with the
+        highest Ids are exhausted.
+    </MudAlert>
+    <LatexRenderer ContainerId="alert5"/>
     <MudAlert id="alert2" Class="my-4" Variant="Variant.Outlined">
         This is tested by the <code>System</code> test group.
     </MudAlert>
