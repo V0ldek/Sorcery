@@ -1,0 +1,34 @@
+﻿@page "/sorcery/simd-sweet-instrinsics-to-make-your-day"
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Blogging;
+@inject BlogBook BlogBook;
+
+<BlogPost Post="BlogBook.SimdSweetIntrinsicsToMakeYourDay">
+    <MudText GutterBottom="true">
+        When learning how this whole computer thingy works we usually reason in terms
+        of single, simple operations &ndash; set a value, add two values together,
+        do a bitwise AND. If you dig into how the CPU executes that stuff you will learn
+        about assembly and registers, and that those simple operations you write in a
+        high-level programming language translate to simple instructions that the CPU
+        executes &ndash; load a value to a register, add two registers together,
+        do a bitwise AND on the register...
+    </MudText>
+    <MudText GutterBottom="true">
+        But what if I told you that your CPU has a whole another mode of execution in it,
+        together with separate registers and specialised instructions?
+        A mode that is ubiqutously used deep inside your compiler and the libraries you use,
+        but can also be tapped into from user code for massive performance gains?
+    </MudText>
+    <MudText>
+        Enter the world of SIMD. What? Why? How? We'll answer these one-by-one.
+    </MudText>
+
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">What is SIMD?</MudText>
+    <MudText GutterBottom="true">
+        <strong>SIMD</strong>, <strong>Single Instruction, Multiple Data</strong>, is an umbrella term
+        for techniques that allow performing a particular operation on more than one atomic data points.
+        For example, while a regular instruction might add two $32$-bit numbers together, a SIMD instruction
+        would add <em>four individual pairs</em> of $32$-bit numbers together as a single operation.
+    </MudText>
+
+</BlogPost>

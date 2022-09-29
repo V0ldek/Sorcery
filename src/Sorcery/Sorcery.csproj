@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sorcery.Blogging\Sorcery.Blogging.csproj" />
     <ProjectReference Include="..\Sorcery.ModularCourse\Sorcery.ModularCourse.csproj" />
   </ItemGroup>
   
