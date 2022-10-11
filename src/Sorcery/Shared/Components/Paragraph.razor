@@ -1,0 +1,16 @@
+﻿<MudText GutterBottom="@GutterBottom" Typo="@Typo" @attributes="@Attributes">@ChildContent</MudText>
+
+@code {
+    [Parameter]
+    public Typo Typo { get; set; } = Typo.body1;
+
+    [Parameter]
+    public bool GutterBottom { get; set; } = true;
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+}
