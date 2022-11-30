@@ -8,16 +8,30 @@ public sealed class BlogBook
 {
     private readonly List<Post> _posts;
 
-    public IEnumerable<Post> Posts => 
+    public IEnumerable<Post> Posts =>
         _posts.Where(p => p.DateOfPublication is not null).OrderByDescending(p => p.DateOfPublication!.Value);
 
     public BlogBook()
     {
         _posts = new()
         {
-            new ("SIMD &ndash; Sweet Intrinsics to Make (your) Day", "simd-sweet-instrinsics-to-make-your-day", null)
+            new ("SIMD &ndash; Sweet Intrinsics to Make (your) Day", "simd-sweet-intrinsics-to-make-your-day", null)
+            {
+
+            },
+            new ("Alphabet does not go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2022, 11, 30))
+            {
+                Tags = new Tag[]
+                {
+                    new ("unicode"),
+                    new ("i18n"),
+                    new ("regex"),
+                }
+            },
         };
     }
 
     public Post SimdSweetIntrinsicsToMakeYourDay => _posts[0];
+
+    public Post AlphabetDoesNotGoAToZ => _posts[1];
 }

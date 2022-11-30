@@ -7,5 +7,5 @@ public record class Post(string Title, string RouteName, DateTime? DateOfPublica
 {
     public IReadOnlyList<Tag> Tags { get; init; } = Array.Empty<Tag>();
 
-    public string Route => RouteHelper.BuildRoute("/sorcery", RouteName);
+    public string Route => RouteHelper.BuildRoute("/sourcery", RouteName);
 }

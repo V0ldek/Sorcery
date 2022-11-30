@@ -3,15 +3,18 @@
 using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using BenchmarkDotNet;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Sse2 = System.Runtime.Intrinsics.X86.Sse2;
+using Avx2 = System.Runtime.Intrinsics.X86.Avx2;
 
 BenchmarkRunner.Run<Benches>();
 
 public class Benches
 {
-    [Params(100_000)]
+    [Params(1_000_000)]
     public int Length { get; set; }
 
     public byte[] Stream1 { get; set; } = Array.Empty<byte>();
@@ -42,6 +45,18 @@ public class Benches
 
     [Benchmark]
     public int? Simd64() => Simd64(Stream1, Stream2);
+
+    [Benchmark]
+    public int? Simd128SSE() => Simd128Manual(Stream1, Stream2);
+
+    [Benchmark]
+    public int? Simd128Portable() => Simd128Portable(Stream1, Stream2);
+
+    [Benchmark]
+    public int? Simd256AVX() => Simd256Manual(Stream1, Stream2);
+
+    [Benchmark]
+    public int? Simd256Portable() => Simd256Portable(Stream1, Stream2);
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private int? Sequential(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
@@ -118,6 +133,168 @@ public class Benches
                 var offset = BitOperations.TrailingZeroCount(xor) / 8;
                 return i + offset;
             }
+        }
+
+        return Sequential(remainder1, remainder2) + stream1.Length;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private unsafe int? Simd128Manual(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+    {
+        if (sensor1.Length != sensor2.Length)
+        {
+            throw new ArgumentException("Unequal stream lengths");
+        }
+        const int Size = 16;
+
+        // Take the cleanly divisible part and leave the reminder for later.
+        DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
+        DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
+
+        // Unsafe fun!
+        // Soundness follows from the fact that we increment by Size up until
+        // reaching stream1.Length, and we've asserted both streams are of equal size.
+        fixed (byte* sensor1Ptr = &MemoryMarshal.GetReference(sensor1))
+        fixed (byte* sensor2Ptr = &MemoryMarshal.GetReference(sensor2))
+        {
+            byte* sensor1Current = sensor1Ptr;
+            byte* sensor2Current = sensor2Ptr;
+
+            for (var i = 0; i < stream1.Length; i += Size)
+            {
+                Vector128<byte> vector1 = Sse2.LoadVector128(sensor1Current);
+                Vector128<byte> vector2 = Sse2.LoadVector128(sensor2Current);
+
+                Vector128<byte> cmpeq = Sse2.CompareEqual(vector1, vector2);
+                int mask = Sse2.MoveMask(cmpeq);
+
+                if (mask != 0xFFFF)
+                {
+                    var offset = BitOperations.TrailingZeroCount(~mask);
+                    return i + offset;
+                }
+
+                sensor1Current += Size;
+                sensor2Current += Size;
+            }
+        }
+
+        return Sequential(remainder1, remainder2) + stream1.Length;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private unsafe int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+    {
+        if (sensor1.Length != sensor2.Length)
+        {
+            throw new ArgumentException("Unequal stream lengths");
+        }
+        const int Size = 16;
+
+        // Take the cleanly divisible part and leave the reminder for later.
+        DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
+        DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
+
+        ref byte sensor1Current = ref MemoryMarshal.GetReference(sensor1);
+        ref byte sensor2Current = ref MemoryMarshal.GetReference(sensor2);
+
+        for (var i = 0; i < stream1.Length; i += Size)
+        {
+            Vector128<byte> vector1 = Vector128.LoadUnsafe(ref sensor1Current);
+            Vector128<byte> vector2 = Vector128.LoadUnsafe(ref sensor2Current);
+
+            Vector128<byte> cmpeq = Vector128.Equals(vector1, vector2);
+            uint mask = Vector128.ExtractMostSignificantBits(cmpeq);
+
+            if (mask != 0xFFFF)
+            {
+                var offset = BitOperations.TrailingZeroCount(~mask);
+                return i + offset;
+            }
+
+            sensor1Current = ref Unsafe.Add(ref sensor1Current, Size);
+            sensor2Current = ref Unsafe.Add(ref sensor2Current, Size);
+        }
+
+        return Sequential(remainder1, remainder2) + stream1.Length;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private unsafe int? Simd256Manual(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+    {
+        if (sensor1.Length != sensor2.Length)
+        {
+            throw new ArgumentException("Unequal stream lengths");
+        }
+        const int Size = 32;
+
+        // Take the cleanly divisible part and leave the reminder for later.
+        DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
+        DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
+
+        // Unsafe fun!
+        // Soundness follows from the fact that we increment by Size up until
+        // reaching stream1.Length, and we've asserted both streams are of equal size.
+        fixed (byte* sensor1Ptr = &MemoryMarshal.GetReference(sensor1))
+        fixed (byte* sensor2Ptr = &MemoryMarshal.GetReference(sensor2))
+        {
+            byte* sensor1Current = sensor1Ptr;
+            byte* sensor2Current = sensor2Ptr;
+
+            for (var i = 0; i < stream1.Length; i += Size)
+            {
+                Vector256<byte> vector1 = Avx2.LoadVector256(sensor1Current);
+                Vector256<byte> vector2 = Avx2.LoadVector256(sensor2Current);
+
+                Vector256<byte> cmpeq = Avx2.CompareEqual(vector1, vector2);
+                uint mask = (uint)Avx2.MoveMask(cmpeq);
+
+                if (mask != 0xFFFFFFFF)
+                {
+                    var offset = BitOperations.TrailingZeroCount(~mask);
+                    return i + offset;
+                }
+
+                sensor1Current += Size;
+                sensor2Current += Size;
+            }
+        }
+
+        return Sequential(remainder1, remainder2) + stream1.Length;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private unsafe int? Simd256Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+    {
+        if (sensor1.Length != sensor2.Length)
+        {
+            throw new ArgumentException("Unequal stream lengths");
+        }
+        const int Size = 32;
+
+        // Take the cleanly divisible part and leave the reminder for later.
+        DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
+        DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
+
+        ref byte sensor1Current = ref MemoryMarshal.GetReference(sensor1);
+        ref byte sensor2Current = ref MemoryMarshal.GetReference(sensor2);
+
+        for (var i = 0; i < stream1.Length; i += Size)
+        {
+            Vector256<byte> vector1 = Vector256.LoadUnsafe(ref sensor1Current);
+            Vector256<byte> vector2 = Vector256.LoadUnsafe(ref sensor2Current);
+
+            Vector256<byte> cmpeq = Vector256.Equals(vector1, vector2);
+            uint mask = Vector256.ExtractMostSignificantBits(cmpeq);
+
+            if (mask != 0xFFFFFFFF)
+            {
+                var offset = BitOperations.TrailingZeroCount(~mask);
+                return i + offset;
+            }
+
+            sensor1Current = ref Unsafe.Add(ref sensor1Current, Size);
+            sensor2Current = ref Unsafe.Add(ref sensor2Current, Size);
         }
 
         return Sequential(remainder1, remainder2) + stream1.Length;

@@ -1,0 +1,22 @@
+﻿@page "/sourcery/alphabet-does-not-go-a-to-z"
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Blogging;
+@inject BlogBook BlogBook;
+
+<BlogPost Post="BlogBook.AlphabetDoesNotGoAToZ">
+    <Paragraph GutterBottom="false">
+        The task is simple, I want you to look at some text and tell me if it contains only <em>alphabetic characters</em>,
+        or, in other words, <em>letters</em>. There are other similar problems, maybe we want to check if the text contains
+        any letters (because we're writing a password validation policy and hate happiness). In any case, the root issue
+        is telling whether a given character is a letter. <Highlight>And you're probably doing it wrong</Highlight>.
+    </Paragraph>
+    
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">Obvious and wrong solution</MudText>
+    <Paragraph>
+        There are two ways we could attempt to do that, depending on the tools available to us.
+        We can simply go through the characters in a string and check if it's a letter!
+    </Paragraph>
+    <CodeBlock>
+
+    </CodeBlock>
+</BlogPost>
