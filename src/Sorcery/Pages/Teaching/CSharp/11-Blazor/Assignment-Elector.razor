@@ -85,28 +85,28 @@
         The election now proceeds in rounds.
     </MudText>
     <MudList>
-        <MudListItem Icon="fas fa-one">
+        <MudListItem Icon="fas fa-1">
             Take all remaining ballots and assign them to the first candidate in order of preference that has not yet been elected or eliminated.
             If a ballot contains no such candidates, it is <em>exhausted</em> and <em>discarded</em>.
         </MudListItem>
-        <MudListItem Icon="fas fa-two">
+        <MudListItem Icon="fas fa-2">
             If there are as many candidates as seats remaining, elect all remaining candidates and end the election.
         </MudListItem>
-        <MudListItem Icon="fas fa-three">
+        <MudListItem Icon="fas fa-3">
             Otherwise, if no candidate has at least as many votes as the quota, eliminate the candidate with the lowest number of votes.
             All of their ballots return to the pool of remaining ballots. Go to 1.
         </MudListItem>
-        <MudListItem Icon="fas fa-four">
+        <MudListItem Icon="fas fa-4">
             Otherwise, elect all candidates that have enough votes. For each such candidate, calculate the <em>surplus</em> of votes,
             i.e. how many votes above quota they have. Then look at all of their votes and gather the <em>transferable</em> votes,
             i.e. votes that have a next-preference candidate that is not yet elected or eliminated (in other words, will not be exhausted
             if returned to the pool). All other votes are non-transferrable and stay with the candidate.
         </MudListItem>
-        <MudListItem Icon="fas fa-five">
+        <MudListItem Icon="fas fa-5">
             If there are at most as many transferable votes as the surplus, then the operation is simple &ndash; transfer all ballots to their
             next-preference candidate.
         </MudListItem>
-        <MudListItem id="math4" Icon="fas fa-six">
+        <MudListItem id="math4" Icon="fas fa-6">
             Otherwise, for each next-preference candidate only a fraction of votes is transfered. The exact number is calculated as:
 
             $$\lfloor \frac{\text{transferable votes for next-preference} \cdot \text{surplus}}{\text{total transferable votes}} \rfloor$$
@@ -114,7 +114,7 @@
             The votes to be transfered are selected at random. Remaining votes are exhausted.
             See the warning in Task 2. for details.
         </MudListItem>
-        <MudListItem Icon="fas fa-seven">
+        <MudListItem Icon="fas fa-7">
             If any seats remain, start the next round (go to 1). Otherwise, end.
         </MudListItem>
     </MudList>
