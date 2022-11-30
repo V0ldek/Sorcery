@@ -16,7 +16,57 @@
         There are two ways we could attempt to do that, depending on the tools available to us.
         We can simply go through the characters in a string and check if it's a letter!
     </Paragraph>
-    <CodeBlock>
+    <CodeBlock LineNumbers="true" Code="@(@"
+static bool IsAllLetters(string text) =>
+    text.All(c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+")"/>
+    <Paragraph>
+        Oftentimes we have access to regular expression validation, so we can also create a regex for this.
+        This is semantically equivalent:
+    </Paragraph>
+    <CodeBlock LineNumbers="true" Code="@(@"
+using System.Text.RegularExpressions;
 
-    </CodeBlock>
+// If you're not regex-savvy, this matches a full string that consists
+// of an arbitrary number of characters either in a-z or A-Z.
+static readonly Regex AllLettersRegex = new(""^[a-zA-Z]*$"");
+
+static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
+")" />
+    <Paragraph>
+        Perfect! Let's test both of those methods with a small suite.
+    </Paragraph>
+    <CodeBlock LineNumbers="true" Code="@(@"
+[Theory]
+[InlineData(""helloworld"", ""HELLOWORLD"", ""HelloWorld"", """")]
+public void IsAllLetters_WithAlphaStrings_ShouldBeTrue(string text)
+{
+    Assert.True(IncorrectSolution.IsAllLetters(text));
+    Assert.True(IncorrectSolution.IsAllLettersRegex(text));
+}
+
+[Theory]
+[InlineData(""Hello, World!"", ""h3110w0r1d"", ""hello_world"", ""hello::world"")]
+public void IsAllLetters_WithNonAlphaStrings_ShouldBeFalse(string text)
+{
+    Assert.False(IncorrectSolution.IsAllLetters(text));
+    Assert.False(IncorrectSolution.IsAllLettersRegex(text));
+}
+")"/>
+    <Paragraph>
+        All tests pass, great, let's push this and release! All of it works! Well, at least until someone tries to use one
+        of the <Highlight>$100,468$ other letters that we've completely ignored</Highlight>!
+    </Paragraph>
+
+    <MudText Typo="Typo.h2" Class="mx-auto py-2">There are more than $52$ letters</MudText>
+    <Paragraph>
+        Anyone who has ever interacted with anything outside of the anglosphere, which is <em>most people in the world</em>,
+        should see the mistake. There are more than $52$ letters. There is more than one alphabet! Even in the West Germanic
+        group of languages (which English belongs to) people use more letters than in the standard latin alphabet &ndash;
+        what if one were to send some German Grüße to our Welt? If we go North (Germanic) and look into some Danish bøger
+        we can find more unusual vowels. And if you asked me how I greet the world, I'd say <Code>WitajŚwiecie</Code>!
+        The further east we go, the more naïve... Wait, that's an English word, clearly made out of letters, but
+        naturally <Code>'ï'</Code> is not in our A to Z range!
+    </Paragraph>
 </BlogPost>
+
