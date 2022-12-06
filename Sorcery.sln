@@ -34,9 +34,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discrepancy.UnitTests", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AlphabetDoesNotGoAToZ", "AlphabetDoesNotGoAToZ", "{16564E33-F442-4A75-BAC7-A327DB408057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphabetDoesNotGoAToZ", "src\BlogPostCode\AlphabetDoesNotGoAToZ\AlphabetDoesNotGoAToZ\AlphabetDoesNotGoAToZ.csproj", "{7AFC2649-2058-47D9-9E3D-FDF3011A8D2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphabetDoesNotGoAToZ", "src\BlogPostCode\AlphabetDoesNotGoAToZ\AlphabetDoesNotGoAToZ\AlphabetDoesNotGoAToZ.csproj", "{7AFC2649-2058-47D9-9E3D-FDF3011A8D2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphabetDoesNotGoAToZ.UnitTests", "src\BlogPostCode\AlphabetDoesNotGoAToZ\AlphabetDoesNotGoAToZ.UnitTests\AlphabetDoesNotGoAToZ.UnitTests.csproj", "{06DE166C-1D8A-499D-B768-1F1D85E76FB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphabetDoesNotGoAToZ.UnitTests", "src\BlogPostCode\AlphabetDoesNotGoAToZ\AlphabetDoesNotGoAToZ.UnitTests\AlphabetDoesNotGoAToZ.UnitTests.csproj", "{06DE166C-1D8A-499D-B768-1F1D85E76FB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

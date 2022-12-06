@@ -16,7 +16,7 @@ namespace AlphabetDoesNotGoAToZ.UnitTests
 
         private static readonly IReadOnlyList<string> NonLatinAlphaStrings = new[]
         {
-            "Witajświecie", "Привiтсвiте", "سلامدنیا", "你好世界", "naïveSolutions"
+            "Witajświecie", "Привiтсвiте", "سلامدنیا", "你好世界", "OhHowNaïveIWas"
         };
 
         private static IReadOnlyList<ISolution> CreateSolutions() => new ISolution[]

@@ -18,32 +18,7 @@
 
         @foreach (var post in BlogBook.Posts.Take(3))
         {
-            <a href="@post.Route">
-                <MudCard Class="mud-button mud-ripple" Elevation="3">
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <div class="d-flex flex-grow-1 gap-4">
-                                <div class="flex-md-1 d-flex" style="width: 80%">
-                                    <MudText Typo="Typo.h6" Color="Color.Primary">@HttpUtility.HtmlDecode(post.Title)</MudText>
-                                </div>
-                                <div class="flex-md-1 d-flex" style="width: 20%">
-                                    <MudText Typo="Typo.caption" Style="text-align: right; width: 100%;">Published on @post.DateOfPublication?.ToString("yyyy-MM-dd")</MudText>
-                                    <br/>
-                                    <MudText Typo="Typo.caption" Style="text-align: right; width: 100%;">Tags: <Highlight>@string.Join(", ", post.Tags)</Highlight></MudText>
-                                </div>
-                            </div>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Class="pb-2">
-                            The task is simple, I want you to look at some text and tell me if it contains only <em>alphabetic characters</em>,
-                            or, in other words, <em>letters</em>. There are other similar problems, maybe we want to check if the text contains
-                            any letters (because we're writing a password validation policy and hate happiness). In any case, the root issue
-                            is telling whether a given character is a letter. <Highlight>And you're probably doing it wrong</Highlight>.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </a>
+            <BlogPostCard Post="@post"/>
         }
     </MudPaper>
 </MudContainer>

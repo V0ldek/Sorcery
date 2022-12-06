@@ -17,7 +17,7 @@ public sealed class BlogBook
         {
             new ("SIMD &ndash; Sweet Intrinsics to Make (your) Day", "simd-sweet-intrinsics-to-make-your-day", null)
             {
-
+                Description = Pages.Sourcery.Posts.SimdSweetIntrinsicsToMakeYourDay.Introduction
             },
             new ("Alphabet does not go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2022, 11, 30))
             {
@@ -26,7 +26,8 @@ public sealed class BlogBook
                     new ("unicode"),
                     new ("i18n"),
                     new ("regex"),
-                }
+                },
+                Description = Pages.Sourcery.Posts.AlphabetDoesNotGoAToZ.Introduction
             },
         };
     }

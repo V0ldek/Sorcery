@@ -1,0 +1,17 @@
+﻿@using Sorcery.Blogging;
+
+@foreach (var tag in Tags.Take(Tags.Count - 1))
+{
+    <MudLink Typo="@Typo.inherit" Href="@($"/sourcery/tags/{tag}")">@tag, </MudLink>
+}
+
+@if (Tags.Any())
+{
+    <MudLink Typo="@Typo.inherit" Href="@($"/sourcery/tags/{Tags[^1]}")">@Tags[^1]</MudLink>
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public IReadOnlyList<Tag> Tags { get; set; } = Array.Empty<Tag>();
+}

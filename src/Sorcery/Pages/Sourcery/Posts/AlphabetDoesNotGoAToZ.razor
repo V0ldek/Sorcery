@@ -1,28 +1,37 @@
 ﻿@page "/sourcery/alphabet-does-not-go-a-to-z"
 @using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Shared.Components.Footnotes;
 @using Sorcery.Blogging;
 @inject BlogBook BlogBook;
 
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+            We're going to examine a seemingly trivial task &ndash; look at some text and tell if it contains only <em>alphabetic characters</em>,
+            or, in other words, <em>letters</em>. Simlarly, we might want to check if the text contains
+            any letters, begins with a letter, etc. In any case, the root issue
+            is telling whether a given character is a letter. <Highlight>And you're probably doing it wrong</Highlight>.
+        </Paragraph>
+    };
+}
+
 <BlogPost Post="BlogBook.AlphabetDoesNotGoAToZ">
-    <Paragraph GutterBottom="false">
-        The task is simple, I want you to look at some text and tell me if it contains only <em>alphabetic characters</em>,
-        or, in other words, <em>letters</em>. There are other similar problems, maybe we want to check if the text contains
-        any letters (because we're writing a password validation policy and hate happiness). In any case, the root issue
-        is telling whether a given character is a letter. <Highlight>And you're probably doing it wrong</Highlight>.
-    </Paragraph>
+    @Introduction
     
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Obvious and wrong solution</MudText>
+    <Header2>Obvious and wrong solution</Header2>
     <Paragraph>
-        There are two ways we could attempt to do that, depending on the tools available to us.
-        We can simply go through the characters in a string and check if it's a letter!
+        There are at least two ways we could attempt to do that, depending on the tools available to us.
+        We can simply go through the characters in a string and check if it's a letter. I'll use C#, but
+        the overall idea is the same in every language:
     </Paragraph>
     <CodeBlock LineNumbers="true" Code="@(@"
 static bool IsAllLetters(string text) =>
     text.All(c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 ")"/>
     <Paragraph>
-        Oftentimes we have access to regular expression validation, so we can also create a regex for this.
-        This is semantically equivalent:
+        Oftentimes we have access to regular expression validation, so we can also create a regex checking
+        the same thing:
     </Paragraph>
     <CodeBlock LineNumbers="true" Code="@(@"
 using System.Text.RegularExpressions;
@@ -34,7 +43,8 @@ static readonly Regex AllLettersRegex = new(""^[a-zA-Z]*$"");
 static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
 ")" />
     <Paragraph>
-        Perfect! Let's test both of those methods with a small suite.
+        Let's test both of those methods with a small XUnit suite, testing against variations
+        of the classic "Hello, World!" greeting:
     </Paragraph>
     <CodeBlock LineNumbers="true" Code="@(@"
 [Theory]
@@ -55,18 +65,146 @@ public void IsAllLetters_WithNonAlphaStrings_ShouldBeFalse(string text)
 ")"/>
     <Paragraph>
         All tests pass, great, let's push this and release! All of it works! Well, at least until someone tries to use one
-        of the <Highlight>$100,468$ other letters that we've completely ignored</Highlight>!
+        of the <Highlight>over $125\,000$ other letters that we've completely ignored</Highlight><Footnote>
+            Based on character counts from <MudLink Typo="@Typo.inherit" Href="https://www.compart.com/en/unicode/category">compart.com/unicode</MudLink>.
+        </Footnote>!
     </Paragraph>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">There are more than $52$ letters</MudText>
+    <Header2>There are more than $52$ letters</Header2>
     <Paragraph>
         Anyone who has ever interacted with anything outside of the anglosphere, which is <em>most people in the world</em>,
         should see the mistake. There are more than $52$ letters. There is more than one alphabet! Even in the West Germanic
         group of languages (which English belongs to) people use more letters than in the standard latin alphabet &ndash;
         what if one were to send some German Grüße to our Welt? If we go North (Germanic) and look into some Danish bøger
-        we can find more unusual vowels. And if you asked me how I greet the world, I'd say <Code>WitajŚwiecie</Code>!
+        we can find more unusual vowels. And if you asked me how I greet the world, I'd say <Code>Witaj, Świecie</Code>!
         The further east we go, the more naïve... Wait, that's an English word, clearly made out of letters, but
-        naturally <Code>'ï'</Code> is not in our A to Z range!
+        clearly <Code>'ï'</Code> is not in our A to Z range!
+    </Paragraph>
+    <Paragraph>
+        Being the principled programmers that we are we can prove it with another test suite,
+        this time using different languages and alphabets:
+    </Paragraph>
+    <CodeBlock LineNumbers="true" Code="@(@"
+[Theory]
+[InlineData(""Witajświecie"", ""Привiтсвiте"", ""سلامدنیا"", ""你好世界"", ""OhHowNaïveIWas"")]
+public void IsAllLetters_WithNonLatinAlphaStrings_ShouldBeTrue(string text)
+{
+    Assert.True(IncorrectSolution.IsAllLetters(text));
+    Assert.True(IncorrectSolution.IsAllLettersRegex(text));
+}
+")" />
+    <Paragraph>
+        Each and every one of these is a string made out of letters and letters only.
+        Each and every one of these fails with our current implementation, because <Highlight>Alphabet Does Not Go A to Z</Highlight>.
+    </Paragraph>
+    <Header2>Correct solution</Header2>
+    <Paragraph>
+        For our first, non-regex version of the code, this error is a bit artificial. Every respectable
+        programming language has functionality in its standard library that recognises letter characters, and it's the one
+        you should naturally prefer to use:
+    </Paragraph>
+    <CodeBlock LineNumbers="true" Code="@(@"
+static bool IsAllLetters(string text) => text.All(c => char.IsLetter(c));
+")" />
+    <Paragraph>
+        It reads better and is less confusing than the previous version, not to mention that this time it's actually correct
+        &ndash; running our test suite on this implementation confirms it recognises non-latin letters as, well, letters. 
+    </Paragraph>
+    <Paragraph>
+        The regex case is a bit more interesting and a key reason I'm writing this post. 
+        The idea of <Code>[a-zA-Z]</Code> meaning "letter" seems pervasive when talking about regular expressions.
+        That is more or less how I was taught at first one should recognise letters, and on StackOverflow
+        answers for questions related to letter classification seem to also be heavily biased towards this
+        patently incorrect solution<Footnote>
+            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/6573686/regex-that-must-have-at-least-3-alpha-characters">
+                    StackOverflow: RegEx that must have at least 3 alpha characters
+            </MudLink>
+        </Footnote><Footnote>
+            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/20195682/regex-letter-and-space-but-minimum-one-letter">
+                StackOverflow: REGEX - Letter and space but minimum one letter
+            </MudLink>
+        </Footnote><Footnote>
+            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/25234296/grab-n-letter-words-dont-count-apostrophes-regex">
+                StackOverflow: grab n letter words don't count apostrophes regex
+            </MudLink>
+        </Footnote><Footnote>
+            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/4149276/how-to-convert-camelcase-to-camel-case">
+                StackOverflow: How to convert "camelCase" to "Camel Case"?
+            </MudLink>
+        </Footnote><Footnote>
+            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/15550860/regex-for-lowercase-letter-or-period-followed-by-an-uppercase-letter">
+                StackOverflow: regex for lowercase letter or period followed by an uppercase letter
+            </MudLink>
+        </Footnote>.
+    </Paragraph>
+    <Paragraph>
+        But it is <em>really</em> easy to do this correctly with regexes as well.
+        Regular expressions support the notion of <Highlight>Unicode categories</Highlight>. These are groups
+        of Unicode characters like letter, number, punctuation, etc. We use <Code>\p{&lt;cat&gt;}</Code> for that, where
+        <Code>&lt;cat&gt;</Code> is the key of the category &ndash; for letters that's <Code>L</Code>.
+    </Paragraph>
+<CodeBlock LineNumbers="true" Code="@(@"
+using System.Text.RegularExpressions;
+
+static readonly Regex AllLettersRegex = new(@""^\p{L}*$"");
+
+static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
+")" />
+    <Paragraph>
+        This works with our non-latin tests, and is also a more readable regex (as much as one can put "readable" and "regex" next to each other, anyway).
+        There are also categories for uppercase and lowercase letters &ndash; <Code>Lu</Code> and <Code>Ll</Code> &ndash; 
+        to replace <Code>[A-Z]</Code> and <Code>[a-z]</Code>, respectivelly.
+    </Paragraph>
+    <Header2>Why this matters</Header2>
+    <Paragraph>
+        I came across this issue when examining the behaviour of an "extract alpha" operation exposed to users.
+        In short, customers are given the ability to perform a simple transformation on a string value before it gets
+        passed on; transformations like converting to lowercase, trimming, or, in this case, taking a prefix consisting
+        of only letter characters. This is all done via a GUI form, and by design is catered towards users
+        who are not necessarilly experts, programmers, or know much about text-processing.
+    </Paragraph>
+    <Paragraph>
+        Imagine your users have an identifier that always starts with their first name, and then may have a numeric
+        value following that ensures uniqueness, e.g. <Code>John37</Code>. Your IT admin uses the <Code>ExtractAlpha</Code> operation to get
+        the first name only and display that as the user's nickname, getting <Code>John</Code> in our example. Everything
+        works fine, until one day you hire a guy from Ireland named Ciarán, who gets the <Code>Ciarán1</Code> identifier.
+        He comes to you, complaining that his nickname is displayed as <Code>Ciar</Code>. Imagine how tedious it would
+        be to diagnose the root cause of the issue. And what does the poor IT admin at the end of the causal chain have to 
+        think to arrive at a fix? Well, the correct problem diagnosis is "those folks whose service we use are bad at programming,
+        and they screwed the <Code>ExtractAlpha</Code> operation", which is not the best impression to leave on your customers.
+        And it's not obvious on how to work around this either! In my case the users also have access to a custom <Code>RegexReplace</Code>
+        operation, but remember that they're not necessarily experts. Even some programmers aren't skilled in regexes, so requiring an end
+        user to diagnose and fix this issue by themselves would be crazy.
+    </Paragraph>
+    <Paragraph>
+        This gets even worse when you're an organisation that is primarily based in a country using a non-latin alphabet.
+        If you're from Ukraine, that operation is utterly useless for processing names (or names of cities, addresses, organisations...),
+        since none of the characters are considered "alphabetic" by your service provider &ndash; in Київ even the initial
+        К is not a latin K, but a different character with a different code, and won't be recognised by <Code>[A-Z]</Code>.
+        I have a personal gripe with this as well as a Pole,
+        who is occasionally told by web forms that "your input can only contain letters and numbers, and your ąęćśźż characters are not letters you weirdo".
+    </Paragraph>
+    <Paragraph>
+        Key takeaway: <Highlight>when typing <Code>[a-zA-Z]</Code> into your regex think twice whether you want these 
+        specific $52$ letters, or actually any letter &ndash; cause these are two different things! The latter is <Code>\p{L}</Code>.
+        </Highlight> 
+    </Paragraph>
+    <Header2>And digits don't go $0$ to $9$ either</Header2>
+    <Paragraph>
+        The string <Code>२१३७</Code> represents a valid decimal number. I hope that at this point I don't
+        have to explain the issue &ndash; different languages have different characters for digits as well.
+        The correct way of recognising these in code is by using the appropriate library function (in C# that's <Code>char.IsDigit</Code>),
+        and in regex by using the Decimal Number category <Code>\p{Nd}</Code>.
+    </Paragraph>
+    <Header2>Caveat</Header2>
+    <Paragraph>
+        One could argue with my labelling of the <Code>[a-zA-Z]</Code> version as "incorrect" and call it an exaggeration.
+        After all, it depends &ndash; correctness only makes sense with respect to requirements. And there are requirements
+        that warrant <Code>[a-zA-Z]</Code> &ndash; maybe you're parsing valid C identifiers, or URLs, or some other well-defined
+        format that is designed around thhe ASCII charset. That's true, if your specific requirements are to recognise latin
+        letters then it's totally fine. But for many of us <em>that's not the case</em>. Regexes are commonly used to validate
+        user input, and in most cases restricting that to ASCII is artificial. <Highlight>Support for Unicode should be the
+        default, and restricting the character set an exception made for a good reason.</Highlight> Computers are no longer exclusively
+        used by English-speaking academics and military, set your default mindset to international.
     </Paragraph>
 </BlogPost>
-

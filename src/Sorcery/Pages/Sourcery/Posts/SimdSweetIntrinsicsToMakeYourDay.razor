@@ -3,6 +3,18 @@
 @using Sorcery.Blogging;
 @inject BlogBook BlogBook;
 
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+                But what if I told you that your CPU has a whole another mode of execution in it,
+                together with separate registers and specialised instructions?
+                A mode that is ubiqutously used deep inside your compiler and the libraries you use,
+                but can also be tapped into from user code for massive performance gains?
+        </Paragraph>
+    };
+}
+
 <BlogPost Post="BlogBook.SimdSweetIntrinsicsToMakeYourDay">
     <Paragraph>
         When learning how this whole computer thingy works we usually reason in terms
@@ -13,12 +25,9 @@
         executes &ndash; load a value to a register, add two registers together,
         do a bitwise AND on the register...
     </Paragraph>
-    <Paragraph>
-        But what if I told you that your CPU has a whole another mode of execution in it,
-        together with separate registers and specialised instructions?
-        A mode that is ubiqutously used deep inside your compiler and the libraries you use,
-        but can also be tapped into from user code for massive performance gains?
-    </Paragraph>
+    
+    @Introduction
+
     <Paragraph GutterBottom="false">
         Enter the world of SIMD. What? Why? How? We'll answer these one-by-one.
     </Paragraph>

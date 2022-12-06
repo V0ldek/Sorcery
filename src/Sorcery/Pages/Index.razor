@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Sorcery.Shared.Components.Blogging;
+@inject BlogBook BlogBook;
 
 <PageTitle>Mat Gienieczko</PageTitle>
 
@@ -20,9 +22,9 @@
             I write a blog at <MudLink Href="/sourcery">Sourcery</MudLink>, here's the latest post: 
         </MudText>
 
-        <MudCard>
-            Stuff will be here.
-        </MudCard>
+        <div class="ma-2">
+            <BlogPostCard Post="BlogBook.Posts.First()" />
+        </div>
 
         <MudText>
             I have a course on C# starting from the very basics &ndash; check out <MudLink Href="/teaching">Teaching</MudLink>.

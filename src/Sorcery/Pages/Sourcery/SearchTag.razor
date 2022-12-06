@@ -1,0 +1,26 @@
+﻿@page "/sourcery/tags/{tagString}"
+@using System.Web;
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Blogging;
+@inject BlogBook BlogBook;
+
+<PageTitle>Posts tagged @TagString</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <MudText Typo="Typo.h1" Class="mx-auto">Posts tagged @TagString</MudText>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+
+        @foreach (var post in BlogBook.Posts.Where(p => p.Tags.Contains(Tag)))
+        {
+           <BlogPostCard Post="@post"/>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string TagString { get; set; } = Tag.None.ToString();
+
+    public Tag Tag { get; set; }
+}
