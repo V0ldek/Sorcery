@@ -17,7 +17,13 @@ public sealed class BlogBook
         {
             new ("SIMD &ndash; Sweet Intrinsics to Make (your) Day", "simd-sweet-intrinsics-to-make-your-day", null)
             {
-                Description = Pages.Sourcery.Posts.SimdSweetIntrinsicsToMakeYourDay.Introduction
+                Tags = new Tag[]
+                {
+                    new ("simd"),
+                    new ("csharp"),
+                },
+                Description = Pages.Sourcery.Posts.SimdSweetIntrinsicsToMakeYourDay.Introduction,
+                ShortDescription = "Discovering the wonderful parallel universe of local parallelism.",
             },
             new ("Alphabet does not go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2022, 11, 30))
             {
@@ -27,7 +33,8 @@ public sealed class BlogBook
                     new ("i18n"),
                     new ("regex"),
                 },
-                Description = Pages.Sourcery.Posts.AlphabetDoesNotGoAToZ.Introduction
+                Description = Pages.Sourcery.Posts.AlphabetDoesNotGoAToZ.Introduction,
+                ShortDescription = "Checking if a character is a letter is harder than you think.",
             },
         };
     }

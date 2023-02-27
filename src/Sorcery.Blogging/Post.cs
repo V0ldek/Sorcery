@@ -11,4 +11,6 @@ public record class Post(string Title, string RouteName, DateTime? DateOfPublica
     public string Route => RouteHelper.BuildRoute("/sourcery", RouteName);
 
     public required RenderFragment Description { get; init; }
+
+    public required string ShortDescription { get; init; }
 }

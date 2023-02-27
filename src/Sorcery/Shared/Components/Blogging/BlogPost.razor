@@ -8,23 +8,16 @@
     <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
         <article>
             <FootnoteContainer>
-                <div class="d-flex flex-grow-1 gap-4">
-                    <div class="flex-md-1 d-flex" style="width: 80%">
+                <div class="d-flex gap-4">
+                    <div class="d-flex flex-grow-1" style="width: 85%">
                         <MudText Typo="Typo.h1">@Title</MudText>
                     </div>
-                    <div class="flex-md-1 d-flex" style="width: 20%">
-                        <MudGrid Justify="Justify.Center">
-                            <MudItem xs="12">
-                                <div style="text-align: right">
-                                    <MudText Typo="Typo.caption" Style="width: 100%">Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")</MudText>
-                                </div>
-                            </MudItem>
-                            <MudItem xs="12">
-                                <div style="text-align: right">
-                                    <MudText Typo="Typo.caption" Style="width: 100%">Tags: <Highlight>@string.Join(", ", Post.Tags)</Highlight></MudText>
-                                </div>
-                            </MudItem>
-                        </MudGrid>
+                    <div class="d-flex flex-grow-1" style="width: 15%; text-align: left">
+                        <MudText Typo="Typo.caption" Style="width: 100%">
+                            Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")
+                            <br/>
+                            Tags: <BlogPostTags Tags="@Post.Tags" />
+                        </MudText>
                     </div>
                 </div>
                 <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />

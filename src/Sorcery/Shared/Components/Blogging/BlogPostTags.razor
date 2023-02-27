@@ -2,7 +2,7 @@
 
 @foreach (var tag in Tags.Take(Tags.Count - 1))
 {
-    <MudLink Typo="@Typo.inherit" Href="@($"/sourcery/tags/{tag}")">@tag, </MudLink>
+    <span><MudLink Typo="@Typo.inherit" Href="@($"/sourcery/tags/{tag}")">@tag</MudLink>, </span>
 }
 
 @if (Tags.Any())

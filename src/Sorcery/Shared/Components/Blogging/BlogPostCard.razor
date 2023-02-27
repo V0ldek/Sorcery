@@ -5,23 +5,15 @@
     <MudCard Class="mud-button mud-ripple" Elevation="5">
         <MudCardHeader>
             <CardHeaderContent>
-                <div class="d-flex flex-grow-1 gap-4">
-                    <div class="flex-md-1 d-flex" style="width: 80%">
+                <div class="d-flex gap-4">
+                    <div class="d-flex flex-grow-1" style="width: 80%">
                         <MudText Typo="Typo.h6" Color="Color.Primary">@HttpUtility.HtmlDecode(Post.Title)</MudText>
                     </div>
-                    <div class="flex-md-1 d-flex" style="width: 20%">
-                        <MudGrid Justify="Justify.Center">
-                            <MudItem xs="12">
-                                <div style="text-align: right">
-                                    <MudText Typo="Typo.caption" Style="width: 100%">Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")</MudText>
-                                </div>
-                            </MudItem>
-                            <MudItem xs="12">
-                                <div style="text-align: right">
-                                    <MudText Typo="Typo.caption" Style="width: 100%">Tags: <BlogPostTags Tags="@Post.Tags" /></MudText>
-                                </div>
-                            </MudItem>
-                        </MudGrid>
+                    <div class="d-flex flex-grow-1" style="width: 20%; text-align: left">
+                        <MudText Typo="Typo.caption" Style="width: 100%">Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")</MudText>
+                    </div>
+                    <div class="d-flex" style="width: 20%; text-align: left">
+                        <MudText Typo="Typo.caption" Style="width: 100%">Tags: <BlogPostTags Tags="@Post.Tags" /></MudText>
                     </div>
                 </div>
             </CardHeaderContent>

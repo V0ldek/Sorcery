@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="Codepage - 850"?>
+<rss
+  version="2.0">
+  <channel>
+    <title>Sourcery</title>
+    <link>https://v0ldek.com/</link>
+    <description>Software and Computer Science wizardry blog by Mat Gienieczko</description>
+    <language>en-GB</language>
+    <copyright>2022 - 2023 Mateusz Gienieczko</copyright>
+    <managingEditor>mat@gienieczko.com</managingEditor>
+    <lastBuildDate>Sun, 26 Feb 2023 23:01:00 Z</lastBuildDate>
+    <category>software</category>
+    <category>programming</category>
+    <category>computer science</category>
+    <item>
+      <guid
+        isPermaLink="true">https://v0ldek.com//sourcery/alphabet-does-not-go-a-to-z</guid>
+      <link>https://v0ldek.com//sourcery/alphabet-does-not-go-a-to-z</link>
+      <title>Alphabet does not go A to Z</title>
+      <description>Checking if a character is a letter is harder than you think.</description>
+    </item>
+  </channel>
+</rss>

@@ -22,5 +22,7 @@
     [Parameter]
     public string TagString { get; set; } = Tag.None.ToString();
 
-    public Tag Tag { get; set; }
+    public Tag Tag { get; private set; }
+
+    protected override void OnParametersSet() => Tag = new Tag(TagString);
 }
