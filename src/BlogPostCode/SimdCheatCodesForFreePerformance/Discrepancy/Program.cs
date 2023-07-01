@@ -1,6 +1,5 @@
 ﻿// Licensed under MIT, copyright Mateusz Gienieczko, all rights reserved.
 
-using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -12,6 +11,7 @@ using Avx2 = System.Runtime.Intrinsics.X86.Avx2;
 
 BenchmarkRunner.Run<Benches>();
 
+[DisassemblyDiagnoser]
 public class Benches
 {
     [Params(1_000_000)]
@@ -93,12 +93,11 @@ public class Benches
         {
             var value1 = BitConverter.ToUInt32(stream1[i..(i + Size)]);
             var value2 = BitConverter.ToUInt32(stream2[i..(i + Size)]);
-
             var xor = value1 ^ value2;
 
             if (xor != 0)
             {
-                var offset = BitOperations.TrailingZeroCount(xor) / 8;
+                var offset = BitOperations.TrailingZeroCount(xor) / Size;
                 return i + offset;
             }
         }
@@ -115,7 +114,7 @@ public class Benches
         }
         const int Size = 8;
 
-        // Take the cleanly divisible part and leave the reminder for later.
+        // Take the cleanly divisible part and leave the remainders for later.
         DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
         DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
 
@@ -125,12 +124,11 @@ public class Benches
             // ... interpreting each 8-byte block as a single 64-bit number.
             var value1 = BitConverter.ToUInt64(stream1[i..(i + Size)]);
             var value2 = BitConverter.ToUInt64(stream2[i..(i + Size)]);
-
             var xor = value1 ^ value2;
 
             if (xor != 0)
             {
-                var offset = BitOperations.TrailingZeroCount(xor) / 8;
+                var offset = BitOperations.TrailingZeroCount(xor) / Size;
                 return i + offset;
             }
         }
@@ -183,7 +181,7 @@ public class Benches
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private unsafe int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+    private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
     {
         if (sensor1.Length != sensor2.Length)
         {
@@ -264,7 +262,7 @@ public class Benches
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private unsafe int? Simd256Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+    private int? Simd256Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
     {
         if (sensor1.Length != sensor2.Length)
         {

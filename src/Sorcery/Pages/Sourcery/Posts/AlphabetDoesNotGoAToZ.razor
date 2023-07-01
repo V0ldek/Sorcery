@@ -30,6 +30,10 @@ static bool IsAllLetters(string text) =>
     text.All(c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 ")"/>
     <Paragraph>
+        This uses the neat property of ASCII encoding that the integer values of "A" through "Z" and "a" through "z"
+        are consecuitve numbers &ndash; 65 through 90 and 97 through 122.
+    </Paragraph>
+    <Paragraph>
         Oftentimes we have access to regular expression validation, so we can also create a regex checking
         the same thing:
     </Paragraph>
@@ -37,7 +41,7 @@ static bool IsAllLetters(string text) =>
 using System.Text.RegularExpressions;
 
 // If you're not regex-savvy, this matches a full string that consists
-// of an arbitrary number of characters either in a-z or A-Z.
+// of an arbitrary number of characters either in the range a-z or A-Z.
 static readonly Regex AllLettersRegex = new(""^[a-zA-Z]*$"");
 
 static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
@@ -78,10 +82,10 @@ public void IsAllLetters_WithNonAlphaStrings_ShouldBeFalse(string text)
         what if one were to send some German Grüße to our Welt? If we go North (Germanic) and look into some Danish bøger
         we can find more unusual vowels. And if you asked me how I greet the world, I'd say <Code>Witaj, Świecie</Code>!
         The further east we go, the more naïve... Wait, that's an English word, clearly made out of letters, but
-        clearly <Code>'ï'</Code> is not in our A to Z range!
+        <Code>'ï'</Code> is not in our A to Z range!
     </Paragraph>
     <Paragraph>
-        Being the principled programmers that we are we can prove it with another test suite,
+        Being the principled programmers that we are we can prove the bug with another test suite,
         this time using different languages and alphabets:
     </Paragraph>
     <CodeBlock LineNumbers="true" Code="@(@"
@@ -173,7 +177,7 @@ static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
         think to arrive at a fix? Well, the correct problem diagnosis is "those folks whose service we use are bad at programming,
         and they screwed the <Code>ExtractAlpha</Code> operation", which is not the best impression to leave on your customers.
         And it's not obvious on how to work around this either! In my case the users also have access to a custom <Code>RegexReplace</Code>
-        operation, but remember that they're not necessarily experts. Even some programmers aren't skilled in regexes, so requiring an end
+        operation, but remember that they're not necessarily experts. Not all programmers aren't skilled in regexes, so requiring an end
         user to diagnose and fix this issue by themselves would be crazy.
     </Paragraph>
     <Paragraph>
@@ -191,8 +195,8 @@ static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
     </Paragraph>
     <Header2>And digits don't go $0$ to $9$ either</Header2>
     <Paragraph>
-        The string <Code>२१३७</Code> represents a valid decimal number. I hope that at this point I don't
-        have to explain the issue &ndash; different languages have different characters for digits as well.
+        The string <Code>२१३७</Code> represents a valid decimal number. The issue should be obvious by now &ndash;
+        different languages have different characters for digits as well!
         The correct way of recognising these in code is by using the appropriate library function (in C# that's <Code>char.IsDigit</Code>),
         and in regex by using the Decimal Number category <Code>\p{Nd}</Code>.
     </Paragraph>

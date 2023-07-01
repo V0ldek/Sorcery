@@ -2,7 +2,7 @@
 @using Sorcery.Blogging;
 
 <a href="@Post.Route">
-    <MudCard Class="mud-button mud-ripple" Elevation="5">
+    <MudCard Class="mud-button mud-ripple" Elevation="5" @attributes="@Attributes">
         <MudCardHeader>
             <CardHeaderContent>
                 <div class="d-flex gap-4">
@@ -28,4 +28,7 @@
     [Parameter]
     [EditorRequired]
     public Post Post { get; set; } = null!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
 }

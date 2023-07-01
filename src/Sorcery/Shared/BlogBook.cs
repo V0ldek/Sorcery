@@ -15,17 +15,17 @@ public sealed class BlogBook
     {
         _posts = new()
         {
-            new ("SIMD &ndash; Sweet Intrinsics to Make (your) Day", "simd-sweet-intrinsics-to-make-your-day", null)
+            new ("SIMD &ndash; Cheat Codes for Free Performance", "simd-cheat-codes-for-free-performance", new DateTime(2023, 04, 17, 13, 03, 00, DateTimeKind.Utc))
             {
                 Tags = new Tag[]
                 {
                     new ("simd"),
                     new ("csharp"),
                 },
-                Description = Pages.Sourcery.Posts.SimdSweetIntrinsicsToMakeYourDay.Introduction,
+                Description = Pages.Sourcery.Posts.SimdCheatCodesForFreePerformance.Introduction,
                 ShortDescription = "Discovering the wonderful parallel universe of local parallelism.",
             },
-            new ("Alphabet does not go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2022, 11, 30))
+            new ("Alphabet Does Not Go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2023, 04, 17, 13, 03, 00, DateTimeKind.Utc))
             {
                 Tags = new Tag[]
                 {
@@ -39,7 +39,7 @@ public sealed class BlogBook
         };
     }
 
-    public Post SimdSweetIntrinsicsToMakeYourDay => _posts[0];
+    public Post SimdCheatCodesForFreePerformance => _posts[0];
 
     public Post AlphabetDoesNotGoAToZ => _posts[1];
 }
