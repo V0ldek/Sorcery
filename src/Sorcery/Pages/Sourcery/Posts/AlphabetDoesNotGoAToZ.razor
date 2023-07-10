@@ -177,7 +177,7 @@ static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
         think to arrive at a fix? Well, the correct problem diagnosis is "those folks whose service we use are bad at programming,
         and they screwed the <Code>ExtractAlpha</Code> operation", which is not the best impression to leave on your customers.
         And it's not obvious on how to work around this either! In my case the users also have access to a custom <Code>RegexReplace</Code>
-        operation, but remember that they're not necessarily experts. Not all programmers aren't skilled in regexes, so requiring an end
+        operation, but remember that they're not necessarily experts. Not all programmers are skilled in regexes, so requiring an end
         user to diagnose and fix this issue by themselves would be crazy.
     </Paragraph>
     <Paragraph>
@@ -205,7 +205,7 @@ static bool IsAllLettersRegex(string text) => AllLettersRegex.IsMatch(text);
         One could argue with my labelling of the <Code>[a-zA-Z]</Code> version as "incorrect" and call it an exaggeration.
         After all, it depends &ndash; correctness only makes sense with respect to requirements. And there are requirements
         that warrant <Code>[a-zA-Z]</Code> &ndash; maybe you're parsing valid C identifiers, or URLs, or some other well-defined
-        format that is designed around thhe ASCII charset. That's true, if your specific requirements are to recognise latin
+        format that is designed around the ASCII charset. That's true, if your specific requirements are to recognise latin
         letters then it's totally fine. But for many of us <em>that's not the case</em>. Regexes are commonly used to validate
         user input, and in most cases restricting that to ASCII is artificial. <Highlight>Support for Unicode should be the
         default, and restricting the character set an exception made for a good reason.</Highlight> Computers are no longer exclusively
