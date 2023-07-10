@@ -1,0 +1,33 @@
+﻿<sup id="@Id">
+    <Intralink Id="@TargetId">[@Number]</Intralink>
+</sup>
+
+@code {
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+
+    public string TargetId { get; set; } = null!;
+
+    public int Number { get; set; }
+
+    [CascadingParameter]
+    protected FootnoteContainer? FootnoteContainer { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            if (FootnoteContainer is null)
+            {
+                throw new InvalidOperationException("Footnote without an associated footnote container.");    
+            }
+
+            FootnoteContainer.AddFootnote(this);
+        }
+    }
+}

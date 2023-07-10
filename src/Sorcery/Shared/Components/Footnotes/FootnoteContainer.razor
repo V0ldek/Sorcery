@@ -1,0 +1,35 @@
+﻿<CascadingValue Value="@this">
+    @ChildContent
+</CascadingValue>
+    
+@if (Footnotes.Any())
+{
+    <MudDivider Class="mt-2 mb-6" DividerType="DividerType.FullWidth" Vertical="false" />
+    <MudList Dense="true">
+        @foreach (var footnote in Footnotes)
+        {
+            <MudListItem id="@footnote.TargetId">
+                <span class="mud-typography-caption">
+                    <Intralink Id="@footnote.Id">[@footnote.Number]</Intralink>. @footnote.ChildContent
+                </span>
+            </MudListItem>
+        }
+    </MudList>
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    private readonly List<Footnote> Footnotes = new();
+
+    public void AddFootnote(Footnote footnote)
+    {
+        footnote.Id = $"footnote-{Footnotes.Count}-source";
+        footnote.TargetId = $"footnote-{Footnotes.Count}";
+        footnote.Number = Footnotes.Count;
+        Footnotes.Add(footnote);
+        StateHasChanged();
+    }
+}

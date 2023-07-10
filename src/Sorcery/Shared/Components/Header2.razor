@@ -1,0 +1,11 @@
+﻿<MudText Typo="Typo.h2" @attributes="@Attributes">@ChildContent</MudText>
+<MudDivider Class="mt-2 mb-6" DividerType="DividerType.FullWidth" Vertical="false" />
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+}

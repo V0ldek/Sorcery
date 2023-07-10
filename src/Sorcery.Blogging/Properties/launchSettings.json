@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Sorcery.Blogging": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:52831;http://localhost:52832"
+    }
+  }
+}

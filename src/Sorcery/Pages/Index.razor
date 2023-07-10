@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Sorcery.Shared.Components.Blogging;
+@inject BlogBook BlogBook;
 
 <PageTitle>Mat Gienieczko</PageTitle>
 
@@ -8,12 +10,19 @@
         <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false"/>
         <MudText GutterBottom="true">
             I'm Mateusz Gienieczko, a.k.a. V0ldek on all the platforms that allow you to put your nickname in. 
-            You can learn more about me at <MudLink Href="/about">About me</MudLink>.
+            I'm a programmer and a streamer. You can learn more about me at <MudLink Href="/about">About me</MudLink>.
         </MudText>
 
         <MudText>
-            If you're here you're probably looking for <MudLink Href="/teaching">Teaching</MudLink>, 
-            where I put stuff related to my courses at MIMUW.
+            I write a blog at <MudLink Href="/sourcery">Sourcery</MudLink>, here's the latest post: 
+        </MudText>
+
+        <div class="ma-4">
+            <BlogPostCard Post="BlogBook.Posts.First()" />
+        </div>
+
+        <MudText>
+            I have a course on C# starting from the very basics &ndash; check out <MudLink Href="/teaching">Teaching</MudLink>.
         </MudText>
         
         <MudText Typo="Typo.h2" Class="mx-auto my-6">About this page</MudText> 

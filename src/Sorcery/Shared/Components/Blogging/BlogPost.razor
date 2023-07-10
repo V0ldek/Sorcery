@@ -1,0 +1,43 @@
+﻿@using System.Web;
+@using Sorcery.Blogging;
+@using Sorcery.Shared.Components.Footnotes;
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <article>
+            <FootnoteContainer>
+                <div class="d-flex gap-4">
+                    <div class="d-flex flex-grow-1" style="width: 85%">
+                        <MudText Typo="Typo.h1">@Title</MudText>
+                    </div>
+                    <div class="d-flex flex-grow-1" style="width: 15%; text-align: left">
+                        <MudText Typo="Typo.caption" Style="width: 100%">
+                            Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")
+                            <br/>
+                            Tags: <BlogPostTags Tags="@Post.Tags" />
+                        </MudText>
+                    </div>
+                </div>
+                <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+
+                @ChildContent
+            </FootnoteContainer>
+        </article>
+    </MudPaper>
+
+    <PrismRenderer ContainerId="content-paper" />
+    <LatexRenderer ContainerId="content-paper" />
+</MudContainer>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Post Post { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    private string Title => HttpUtility.HtmlDecode(Post.Title);
+}

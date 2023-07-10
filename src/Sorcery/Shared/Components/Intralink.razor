@@ -1,0 +1,31 @@
+﻿@inject IJSRuntime JSRuntime;
+
+<MudLink Typo="Typo.inherit" Underline="Underline.Hover" @attributes=Attributes @onclick="OnClickAsync" style="cursor: pointer">
+    @ChildContent
+</MudLink>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public string Id { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+
+    private async Task OnClickAsync()
+    {
+        if (Id is not null)
+        {
+            var container = await JSRuntime.InvokeAsync<IJSInProcessObjectReference>("document.getElementById", Id);
+            await container.InvokeVoidAsync("scrollIntoView", new
+            {
+                block = "center"
+            });
+            await JSRuntime.InvokeVoidAsync("window.Prism.highlightAllUnder", container);
+        }
+    }
+}

@@ -1,4 +1,4 @@
-﻿<pre @attributes="@_preAttributes">
+﻿<pre data-start="@LineNumbersStartAt" @attributes="@_preAttributes">
 <code class="@_codeClass">
         @_displayCode
     </code>
@@ -16,6 +16,13 @@
     /// </summary>
     [Parameter]
     public bool LineNumbers { get; set; }
+
+    /// <summary>
+    ///     Starting point for line numbering. Has no effect if
+    ///     <see cref="LineNumbers"/> is false.
+    /// </summary>
+    [Parameter]
+    public int LineNumbersStartAt { get; set; } = 0;
 
     /// <summary>
     ///     Source file name to display. If not given then it's omitted from the overlay.

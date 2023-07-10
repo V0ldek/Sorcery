@@ -1,0 +1,28 @@
+﻿@page "/sourcery"
+@using System.Web;
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Blogging;
+@inject BlogBook BlogBook;
+
+<PageTitle>Sourcery</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <MudText Typo="Typo.h1" Class="mx-auto">Sourcery</MudText>
+        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+        <Paragraph>
+            This is my blog, where I muse about cool coding problems, performance, programming languages,
+            and pretty much whatever programming related. The only overarching theme is that coding is modern-day
+            sorcery and I refuse to use my magic abilities responsibly.
+        </Paragraph>
+
+        @foreach (var post in BlogBook.Posts.Take(3))
+        {
+            <BlogPostCard Post="@post" class="my-1"/>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+
+}

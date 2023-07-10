@@ -3,6 +3,8 @@
 <MudNavMenu Bordered="true" Dense="true">
     <MudNavLink Href="/" Match="NavLinkMatch.All">Welcome page</MudNavLink>
 
+    <MudNavLink Href="/sourcery" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Feed">Sourcery</MudNavLink>
+
     <MudNavGroupLink Href="/teaching" Match="NavLinkMatch.Prefix" Expanded="true" Icon="@Icons.Filled.School" Title="Teaching">
         @foreach (var course in CourseBook.Courses)
         {

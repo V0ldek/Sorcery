@@ -1,0 +1,302 @@
+﻿@page "/sourcery/simd-cheat-codes-for-free-performance"
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Blogging;
+@using Sorcery.Shared.Components.Footnotes
+@inject BlogBook BlogBook;
+
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+            However, modern CPUs have special instructions for a more complex mode of execution,
+            together with separate registers for those instructions only. These are cheat codes
+            that compilers and library developers use to get massive performance gains without
+            fundamentally changing the algorithm being executed.
+        </Paragraph>
+    };
+}
+
+<BlogPost Post="BlogBook.SimdCheatCodesForFreePerformance">
+    <Paragraph>
+        When learning how this whole computer thingy works we usually reason in terms
+        of single, simple operations &ndash; set a value, add two values together,
+        do a bitwise AND. If you dig into how the CPU executes that stuff you will learn
+        about assembly and registers, and that those operations you write in a
+        high-level programming language translate to simple instructions that the CPU
+        executes &ndash; load a value to a register, add two registers together,
+        do a bitwise AND on the register...
+    </Paragraph>
+    
+    @Introduction
+
+    <Paragraph GutterBottom="false">
+        Enter the world of SIMD. This series will introduce the concept from first principles,
+        starting with simple concepts at a high-level and then gradually getting us closer to the metal.
+        We'll start with good old C# code, without any magic tricks. All the code for this part can be found
+        <MudLink Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">on my GitHub</MudLink>.
+    </Paragraph>
+
+    <Header2>What Is SIMD?</Header2>
+    <section>
+        <Paragraph>
+            <strong>SIMD</strong>, <strong>Single Instruction, Multiple Data</strong>, is an umbrella term
+            for techniques that allow performing a particular operation on more than one atomic data point.
+            For example, while a regular instruction might add two $32$-bit numbers together, a SIMD instruction
+            would add <em>multiple individual pairs</em> of $32$-bit numbers together as a single operation.
+        </Paragraph>
+        <Paragraph>
+            The magical world of new instructions and registers I mentioned at the start 
+            is not actually needed to apply this concept. Consider the following toy problem.
+        </Paragraph>
+        <MudAlert Variant="Variant.Outlined" Class="mb-2">
+            <strong>The Dicrepancy Problem.</strong> &mdash;
+            We are given two streams of $8$-bit measurements from two sensors over some time period.
+            We expect them to be the same, but since anomalies can occur we want to detect the first place
+            at which they differ, if it exists.
+        </MudAlert>
+        <Header3>Sequential solution</Header3>
+        <section>
+            <Paragraph>
+                This can be solved with a rather simple sequential loop:
+            </Paragraph>
+            <CodeBlock LineNumbers="true" Code="@(@"
+int? Sequential(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+{
+    if (sensor1.Length != sensor2.Length)
+    {
+        throw new ArgumentException(""Unequal stream lengths"");
+    }
+
+    for (var i = 0; i < sensor1.Length; i += 1)
+    {
+        if (sensor1[i] != sensor2[i])
+        {
+            return i;
+        }
+    }
+
+    return null;
+}")" />
+            <Paragraph>
+                I'm using <MudLink Href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2018/january/csharp-all-about-span-exploring-a-new-net-mainstay">
+                <Code>ReadOnlySpan&lt;byte&gt;</Code>
+                </MudLink> to abstract the actual input format. It can be any contiguous sequence of bytes somewhere in memory.
+            </Paragraph>
+        </section>
+        <Header3>Engineer's First SIMD</Header3>
+        <section>
+            <Paragraph>
+                To get how to optimise this we need to go a level of abstraction lower and ponder for a second
+                what the compiler does for the above code. Well, it will certainly be a loop, steadily incrementing
+                the index by one, at each step loading one byte from each sensor into separate registers
+                and doing some sort of a comparison on them. CPUs don't usually operate on an $8$-bit elements, though.
+                The phrases "$32$-bit" or "$64$-bit" architecture mean that the CPU is equipped with registers
+                with those sizes, in my case $64$-bit.
+                In fact, when you tell your CPU to perform an $8$-bit addition, it will perform a full $32$/$64$-bit
+                addition and just ignore whatever happened in the higher $24$/$56$ bits. That means that
+                an operation on registers takes the same amount of time regardless of whether we load a byte or $8$ bytes into it.
+                So what we're doing here is telling our CPU that can hold $8$ bytes of data in each hand
+                (this analogy works if you consider the CPU to have around a dozen hands) to grab individual
+                bytes and leave $75-87.5\%$ of its capacity unused in every iteration of the loop.
+            </Paragraph>
+            <Paragraph>
+                The core insight should gleam on the horizon by now &ndash; maybe we can redesign
+                the loop so that we fully utilise the CPU's registers by feeding it $8$ bytes at a time?
+            </Paragraph>
+            <MudAlert Variant="Variant.Outlined">
+                From here on forward I will assume we use a $64$-bit architecture.
+                Note that all insights also apply to $32$-bit, in which case we would want to process
+                $4$ bytes at a time. You can also use the $8$-byte code on $32$-bit architectures,
+                but note that the performance then may not be greater than that of $4$-byte code,
+                since the CPU has to play pretend and emulate $64$-bit operations in $32$-bit registers.
+            </MudAlert>
+            <Paragraph>
+                Well, in our problem we can quite naturally just compare $8$ bytes at a time.
+                When we found a block of $8$ bytes that differs between sensors, we can then
+                find which particular one is different and return that. There's a small issue that
+                comes with block-by-block processing &ndash; the stream has to be divisible into those blocks.
+                So, if we get $1,000$ bytes of input and want to process it in blocks of $8$, that's easy,
+                it's just $125$ blocks. But if we get $1,007$ bytes, suddenly we have clean $125$ blocks
+                and the ugly $7$-byte remainder.
+            </Paragraph>
+            <Paragraph>
+                The usual approach in such cases is to run the block-by-block algorithm on most of the input,
+                and then process the remaining part sequentially. It will be small (always smaller than block
+                size), so it won't have a significant impact on the overall performance. We can
+                write a generic function that will split a stream of bytes into the "clean" part and
+                the remainder, which will prove very useful:<Footnote>
+                    I couldn't use a tuple as the return, since <Code>ReadOnlySpan&lt;&gt;</Code> is special
+                    and can't be a type argument, so I used the old multiple-return-values-via-out-parameters
+                    approach.
+                </Footnote>
+            </Paragraph>
+            <CodeBlock LineNumbers="true" Code="@(@"
+static void DetachFullBlocks(
+    ReadOnlySpan<byte> bytes,
+    int blockSize,
+    out ReadOnlySpan<byte> fullBlocks,
+    out ReadOnlySpan<byte> remainder)
+{
+    var numberOfFullBlocks = bytes.Length / blockSize;
+    var prefixLength = numberOfFullBlocks * blockSize;
+
+    fullBlocks = bytes[..prefixLength];
+    remainder = bytes[prefixLength..];
+}
+")" />
+            <Paragraph>
+                With that handy tool we can write our solution for $64$-bit blocks.
+            </Paragraph>
+            <CodeBlock LineNumbers="true" Code="@(@"
+private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
+{
+    if (sensor1.Length != sensor2.Length)
+    {
+        throw new ArgumentException(""Unequal stream lengths"");
+    }
+    const int Size = 8;
+
+    // Take the cleanly divisible part and leave the remainders for later.
+    DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
+    DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
+
+    // Stride by 8 bytes at a time...
+    for (var i = 0; i < stream1.Length; i += Size)
+    {
+        // ... interpreting each 8-byte block as a single 64-bit number.
+        var value1 = BitConverter.ToUInt64(stream1[i..(i + Size)]);
+        var value2 = BitConverter.ToUInt64(stream2[i..(i + Size)]);
+
+        if (value1 != value2)
+        {
+            // There is a difference within the block,
+            // find where it is exactly.
+            for (var j = i; j < i + Size; j += 1)
+            {
+                if (stream1[j] != stream2[j])
+                {
+                    return j;
+                }
+            }
+        }
+    }
+
+    // Deal with the reminder by running the Sequential version on it.
+    return Sequential(remainder1, remainder2) + stream1.Length;
+}
+")" />
+        </section>
+        <Header3>Numbers!</Header3>
+        <section>
+            <Paragraph>
+                Let's compare the performance of these solutions! I've also implemented Simd32,
+                which is a trivial change of the <Code>Size</Code> constant and <Code>BitConverter</Code>
+                calls. I run the benchmark on two streams of $1$ megabyte, with only the final byte
+                differing. <Footnote>For completeness, this is run with .NET 7.0.4 on an AMD Ryzen 9 7950X.</Footnote>
+            </Paragraph>
+            <MudSimpleTable Class="my-4" Bordered="true" Striped="true" Style="overflow-x: auto;">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Mean</th>
+                        <th>Error</th>
+                        <th>Ratio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sequential</td>
+                        <td>273.67 &mu;s</td>
+                        <td>1.001 &mu;s</td>
+                        <td>1.00</td>
+                    </tr>
+                    <tr>
+                        <td>Simd32</td>
+                        <td>136.70 &mu;s</td>
+                        <td>1.371 &mu;s</td>
+                        <td>0.50</td>
+                    </tr>
+                    <tr>
+                        <td>Simd64</td>
+                        <td>67.62 &mu;s</td>
+                        <td>0.476 &mu;s</td>
+                        <td>0.25</td>
+                    </tr>
+                </tbody>
+            </MudSimpleTable>
+            <Paragraph>
+                $4 \times$ speedup basically for free! <Footnote>
+It might be slightly surprising that we get $2$/$4$ times speedups while increasing
+the size of operations $4$/$8$ times. Such is reality, though, the packed version generates
+more complex code and introduces its own overhead. Note, however, that the fact that 
+$32$-bit SIMD is almost exactly twice as fast as sequential is just a coincidence, but that $64$-bit is almost
+exactly twice as fast as $32$-bit <em>is not</em> &ndash; the code between the two is identical
+save for the size difference, so there's no additional overhead, just pure gains.
+</Footnote>
+            </Paragraph>
+        </section>
+    </section>
+    <Header2>Clever Bitwise Tricks</Header2>
+    <section>
+        <Paragraph>
+            There's a small wrinkle that doesn't really affect performance, but understanding
+            how to fix it will go a long way. The sequential part of finding the exact place in a block
+            where there's a discrepancy is not elegant and can be done with a small trick.
+        </Paragraph>
+        <Paragraph>
+            I want you to forget for a second (or the duration of this article, really) that
+            the <Code>UInt64</Code> in the snippet is a number. That's <em>technically</em>
+            true, but it's much more useful to think of it as a vector of $8$ bytes.
+            In the end, we're not interested in the number itself &ndash; its decimal representation
+            is a mere implementation detail, what matters is the $8$ constituent values.
+        </Paragraph>
+        <Paragraph>
+            Try to come up with a solution that finds which element of an $8$-element vector is different
+            <em>without using any loops</em>. Here are the building blocks that I give you &ndash; 
+            you can perform any bitwise operation  on the vectors as you want, and you can quickly access some information about
+            the vector, like the number of non-zero elements or the location of first such element.
+        </Paragraph>
+        <div>
+            <Paragraph>
+                We can XOR the two vectors together and then ask where the first non-zero element is.
+                That element is our discrepancy. If the result of the XOR is zero, it means that both
+                vectors were identical. Thus, the check on the blocks now becomes:
+            </Paragraph>
+            <CodeBlock LineNumbers="true" LineNumbersStartAt="20" Code="@(@"
+    var xor = value1 ^ value2;
+
+    if (xor != 0)
+    {
+        // Recall that Size = 4 for 32-bit, 8 for 64-bit.
+        var offset = BitOperations.TrailingZeroCount(xor) / Size;
+        return i + offset;
+    }
+    ")" />
+            <MudPaper Class="pa-2 mb-1" Elevation="2">
+                <MudGrid Justify="@Justify.Center">
+                    <MudItem xs="12" md="6">
+                        <MudPaper Class="mr-3 mb-3 pa-3 d-flex align-center justify-center mud-width-full" Elevation="0">
+                            <ThemedImage Alt="C# sticker" Title="C# sticker" Src="img/sorcery/simd-sweet-intrinsics-to-make-your-day/discrepancy-xor.svg" Fluid="true" Width="420" Height="280" />
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudPaper Height="100%" Class="d-flex align-center justify-center mud-width-full" Elevation="0">
+                            <MudText>
+                                Visualisation of the XOR trick for $32$-bit registers.
+                                The fourth byte in the block differs between streams,
+                                so the result of a XOR is non-zero on the fourth byte.
+                                Trailing zeroes are used, and dividing their count by $8$
+                                gives us how many full bytes are identical. We conclude that
+                                it's the byte of index $3$ (counting from $0$) that differs.
+                            </MudText>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </div>
+    </section>
+    <Header2>Wide Vector SIMD</Header2>
+    <section>
+
+    </section>
+</BlogPost>

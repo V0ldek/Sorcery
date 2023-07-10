@@ -1,19 +1,22 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider @ref="@_mudThemeProvider" IsDarkMode="@_isDarkMode" Theme="_matTheme"/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+<MudThemeProvider @ref="@_mudThemeProvider" IsDarkMode="@_isDarkMode" Theme="_matTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" aria-label="Menu" />
-        <MudAvatar Image="/img/v0ldek.webp" Alt="my gravatar" Variant="Variant.Filled"></MudAvatar>
+        <MudAvatar Variant="Variant.Filled">
+            <MudImage Src="/img/v0ldek.webp" Alt="my gravatar" Class="mud-avatar-img" ObjectFit="ObjectFit.Cover" />
+        </MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Mat Gienieczko</MudText>
         <MudSpacer />
-        <MudToggleIconButton @bind-Toggled="@_isDarkMode" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.LightMode" 
-            aria-label="Dark mode toggle"></MudToggleIconButton>
+        <MudToggleIconButton @bind-Toggled="@_isDarkMode" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.LightMode"
+                             aria-label="Dark mode toggle"></MudToggleIconButton>
         <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="@GitHub.Sorcery" aria-label="GitHub"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.RssFeed" Color="Color.Inherit" Href="/feed.rss" aria-label="RSS feed"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="@GitHub.Sorcery" aria-label="GitHub"></MudIconButton>
             <MudText Typo="Typo.body2" Class="ps-4"><footer><small>Copyright &copy; @_copyright Mateusz Gienieczko</small></footer></MudText>
         </MudHidden>
     </MudAppBar>
@@ -25,7 +28,7 @@
             @Body
         </CascadingValue>
         <MudScrollToTop>
-            <MudFab Color="Color.Dark" Icon="@Icons.Filled.ArrowUpward" />
+            <MudFab Color="Color.Dark" StartIcon="@Icons.Material.Filled.ArrowUpward" />
         </MudScrollToTop>
     </MudMainContent>
 </MudLayout>
@@ -65,7 +68,7 @@
         theme.PaletteDark.Primary = "#E95C30";
         theme.PaletteDark.PrimaryDarken = "#DE562C";
         theme.PaletteDark.PrimaryLighten = "#F46234";
-        
+
         theme.PaletteDark.InfoLighten = Colors.Blue.Lighten4;
         theme.PaletteDark.Info = Colors.Blue.Lighten3;
         theme.PaletteDark.InfoDarken = Colors.Blue.Lighten2;
@@ -73,7 +76,7 @@
         theme.PaletteDark.WarningLighten = Colors.Orange.Lighten3;
         theme.PaletteDark.Warning = Colors.Orange.Lighten2;
         theme.PaletteDark.WarningDarken = Colors.Orange.Lighten1;
-        
+
         theme.PaletteDark.ErrorLighten = Colors.Red.Lighten3;
         theme.PaletteDark.Error = Colors.Red.Lighten2;
         theme.PaletteDark.ErrorDarken = Colors.Red.Lighten1;

@@ -1,0 +1,66 @@
+﻿<MudImage 
+    Alt="@Alt"
+    title="@Title"
+    Src="@ThemedSrc"
+    Fluid="@Fluid"
+    Width="@Width"
+    Height="@Height"
+    ObjectPosition="@ObjectPosition"
+    Elevation="@Elevation"
+    ObjectFit="@ObjectFit"
+    @attributes="@Attributes" />
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string Alt { get; set; } = "";
+
+    [Parameter]
+    [EditorRequired]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    [EditorRequired]
+    public string Src { get; set; } = "";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+
+    [CascadingParameter]
+    protected ThemeInfo? ThemeInfo { get; set; }
+
+    [Parameter]
+    public bool Fluid { get; set; }
+
+    [Parameter]
+    public int? Width { get; set; }
+
+    [Parameter]
+    public int? Height { get; set; }
+
+    [Parameter]
+    public ObjectPosition ObjectPosition { get; set; } = ObjectPosition.Center;
+
+    [Parameter]
+    public int Elevation { get; set; }
+
+    [Parameter]
+    public ObjectFit ObjectFit { get; set; } = ObjectFit.Fill;
+
+    public string ThemedSrc
+    {
+        get
+        {
+            if (ThemeInfo?.IsDarkMode is true)
+            {
+                return Src;
+            }
+            else
+            {
+                var withoutExtension = Path.ChangeExtension(Src, null);
+                var extension = Path.GetExtension(Src);
+                return $"{withoutExtension}-light{extension}";
+            }
+        }
+    }
+}
