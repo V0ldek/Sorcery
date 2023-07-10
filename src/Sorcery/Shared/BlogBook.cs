@@ -15,7 +15,7 @@ public sealed class BlogBook
     {
         _posts = new()
         {
-            new ("SIMD &ndash; Cheat Codes for Free Performance", "simd-cheat-codes-for-free-performance", new DateTime(2023, 04, 17, 13, 03, 00, DateTimeKind.Utc))
+            new ("SIMD &ndash; Cheat Codes for Free Performance", "simd-cheat-codes-for-free-performance", null)
             {
                 Tags = new Tag[]
                 {
@@ -25,7 +25,7 @@ public sealed class BlogBook
                 Description = Pages.Sourcery.Posts.SimdCheatCodesForFreePerformance.Introduction,
                 ShortDescription = "Discovering the wonderful parallel universe of local parallelism.",
             },
-            new ("Alphabet Does Not Go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2023, 04, 17, 13, 03, 00, DateTimeKind.Utc))
+            new ("Alphabet Does Not Go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2023, 07, 10, 14, 00, 00, DateTimeKind.Utc))
             {
                 Tags = new Tag[]
                 {
