@@ -21,6 +21,7 @@ public sealed class BlogBook
                 {
                     new ("simd"),
                     new ("csharp"),
+                    new ("perf"),
                 },
                 Description = Pages.Sourcery.Posts.SimdCheatCodesForFreePerformance.Introduction,
                 ShortDescription = "Discovering the wonderful parallel universe of local parallelism.",
