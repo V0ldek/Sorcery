@@ -6,6 +6,7 @@ using MudBlazor.Services;
 using Sorcery;
 using Sorcery.ModularCourse;
 using Sorcery.Shared;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

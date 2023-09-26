@@ -4,6 +4,7 @@
     "inputFiles": [
       "wwwroot/css/lib/*.css",
       "wwwroot/css/lib/fontawesome/**/*.css",
+      "!wwwroot/scripts/lib/giscus.css",
       "wwwroot/css/app.css"
     ],
     "minify": {

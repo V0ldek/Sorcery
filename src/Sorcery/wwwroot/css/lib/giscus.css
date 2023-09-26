@@ -1,0 +1,32 @@
+﻿main {
+    --color-bg-primary: #1B1D1E;
+    --color-text-primary: #BEB9B0;
+    --color-border-primary: #555555;
+    --color-bg-overlay: #181A1B;
+    --color-accent-fg: #E95C30;
+    --color-accent-muted: #773723;
+    --color-btn-bg: #1B1D1E;
+    --color-btn-text: #BEB9B0;
+    --color-btn-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12);
+}
+
+    main .pagination-loader-container {
+        background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
+    }
+
+    main .gsc-loading-image {
+        background-image: url("https://github.githubassets.com/images/mona-loading-dark.gif");
+    }
+
+    main .gsc-main {
+        padding-right: 1pt;
+        padding-left: 1pt;
+    }
+
+    main .gsc-comment .border {
+        border-radius: 4px !important;
+    }
+
+    main .gsc-main .btn {
+        border: none;
+    }
