@@ -8,7 +8,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Sse2 = System.Runtime.Intrinsics.X86.Sse2;
 using Avx2 = System.Runtime.Intrinsics.X86.Avx2;
-using Avx512 = System.Runtime.Intrinsics.X86.Avx512BW;
 
 BenchmarkRunner.Run<Benches>();
 
@@ -58,9 +57,6 @@ public class Benches
 
     [Benchmark]
     public int? Simd256Portable() => Simd256Portable(Stream1, Stream2);
-
-    [Benchmark]
-    public int? Simd512Portable() => Simd512Portable(Stream1, Stream2);
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private int? Sequential(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
@@ -290,43 +286,6 @@ public class Benches
             uint mask = Vector256.ExtractMostSignificantBits(cmpeq);
 
             if (mask != 0xFFFFFFFF)
-            {
-                var offset = BitOperations.TrailingZeroCount(~mask);
-                return i + offset;
-            }
-
-            sensor1Current = ref Unsafe.Add(ref sensor1Current, Size);
-            sensor2Current = ref Unsafe.Add(ref sensor2Current, Size);
-        }
-
-        return Sequential(remainder1, remainder2) + stream1.Length;
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private int? Simd512Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
-    {
-        if (sensor1.Length != sensor2.Length)
-        {
-            throw new ArgumentException("Unequal stream lengths");
-        }
-        const int Size = 64;
-
-        // Take the cleanly divisible part and leave the reminder for later.
-        DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
-        DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
-
-        ref byte sensor1Current = ref MemoryMarshal.GetReference(stream1);
-        ref byte sensor2Current = ref MemoryMarshal.GetReference(stream2);
-
-        for (var i = 0; i < stream1.Length; i += Size)
-        {
-            Vector512<byte> vector1 = Vector512.LoadUnsafe(ref sensor1Current);
-            Vector512<byte> vector2 = Vector512.LoadUnsafe(ref sensor2Current);
-
-            Vector512<byte> cmpeq = Vector512.Equals(vector1, vector2);
-            ulong mask = Vector512.ExtractMostSignificantBits(cmpeq);
-
-            if (mask != 0xFFFFFFFFFFFFFFFF)
             {
                 var offset = BitOperations.TrailingZeroCount(~mask);
                 return i + offset;
