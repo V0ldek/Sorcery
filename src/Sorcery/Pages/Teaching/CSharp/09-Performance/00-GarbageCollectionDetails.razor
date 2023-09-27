@@ -104,15 +104,15 @@
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
     <MudList>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             More allocations &ndash; more collections. Decreasing allocations can improve performance by
             reducing GC time.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Allocating a lot of long-lived objects is a surefire way of killing your app's performance
             by increasing the frequency of Gen2 collections.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The Large Object Heap is best when it's not touched. We will talk on how to achieve that
             in <MudLink Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</MudLink>.
         </MudListItem>

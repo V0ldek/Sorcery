@@ -47,18 +47,18 @@ public async Task<ActionResult<DungeonView>> GetDungeonAsync(int id)
         A few things here:
     </MudText>
     <MudList>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The <Code>RouteAttribute</Code> specifies a parameter named <Code>id</Code>
             that gets mapped from the last part of the URL. So <code>/dungeon/dungeons/3</code> will map to this action with
             parameter <Code>id = 3</Code>. That parameter is mapped to the method's parameter with the same name.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The return type is <Code>ActionResult&lt;DungeonView&gt;</Code>. This is a special ASP.NET Core type
             that represents a bunch of possible responses. There's an implicit conversion from <Code>T</Code> to
             <Code>ActionResult&lt;T&gt;</Code>, as well as conversions from things like <Code>NotFoundResult</Code>,
             <Code>BadRequestResult</Code>, etc.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             We can return different HTTP responses using helper methods defined on <Code>ControllerBase</Code>.
             In this case we return a 404 Not Found if a Dungeon with given ID does not exist.
         </MudListItem>

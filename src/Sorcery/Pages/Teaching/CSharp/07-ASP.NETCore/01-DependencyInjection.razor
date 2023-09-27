@@ -79,33 +79,33 @@ curl https://localhost:20443/adder/sum
         for, like, infinitely many reasons.
     </MudText>
     <MudList>
-        <MudListItem Icon="@Icons.Filled.Dangerous">
+        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
             If <Code>NumberRepository</Code> ever needs a different way to be constructed,
             for example we decide to add logging and make the constructor take a logger,
             we would have to change every place with <Code>new NumberRepository</Code>.
             Imagine we had hundreds of actions, each instantiating its own <Code>NumberRepository</Code>...
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Dangerous">
+        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
             If <Code>AdderDbContext</Code> ever needs a different way to be constructed we are also screwed.
             You can probably see how this extrapolates &ndash; the issue becomes more and more pronounced with
             every layer underneath us. At some point instantiating a high-level service in a controller
             might require <Code>new</Code>-ing a dozen objects into existence.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Dangerous">
+        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
             Why does the <Code>AdderController</Code> even care about whether <Code>NumberRepository</Code>
             uses a <Code>DbContext</Code> underneath? What if we decide that we need to hold our numbers in
             a cloud storage? Do we go around and change every instantiation of the repository to use the
             cloud provider instead of <Code>AdderDbContext</Code>?
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Dangerous">
+        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
             For that matter, why does the <Code>AdderController</Code> even care that <Code>AdderDbContext</Code> <em>exists</em>.
             Again, does our controller need to know about every single type in the project to perform its job? If it
             needed a high-level service it'd necessarily know all about all the types below.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Dangerous">
+        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
             Why is the controller managing the lifetime of a <Code>DbContext</Code>? Just asking questions.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Dangerous">
+        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
             Finally, and <strong>most importantly &ndash; there is no way to test this method.</strong> None. Any unit test would necessarily have
             to construct a database itself and then seed it with data to observe the results.
             Changing our code to use a different database immediately invalidates all these tests.
@@ -239,14 +239,14 @@ public class AdderControllerUnitTests
         lifetime types:
     </MudText>
     <MudList Dense="true">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Transient &ndash; a new instance gets created every time the service is requested.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Scoped &ndash; an intance is created per scope. By and large it means one per
             HTTP request, but one can create more granular scopes manually.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Singleton &ndash; one instance gets created and reused throughout the application's
             lifetime.
         </MudListItem>

@@ -10,17 +10,17 @@
         We won't be using a notebook for this one, as we need an actual project to run the tests.
         In .NET there are three major test frameworks:
         <MudList Dense="true">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 MSUnit
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 NUnit
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 xUnit
             </MudText>
@@ -42,12 +42,12 @@
         which is a workflow where you repeatedly alternate between two modes:
     </MudText>
     <MudList Dense="true">
-        <MudListItem Icon="@Icons.Filled.Science">
+        <MudListItem Icon="@Icons.Material.Filled.Science">
             <MudText>
                 write new unit tests until they stop passing;
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Code">
+        <MudListItem Icon="@Icons.Material.Filled.Code">
             <MudText>
                 write production code until the existing unit tests all pass.
             </MudText>
@@ -76,17 +76,17 @@
         We're going to create a simple <Code>Modulo(int x, int m)</Code> method that works as follows:
     </MudText>    
     <MudList Dense="true" id="list-with-math">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 if <Code>m</Code> or <Code>x</Code> is zero, returns zero;
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 else if <Code>x</Code> is positive returns $x \mod |m|$;
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 otherwise, returns $-(|x| \mod |m|)$;
             </MudText>
@@ -249,17 +249,17 @@ public class CalculatorUnitTests
         which is a useful template for writing tests that makes their logic clear to follow.
     </MudText>    
     <MudList Dense="true" id="list-with-math">
-        <MudListItem Icon="@Icons.Filled.Build">
+        <MudListItem Icon="@Icons.Material.Filled.Build">
             <MudText>
                 <strong>Arrange</strong>: initialize all objects required for the test.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Memory">
+        <MudListItem Icon="@Icons.Material.Filled.Memory">
             <MudText>
                 <strong>Act</strong>: perform the operations whose effects we want to test and save their results.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.FactCheck">
+        <MudListItem Icon="@Icons.Material.Filled.FactCheck">
             <MudText>
                 <strong>Assert</strong>: validate that the result conforms to the expectations.
             </MudText>

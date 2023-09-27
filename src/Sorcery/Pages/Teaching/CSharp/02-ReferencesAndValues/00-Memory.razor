@@ -17,7 +17,7 @@
         and the <Highlight>collector</Highlight>.
     </MudText>
     <MudList>
-        <MudListItem Icon="@Icons.Filled.Memory" IconSize="Size.Large">
+        <MudListItem Icon="@Icons.Material.Filled.Memory" IconSize="Size.Large">
             <MudText GutterBottom="true">
                 <strong>Allocator</strong> is responsible for allocating and initialising memory requested
                 by a program running on the CLR. In theory, its job is simple &ndash; when it gets a request
@@ -35,7 +35,7 @@
                 based on number of allocations performed, average lifetimes of allocated objects, etc.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.Delete" IconSize="Size.Large">
+        <MudListItem Icon="@Icons.Material.Filled.Delete" IconSize="Size.Large">
             <MudText>
                 <strong>Collector</strong> performs the actual garbage collection. The .NET GC is a
                 <Highlight>mark-and-sweep</Highlight> collector. When triggered, it scans the program

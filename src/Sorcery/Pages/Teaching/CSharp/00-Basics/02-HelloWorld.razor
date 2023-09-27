@@ -69,7 +69,7 @@ internal class Program
         Let's go through that line by line.
     </MudText>
     <MudList> 
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 The first line is what we call a <Code>using</Code> directive. It tells the compiler to bring into scope
                 all types defined in the <Code>System</Code> namespace. That's another new word &ndash; a <Highlight>namespace</Highlight> is a logical
@@ -78,7 +78,7 @@ internal class Program
                 <Code>System.Text.Regex</Code>. If you know Java's packages &ndash; this is more or less it. Namespaces are in PascalCase.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 Line number two is the declaration of our namespace in which the types defined in this file should be located.
                 By convention, the namespace is the same as the directory path. Since <code>Program.cs</code> is located directly
@@ -87,21 +87,21 @@ internal class Program
                 You should definitely follow that convention, as otherwise the project structure gets very confusing.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 Line three declares the <Code>Program</Code> class. The <Code>internal</Code> modifier restricts its visibility &ndash; we will cover that later.
                 Because of line two, the <Code>Program</Code> class is located in the <Code>HelloWorld</Code> namespace. Types are named in PascalCase.
                 Blocks of code such as class bodies are delimited in braces, which in C# we put on separate lines.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 Next we declare a <Code>static</Code> method on the <Code>Program</Code> class. It is called <Code>Main</Code>, takes
                 an array of <Code>string</Code> values called <Code>args</Code> as a parameter, and returns nothing (because it's <Code>void</Code>).
                 Methods are also in PascalCase, but their parameters are in camelCase.
             </MudText>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 Finally, we call the <Code>WriteLine</Code> method on the <Code>Console</Code> class and pass a single string argument to it.
                 Where is <Code>Console</Code> from? Well, its <Highlight>fully qualified name</Highlight> is <Code>System.Console</Code>. Every

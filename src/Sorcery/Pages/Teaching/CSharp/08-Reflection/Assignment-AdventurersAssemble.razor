@@ -25,16 +25,16 @@
         To be approprietly loaded, a type needs to:
     </MudText>
     <MudList Class="my-2">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             be tagged with the <Code>HeroClassAttribute</Code>;
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             be a subclass of <Code>DungeonWalker.Logic.Characters.Hero</Code>;
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             have a parameterless constructor;
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             have a name specified in the attribute not conflicting with any previously loaded Hero.
         </MudListItem>
     </MudList>
@@ -66,13 +66,13 @@ dotnet publish ./dynamic/Outside.Heroes -o ./dynamic/bin
         Implement the missing functions:
     </MudText>
     <MudList Class="my-2">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <Code>GetHeroAsync</Code>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <Code>LoadAllHeroesFromAssembly</Code>
         </MudListItem>        
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <Code>LoadHeroClass</Code>
         </MudListItem>
     </MudList>
@@ -86,16 +86,16 @@ dotnet publish ./dynamic/Outside.Heroes -o ./dynamic/bin
         instance has extension methods defined for all of the failure cases we defined:
     </MudText>
     <MudList Class="my-2">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <Code>FailedToLoadHeroClassDueToNoAttribute</Code>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <Code>FailedToLoadHeroClassDueToLackOfAParameterlessConstructor</Code>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <Code>FailedToLoadHeroClassDueToNotSubclassingHero</Code>
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <Code>FailedToLoadHeroClassDueToConflictingName</Code>
         </MudListItem>
     </MudList>
