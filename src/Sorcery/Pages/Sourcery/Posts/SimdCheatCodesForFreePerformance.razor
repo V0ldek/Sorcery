@@ -8,7 +8,7 @@
     public static readonly RenderFragment Introduction = __builder =>
     {
         <Paragraph>
-            However, modern CPUs have special instructions for a more complex mode of execution,
+            Modern CPUs have special instructions for a more complex mode of execution,
             together with separate registers for those instructions only. These are cheat codes
             that compilers and library developers use to get massive performance gains without
             fundamentally changing the algorithm being executed.
@@ -48,8 +48,8 @@
             The magical world of new instructions and registers I mentioned at the start 
             is not actually needed to apply this concept. Consider the following toy problem.
         </Paragraph>
-        <MudAlert Variant="Variant.Outlined" Class="mb-2">
-            <strong>The Discrepancy Problem.</strong> &mdash;
+        <MudAlert Variant="Variant.Outlined" Class="mb-4">
+            <strong>The Discrepancy Problem</strong> &mdash;
             We are given two streams of $8$-bit measurements from two sensors over some time period.
             We expect them to be the same, but since anomalies can occur we want to detect the first place
             at which they differ, if it exists.
@@ -154,6 +154,7 @@ private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
     {
         throw new ArgumentException(""Unequal stream lengths"");
     }
+
     const int Size = 8;
 
     // Take the cleanly divisible part and leave the remainders for later.
@@ -238,7 +239,8 @@ code, including memory latency, and without proper profiling we cannot identify 
     <Header2>Clever Bitwise Tricks</Header2>
     <section>
         <Paragraph>
-            There's a small wrinkle that doesn't really affect performance, but understanding
+            There's a small wrinkle that doesn't really affect performance in this case &ndash; it happens
+            at most once at the end &ndash; but understanding
             how to fix it will go a long way. The sequential part of finding the exact place in a block
             where there's a discrepancy is not elegant and can be done with a small trick.
         </Paragraph>
@@ -262,14 +264,15 @@ code, including memory latency, and without proper profiling we cannot identify 
                 vectors were identical. Thus, the check on the blocks now becomes:
             </Paragraph>
             <CodeBlock LineNumbers="true" LineNumbersStartAt="20" Code="@(@"
-    var xor = value1 ^ value2;
+var xor = value1 ^ value2;
 
-    if (xor != 0)
-    {
-        // Recall that Size = 4 for 32-bit, 8 for 64-bit.
-        var offset = BitOperations.TrailingZeroCount(xor) / Size;
-        return i + offset;
-    }
+if (xor != 0)
+{
+    // This is a different 8 than the Size constant, it's for 8 bits in a byte
+    // that we need to count, e.g. 26 trailing zeroes is 26 / 8 = 3 full trailing bytes.
+    var offset = BitOperations.TrailingZeroCount(xor) / 8;
+    return i + offset;
+}
     ")" />
             <MudPaper Class="pa-2 mb-1" Elevation="4">
                 <MudGrid Justify="@Justify.Center">
