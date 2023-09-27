@@ -24,7 +24,7 @@
                 right = "$",
                 display = false
             }
-        },
+    },
         throwOnError = true
     };
 
@@ -32,8 +32,12 @@
     {
         if (firstRender)
         {
-            var container = await JSRuntime.InvokeAsync<IJSInProcessObjectReference>("document.getElementById", ContainerId);
-            await JSRuntime.InvokeVoidAsync("renderMathInElement", container, _configuration);
+            var container = await JSRuntime.InvokeAsync<IJSInProcessObjectReference?>("document.getElementById", ContainerId);
+
+            if (container != null)
+            {
+                await JSRuntime.InvokeVoidAsync("renderMathInElement", container, _configuration);
+            }
         }
     }
 }

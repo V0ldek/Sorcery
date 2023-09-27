@@ -15,6 +15,30 @@
     }
   },
   {
+    "outputFileName": "wwwroot/css/bundled/giscus.min.css",
+    "inputFiles": [
+      "wwwroot/css/lib/giscus.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "hacks",
+      "gzip": true,
+      "adjustRelativePaths": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/bundled/giscus-light.min.css",
+    "inputFiles": [
+      "wwwroot/css/lib/giscus-light.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "hacks",
+      "gzip": true,
+      "adjustRelativePaths": true
+    }
+  },
+  {
     "outputFileName": "wwwroot/scripts/bundled/bundle.min.js",
     "inputFiles": [
       "wwwroot/scripts/lib/*.js",

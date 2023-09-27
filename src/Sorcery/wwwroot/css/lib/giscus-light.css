@@ -1,26 +1,26 @@
 ﻿main {
-    --color-bg-primary: #1B1D1E;
-    --color-text-primary: #BEB9B0;
+    --color-bg-primary: #FFFFFF;
+    --color-text-primary: #424242;
     --color-border-primary: #555555;
     --color-border-default: #555555;
     --color-border-muted: #333333;
-    --color-canvas-default: #1B1D1E;
+    --color-canvas-default: #FFFFFF;
     --color-textarea: #4E4940;
-    --color-bg-overlay: #181A1B;
-    --color-accent-fg: #E95C30;
+    --color-bg-overlay: #FFFFFF;
+    --color-accent-fg: #E64A19;
     --color-accent-muted: #773723;
-    --color-btn-bg: #1B1D1E;
-    --color-btn-primary-bg: #1B1D1E;
+    --color-btn-bg: #FFFFFF;
+    --color-btn-primary-bg: #FFFFFF;
     --color-btn-text: #BEB9B0;
     --color-btn-primary-text: #BEB9B0;
     --color-btn-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12);
     --color-btn-primary-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12);
-    --color-btn-hover-bg: #181A1B;
-    --color-btn-primary-hover-bg: #181A1B;
-    --color-social-reaction-bg-hover: #181A1B;
+    --color-btn-hover-bg: #FFFFFF;
+    --color-btn-primary-hover-bg: #FFFFFF;
+    --color-social-reaction-bg-hover: #FFFFFF;
     --color-btn-primary-disabled-text: #4E4940;
     --color-btn-primary-disabled-shadow: 0;
-    --color-segmented-control-button-selected-border: #E95C30;
+    --color-segmented-control-button-selected-border: #E64A19;
 }
 
     main .pagination-loader-container {
