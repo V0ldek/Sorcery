@@ -207,26 +207,26 @@ private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
                 <tbody>
                     <tr>
                         <td>Sequential</td>
-                        <td>277.25 &mu;s</td>
-                        <td>0.913 &mu;s</td>
+                        <td>273.67 &mu;s</td>
+                        <td>1.001 &mu;s</td>
                         <td>1.00</td>
                     </tr>
                     <tr>
                         <td>Simd32</td>
-                        <td>96.14 &mu;s</td>
-                        <td>0.673 &mu;s</td>
-                        <td>0.35</td>
+                        <td>136.70 &mu;s</td>
+                        <td>1.371 &mu;s</td>
+                        <td>0.50</td>
                     </tr>
                     <tr>
                         <td>Simd64</td>
-                        <td>53.31 &mu;s</td>
-                        <td>1.035 &mu;s</td>
-                        <td>0.19</td>
+                        <td>67.62 &mu;s</td>
+                        <td>0.476 &mu;s</td>
+                        <td>0.25</td>
                     </tr>
                 </tbody>
             </MudSimpleTable>
             <Paragraph>
-                $5 \times$ speedup basically for free! <Footnote>
+                $4 \times$ speedup basically for free! <Footnote>
 It might be slightly surprising that we get $3$/$5$ times speedups while increasing
 the size of operations $4$/$8$ times. Such is reality, though, the packed version generates
 more complex code and introduces its own overhead. There are many variables at play in high-performance
