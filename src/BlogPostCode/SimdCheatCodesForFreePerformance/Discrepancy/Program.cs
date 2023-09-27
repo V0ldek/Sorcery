@@ -97,7 +97,7 @@ public class Benches
 
             if (xor != 0)
             {
-                var offset = BitOperations.TrailingZeroCount(xor) / Size;
+                var offset = BitOperations.TrailingZeroCount(xor) / 8;
                 return i + offset;
             }
         }
@@ -128,7 +128,7 @@ public class Benches
 
             if (xor != 0)
             {
-                var offset = BitOperations.TrailingZeroCount(xor) / Size;
+                var offset = BitOperations.TrailingZeroCount(xor) / 8;
                 return i + offset;
             }
         }
@@ -152,8 +152,8 @@ public class Benches
         // Unsafe fun!
         // Soundness follows from the fact that we increment by Size up until
         // reaching stream1.Length, and we've asserted both streams are of equal size.
-        fixed (byte* sensor1Ptr = &MemoryMarshal.GetReference(sensor1))
-        fixed (byte* sensor2Ptr = &MemoryMarshal.GetReference(sensor2))
+        fixed (byte* sensor1Ptr = &MemoryMarshal.GetReference(stream1))
+        fixed (byte* sensor2Ptr = &MemoryMarshal.GetReference(stream2))
         {
             byte* sensor1Current = sensor1Ptr;
             byte* sensor2Current = sensor2Ptr;
@@ -193,8 +193,8 @@ public class Benches
         DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
         DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
 
-        ref byte sensor1Current = ref MemoryMarshal.GetReference(sensor1);
-        ref byte sensor2Current = ref MemoryMarshal.GetReference(sensor2);
+        ref byte sensor1Current = ref MemoryMarshal.GetReference(stream1);
+        ref byte sensor2Current = ref MemoryMarshal.GetReference(stream2);
 
         for (var i = 0; i < stream1.Length; i += Size)
         {
@@ -233,8 +233,8 @@ public class Benches
         // Unsafe fun!
         // Soundness follows from the fact that we increment by Size up until
         // reaching stream1.Length, and we've asserted both streams are of equal size.
-        fixed (byte* sensor1Ptr = &MemoryMarshal.GetReference(sensor1))
-        fixed (byte* sensor2Ptr = &MemoryMarshal.GetReference(sensor2))
+        fixed (byte* sensor1Ptr = &MemoryMarshal.GetReference(stream1))
+        fixed (byte* sensor2Ptr = &MemoryMarshal.GetReference(stream2))
         {
             byte* sensor1Current = sensor1Ptr;
             byte* sensor2Current = sensor2Ptr;
@@ -274,8 +274,8 @@ public class Benches
         DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
         DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
 
-        ref byte sensor1Current = ref MemoryMarshal.GetReference(sensor1);
-        ref byte sensor2Current = ref MemoryMarshal.GetReference(sensor2);
+        ref byte sensor1Current = ref MemoryMarshal.GetReference(stream1);
+        ref byte sensor2Current = ref MemoryMarshal.GetReference(stream2);
 
         for (var i = 0; i < stream1.Length; i += Size)
         {

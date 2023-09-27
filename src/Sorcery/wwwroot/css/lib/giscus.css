@@ -1,0 +1,125 @@
+﻿main {
+    --color-bg-primary: #1B1D1E;
+    --color-text-primary: #BEB9B0;
+    --color-border-primary: #555555;
+    --color-border-default: #555555;
+    --color-border-muted: #333333;
+    --color-canvas-default: #1B1D1E;
+    --color-textarea: #4E4940;
+    --color-bg-overlay: #181A1B;
+    --color-accent-fg: #E95C30;
+    --color-accent-muted: #773723;
+    --color-btn-bg: #1B1D1E;
+    --color-btn-primary-bg: #1B1D1E;
+    --color-btn-text: #BEB9B0;
+    --color-btn-primary-text: #BEB9B0;
+    --color-btn-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12);
+    --color-btn-primary-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12);
+    --color-btn-hover-bg: #181A1B;
+    --color-btn-primary-hover-bg: #181A1B;
+    --color-social-reaction-bg-hover: #181A1B;
+    --color-btn-primary-disabled-text: #4E4940;
+    --color-btn-primary-disabled-shadow: 0;
+    --color-segmented-control-button-selected-border: #E95C30;
+}
+
+    main .pagination-loader-container {
+        background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
+    }
+
+    main .gsc-loading-image {
+        background-image: url("https://github.githubassets.com/images/mona-loading-dark.gif");
+    }
+
+    main .gsc-main {
+        padding: 1pt;
+    }
+
+    main .gsc-comment .border {
+        border-radius: 4px !important;
+    }
+
+    main .gsc-main .btn:disabled {
+        box-shadow: var(--color-btn-primary-disabled-shadow);
+    }
+
+    main .gsc-main .btn {
+        border: none;
+        border-radius: 0px !important;
+        box-shadow: var(--color-btn-primary-shadow);
+    }
+
+    main .gsc-social-reaction-summary-item {
+        border-radius: 0px;
+        border: none;
+    }
+
+        main .gsc-social-reaction-summary-item:not([disabled]) {
+            box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+        }
+
+        main .gsc-social-reaction-summary-item.has-reacted:not([disabled]) {
+            border: solid 1px;
+        }
+
+    main .gsc-reactions-button:hover {
+        background-color: var(--color-social-reaction-bg-hover);
+    }
+
+    main .gsc-comment-box-textarea::placeholder {
+        color: var(--color-textarea);
+    }
+
+    main .BtnGroup-item {
+        border-radius: 0px;
+    }
+
+    main .gsc-reactions-count {
+        display: none;
+    }
+
+    main .gsc-reactions {
+        align-items: flex-start;
+        margin-bottom: 3em;
+    }
+
+        main .gsc-reactions .flex {
+            flex-direction: row-reverse;
+        }
+
+main {
+    --color-prettylights-syntax-comment: #6a9955;
+    --color-prettylights-syntax-constant: #b5cea8;
+    --color-prettylights-syntax-entity: #dcdcaa;
+    --color-prettylights-syntax-storage-modifier-import: #9cdcfe;
+    --color-prettylights-syntax-entity-tag: #00FF00;
+    --color-prettylights-syntax-keyword: #569CD6;
+    --color-prettylights-syntax-string: #ce9178;
+    --color-prettylights-syntax-variable: #9cdcfe;
+    --color-prettylights-syntax-brackethighlighter-unmatched: #e5534b;
+    --color-prettylights-syntax-invalid-illegal-text: #cdd9e5;
+    --color-prettylights-syntax-invalid-illegal-bg: #922323;
+    --color-prettylights-syntax-carriage-return-text: #cdd9e5;
+    --color-prettylights-syntax-carriage-return-bg: #ad2e2c;
+    --color-prettylights-syntax-string-regexp: #8ddb8c;
+    --color-prettylights-syntax-markup-list: #eac55f;
+    --color-prettylights-syntax-markup-heading: #316dca;
+    --color-prettylights-syntax-markup-italic: #adbac7;
+    --color-prettylights-syntax-markup-bold: #adbac7;
+    --color-prettylights-syntax-markup-deleted-text: #ffd8d3;
+    --color-prettylights-syntax-markup-deleted-bg: #78191b;
+    --color-prettylights-syntax-markup-inserted-text: #b4f1b4;
+    --color-prettylights-syntax-markup-inserted-bg: #1b4721;
+    --color-prettylights-syntax-markup-changed-text: #ffddb0;
+    --color-prettylights-syntax-markup-changed-bg: #682d0f;
+    --color-prettylights-syntax-markup-ignored-text: #adbac7;
+    --color-prettylights-syntax-markup-ignored-bg: #255ab2;
+    --color-prettylights-syntax-meta-diff-range: #dcbdfb;
+    --color-prettylights-syntax-brackethighlighter-angle: #768390;
+    --color-prettylights-syntax-sublimelinter-gutter-mark: #545d68;
+    --color-prettylights-syntax-constant-other-reference-link: #96d0ff;
+}
+
+    main .highlight {
+        color: #d4d4d4;
+    }

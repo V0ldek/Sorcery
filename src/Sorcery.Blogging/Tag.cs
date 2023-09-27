@@ -4,7 +4,7 @@ namespace Sorcery.Blogging;
 
 public readonly record struct Tag
 {
-    public static readonly Tag None = new Tag();
+    public static readonly Tag None;
 
     public string Value { get; private init; }
 

@@ -1,5 +1,6 @@
 ﻿@using System.Web;
 @using Sorcery.Blogging;
+@using Sorcery.Shared.Components;
 @using Sorcery.Shared.Components.Footnotes;
 
 <PageTitle>@Title</PageTitle>
@@ -25,6 +26,7 @@
                 @ChildContent
             </FootnoteContainer>
         </article>
+        <CommentBox />
     </MudPaper>
 
     <PrismRenderer ContainerId="content-paper" />

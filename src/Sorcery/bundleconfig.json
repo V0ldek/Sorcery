@@ -4,7 +4,32 @@
     "inputFiles": [
       "wwwroot/css/lib/*.css",
       "wwwroot/css/lib/fontawesome/**/*.css",
+      "!wwwroot/scripts/lib/giscus.css",
       "wwwroot/css/app.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "hacks",
+      "gzip": true,
+      "adjustRelativePaths": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/bundled/giscus.min.css",
+    "inputFiles": [
+      "wwwroot/css/lib/giscus.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "hacks",
+      "gzip": true,
+      "adjustRelativePaths": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/bundled/giscus-light.min.css",
+    "inputFiles": [
+      "wwwroot/css/lib/giscus-light.css"
     ],
     "minify": {
       "enabled": true,

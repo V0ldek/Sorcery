@@ -185,18 +185,18 @@ COMMIT;
         Hints and warnings:
     </MudText>
     <MudList>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Remember that the save semantics are "overwrite if exists". For a database that means that you need to
             first remove a graph with the given name, if it exists.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             @{
                 var navigation = CourseBook.CSharpCourse["entity-framework"]["navigation-properties"];
             }
             The relation model is quite deep. You will need to use stuff described in <MudLink Href="@(navigation.Route)">@(navigation.DisplayName)</MudLink>,
             including <Code>ThenInclude</Code>, which you can find in the linked resource: <MudLink Href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager">Eager Loading of Related Data</MudLink>.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             During loading, try to perform as much simplification as possible inside the query. If you need only a list of numbers
             of vertices to reconstruct the graph, <Code Language="SQL">SELECT</Code> only the numbers, not all the edges. If you need
             to sort some data, try to sort it on the database instead of locally.

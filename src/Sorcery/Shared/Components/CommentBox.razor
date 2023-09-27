@@ -1,0 +1,47 @@
+﻿@inject IJSRuntime JSRuntime;
+
+<MudDivider Class="mt-2 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
+
+<MudPaper id="comment-box-paper" Width="100%" Class="pa-4" Elevation="0">
+    @if (ThemeInfo?.IsDarkMode is true)
+    {
+        <script src="https://giscus.app/client.js"
+                data-repo="V0ldek/Sorcery"
+                data-repo-id="R_kgDOGxG9iw"
+                data-category="Sourcery"
+                data-category-id="DIC_kwDOGxG9i84CZncE"
+                data-mapping="title"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="https://v0ldek.com/css/bundled/giscus.min.css"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+    }
+    else
+    {
+        <script src="https://giscus.app/client.js"
+                data-repo="V0ldek/Sorcery"
+                data-repo-id="R_kgDOGxG9iw"
+                data-category="Sourcery"
+                data-category-id="DIC_kwDOGxG9i84CZncE"
+                data-mapping="title"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="https://v0ldek.com/css/bundled/giscus-light.min.css"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+    }
+</MudPaper>
+
+@code {
+    [CascadingParameter]
+    protected ThemeInfo? ThemeInfo { get; set; }
+}

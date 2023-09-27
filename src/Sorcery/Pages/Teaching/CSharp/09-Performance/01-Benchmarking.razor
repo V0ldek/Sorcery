@@ -11,13 +11,13 @@
         we reach our goals. These are:
     </MudText>
     <MudList Class="py-2">
-        <MudListItem Icon="@Icons.Filled.CandlestickChart">
+        <MudListItem Icon="@Icons.Material.Filled.CandlestickChart">
             Measure,
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.TrendingUp">
+        <MudListItem Icon="@Icons.Material.Filled.TrendingUp">
             Measure, and
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.QueryStats">
+        <MudListItem Icon="@Icons.Material.Filled.QueryStats">
             Measure.
         </MudListItem>
     </MudList>
@@ -131,19 +131,19 @@
     </MudText>
     <LatexRenderer ContainerId="benchmark-description" />
     <MudList id="remove-modes" Class="py-2">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             $1.0$ &ndash; search through unchanged input, which contains the word "interrelationships";
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             $0.75$ &ndash; replaces "interrelationship", "interrelationships" and "interrelationship's"
             in the input with '#' characters; this makes sure that the longest substring contained within the input is "interrelations"
             ($14$ characters), so both solutions need to do some work to find it.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             $0.5$ &ndash; additionally removes "interrelation", "interrelations",
             "relationship", and "relationships". The longest match is "relations" ($9$ characters).
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             $0.0$ &ndash; removes all substrings of "interrelationships", so that the result is an empty string.
         </MudListItem>
     </MudList>
@@ -253,36 +253,36 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
     <LatexRenderer ContainerId="optimisation"/>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Benchmarking Golden Rules</MudText>
     <MudList Class="py-2">
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Use vetted tools that deal with the benchmark infrastructure for you.
         </MudListItem>
-        <MudListItem id="remove-mode-only-longest" Icon="@Icons.Filled.ChevronRight">
+        <MudListItem id="remove-mode-only-longest" Icon="@Icons.Material.Filled.ChevronRight">
             Never rely on system timestamps for benchmarking, it's hard to find a less reliable timestamping tool.
         </MudListItem>
-        <MudListItem id="remove-mode-all-long" Icon="@Icons.Filled.ChevronRight">
+        <MudListItem id="remove-mode-all-long" Icon="@Icons.Material.Filled.ChevronRight">
             Run benchmarks in a controlled environment. Best case scenario you'd have a separate machine,
             be it a second PC, a laptop, or a VM in the cloud, that can run the benchmark <em>and only the benchmark</em>.
             Most surefire way to ruin a benchmark is try to use Visual Studio while it's executing. On my PC it skews results
             by large percentages and even changes modalities of distributions.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Keep in mind that the compiler will try to pull the rug from under your feet. It will mercilessly inline methods,
             discard unused results, unroll loops, and sometimes optimise your whole benchmark away. Remember to always use the
             results of a computation, to slap <Code>NoInlining</Code> if you want to make sure a method is completely isolated,
             etc.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Use real data and workflows if possible. Running your bench on randomly generated data is usually completely unrepresentative
             of the actual performance. Most users don't work on random data. There are whole branches of computer science dedicated
             towards synthesising useful artificial datasets. The best way to get a reliable benchmark is using real data. Find the queries
             that use up the most time. Use anonimisied production data, if possible. Use open-source datasets for common documents like
             JSONs.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Use your brain. Benchmarks are experiments that test our hypotheses. We still need to come up with the hypotheses
             and analyse the data. If the distribution doesn't make sense, find out why. Unexpected results must be understood.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Drive your benchmark with business requirements. It's rare that we want a method to just execute as fast as possible
             for all data. The requirements are usually more "this query takes 2s and the users are pissed, make it 1s or less",
             or "we need P95 to be at most 200ms". Of course this only matters when you're concerned with the business &ndash;

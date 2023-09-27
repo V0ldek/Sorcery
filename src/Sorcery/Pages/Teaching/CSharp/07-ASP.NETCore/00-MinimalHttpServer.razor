@@ -199,21 +199,21 @@ public class WeatherForecastController : ControllerBase
         Let's break it down:
     </MudText>
     <MudList>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The controller is defined as a class inheriting from <Code>ControllerBase</Code>
             with the special <Code>ApiControllerAttribute</Code>.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The <Code>RouteAttribute</Code> defines how to access the controller.
             The special '<code>[controller]</code>' value evaluates to the controller class name
             with '<code>Controller</code>' stripped, so in this case it's '<code>weatherForecast</code>'
             (URL-s are case insensitive).
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The controller has a <Code>ILogger&lt;WeatherForecastController&gt;</Code> dependency
             that is magically given to it in the constructor. This is Dependency Injection.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The controller's action is called <Code>Get</Code> and returns a sequence of
             <Code>WeatherForecast</Code> objects. The <Code>Name</Code> is a friendly name
             given to an action, e.g. allowing us to create a link to this particular action

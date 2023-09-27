@@ -211,24 +211,24 @@ public interface IDungeonRepository
         Remember that:
     </MudText>
     <MudList>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             All I/O operations on the filesystem may fail.
             The exceptions called by this must be wrapped in a <Code>FileSystemRepositoryException</Code>
             that inherits from <Code>DungeonRepositoryException</Code>.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Precondition checks for <Code>async</Code> operations should happen synchronously.
             There are no tests for this, but I will point that out during code review. Use the local method pattern
             to deal with that.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             All system file handles are expensive resources and must be properly disposed of.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The <Code>CancellationToken</Code> instances passed to the methods should be used for
             all async operations that support cancellation.
         </MudListItem>
-        <MudListItem Icon="@Icons.Filled.ChevronRight">
+        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Always choose the async overload for operations on the filesystem.
         </MudListItem>
     </MudList>
