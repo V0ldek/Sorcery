@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor.Utilities;
+@inherits LayoutComponentBase
 
 <MudThemeProvider @ref="@_mudThemeProvider" IsDarkMode="@_isDarkMode" Theme="_matTheme" />
 <MudDialogProvider />
@@ -60,6 +61,7 @@
         theme.PaletteDark.BackgroundGrey = "#191B1C";
         theme.PaletteDark.DrawerBackground = "#1A1C1D";
         theme.PaletteDark.Surface = "1B1D1E";
+        theme.PaletteDark.TableStriped = new MudColor(Colors.Shades.White).SetAlpha(0.06).ToString(MudColorOutputFormats.RGBA);
 
         theme.Palette.Primary = Colors.DeepOrange.Darken2;
         theme.Palette.PrimaryDarken = Colors.DeepOrange.Darken3;

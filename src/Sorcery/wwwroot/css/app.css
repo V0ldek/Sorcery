@@ -12,6 +12,10 @@
     font-family: 'Terminal Nerd Font', Consolas, Menlo, 'Bitstream Vera Sans Mono', monospace, 'Powerline Symbols' !important;
 }
 
+.footnote[data-intralink-focused]:focus {
+    border: solid 1px;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

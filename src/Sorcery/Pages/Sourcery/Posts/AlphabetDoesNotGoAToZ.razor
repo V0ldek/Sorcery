@@ -69,9 +69,9 @@ public void IsAllLetters_WithNonAlphaStrings_ShouldBeFalse(string text)
 ")"/>
     <Paragraph>
         All tests pass, great, let's push this and release! All of it works! Well, at least until someone tries to use one
-        of the <Highlight>over $125\,000$ other letters that we've completely ignored</Highlight><Footnote>
-            Based on character counts from <MudLink Typo="@Typo.inherit" Href="https://www.compart.com/en/unicode/category">compart.com/unicode</MudLink>.
-        </Footnote>!
+        of the <Highlight>over $125\,000$ other letters that we've completely ignored</Highlight>!<Footnote>
+            Based on character counts from <Link Typo="@Typo.inherit" Href="https://www.compart.com/en/unicode/category">compart.com/unicode</Link>.
+        </Footnote>
     </Paragraph>
 
     <Header2>There are more than $52$ letters</Header2>
@@ -119,27 +119,27 @@ static bool IsAllLetters(string text) => text.All(c => char.IsLetter(c));
         The idea of <Code>[a-zA-Z]</Code> meaning "letter" seems pervasive when talking about regular expressions.
         That is more or less how I was taught at first one should recognise letters, and on StackOverflow
         answers for questions related to letter classification seem to also be heavily biased towards this
-        patently incorrect solution<Footnote>
-            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/6573686/regex-that-must-have-at-least-3-alpha-characters">
+        patently incorrect solution.<Footnote>
+            <Link Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/6573686/regex-that-must-have-at-least-3-alpha-characters">
                     StackOverflow: RegEx that must have at least 3 alpha characters
-            </MudLink>
+            </Link>
         </Footnote><Footnote>
-            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/20195682/regex-letter-and-space-but-minimum-one-letter">
+            <Link Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/20195682/regex-letter-and-space-but-minimum-one-letter">
                 StackOverflow: REGEX - Letter and space but minimum one letter
-            </MudLink>
+            </Link>
         </Footnote><Footnote>
-            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/25234296/grab-n-letter-words-dont-count-apostrophes-regex">
+            <Link Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/25234296/grab-n-letter-words-dont-count-apostrophes-regex">
                 StackOverflow: grab n letter words don't count apostrophes regex
-            </MudLink>
+            </Link>
         </Footnote><Footnote>
-            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/4149276/how-to-convert-camelcase-to-camel-case">
+            <Link Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/4149276/how-to-convert-camelcase-to-camel-case">
                 StackOverflow: How to convert "camelCase" to "Camel Case"?
-            </MudLink>
+            </Link>
         </Footnote><Footnote>
-            <MudLink Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/15550860/regex-for-lowercase-letter-or-period-followed-by-an-uppercase-letter">
+            <Link Typo="@Typo.inherit" Href="https://stackoverflow.com/questions/15550860/regex-for-lowercase-letter-or-period-followed-by-an-uppercase-letter">
                 StackOverflow: regex for lowercase letter or period followed by an uppercase letter
-            </MudLink>
-        </Footnote>.
+            </Link>
+        </Footnote>
     </Paragraph>
     <Paragraph>
         But it is <em>really</em> easy to do this correctly with regexes as well.

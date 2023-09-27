@@ -8,6 +8,8 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Sse2 = System.Runtime.Intrinsics.X86.Sse2;
 using Avx2 = System.Runtime.Intrinsics.X86.Avx2;
+using System.IO;
+using Dia2Lib;
 
 BenchmarkRunner.Run<Benches>();
 
@@ -84,24 +86,33 @@ public class Benches
         {
             throw new ArgumentException("Unequal stream lengths");
         }
+
+        // 32-bit blocks == 4-byte blocks.
         const int Size = 4;
 
+        // Take the cleanly divisible part and leave the remainders for later.
         DetachFullBlocks(sensor1, Size, out var stream1, out var remainder1);
         DetachFullBlocks(sensor2, Size, out var stream2, out var remainder2);
 
+        // Stride by 4 bytes at a time...
         for (var i = 0; i < stream1.Length; i += Size)
         {
+            // ... interpreting each 4-byte block as a single 32-bit number.
             var value1 = BitConverter.ToUInt32(stream1[i..(i + Size)]);
             var value2 = BitConverter.ToUInt32(stream2[i..(i + Size)]);
+
             var xor = value1 ^ value2;
 
             if (xor != 0)
             {
+                // This is a different 8 than the Size constant, it's for 8 bits in a byte.
+                // For example, 26 trailing zero bits is 26 / 8 = 3 full trailing zero bytes.
                 var offset = BitOperations.TrailingZeroCount(xor) / 8;
                 return i + offset;
             }
         }
 
+        // Deal with the reminder by running the Sequential version on it.
         return Sequential(remainder1, remainder2) + stream1.Length;
     }
 
@@ -112,6 +123,8 @@ public class Benches
         {
             throw new ArgumentException("Unequal stream lengths");
         }
+
+        // 64-bit blocks == 8-byte blocks.
         const int Size = 8;
 
         // Take the cleanly divisible part and leave the remainders for later.
@@ -124,15 +137,19 @@ public class Benches
             // ... interpreting each 8-byte block as a single 64-bit number.
             var value1 = BitConverter.ToUInt64(stream1[i..(i + Size)]);
             var value2 = BitConverter.ToUInt64(stream2[i..(i + Size)]);
+
             var xor = value1 ^ value2;
 
             if (xor != 0)
             {
+                // This is a different 8 than the Size constant, it's for 8 bits in a byte.
+                // For example, 26 trailing zero bits is 26 / 8 = 3 full trailing zero bytes.
                 var offset = BitOperations.TrailingZeroCount(xor) / 8;
                 return i + offset;
             }
         }
 
+        // Deal with the reminder by running the Sequential version on it.
         return Sequential(remainder1, remainder2) + stream1.Length;
     }
 
@@ -187,6 +204,8 @@ public class Benches
         {
             throw new ArgumentException("Unequal stream lengths");
         }
+
+        // 128-bit blocks == 16-byte blocks.
         const int Size = 16;
 
         // Take the cleanly divisible part and leave the reminder for later.
@@ -198,18 +217,28 @@ public class Benches
 
         for (var i = 0; i < stream1.Length; i += Size)
         {
+            // SAFETY: This operation is safe if the ref bytes actually contain
+            // enough initialised values to fill the vector.
+            // DetachFullBlocks is the safeguard here.
             Vector128<byte> vector1 = Vector128.LoadUnsafe(ref sensor1Current);
             Vector128<byte> vector2 = Vector128.LoadUnsafe(ref sensor2Current);
 
             Vector128<byte> cmpeq = Vector128.Equals(vector1, vector2);
             uint mask = Vector128.ExtractMostSignificantBits(cmpeq);
 
+            // If the two vectors are identical, all 16 bits in the mask are set.
+            // We compare against the constant 16-set-bits value.
             if (mask != 0xFFFF)
             {
+                // We want to count trailing ones, but there is no TrailingOneCount operation.
+                // Equivalently, we count the zeroes in the *negated* mask.
                 var offset = BitOperations.TrailingZeroCount(~mask);
                 return i + offset;
             }
 
+            // SAFETY: This is the same invariant - there have to be at least
+            // Size elements to skip over.
+            // DetachFullBlocks guarantees this for the entire loop.
             sensor1Current = ref Unsafe.Add(ref sensor1Current, Size);
             sensor2Current = ref Unsafe.Add(ref sensor2Current, Size);
         }
@@ -268,6 +297,8 @@ public class Benches
         {
             throw new ArgumentException("Unequal stream lengths");
         }
+
+        // 256-bit blocks == 32-byte blocks.
         const int Size = 32;
 
         // Take the cleanly divisible part and leave the reminder for later.
@@ -279,18 +310,28 @@ public class Benches
 
         for (var i = 0; i < stream1.Length; i += Size)
         {
+            // SAFETY: This operation is safe if the ref bytes actually contain
+            // enough initialised values to fill the vector.
+            // DetachFullBlocks is the safeguard here.
             Vector256<byte> vector1 = Vector256.LoadUnsafe(ref sensor1Current);
             Vector256<byte> vector2 = Vector256.LoadUnsafe(ref sensor2Current);
 
             Vector256<byte> cmpeq = Vector256.Equals(vector1, vector2);
             uint mask = Vector256.ExtractMostSignificantBits(cmpeq);
 
+            // If the two vectors are identical, all 32 bits in the mask are set.
+            // We compare against the constant 32-set-bits value.
             if (mask != 0xFFFFFFFF)
             {
+                // We want to count trailing ones, but there is no TrailingOneCount operation.
+                // Equivalently, we count the zeroes in the *negated* mask.
                 var offset = BitOperations.TrailingZeroCount(~mask);
                 return i + offset;
             }
 
+            // SAFETY: This is the same invariant - there have to be at least
+            // Size elements to skip over.
+            // DetachFullBlocks guarantees this for the entire loop.
             sensor1Current = ref Unsafe.Add(ref sensor1Current, Size);
             sensor2Current = ref Unsafe.Add(ref sensor2Current, Size);
         }

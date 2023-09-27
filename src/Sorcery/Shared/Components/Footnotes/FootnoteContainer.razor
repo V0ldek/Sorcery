@@ -8,7 +8,7 @@
     <MudList Dense="true">
         @foreach (var footnote in Footnotes)
         {
-            <MudListItem id="@footnote.TargetId">
+            <MudListItem class="footnote" id="@footnote.TargetId">
                 <span class="mud-typography-caption">
                     <Intralink Id="@footnote.Id">[@footnote.Number]</Intralink>. @footnote.ChildContent
                 </span>

@@ -26,14 +26,14 @@
         executes &ndash; load a value to a register, add two registers together,
         do a bitwise AND on the register...
     </Paragraph>
-    
+
     @Introduction
 
     <Paragraph GutterBottom="false">
         Enter the world of SIMD. This series will introduce the concept from first principles,
         starting with simple concepts at a high-level and then gradually getting us closer to the metal.
         Part 1 starts with good old C# code, without any magic tricks. All the code for this part can be found
-        <MudLink Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">on my GitHub</MudLink>.
+        <Link Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">on my GitHub</Link>.
     </Paragraph>
 
     <Header2>What Is SIMD?</Header2>
@@ -45,7 +45,7 @@
             would add <em>multiple individual pairs</em> of $32$-bit numbers together as a single operation.
         </Paragraph>
         <Paragraph>
-            The magical world of new instructions and registers I mentioned at the start 
+            The magical world of new instructions and registers I mentioned at the start
             is not actually needed to apply this concept. Consider the following toy problem.
         </Paragraph>
         <MudAlert Variant="Variant.Outlined" Class="mb-4">
@@ -78,9 +78,9 @@ int? Sequential(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
     return null;
 }")" />
             <Paragraph>
-                I'm using <MudLink Href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2018/january/csharp-all-about-span-exploring-a-new-net-mainstay">
+                I'm using <Link Href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2018/january/csharp-all-about-span-exploring-a-new-net-mainstay">
                 <Code>ReadOnlySpan&lt;byte&gt;</Code>
-                </MudLink> to abstract the actual input format. It can be any contiguous sequence of bytes somewhere in memory.
+                </Link> to abstract the actual input format. It can be any contiguous sequence of bytes somewhere in memory.
             </Paragraph>
         </section>
         <Header3>Engineer's First SIMD</Header3>
@@ -91,12 +91,12 @@ int? Sequential(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
                 the index by one, at each step loading one byte from each sensor into separate registers
                 and doing some sort of a comparison on them. CPUs don't usually operate on an $8$-bit elements, though.
                 The phrases "$32$-bit" or "$64$-bit" architecture mean that the CPU is equipped with registers
-                with those sizes, in my case $64$-bit.
+                with those sizes.
                 In fact, when you tell your CPU to perform an $8$-bit addition, it will perform a full $32$/$64$-bit
                 addition and just ignore whatever happened in the higher $24$/$56$ bits. That means that
                 an operation on registers takes the same amount of time regardless of whether we load a byte or $8$ bytes into it.
-                So what we're doing here is telling our CPU that can hold $8$ bytes of data in each hand
-                (this analogy works if you consider the CPU to have around a dozen hands) to grab individual
+                So what we're doing here is telling our CPU that can hold $4$/$8$ bytes of data in each hand
+                (of which it has around a dozen, here's an amazing mental picture for you) to grab individual
                 bytes and leave $75-87.5\%$ of its capacity unused in every iteration of the loop.
             </Paragraph>
             <Paragraph>
@@ -155,6 +155,7 @@ private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
         throw new ArgumentException(""Unequal stream lengths"");
     }
 
+    // 64-bit blocks == 8-byte blocks.
     const int Size = 8;
 
     // Take the cleanly divisible part and leave the remainders for later.
@@ -190,13 +191,20 @@ private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
         <Header3>Numbers!</Header3>
         <section>
             <Paragraph>
-                Let's compare the performance of these solutions! I've also implemented Simd32,
+                Let's compare the performance of these solutions! I've also implemented <Code>Simd32</Code>,
                 which is a trivial change of the <Code>Size</Code> constant and <Code>BitConverter</Code>
                 calls. I run the benchmark on two streams of $1$ megabyte, with only the final byte
-                differing between them, so that all bytes have to be compared.
-                <Footnote>For completeness, this is run with .NET 7.0.4 on an AMD Ryzen 9 7950X.</Footnote>
+                differing between them, forcing all bytes to be compared.
+                <Footnote>
+                    For completeness, this is run with .NET 7.0.4 on an AMD Ryzen 9 7950X.
+                    Benchmarks are, naturally, ran with Benchmark.NET.
+                    If you're not familiar with benchmarking .NET code, I have
+                    <Link Href="teaching/csharp/9-performance/1-benchmarking">
+                    a whole section on benchmarking in the Performance module of my course
+                    </Link>!
+                </Footnote>
             </Paragraph>
-            <MudSimpleTable Class="my-4" Bordered="true" Striped="true" Style="overflow-x: auto;">
+            <MudSimpleTable Class="my-4" Bordered="true" Striped="true" Style="overflow-x: auto; border: solid 1px;">
                 <thead>
                     <tr>
                         <th>Method</th>
@@ -207,32 +215,32 @@ private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Sequential</td>
-                        <td>273.67 &mu;s</td>
-                        <td>1.001 &mu;s</td>
-                        <td>1.00</td>
+                        <td><Code>Sequential</Code></td>
+                        <td>$273.67 \mu s$</td>
+                        <td>$1.001 \mu s$</td>
+                        <td>$1.00$</td>
                     </tr>
                     <tr>
-                        <td>Simd32</td>
-                        <td>136.70 &mu;s</td>
-                        <td>1.371 &mu;s</td>
-                        <td>0.50</td>
+                        <td><Code>Simd32</Code></td>
+                        <td>$136.70 \mu s$</td>
+                        <td>$1.371 \mu s$</td>
+                        <td>$0.50$</td>
                     </tr>
                     <tr>
-                        <td>Simd64</td>
-                        <td>67.62 &mu;s</td>
-                        <td>0.476 &mu;s</td>
-                        <td>0.25</td>
+                        <td><Code>Simd64</Code></td>
+                        <td>$67.62 \mu s$</td>
+                        <td>$0.476 \mu s$</td>
+                        <td>$0.25$</td>
                     </tr>
                 </tbody>
             </MudSimpleTable>
             <Paragraph>
                 $4 \times$ speedup basically for free! <Footnote>
-It might be slightly surprising that we get $3$/$5$ times speedups while increasing
-the size of operations $4$/$8$ times. Such is reality, though, the packed version generates
-more complex code and introduces its own overhead. There are many variables at play in high-performance
-code, including memory latency, and without proper profiling we cannot identify them all.
-</Footnote>
+                    It might be slightly surprising that we get $2$/$4$ times speedups while increasing
+                    the size of operations $4$/$8$ times. Such is reality, though, the packed version generates
+                    more complex code and introduces its own overhead. There are many variables at play in high-performance
+                    code, including memory latency, and without proper profiling we cannot identify them all.
+                </Footnote>
             </Paragraph>
         </section>
     </section>
@@ -242,7 +250,8 @@ code, including memory latency, and without proper profiling we cannot identify 
             There's a small wrinkle that doesn't really affect performance in this case &ndash; it happens
             at most once at the end &ndash; but understanding
             how to fix it will go a long way. The sequential part of finding the exact place in a block
-            where there's a discrepancy is not elegant and can be done with a small trick.
+            where there's a discrepancy is not elegant and there's a clever little trick we can apply
+            to make it nicer.
         </Paragraph>
         <Paragraph>
             I want you to forget for a second (or the duration of this article, really) that
@@ -253,9 +262,12 @@ code, including memory latency, and without proper profiling we cannot identify 
         </Paragraph>
         <Paragraph>
             Try to come up with a solution that finds which element of an $8$-element vector is different
-            <em>without using any loops</em>. Here are the building blocks that I give you &ndash; 
+            <em>without using any loops</em>. Here are the building blocks that I give you &ndash;
             you can perform any bitwise operation  on the vectors you want, and you can quickly access some information about
             the vector, like the number of non-zero elements or the location of first such element.
+        </Paragraph>
+        <Paragraph>
+            I'll give you a second.
         </Paragraph>
         <div>
             <Paragraph>
@@ -263,22 +275,27 @@ code, including memory latency, and without proper profiling we cannot identify 
                 That element is our discrepancy. If the result of the XOR is zero, it means that both
                 vectors were identical. Thus, the check on the blocks now becomes:
             </Paragraph>
-            <CodeBlock LineNumbers="true" LineNumbersStartAt="20" Code="@(@"
+            <CodeBlock LineNumbers="true" LineNumbersStartAt="21" Code="@(@"
 var xor = value1 ^ value2;
 
 if (xor != 0)
 {
-    // This is a different 8 than the Size constant, it's for 8 bits in a byte
-    // that we need to count, e.g. 26 trailing zeroes is 26 / 8 = 3 full trailing bytes.
+    // This is a different 8 than the Size constant, it's for 8 bits in a byte.
+    // For example, 26 trailing zero bits is 26 / 8 = 3 full trailing zero bytes.
     var offset = BitOperations.TrailingZeroCount(xor) / 8;
     return i + offset;
 }
     ")" />
-            <MudPaper Class="pa-2 mb-1" Elevation="4">
+            <MudPaper Class="pa-2 mb-2 mt-4" Elevation="4">
                 <MudGrid Justify="@Justify.Center">
                     <MudItem xs="12" md="6">
                         <MudPaper Class="mr-3 mb-3 pa-3 d-flex align-center justify-center mud-width-full" Elevation="0">
-                            <ThemedImage Alt="C# sticker" Title="C# sticker" Src="img/sorcery/simd-cheat-codes-for-free-performance/discrepancy-xor.svg" Fluid="true" Width="420" Height="280" />
+                            <ThemedImage Alt="diagram visualising the xor trick"
+                                         Title="The XOR trick"
+                                         Src="img/sorcery/simd-cheat-codes-for-free-performance/discrepancy-xor.svg"
+                                         Fluid="true"
+                                         Width="420"
+                                         Height="280" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="12" md="6">
@@ -301,32 +318,48 @@ if (xor != 0)
     <section>
         <Paragraph>
             On a $64$-bit platform the $8$-byte solution utilises the general-purpose registers fully.
-            The idea behind what we usually call SIMD is rather simple &ndash; let's make bigger registers
-            so that we can handle more data with a single instruction. Such extensions are sometimes called
-            <em>vectorial extensions</em> and give us access to the SIMD world where each value/register
-            is a <Highlight>vector</Highlight> of atomic values.
+            This wouldn't be much of a blogpost if the story ended there, though &ndash; the idea CPU designers
+            had was to make bigger registers so that we can handle more data with a single instruction.
+            Such extensions are sometimes called <em>vectorial extensions</em> and give us access to the SIMD world,
+            where each value/register is a <Highlight>vector</Highlight> of atomic values and are equipped with
+            special "wide" operations.
         </Paragraph>
         <Paragraph>
             This is the moment where implementation
             gets hairy &ndash; those additional registers are provided by <em>platform extensions</em> which are,
             well, platform-specific. There is a whole bunch of them providing registers of different sizes
             ($128$, $256$, $512$ bits), different instruction sets, and different performance characteristics.
-            Most modern x86 CPUs have standardised access to most interesting operations, but not all.
-            Moreover, ARM SIMD is completely different from x86 SIMD, and there's a separate extension set
-            for SIMD on WebAssembly.
+            What sizes and operations are available depends on the CPU's microarchitecture, and attempting
+            to run code specific to, say, $256$-bit wide x86 SIMD on an ARM chip will result in Bad Times.
+            <Footnote>In this case, most likely a SIGILL signal that kills the process.</Footnote>
             Instead of diving deep into the various SSEs, AVXs, and NEONs of the world,
             we will use a layer of abstraction that I will call <Highlight>portable SIMD</Highlight>.
         </Paragraph>
         <Paragraph>
             Different languages have different ways of providing portable SIMD. In C# land these facilities
             live in <Code>System.Runtime.Intrinsics</Code> as
-            <MudLink Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128-1?view=net-7.0"><Code>Vector128</Code></MudLink>,
-            <MudLink Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector256-1?view=net-7.0"><Code>Vector256</Code></MudLink>,
-            and (in .NET 8) <MudLink Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector512-1?view=net-8.0"><Code>Vector512</Code></MudLink>.
+            <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128-1?view=net-7.0"><Code>Vector128</Code></Link>,
+            <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector256-1?view=net-7.0"><Code>Vector256</Code></Link>,
+            and (in .NET 8) <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector512-1?view=net-8.0"><Code>Vector512</Code></Link>.
             The main purpose of portable SIMD is to allow the programmer to write code with vector acceleration in mind,
             but leave it to the compiler to figure out what specific extensions the target platform supports
             and what code to generate to get the best performance. This is especially natural for a JIT-compiled language
             like C#, where that's <em>already</em> the jitter's job for other code.
+        </Paragraph>
+        <Paragraph>
+            Think about it, if we had to compile to machine code before running the program we wouldn't be able to anticipate what CPU it runs on.
+            We would either have to compile for a specific microarchitecture, and then the binary would be non-portable,
+            or compile for <em>all</em> architectures and choose the implementation at runtime, which would result
+            in a gigantic binary where a lot of the code would be left unused by a particular machine.
+            But in .NET, when we run a program the JIT compiler gets a method's bytecode and is supposed
+            to turn it into machine code on the fly; but it knows exactly what CPU to target &ndash;
+            the one it's running on! So it can always choose exactly the most efficient instructions available
+            to the current CPU. It can even try to salvage incompatible vectorial code; say you run
+            a method using <Code>Vector256</Code> on a platform that only supports $128$-bit SIMD
+            &ndash; the JIT can then split the instructions into two separate <Code>Vector128</Code>
+            operations and still get partial acceleration. As a programmer you don't have to worry
+            about any of this platform-specific nonsense &ndash; you write the method using
+            <Code>System.Runtime.Intrinsics</Code> portable SIMD and then it Just (in Time) Works™.
         </Paragraph>
         <Paragraph>
             Before we jump into SIMD world, here are some preliminaries.
@@ -334,56 +367,78 @@ if (xor != 0)
             and operations that reduce vectors into primitive types <Highlight>projections</Highlight>.
             There are a few ground rules we have to follow:
             <MudList>
-                <MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                     all operations on SIMD vectors are immutable &ndash; they read the inputs and produce a fresh result;
                 </MudListItem>
-                <MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                     we cannot read the contents of a SIMD vector directly, we first need to project
                     it to a primitive type, like an integer;
                 </MudListItem>
-                <MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                     projection is expensive &ndash; we get vectorial speedups while keeping within the SIMD world,
                     and pay a cost to exit into general-purpose value world.
                 </MudListItem>
             </MudList>
+            With that in mind, let's explore the two operations we'll need for our acceleration &ndash;
+            <Code>cmpeq</Code> and <Code>movemask</Code>.
         </Paragraph>
         <Header3>SIMD Maps and Projections</Header3>
         <section>
             <Paragraph>
-                One of the fundamental binary operation classes
-                is comparison &ndash; we're specifically interested in element-wise equality.
+                There are SIMD counterparts for most common binary operations, be it arithmetic,
+                bitwise logic, or comparison. In the discrepancy problem we're specifically interested in element-wise equality,
+                usually dubbed <Highlight><Code>cmpeq</Code></Highlight>.
                 The semantics are: the $i$-th element of the result is all-ones if the $i$-th elements
-                of input are equal, and zero otherwise.
+                of input are equal, and zero otherwise. In pseudocode for a single pair of elements:
+                <Code>x == y ? 0xFF : 0x00</Code>;<Footnote>
+                    It is common to represent values in SIMD using hex notation &ndash; once you get used to it you can
+                    easily figure out which bits are set at a glance. <Code>0xFF</Code> is the all-ones byte value
+                    &ndash; <Code>255</Code> in decimal, <Code>0b11111111</Code> in binary. Similarly, <Code>0xFFFF</Code>
+                    is an all-ones $16$-bit long mask, <Code>0xFFFFFFFF</Code> $32$-bit, and <Code>0xFFFFFFFFFFFFFFFF</Code>
+                    $64$-bit. Two more useful ones are <Code>0x01</Code> for the lowest-bit-set byte (decimal <Code>1</Code>)
+                    and <Code>0x80</Code> for the highest-bit-set byte (decimal <Code>128</Code>).
+                    This gets really handy when one needs to consider individual nibbles, but that's a story
+                    for a later post...
+                </Footnote> this is executed simultaneously for all pairs.
             </Paragraph>
             <Paragraph>
+                As mentioned before, we can't yet use the result in any meaningful way as its locked
+                in the opaque <Code>Vector</Code> value, we need to project it first.
                 There is a number of standard projections of vectors into fundamental types.
                 For example, one can take the sum of all elements in a vector and obtain a regular integer.
-                In our case, we are interested in the very special <Highlight>movemask</Highlight> operation.
+                In our case, we are interested in the very special <Highlight><Code>movemask</Code></Highlight> operation.
                 It produces a primitive integer whose each bit corresponds to the state of an element in the input vector &ndash;
-                The $i$-th bit of the result is set if the most significant bit of the $i$-th element is set.
+                the $i$-th bit of the result is set if the most significant bit of the $i$-th element is set.
+                In pseudocode for a single vector element getting projected to a single bit: <Code>x & 0x80 == 0x80 ? 1 : 0</Code>;
+                this is executed simultaneously for all elements, so from an $N$-byte vector we get an $N$-bit mask as a result.
             </Paragraph>
-            <MudPaper Class="pa-2 mb-1" Elevation="4">
+            <MudPaper Class="pa-2 mb-2 mt-4" Elevation="4">
                 <MudGrid Justify="@Justify.Center">
                     <MudItem xs="12" md="6">
                         <MudPaper Class="mr-3 mb-3 pa-3 d-flex align-center justify-center mud-width-full" Elevation="0">
-                            <ThemedImage Alt="C# sticker" Title="C# sticker" Src="img/sorcery/simd-cheat-codes-for-free-performance/discrepancy-cmpeq-movemask.svg" Fluid="true" Width="420" Height="280" />
+                            <ThemedImage Alt="diagram visualising the cmpeq into movemask operation"
+                                         Title="cmpeq-movemask operation"
+                                         Src="img/sorcery/simd-cheat-codes-for-free-performance/discrepancy-cmpeq-movemask.svg"
+                                         Fluid="true"
+                                         Width="420"
+                                         Height="280" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudPaper Height="100%" Class="d-flex align-center justify-center mud-width-full" Elevation="0">
                             <section>
                                 <MudText>
-                                We can combine the equality check with a movemask to obtain a mask
-                                similar to the one we worked on in our $32$/$64$-bit algorithms before.
-                                Equality produces vectors of all-one and all-zero values, which are
-                                then collapsed by movemask into singular bits of the result.
+                                    We can combine the equality check with a <Code>movemask</Code> to obtain a mask
+                                    similar to the one we worked on in our $32$/$64$-bit algorithms before.
+                                    Equality produces vectors of all-one and all-zero values, which are
+                                    then collapsed by <Code>movemask</Code> into singular bits of the result.
                                 </MudText>
-                                <br/>
+                                <br />
                                 <MudText>
-                                This is a small $32$-bit example, just for illustrative purposes.
-                                $4$-bit integers don't exist, they can't hurt you.
+                                    This is a small $32$-bit vector example, just for illustrative purposes.
+                                    $4$-bit integers don't exist, they can't hurt you.
                                 </MudText>
-                            </section> 
+                            </section>
                         </MudPaper>
                     </MudItem>
                 </MudGrid>
@@ -399,15 +454,30 @@ if (xor != 0)
                 problem it's <Code>byte</Code> &ndash; <Code>Vector128&lt;byte&gt;</Code> represents $16$ individual <Code>byte</Code> values.
                 As an example, you can imagine a similar problem on streams of $32$-bit <Code>int</Code> values, and then we'd
                 be using <Code>Vector128&lt;int&gt;</Code> as vectors of $4$ individual <Code>int</Code>s.
+                <Footnote>
+                    It is perhaps a useful exercise to realise why these types are <em>not</em> interchangeable.
+                    For example, the semantics of the <Code>cmpeq</Code> operation are different for
+                    <Code>byte</Code>-sized elements and <Code>int</Code>-sized elements; you should be able
+                    to construct an example of two $128$-bit vectors <Code>x</Code> and <Code>y</Code>
+                    such that the result of <Code>Vector128.Equals(x, y)</Code> is different depending on whether they are
+                    of type <Code>Vector128&lt;byte&gt;</Code> or <Code>Vector128&lt;int&gt;</Code>.
+                </Footnote>
+                The <Code>cmpeq</Code> operation is exposed as
+                <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128.equals?view=net-7.0#system-runtime-intrinsics-vector128-equals-1(system-runtime-intrinsics-vector128((-0))-system-runtime-intrinsics-vector128((-0)))">
+                the <Code>Equals</Code> method
+                </Link> on the <Code>Vector</Code> types, while <Code>movemask</Code> is given as
+                <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128.extractmostsignificantbits?view=net-7.0">
+                the <Code>ExtractMostSignificantBits</Code> method
+                </Link>.
             </Paragraph>
             <Paragraph>
                 The tricky part is getting the vectors loaded. Normally when coding in C# we really don't want to think about
                 low-level interactions with memory, but here we're pretty close to the hardware. SIMD can only load
                 data to a vector if it exists in a single contiguous slice of memory &ndash; the $16$ bytes we want to load
-                have to be next to each other, and we need to give the pointer to the first one. We don't want to deal with
+                have to be next to each other, and we need to give a pointer to the first one. We don't want to deal with
                 pointers, pointers are icky and require magical <Code>unsafe</Code> stuff. Fortunately, we can use a
                 <Highlight>reference variable</Highlight> to, <em>ekhem</em>, refer to the start of our stream,
-                and then a <Code>nuint</Code> to store the offset within the stream for loading purposes.
+                and then move it by the appropriate stride equal to the size of our vector.
             </Paragraph>
             <Header4>Reference Variables</Header4>
             <section>
@@ -432,7 +502,9 @@ y += 1;
 Console.WriteLine(x);
 Console.WriteLine(y);
 ")" />
-                    prints <Code>1 1 2 2</Code><Footnote>See <MudLink Typo="@Typo.inherit" Href="https://sharplab.io/#gist:08dd877124917daf18f3b5c5533f7e31">SharpLab gist</MudLink></Footnote>.,
+                    prints <Code>1 1 2 2</Code>,<Footnote>
+                        See this in action in <Link Href="https://sharplab.io/#gist:08dd877124917daf18f3b5c5533f7e31">SharpLab</Link>.
+                    </Footnote>
                     while any attempts to return a potentially invalid <Code>ref</Code> will fail:
                     <CodeBlock Code="@(@"
 // Intentionally does not compile.
@@ -449,16 +521,31 @@ ref int Foo()
                 <Paragraph>
                     Okay, let's actually write and run that.
                     First we will take our <Code>ReadOnlySpan</Code>s and ask a helper class
-                    <Footnote><MudLink Typo="@Typo.inherit" Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal?view=net-7.0"><Code>MemoryMarshal</Code></MudLink>,
-                    which exists specifically to help translating between a <Code>ReadOnlySpan</Code> and its contiguous slice memory representation.</Footnote>
-                    to give us a <Code>ref</Code> to the first byte, which can be loaded into a <Code>Vector128&lt;byte&gt;</Code>.
-                    We will use the equality map and movemask projection to get a bitmask where set bits signify elements
-                    that are the same. By negating that mask and looking at trailing zeroes we can replicate the same
-                    algorithm we used before for our $32$ and $64$-bit approaches. We then need to use another helper
                     <Footnote>
-                    <MudLink Typo="@Typo.inherit" Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.add?view=net-7.0#system-runtime-compilerservices-unsafe-add-1"><Code>Unsafe.Add</Code></MudLink>;
-                    note that we could also keep track of the offset manually in a <Code>nuint</Code> and pass it to the <Code>LoadUnsafe</Code> function,
-                    but I didn't want to introduce the concept of a native int here.
+                        <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal?view=net-7.0">
+                        <Code>MemoryMarshal</Code>
+                        </Link>,
+                        which exists specifically to help translating between a <Code>ReadOnlySpan</Code> and its contiguous slice memory representation.
+                    </Footnote>
+                    to give us a <Code>ref</Code> to the first byte, which can be loaded into a <Code>Vector128&lt;byte&gt;</Code>.
+                    We will use the <Code>cmpeq</Code> map and the <Code>movemask</Code> projection to get a bitmask where set bits signify elements
+                    that are the same.
+                    <Footnote>
+                        If you look at the code you can see that <Code>ExtractMostSignificantBits</Code>
+                        returns a <Code>uint</Code>, even though the mask is actually only $16$-bit wide,
+                        so it logically is a <Code>ushort</Code>. The question arises: <em>why</em>?
+                        No, seriously, why? I have no idea. If you find out, let me know in the comments.
+                    </Footnote>
+                    By looking at trailing ones of the mask we can replicate the same
+                    algorithm we used before for our $32$ and $64$-bit approaches &ndash; note that the mask here
+                    is flipped, we have bits set for identical elements whereas the previous XOR trick
+                    left bits set for differing elements. After the check is done we need to use another helper
+                    <Footnote>
+                        <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.add?view=net-7.0#system-runtime-compilerservices-unsafe-add-1">
+                        <Code>Unsafe.Add</Code>
+                        </Link>;
+                        note that we could also keep track of the offset manually in a <Code>nuint</Code> and pass it to the <Code>LoadUnsafe</Code> function,
+                        but I didn't want to introduce the concept of a native int here.
                     </Footnote>
                     to move our <Code>ref</Code>s to the streams forward and loop.
                 </Paragraph>
@@ -469,6 +556,8 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
     {
         throw new ArgumentException(""Unequal stream lengths"");
     }
+
+    // 128-bit blocks == 16-byte blocks.
     const int Size = 16;
 
     // Take the cleanly divisible part and leave the reminder for later.
@@ -488,11 +577,13 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
 
         Vector128<byte> cmpeq = Vector128.Equals(vector1, vector2);
         uint mask = Vector128.ExtractMostSignificantBits(cmpeq);
-        
-        // Discrepancy occurs only if two elements were different,
-        // and one of the bits of the mask is NOT set.
+
+        // If the two vectors are identical, all 16 bits in the mask are set.
+        // We compare against the constant 16-set-bits value.
         if (mask != 0xFFFF)
         {
+            // We want to count trailing ones, but there is no TrailingOneCount operation.
+            // Equivalently, we count the zeroes in the *negated* mask.
             var offset = BitOperations.TrailingZeroCount(~mask);
             return i + offset;
         }
@@ -517,7 +608,7 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
                     &ndash; <Code>Vector128</Code> is replaced with <Code>Vector256</Code>, <Code>Size</Code>
                     is set to $32$, ant the mask is compared against <Code>0xFFFFFFFF</Code>.
                 </Paragraph>
-                <MudSimpleTable Class="my-4" Bordered="true" Striped="true" Style="overflow-x: auto;">
+                <MudSimpleTable Class="my-4" Bordered="true" Striped="true" Style="overflow-x: auto; border: solid 1px;">
                     <thead>
                         <tr>
                             <th>Method</th>
@@ -528,50 +619,49 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Sequential</td>
-                            <td>267.44 &mu;s</td>
-                            <td>0.833 &mu;s</td>
-                            <td>1.00</td>
+                            <td><Code>Sequential</Code></td>
+                            <td>$273.95 \mu s$</td>
+                            <td>$0.535 \mu s$</td>
+                            <td>$1.00$</td>
                         </tr>
                         <tr>
-                            <td>Simd32</td>
-                            <td>93.49 &mu;s</td>
-                            <td>0.191 &mu;s</td>
-                            <td>0.35</td>
+                            <td><Code>Simd32</Code></td>
+                            <td>$136.39 \mu s$</td>
+                            <td>$0.345 \mu s$</td>
+                            <td>$0.50$</td>
                         </tr>
                         <tr>
-                            <td>Simd64</td>
-                            <td>49.86 &mu;s</td>
-                            <td>0.962 &mu;s</td>
-                            <td>0.19</td>
+                            <td><Code>Simd64</Code></td>
+                            <td>$69.03 \mu s$</td>
+                            <td>$0.130 \mu s$</td>
+                            <td>$0.25$</td>
                         </tr>
                         <tr>
-                            <td>Simd128Portable</td>
-                            <td>26.87 &mu;s</td>
-                            <td>0.019 &mu;s</td>
-                            <td>0.10</td>
+                            <td><Code>Simd128Portable</Code></td>
+                            <td>$27.34 \mu s$</td>
+                            <td>$0.032 \mu s$</td>
+                            <td>$0.10$</td>
                         </tr>
                         <tr>
-                            <td>Simd256Portable</td>
-                            <td>15.42 &mu;s</td>
-                            <td>0.055 &mu;s</td>
-                            <td>0.06</td>
+                            <td><Code>Simd256Portable</Code></td>
+                            <td>$15.69 \mu s$</td>
+                            <td>$0.028 \mu s$</td>
+                            <td>$0.06$</td>
                         </tr>
                     </tbody>
                 </MudSimpleTable>
                 <Paragraph>
-                    Changing nothing about the fundamental algorithm we made it <Highlight>$20\times$ faster</Highlight>
-                    just by switching to SIMD! And apart from a few relatively uncomplicated ref-offset operations that's
+                    Changing nothing about the fundamental algorithm we made it <Highlight>$16\times$ faster</Highlight>
+                    just by switching to SIMD! And apart from a few relatively uncommon ref-offset operations that's
                     just plain C# code, the JIT does the heavy lifting for us.
                 </Paragraph>
                 <Paragraph>
                     The question remains, though &ndash; what exactly is it lifting and why is it so heavy?
-                    Well, that's why this is merely part one.
                 </Paragraph>
             </section>
         </section>
-        <MudAlert Variant="Variant.Outlined">
-            We will discuss juicy details in the next part. To not miss it, subscribe to the <MudLink Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</MudLink>!
+        <MudAlert Variant="Variant.Outlined" Class="mb-4">
+            We will discuss juicy details in the next part. To not miss it, subscribe to the <Link Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</Link>!
         </MudAlert>
     </section>
 </BlogPost>

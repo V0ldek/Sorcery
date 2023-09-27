@@ -1,6 +1,6 @@
-﻿<sup id="@Id">
-    <Intralink Id="@TargetId">[@Number]</Intralink>
-</sup>
+﻿<span id="@Id" style="margin-left: -4px" class="footnote" tabindex="0">
+    <sup><Intralink Id="@TargetId">[@Number]</Intralink></sup>
+</span>
 
 @code {
     public string Id { get; set; } = Guid.NewGuid().ToString();
