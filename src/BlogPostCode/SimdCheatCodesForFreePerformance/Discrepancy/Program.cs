@@ -8,8 +8,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Sse2 = System.Runtime.Intrinsics.X86.Sse2;
 using Avx2 = System.Runtime.Intrinsics.X86.Avx2;
-using System.IO;
-using Dia2Lib;
 
 BenchmarkRunner.Run<Benches>();
 
@@ -34,8 +32,10 @@ public class Benches
         var rng = new Random(Seed);
         rng.NextBytes(Stream1);
 
+        // Make the streams identical, but...
         Stream1.CopyTo(Stream2, 0);
 
+        // ... forcefully introduce a discrepancy on the last byte.
         Stream2[^1] ^= 0x01;
     }
 
