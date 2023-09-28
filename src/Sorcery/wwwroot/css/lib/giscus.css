@@ -87,6 +87,43 @@
             flex-direction: row-reverse;
         }
 
+    main .BtnGroup-item,
+    main .gsc-direct-reaction-button,
+    main .gsc-reactions-button
+    main .btn {
+        position: relative;
+        overflow: hidden;
+    }
+
+        main .BtnGroup-item:after,
+        main .gsc-direct-reaction-button:after,
+        main .gsc-reactions-button:after
+        main .btn:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle,#000 10%,transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10,10);
+            opacity: 0;
+            transition: transform .3s,opacity 1s;
+        }
+
+        main .BtnGroup-item:active:after,
+        main .gsc-direct-reaction-button:active:after,
+        main .gsc-reactions-button:active:after
+        main .btn:active:after {
+            transform: scale(0, 0);
+            opacity: .1;
+            transition: 0s;
+        }
+
 main {
     --color-prettylights-syntax-comment: #6a9955;
     --color-prettylights-syntax-constant: #b5cea8;
