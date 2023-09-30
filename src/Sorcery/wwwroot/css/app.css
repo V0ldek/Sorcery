@@ -16,6 +16,10 @@
     border: solid 1px;
 }
 
+.mud-link.mud-primary-text {
+    color: var(--mud-palette-primary-lighten) !important;
+}
+
 .mud-main-content {
     --mud-typography-h1-size: 2rem;
     --mud-typography-h2-size: 1.875rem;
