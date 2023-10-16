@@ -15,7 +15,7 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Simple GET by ID</MudText>
     <MudText>
         We have the <code>DungeonWalker.Api</code> solution setup with the example Dungeon database from
-        <MudLink Href="@entityFrameworkModule.Route">@entityFrameworkModule.DisplayName</MudLink>. Let's setup
+        <Link Href="@entityFrameworkModule.Route">@entityFrameworkModule.DisplayName</Link>. Let's setup
         a standard query-by-id endpoint.
     </MudText>
     <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
@@ -146,16 +146,16 @@ public async Task<ActionResult<IEnumerable<DungeonRunView>>> QueryRunsAsync(
     ")" />
     <MudText>
         The parameters in the method get mapped from the query. So if we query
-        <MudLink Href="https://localhost:10443/runs?dungeonName=Adventure&heroClass=Warrior">
+        <Link Href="https://localhost:10443/runs?dungeonName=Adventure&heroClass=Warrior">
             https://localhost:10443/runs?dungeonName=Adventure&heroClass=Warrior
-        </MudLink>
+        </Link>
         it will map to <Code>dungeonName = "Adventure", heroClass = "Warrior"</Code>.
         If we omit one of the parameters, like
-        <MudLink Href="https://localhost:10443/runs?heroClass=Warrior">
+        <Link Href="https://localhost:10443/runs?heroClass=Warrior">
             https://localhost:10443/runs?heroClass=Warrior
-        </MudLink>
+        </Link>
         it will map to <Code>dungeonName = null, heroClass = "Warrior"</Code>.
-        If we omit both, <MudLink Href="https://localhost:10443/runs">https://localhost:10443/runs</MudLink>,
+        If we omit both, <Link Href="https://localhost:10443/runs">https://localhost:10443/runs</Link>,
         both will map to <Code>null</Code>.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Mapping complex types</MudText>
@@ -196,8 +196,8 @@ public async Task<ActionResult> PostAsync([FromBody] DungeonRunPost dungeonRun)
     <MudText>
         The rest is boring implementation details. First, note <Code>CreatedAtAction</Code> &ndash;
         it allows us to return a 201 Created response with a link to the resource just created based
-        on an action. Two, note the standardised response based on <MudLink Href="https://datatracker.ietf.org/doc/html/rfc7807">
-        Problem Details</MudLink>. Now we can play with the requests:
+        on an action. Two, note the standardised response based on <Link Href="https://datatracker.ietf.org/doc/html/rfc7807">
+        Problem Details</Link>. Now we can play with the requests:
     </MudText>
     <CodeBlock Language="powershell" Code="@(@"
 > curl -X POST https://localhost:10443/Dungeon/seed -i
@@ -278,8 +278,8 @@ public async Task<Result<int, ApiError>> CreateDungeonRunAsync(DungeonRunPost du
 }
     ")"/>
     <MudText>
-        I pulled a sneaky on ya here. I installed the <MudLink Href="https://www.nuget.org/packages/CSharpFunctionalExtensions/">
-        CSharpFunctionalExtensions</MudLink> package to get access to the <Code>Result</Code> types. You should definitely
+        I pulled a sneaky on ya here. I installed the <Link Href="https://www.nuget.org/packages/CSharpFunctionalExtensions/">
+        CSharpFunctionalExtensions</Link> package to get access to the <Code>Result</Code> types. You should definitely
         check out that package, as it makes handling errors much easier.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>

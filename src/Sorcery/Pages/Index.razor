@@ -6,42 +6,52 @@
 
 <MudContainer MaxWidth="MaxWidth.Large">
     <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
-        <MudText Typo="Typo.h1" Class="mx-auto">Greetings!</MudText>
-        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false"/>
-        <MudText GutterBottom="true">
+        <Header1>Greetings!</Header1>
+        <Paragraph>
             I'm Mateusz Gienieczko, a.k.a. V0ldek on all the platforms that allow you to put your nickname in. 
-            I'm a programmer and a streamer. You can learn more about me at <MudLink Href="/about">About me</MudLink>.
-        </MudText>
+            I'm a programmer, currently at Microsoft Identity, and I dabble in open-source in the meantime.
+            You can learn more about me at <Link Href="/about">About me</Link>.
+        </Paragraph>
 
-        <MudText>
-            I write a blog at <MudLink Href="/sourcery">Sourcery</MudLink>, here's the latest post: 
-        </MudText>
+        <Paragraph>
+            I write a blog at <Link Href="/sourcery">Sourcery</Link>, here's the latest post: 
+        </Paragraph>
 
         <div class="ma-4">
             <BlogPostCard Post="BlogBook.Posts.First()" />
         </div>
 
-        <MudText>
-            I have a course on C# starting from the very basics &ndash; check out <MudLink Href="/teaching">Teaching</MudLink>.
-        </MudText>
+        <Paragraph>
+            I have a course on C# starting from the very basics &ndash; check out <Link Href="/teaching">Teaching</Link>.
+        </Paragraph>
         
-        <MudText Typo="Typo.h2" Class="mx-auto my-6">About this page</MudText> 
-        <MudText GutterBottom="true">
+        <Header2>About this page</Header2> 
+        <Paragraph>
             First of all, this page is fully open-source. If there are any issues that you see, or room
-            for improvement and making it more accessible for you, please, file an issue on <MudLink Href="@GitHub.Sorcery">GitHub</MudLink>.
-        </MudText>
-        <MudText GutterBottom="true">
-            It is powered by <MudLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">Blazor</MudLink>
-            and written in C#, with the help of <MudLink Href="https://mudblazor.com/">MudBlazor</MudLink> components.
+            for improvement and making it more accessible for you, please, file an issue on <Link Href="@GitHub.Sorcery">GitHub</Link>.
+        </Paragraph>
+        <Paragraph>
+            It is powered by <Link Href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">Blazor</Link>
+            and written in C#, with the help of <Link Href="https://mudblazor.com/">MudBlazor</Link> components.
             It contains as little JavaScript as possible while still being presentable, which means it uses the
-            <MudLink Href="https://katex.org/">KaTeX</MudLink>, <MudLink Href="https://prismjs.com/">Prism</MudLink>,
-            and the <MudLink Href="https://asciinema.org/">Asciinema</MudLink> player libraries.
-        </MudText>
-        <MudText>
-            All resources are statically hosted, literally no external sites are called from here.
+            <Link Href="https://katex.org/">KaTeX</Link> for pretty math,
+            <Link Href="https://prismjs.com/">Prism</Link> for syntax highlighting,
+            and the <Link Href="https://asciinema.org/">Asciinema</Link> player libraries for animated terminal snippets.
+        </Paragraph>
+        <Header2>Privacy</Header2>
+        <Paragraph>
+            All resources are statically hosted with the exception of comments;
+            the only external calls that this site makes are to the comment service.
             There is no trackers and I do not store any personal information.
             I know, complete avant-garde. I wish "Web 3.0" was this instead of whatever it's
             being sold as right now.
-        </MudText>
+        </Paragraph>
+        <Paragraph>
+            Comments are powered by <Link Href="https://giscus.app/">giscuss</Link> and hosted on
+            <Link Href="https://github.com/V0ldek/Sorcery/discussions">GitHub Discussions</Link>;
+            you need a GitHub account to post a comment, and all the comment data is managed by GitHub
+            according to <Link Href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">their privacy policy</Link>.
+            If you wish your comments disappeared from this site simply delete them from the relevant GitHub Discussion.
+        </Paragraph>
     </MudPaper>
 </MudContainer>

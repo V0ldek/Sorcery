@@ -20,7 +20,7 @@
     <MudText GutterBottom="true">
         First we need to make our graph serializable. There are two major libraries in .NET
         when it comes to JSON processing, the long established 
-        <MudLink Href="https://www.newtonsoft.com/json"><Code>Json.NET</Code></MudLink>, and the
+        <Link Href="https://www.newtonsoft.com/json"><Code>Json.NET</Code></Link>, and the
         newer <Code>System.Text.Json</Code>, which is part of the BCL. We will use the latter
         for this assignment.
     </MudText>
@@ -68,7 +68,7 @@ public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
     <LatexRenderer ContainerId="text-with-four-cycle"/>
     
     <MudText GutterBottom="true">
-        To serialize and deserialize with <Code>System.Text.Json</Code> we use the <MudLink Href="https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer?view=net-6.0"><Code>JsonSerializer</Code></MudLink> class. It has a lot of overloads for
+        To serialize and deserialize with <Code>System.Text.Json</Code> we use the <Link Href="https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer?view=net-6.0"><Code>JsonSerializer</Code></Link> class. It has a lot of overloads for
         <Code>Serialize</Code> and <Code>Deserialize</Code> methods, including async overloads, cancellation support,
         writing directly to streams, etc.
     </MudText>

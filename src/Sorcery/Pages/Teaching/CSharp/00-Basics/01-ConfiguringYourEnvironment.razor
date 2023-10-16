@@ -18,19 +18,19 @@
     </MudAlert>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">.NET, i.e. <Code Language="bash">dotnet</Code></MudText>
     <MudText GutterBottom="true">
-        The <MudLink Href="https://dotnet.microsoft.com/en-us/download">.NET installation instructions</MudLink> are detailed and
+        The <Link Href="https://dotnet.microsoft.com/en-us/download">.NET installation instructions</Link> are detailed and
         guaranteed to be up-to-date, so I won't copy most of it.
     </MudText>
     <MudText Typo="Typo.h3" Class="mx-auto py-2">Windows</MudText>
     <MudText GutterBottom="true">
-        Go to <MudLink Href="https://dotnet.microsoft.com/en-us/download">https://dotnet.microsoft.com/en-us/download</MudLink> and download the .NET SDK for your platform.
-        If you don't have your shell environment configured on Windows, I recommend grabbing <MudLink Href="https://docs.microsoft.com/en-us/windows/terminal/install">Windows Terminal</MudLink>.
+        Go to <Link Href="https://dotnet.microsoft.com/en-us/download">https://dotnet.microsoft.com/en-us/download</Link> and download the .NET SDK for your platform.
+        If you don't have your shell environment configured on Windows, I recommend grabbing <Link Href="https://docs.microsoft.com/en-us/windows/terminal/install">Windows Terminal</Link>.
         It will make your life much easier. If I ever show commandline in the tutorial, it will be from Linux via WSL2, but only because Asciinema only works there.
         However, all <Code Language="bash">dotnet</Code> commands work the same on both platforms.
     </MudText>
     <MudText Typo="Typo.h3" Class="mx-auto py-2">Linux</MudText>
     <MudText GutterBottom="true">
-        Navigate to <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux">https://docs.microsoft.com/en-gb/dotnet/core/install/linux</MudLink> for
+        Navigate to <Link Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux">https://docs.microsoft.com/en-gb/dotnet/core/install/linux</Link> for
         installation instructions on Linux. If you're using Ubuntu, Debian or something else that manages their dependencies through <Code Language="bash">apt-get</Code> then follow
         me below. If not you're on your own, but you're using Linux, so you should be used to that.
     </MudText>
@@ -52,8 +52,8 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
             
         <MudAlert Severity="Severity.Warning" Class="my-4" Variant="Variant.Outlined">
             Be aware that installing <Code Language="bash">dotnet</Code> with <Code Language="bash">snap</Code> is known to be weird
-            and/or fail. If you have issues, there is always the <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux#manual-installation">manual installation</MudLink>
-            path, without a package manager. The best way to do that is the <MudLink Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux-scripted-manual#scripted-install">dotnet-install.sh</MudLink>
+            and/or fail. If you have issues, there is always the <Link Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux#manual-installation">manual installation</Link>
+            path, without a package manager. The best way to do that is the <Link Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux-scripted-manual#scripted-install">dotnet-install.sh</Link>
             script.
         </MudAlert>
     </MudText>
@@ -70,7 +70,7 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
         If you already have Code configured, check the extension list to make sure you have them all.
     </MudText>      
     <MudText GutterBottom="true">  
-        To install Code, you go to <MudLink Href="https://code.visualstudio.com/Download">https://code.visualstudio.com/Download</MudLink>
+        To install Code, you go to <Link Href="https://code.visualstudio.com/Download">https://code.visualstudio.com/Download</Link>
         and select your platform. Once it's installed you should be able to run it from your shell using <Code Language="bash">code &lang;dir&rang;</Code> to open it in the specified
         directory.
     </MudText>       
@@ -78,15 +78,15 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
         Here are the extensions that we need to install in Code:
         <MudList>
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-                C# (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp">Marketplace</MudLink>)
+                C# (<Link Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp">Marketplace</Link>)
                 &ndash; IDE for C# .NET development
             </MudListItem>
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-                .NET Interactive Notebooks (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode">Marketplace</MudLink>)
+                .NET Interactive Notebooks (<Link Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode">Marketplace</Link>)
                 &ndash; to use interactive notebooks in Code.
             </MudListItem>
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-                NuGet Gallery (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=patcx.vscode-nuget-gallery">Marketplace</MudLink>)
+                NuGet Gallery (<Link Href="https://marketplace.visualstudio.com/items?itemName=patcx.vscode-nuget-gallery">Marketplace</Link>)
                 &ndash; for browsing and installing C# libraries.
             </MudListItem>
         </MudList>
@@ -95,17 +95,17 @@ sudo apt-get install -y dotnet-sdk-6.0")/>
         There are also a few very helpful extensions that you might want to install if you haven't already:
         <MudList>
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-                Error Lens (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens">Marketplace</MudLink>)
+                Error Lens (<Link Href="https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens">Marketplace</Link>)
                 &ndash; shows diagnostics (warnings, errors, etc.) inline in your code. Very useful in notebooks where we show intentionally wrong
                 code, so that you know at a glance what the error is.
             </MudListItem>
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-                Test Explorer UI (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer">Marketplace</MudLink>)
-                and .NET Core Test Explorer (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=formulahendry.dotnet-test-explorer">Marketplace</MudLink>)
+                Test Explorer UI (<Link Href="https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer">Marketplace</Link>)
+                and .NET Core Test Explorer (<Link Href="https://marketplace.visualstudio.com/items?itemName=formulahendry.dotnet-test-explorer">Marketplace</Link>)
                 &ndash; view and run .NET tests from the VS Code UI.
             </MudListItem>
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-                Code Spell Checker (<MudLink Href="https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker">Marketplace</MudLink>)
+                Code Spell Checker (<Link Href="https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker">Marketplace</Link>)
                 &ndash; so that your final project doesn't contain those emberesing speling miskates. <!-- These are obviously intentional -->
             </MudListItem>
         </MudList>

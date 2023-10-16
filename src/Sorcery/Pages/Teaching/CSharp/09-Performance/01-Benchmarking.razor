@@ -34,9 +34,9 @@
         because the runtime can support the tooling better than as if we were running compiled machine code.
         It's harder, because all the layers between the code and runtime, the JITter, etc. Doing that by
         hand and accounting for all the different factors is <em>hard</em>. Quoting from
-        <MudLink Href="https://github.com/dotnet/BenchmarkDotNet/tree/5e62756c126980ecde9e4779b3c320b3225381ee#automation=">
+        <Link Href="https://github.com/dotnet/BenchmarkDotNet/tree/5e62756c126980ecde9e4779b3c320b3225381ee#automation=">
         BenchmarkDotNet README
-        </MudLink>:
+        </Link>:
     </MudText>
     <Quote>
         Let's think about what should you do in a typical case.
@@ -124,9 +124,9 @@
     <MudText id="benchmark-description">
         The <Code>Benches</Code> class contains the benchmarks. We use a file located in <code>/data/words.txt</code>, containing
         around $5$MB of English words, separated with newlines. As the pattern, we use "interrelationships" ($18$ characters), which 
-        <MudLink Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
+        <Link Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
             scores quite highly in terms of valid substrings contained within it
-        </MudLink>. We also use a special switch that determines the size of the result
+        </Link>. We also use a special switch that determines the size of the result
         by replacing parts of the input with garbage. There are four:
     </MudText>
     <LatexRenderer ContainerId="benchmark-description" />

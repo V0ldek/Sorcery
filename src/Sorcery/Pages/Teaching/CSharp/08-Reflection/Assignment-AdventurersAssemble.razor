@@ -58,7 +58,7 @@ dotnet publish ./dynamic/Outside.Heroes -o ./dynamic/bin
         The <Code>HeroRepository</Code>, when constructed, loads all Hero classes defined in the base game,
         and then uses configuration options to dynamically load outside assemblies from a path.
         Details of how assembly loading works are not really riveting, but if you're interested in them
-        then you can read <MudLink Href="https://docs.microsoft.com/en-us/dotnet/core/dependency-loading/understanding-assemblyloadcontext">this article</MudLink>.
+        then you can read <Link Href="https://docs.microsoft.com/en-us/dotnet/core/dependency-loading/understanding-assemblyloadcontext">this article</Link>.
         In the end, we get an <Code>Assembly</Code> object that we can then query for types.
     </MudText>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; <Code>HeroRepository</Code></MudText>
@@ -111,7 +111,7 @@ dotnet publish ./dynamic/Outside.Heroes -o ./dynamic/bin
         the assemblies once, but create the Heroes potentially many times. A solution that just stores
         the <Code>ConstructorInfo</Code> and calls it every time a <Code>Hero</Code> is requested
         will not be sufficient. You need to either create an expression tree and compile it into a delegate
-        (see <MudLink Href="https://docs.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression.new?view=net-6.0">Expression.New</MudLink>),
+        (see <Link Href="https://docs.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression.new?view=net-6.0">Expression.New</Link>),
         or use a helper function that will call the constructor of a given <Code>T: new()</Code>, take its <Code>MethodInfo</Code>
         and compile it with <Code>CreateDelegate</Code>.
     </MudText>

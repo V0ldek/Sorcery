@@ -10,7 +10,7 @@
         Creating a project for ASP.NET core is a bit different from what we've been doing thus far.
         We need to use a different SDK and a completely different project type for the entry project.
         Navigate to the <code>07-ASP.NETCore/DungeonWalker.Api</code> directory in 
-        <MudLink Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</MudLink>
+        <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>
         and run:
     </MudText>
     <CodeBlock Language="powershell" Code="@(@"
@@ -145,14 +145,14 @@ curl https://localhost:10443 --verbose
     <MudText GutterBottom="true">
         Routing is what our server does when it gets a request to determine what code to run to serve the request.
         The <em>route</em> is the part of the URL after the root server URL, so when making a request
-        to <MudLink Href="https://gienieczko.com/teaching/csharp/7-aspnet-core/0-minimal-http-server">
+        to <Link Href="https://gienieczko.com/teaching/csharp/7-aspnet-core/0-minimal-http-server">
             https://gienieczko.com/teaching/csharp/7-aspnet-core/0-minimal-http-server
-        </MudLink>
+        </Link>
         the route is '<code>/teaching/csharp/7-aspnet-core/0-minimal-http-server</code>'.
         The server has to parse that route and, em, route it to the correct handler, which in case of an ASP.NET Core is an <em>action</em>
         defined in a <em>controller</em>.
-        The route isn't only a path, for example in <MudLink Href="https://duckduckgo.com/?q=gienieczko&t=h_&ia=web">
-        https://duckduckgo.com/?q=gienieczko&t=h_&ia=web</MudLink> we have the path '<code>/</code>', but also three query parameters:
+        The route isn't only a path, for example in <Link Href="https://duckduckgo.com/?q=gienieczko&t=h_&ia=web">
+        https://duckduckgo.com/?q=gienieczko&t=h_&ia=web</Link> we have the path '<code>/</code>', but also three query parameters:
         '<code>q</code>' with value '<code>gienieczko</code>', '<code>t</code>' with value '<code>h_</code>', and '<code>ia</code>'
         with value '<code>web</code>'.
     </MudText>

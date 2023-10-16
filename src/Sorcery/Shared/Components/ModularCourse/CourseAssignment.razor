@@ -15,7 +15,7 @@
         <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
 
         <MudAlert Class="my-4" Variant="Variant.Outlined">
-            <MudLink Href="@Assignment.GitHubClassroom" Target="_blank">GitHub Classroom invitation to the assignment.</MudLink>
+            <Link Href="@Assignment.GitHubClassroom" Target="_blank">GitHub Classroom invitation to the assignment.</Link>
         </MudAlert>
 
         <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
@@ -26,7 +26,7 @@
     
         @if (Assignment.Module.Next is null)
         {
-            <MudButton Link="@Assignment.Module.Course.Route">
+            <MudButton Href="@Assignment.Module.Course.Route">
                 This is the end of the &nbsp; <Highlight>@Assignment.Module.Course.DisplayName</Highlight>.
                 Click here to return to its main page.
             </MudButton>

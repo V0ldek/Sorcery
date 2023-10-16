@@ -9,7 +9,7 @@
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
     <MudText GutterBottom="true">
         The goal of this assignment is to implement the <Code>IDungeonRepository</Code> interface known from
-        the <MudLink Href="@CourseBook.CSharpCourse["asynchrony"].Assignment!.Route">previous assignment</MudLink>,
+        the <Link Href="@CourseBook.CSharpCourse["asynchrony"].Assignment!.Route">previous assignment</Link>,
         but using Entity Framework with an SQLite database.
     </MudText>
     <MudText>
@@ -33,7 +33,7 @@
         defined, there is no need to modify the types in any way.
     </MudText>
     <MudText GutterBottom="true">
-        You need to define the actual model in <Code>DungeonWalkerDbContext.OnModelCreating</Code>. It should use <MudLink Href="https://docs.microsoft.com/en-us/ef/core/modeling/inheritance#table-per-hierarchy-and-discriminator-configuration">TPH inheritance</MudLink>
+        You need to define the actual model in <Code>DungeonWalkerDbContext.OnModelCreating</Code>. It should use <Link Href="https://docs.microsoft.com/en-us/ef/core/modeling/inheritance#table-per-hierarchy-and-discriminator-configuration">TPH inheritance</Link>
         for both rooms and loot. The core entity is <Code>Graph&lt;RoomTemplate&gt;</Code> and will be the one queried in the repository implementation.
         Included is an ERD diagram of the expected database schema.
     </MudText>
@@ -60,9 +60,9 @@ dotnet tool install --global dotnet-ef
         <MudListItem Icon="fa-brands fa-apple">On OSX, it's in the <code>/Users/{user}/.local/share</code> directory.</MudListItem>
     </MudList>
     <MudText GutterBottom="true">
-        You can connect to the database from the outside, which should be useful for debugging. I recommend <MudLink Href="https://dbeaver.io/download/">DBeaver</MudLink>,
+        You can connect to the database from the outside, which should be useful for debugging. I recommend <Link Href="https://dbeaver.io/download/">DBeaver</Link>,
         (Community Edition), an open-source database tool. Its usage is straightforward, the only hard thing is 
-        <MudLink Href="https://programmersought.com/article/24818171626/">installing the dark mode</MudLink>.
+        <Link Href="https://programmersought.com/article/24818171626/">installing the dark mode</Link>.
     </MudText>
     <MudText>
         And to drive the point home even more, here's the migration script generated from the expected model. You can get
@@ -193,8 +193,8 @@ COMMIT;
             @{
                 var navigation = CourseBook.CSharpCourse["entity-framework"]["navigation-properties"];
             }
-            The relation model is quite deep. You will need to use stuff described in <MudLink Href="@(navigation.Route)">@(navigation.DisplayName)</MudLink>,
-            including <Code>ThenInclude</Code>, which you can find in the linked resource: <MudLink Href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager">Eager Loading of Related Data</MudLink>.
+            The relation model is quite deep. You will need to use stuff described in <Link Href="@(navigation.Route)">@(navigation.DisplayName)</Link>,
+            including <Code>ThenInclude</Code>, which you can find in the linked resource: <Link Href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager">Eager Loading of Related Data</Link>.
         </MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             During loading, try to perform as much simplification as possible inside the query. If you need only a list of numbers
