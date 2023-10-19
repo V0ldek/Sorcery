@@ -2,32 +2,32 @@
 @inject CourseBook CourseBook;
 
 <CourseAssignment Assignment="@CourseBook.CSharpCourse["generics-and-collections"].Assignment">
-    <MudText>
+    <Paragraph>
         When the path is straight, pressing onwards is the only course of action.
         But when dark paths diverge and twist, choices need to be made, and resolve
         of our Heroes tested...
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Overview</Header2>
+    <Paragraph>
         We want to introduce non-determinism to our game. For that we need Dungeons
         that are more complicated than a path of Rooms. If we implement a graph
         type we'll be able to create complex Dungeons and test different paths through
         it for efficiency.
-    </MudText>
+    </Paragraph>
     
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0 &ndash; Run Leaderboard</MudText>
-    <MudText GutterBottom="true">
+    <Header2>Task 0 &ndash; Run Leaderboard</Header2>
+    <Paragraph>
         We now want to be able to compare different runs of our Heroes.
         Since the dungeons now have multiple paths, multiple outcomes are possible.
         To facilitate this, <Code>PlayerStatistics</Code> have been changed to produce
         an immutable result at the end of a run, represented by the type <Code>DungeonWalker.Logic.Statistics.RunStatistics</Code>.
         It contains all the statistics and an identifier that is unique in a single execution of our game.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Your task is to complete its implementation with equality and ordering.
         The rules for equality are simple: instances are equal if they have the same <Code>Id</Code>.
         For ordering we compare statistics in order to determine the best run:
-    </MudText>
+    </Paragraph>
     <MudList Class="my-2">
         <MudListItem Icon="fas fa-dungeon">
             A Run with more cleared rooms is better (greater); if equal, then
@@ -43,13 +43,13 @@
         </MudListItem>
     </MudList>
     
-    <MudText>
+    <Paragraph>
         Then, we want to create a Leaderboard. The <Code>BestRunsCollection</Code> type is a mutable
         collection of Runs that implements the <Code>ICollection&lt;RunStatistics&gt;</Code>
         interface, and provides a special method: <Code>IEnumerable&lt;(int rank, RunStatistics run)&gt; EnumerateRanking()</Code>.
         It's supposed to enumerate the Runs from the best to the worst and assign them a rank.
         The ranks are as in natural leaderboards, an example looks like this:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="Plain" Code="@(@"
 --------------------------------------
 | 1. | 🚪 8 | ☠️ 2 | ⚔️ 120 | 💔 90  |
@@ -68,22 +68,22 @@
         This is tested by the "Statistics" test group, worth <Highlight>0.5</Highlight> point.
     </MudAlert>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Graphs</MudText>
-    <MudText>
+    <Header2>Task 1. &ndash; Graphs</Header2>
+    <Paragraph>
         This task is cut out for you. We have a new project, <Code>DungeonWalker.Graphs</Code>,
         defining two interfaces, <Code>IGraph&lt;TLabel&gt;</Code>
         and <Code>IGraphBuilder&lt;TLabel&gt;</Code>, as well as two basic types, <Code>Vertex&lt;TLabel&gt;</Code>
         and <Code>Edge&lt;TLabel&gt;</Code>. You need to fill out their implementations. Bulk of the work is in
         <code>Graph.cs</code>, where we need to implement both the graph and the builder.
-    </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Novelty &ndash; XML Comments</MudText>
-    <MudText>
+    </Paragraph>
+    <Header3>Novelty &ndash; XML Comments</Header3>
+    <Paragraph>
         The code differs in one major aspect from what you've seen thus far &ndash; it has documentation!
         In C# we document public members in a structured manner with XML comments.
         These give your IDE the power to help you during autocomplete, showing descriptions
         of types, methods, and their parameters while you're filling out the arguments.
         Here's a sample:
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="DungeonWalker.Graphs/IGraph.cs" Code="@(@"
 /// <summary>
 ///     Gets the vertex with a given label, if present in the graph.
@@ -94,23 +94,23 @@
 /// <exception cref=""KeyNotFoundException"">If the graph does not contain a vertex with label <paramref name=""label"" />.</exception>
 Vertex<TLabel> this[TLabel label] { get; }
 ")"/>
-    <MudText GutterBottom="true">
+    <Paragraph>
         The documentation should be pretty self-documenting (no apologies for the pun).
         Your implementation should fulfil the documentation, as this is what the tests test against.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
          In many cases the documentation is exactly the same as in the interface (or base class)
          we're implementing. Since the compiler complains about undocumented public members,
          there's a shortcut to inherit the entire documentation for a given member:
-    </MudText>
+    </Paragraph>
     <CodeBlock Code="@(@"/// <inheritdoc/>")"></CodeBlock>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Novelty &ndash; Analysers</MudText>
-    <MudText>
+    <Header3>Novelty &ndash; Analysers</Header3>
+    <Paragraph>
         You might notice that the compiler is complaining about quite a few more things than usual.
         That's because I've finally enabled the default Roslyn analysers across the solution.
         Before this module its suggestions might've been confusing, as we didn't know generics for example.
         They're triggered by the following spells in the <code>csproj</code> files:
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="DungeonWalker.Graphs/DungeonWalker.Graphs.csproj" Language="xml" Code="@(@"
   <PropertyGroup>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -126,11 +126,11 @@ Vertex<TLabel> this[TLabel label] { get; }
     </PackageReference>
   </ItemGroup>
 ")"/>
-    <MudText>
+    <Paragraph>
         These analysers include warnings and suggestions for common antipatterns in C#,
         as well as automatic fixes for them. Heed the compiler, if it complains about something
         there's a big chance I will too during review :)
-    </MudText>
+    </Paragraph>
     
     <MudAlert Class="my-4" Severity="Severity.Info" Variant="Variant.Outlined">
         To get full benefits of the feature, you need to toggle a setting in VS Code located in
@@ -141,13 +141,13 @@ Vertex<TLabel> this[TLabel label] { get; }
         This is tested by the "Graphs" test group, worth <Highlight>1.0</Highlight> point.
     </MudAlert>
     
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
-    <MudText GutterBottom="true">
+    <Header2>Project structure and execution</Header2>
+    <Paragraph>
         A few new parameters were added to allow for randomising paths through the Dungeon.
         There is a single graph dungeon defined, <code>MagicalMaze</code>. You can provide
         the number of independent runs to execute with the <code>--number</code> flag,
         and fix a seed for the RNG with <code>--seed</code>.
-    </MudText>
+    </Paragraph>
 
     <Asciinema CastName="diverging-dungeons-demo" />
 </CourseAssignment>

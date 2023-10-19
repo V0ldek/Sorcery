@@ -6,11 +6,11 @@
 }
 
 <CourseSection Section="@(section)">
-    <MudText GutterBottom="true">
+    <Paragraph>
         Continuing with <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>
         go through the next notebook, <Highlight>@($"{section.Module.Id}-{section.Module.RouteName}/{section.Id}-{section.RouteName}.dib")</Highlight>, in VS Code.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
+        </Paragraph>
+    <Header2>In this section we'll cover</Header2>
     <MudList>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>

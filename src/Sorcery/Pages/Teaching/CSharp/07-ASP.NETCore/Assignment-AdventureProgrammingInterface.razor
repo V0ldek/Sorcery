@@ -2,62 +2,62 @@
 @inject CourseBook CourseBook;
 
 <CourseAssignment Assignment="@CourseBook.CSharpCourse["aspnet-core"].Assignment">
-    <MudText>
+    <Paragraph>
         Sending Heroes on Adventures manually is tedious. Dozens of people have to work to equip them,
         prepare provisions, cheer them on their way... We need a more automated solution, or we'll never reach
         get rid of all the enemies!
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Overview</Header2>
+    <Paragraph>
         We will be implementing an ASP.NET Core API for our project. Simple enough. We need to define the controllers,
         integrate the, at this point legacy, game engine with the API, and add some logging to allow easy debugging.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Tour de Code</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Task 0. &ndash; Tour de Code</Header2>
+    <Paragraph>
         First, let's examine what is already there. Take a look at the models defined in <Code>DungeonWalker.Api.Model</Code>.
         They are simple objects meant to be returned by the API. We have two controllers, the <Code>DungeonsController</Code>,
         responsible for listing Dungeon data, and <Code>RunsController</Code>, that allows us to play the game and examine
         the highscores.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Underneath, the well known <Code>IDungeonRepository</Code> provides the Dungeons, while <Code>IRunsRepository</Code>
         is a new addition that works on Runs. It is partially implemented in <Code>DungeonWalker.DataLayer.Sql.SqlRunsRepository</Code>.
         Partially, because I couldn't take away the pure joy of writing another LINQ query from you in <Code>GetBestRunsAsync</Code>.
         This part is untested, but you should start there. To get the database running you will need to apply the new migration that
         builds the <Code>DungeonRun</Code> tables.
-    </MudText>
+    </Paragraph>
     <CodeBlock Code="@(@"
 dotnet ef database update --project ./src/DungeonWalker.DataLayer.Sql
     ")"/>
-    <MudText GutterBottom="true">
+    <Paragraph>
         The <Code>IHeroRepository</Code> has one trivial implementation that just returns the classes we defined way back in the first assignment.
         Finally, the <Code>IGameEngine</Code> interface allows us to run the game. Its implementation is non-trivial, and uses
         <Code>IRandomNumberGenerator</Code> to abstract randomness away. Feel free to examine the code, although you don't need to change
         anything here.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         All of this is glued together in <Code>DungeonWalker.Dependencies</Code>. This is a pretty common architecture, where we separate
         different parts of the system into many projects, and then make the single Dependencies project depend on all of them to register
         them for Dependency Injection. That way our API never has to reference any of the low-level implementation projects, like
         <Code>DungeonWalker.DataLayer.Sql</Code>.
-    </MudText>
+    </Paragraph>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; <Code>DungeonsController</Code></MudText>
-    <MudText>
+    <Paragraph>
         Implement the actions <Code>ListNamesAsync</Code> and <Code>GetAsync</Code>. Remember to use structured logging
         for easier debugging. All logging messages I deemed necessary are defined in <Code>DungeonWalker.Api.Extensions.ILoggerExtensions</Code>,
         although you are free to define your own. Just remember to follow structured logging principles.
-    </MudText>
+    </Paragraph>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "DungeonsController" test group, worth <Highlight>1</Highlight> point.
     </MudAlert>
     <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; <Code>RunsController</Code></MudText>
-    <MudText>
+    <Paragraph>
         Implement the actions <Code>GetBestRunsAsync</Code> and <Code>PlayAsync</Code>. Remember to use structured logging
         for easier debugging. <Code>PlayAsync</Code> is the tricky part, as it requires coordinating all the things we've built
         thus far. You need to use the <Code>IGameEngine</Code> to run the game, but that requires you to fetch the
         layout and Hero first. You need to then save the run, which could fail by itself. But once this is done,
         you can play DungeonWalker from the Swagger interface! Just remember to hit the <code>seed</code> endpoint first.
-    </MudText>
+    </Paragraph>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "RunsController" test group, worth <Highlight>1</Highlight> point.
     </MudAlert>

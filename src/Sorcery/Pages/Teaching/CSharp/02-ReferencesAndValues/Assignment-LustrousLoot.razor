@@ -2,31 +2,31 @@
 @inject CourseBook CourseBook;
 
 <CourseAssignment Assignment="@CourseBook.CSharpCourse["references-and-values"].Assignment">
-    <MudText>
+    <Paragraph>
         Our tenacious heroes are strong, but not strong enough!
         To defeat their enemies they need reliable equipment and powerful trinkets
         that will enhance their abilities. The Dark Lord's machinery in the dungeon
         can be used to make the weapons even deadlier and <span class="armour">armour</span> even sturdier...
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Overview</Header2>
+    <Paragraph>
         Throughout the course we will be working on our DungeonWalker and making it more into a real game!
         This time we will be revisiting Loot and making it more fledged out by splitting it into Equipment
         and Consumable items.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Modifiers and Health</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Task 0. &ndash; Modifiers and Health</Header2>
+    <Paragraph>
         If you compare Health Potions to Damage Crystals and Chainmails, a key difference emerges &ndash;
         the first one gets consumed and applies its effects immediately, while the other two give permanent
         modifiers to the Hero &ndash; these we call Equipment. We want to expand on this by creating a <Code>Modifier</Code> type that
         will model that.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         First, we define an <Code>EquipmentBase</Code> abstract class that can be implemented by items
         to indicate they are not one-timers, but rather permanent additions to the Hero's arsenal.
         It has a single property, which returns a <Code>Modifier</Code>, and a <Code>TryUpgrade</Code>
         method that we will use later:
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="DungeonWalker.Logic/Loot/Equipment/IEquipment.cs" Code="@(@"
 using DungeonWalker.Logic.Characters;
 
@@ -35,69 +35,69 @@ namespace DungeonWalker.Logic.Loot.Equipment;
 public abstract class EquipmentBase
 {
     public Modifier Modifier => throw new NotImplementedException();
-    
+
     public bool TryUpgrade() => throw new NotImplementedException();
 }
-    ")"/>
-    <MudText GutterBottom="true">
+    ")" />
+    <Paragraph>
         As usual, you can freely add stuff to this class, just don't change the two existing signatures.
         A Modifier is currently a rather dumb type:
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="DungeonWalker.Logic/Characters/Modifier.cs" Code="@(@"
 namespace DungeonWalker.Logic.Characters;
 
 public struct Modifier
 {
     public int AttackDamageModifier { get; init; }
-    
+
     public int ArmourModifier { get; init; }
 
     public int MaxHealthModifier { get; init; }
 }
-")"/>
-    <MudText>
+")" />
+    <Paragraph>
         We'd like it to be more useful. Your first task is to implement relevant operators and methods:
-    </MudText>
 
-    <MudList Class="my-2">
-        <MudListItem Icon="fas fa-plus">addition of two Modifiers that simply adds all individual modifier values;</MudListItem>
-        <MudListItem Icon="fas fa-minus">dual to addition, subtraction of two Modifiers</MudListItem>
-        <MudListItem Icon="fas fa-xmark">multiplication by a <Code>float</Code> scalar that multiplies all individual modifier values, rounding down;</MudListItem>
-        <MudListItem Icon="fas fa-circle-minus">unary negation, equivalent to multiplying by negative one.</MudListItem>
-    </MudList>
-    
+        <MudList Class="my-2">
+            <MudListItem Icon="fas fa-plus">addition of two Modifiers that simply adds all individual modifier values;</MudListItem>
+            <MudListItem Icon="fas fa-minus">dual to addition, subtraction of two Modifiers</MudListItem>
+            <MudListItem Icon="fas fa-xmark">multiplication by a <Code>float</Code> scalar that multiplies all individual modifier values, rounding down;</MudListItem>
+            <MudListItem Icon="fas fa-circle-minus">unary negation, equivalent to multiplying by negative one.</MudListItem>
+        </MudList>
+    </Paragraph>
+
     <MudText>
         We also want a readable <Code>ToString</Code> representation, e.g. our friend Chainmail would give this modifier:
     </MudText>
     <CodeBlock Language="plain" Code="@(@"🛡 +5")" />
-    
+
     <MudText>
         A magical sword that grants extraordinary strength could give:
     </MudText>
     <CodeBlock Language="plain" Code="@(@"❤️ +10 ⚔️ +10")" />
-    
+
     <MudText>
         And a legendary artefact could grant:
     </MudText>
     <CodeBlock Language="plain" Code="@(@"❤️ +20 ⚔️ +15 🛡 +15")" />
 
-    <MudText GutterBottom="true">
+    <Paragraph>
         In short, just write out the non-zero modifiers in order <span class="health">max health</span>, <span class="damage">damage</span>, <span class="armour">armour</span>.
         If the Modifier is zero across the board, print <Code>"nothing"</Code>.
-    </MudText>
-    
-    <MudText GutterBottom="true">
+    </Paragraph>
+
+    <Paragraph>
         To finish working with Modifiers, we need to change how Characters interact with it.
         The Character class has been reworked to have immutable base statistics and a Modifier, but it is bugged!
         It can cause the Character to have less <span class="health">health</span> than zero &ndash; you need to fix that.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         You also need to fix the Hero's <Code>DisableTenacity</Code> and <Code>EnableTenacity</Code> methods
         to apply the modifier correctly.
-    </MudText>
+    </Paragraph>
 
 
-     <CodeBlock FileName="DungeonWalker.Logic/Characters/Hero.cs" Code="@(@"
+    <CodeBlock FileName="DungeonWalker.Logic/Characters/Hero.cs" Code="@(@"
 //...
 
 private void DisableTenacity()
@@ -111,135 +111,132 @@ private void EnableTenacity()
     throw new NotImplementedException(""Should remove Tenacity here!"");
     _isTenacityActive = true;
 }
-")"/>
+")" />
 
     <MudAlert Class="my-4" Severity="Severity.Warning" Variant="Variant.Outlined">
         The tests do not compile until you finish this Task.
         If you add the required operators to the <Code>Modifier</Code> type they will compile.
     </MudAlert>
-    
+
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "Modifiers" test group, worth <Highlight>0.33</Highlight> points.
     </MudAlert>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Equipment</MudText>
-    
-    <MudText>
+    <Header2>Task 1. &ndash; Equipment</Header2>
+
+    <Paragraph>
         Now we rework the existing Loot system to split items between Consumables and Equipment.
         Not all Equipment is equal. There are five distinct types of items the Heroes may equip:
-    </MudText>
-    
-    <MudList Class="my-2">
-        <MudListItem Icon="fas fa-hand-fist"><strong>Melee Weapon</strong></MudListItem>
-        <MudListItem Icon="fas fa-wand-sparkles"><strong>Ranged Weapon</strong></MudListItem>
-        <MudListItem Icon="fas fa-vest"><strong>Armour</strong></MudListItem>
-        <MudListItem Icon="fas fa-shield-blank"><strong>Shield</strong></MudListItem>
-        <MudListItem Icon="fas fa-hat-wizard"><strong>Trinket</strong></MudListItem>
-    </MudList>
-    
-    <MudText>
+
+        <MudList Class="my-2">
+            <MudListItem Icon="fas fa-hand-fist"><strong>Melee Weapon</strong></MudListItem>
+            <MudListItem Icon="fas fa-wand-sparkles"><strong>Ranged Weapon</strong></MudListItem>
+            <MudListItem Icon="fas fa-vest"><strong>Armour</strong></MudListItem>
+            <MudListItem Icon="fas fa-shield-blank"><strong>Shield</strong></MudListItem>
+            <MudListItem Icon="fas fa-hat-wizard"><strong>Trinket</strong></MudListItem>
+        </MudList>
         These types constrain who can equip them.
-    </MudText>
+    </Paragraph>
 
     <MudList>
         <MudListItem Icon="fas fa-wind">
             <MudText Color="Color.Default">
                 <Code>Rogue</Code> &ndash;
-                    can equip a Melee Weapon, a Ranged Weapon, and a Trinket.
+                can equip a Melee Weapon, a Ranged Weapon, and a Trinket.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-shield-blank">
             <MudText Color="Color.Default">
-                <Code>Warrior</Code> &ndash; 
-                    can equip a Melee Weapon, an Armour, and a Shield.
+                <Code>Warrior</Code> &ndash;
+                can equip a Melee Weapon, an Armour, and a Shield.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hand-sparkles">
             <MudText Color="Color.Default">
-                <Code>Wizard</Code> &ndash; 
-                    can equip a Ranged Weapon, and two Trinkets.
+                <Code>Wizard</Code> &ndash;
+                can equip a Ranged Weapon, and two Trinkets.
             </MudText>
         </MudListItem>
     </MudList>
-    
-    <MudText>
+
+    <Paragraph>
         You need to implement the missing <Code>TryEquip</Code> method on
         the <Code>Hero</Code> class and potentially all inheriting classes.
-    </MudText>
-    
+    </Paragraph>
+
     <MudAlert Class="my-4" Severity="Severity.Info" Variant="Variant.Outlined">
         You may need to modify the <Code>TestHero</Code> class located in the tests.
         This is allowed and expected. The TestHero can accept any equipment types.
         The tests only ever put at most five items into their equipment.
     </MudAlert>
 
-    <MudText>
+    <Paragraph>
         The <Code>EquipmentFactory</Code> class has more unimplemented members for you.
         Implement the new possible Equipment drops.
-    </MudText>
-    
+    </Paragraph>
+
     <MudList id="equipment-list">
         <MudListItem Icon="fas fa-vest">
             <MudText Color="Color.Default">
                 <Code>Chainmail</Code> &ndash;
-                    good old Loot from the previous assignment, only now it's an Armour.
+                good old Loot from the previous assignment, only now it's an Armour.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hat-wizard">
             <MudText Color="Color.Default">
-                <Code>DamageCrystal</Code> &ndash; 
-                    same as above, but now it's a Trinket.
+                <Code>DamageCrystal</Code> &ndash;
+                same as above, but now it's a Trinket.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hand-fist">
             <MudText Color="Color.Default">
-                <Code>TwoHandedSword</Code> &ndash; 
-                    a Melee Weapon that increases Hero's <span class="damage">damage</span> by $20$, but decreases <span class="armour">armour</span> by $10$ 
-                    (handling such a heavy weapon slows you down and makes you more susceptible to attacks).
+                <Code>TwoHandedSword</Code> &ndash;
+                a Melee Weapon that increases Hero's <span class="damage">damage</span> by $20$, but decreases <span class="armour">armour</span> by $10$
+                (handling such a heavy weapon slows you down and makes you more susceptible to attacks).
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-wand-sparkles">
             <MudText Color="Color.Default">
-                <Code>StaffOfLife</Code> &ndash; 
-                    a Ranged Weapon that increases Hero's <span class="damage">damage</span> by $10$ and their <span class="health">max health</span> by $10$.
+                <Code>StaffOfLife</Code> &ndash;
+                a Ranged Weapon that increases Hero's <span class="damage">damage</span> by $10$ and their <span class="health">max health</span> by $10$.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-shield-blank">
             <MudText Color="Color.Default">
-                <Code>SpikedShield</Code> &ndash; 
-                    a Shield that increases Hero's <span class="damage">damage</span> by $10$ and their <span class="armour">armour</span> by $15$.
+                <Code>SpikedShield</Code> &ndash;
+                a Shield that increases Hero's <span class="damage">damage</span> by $10$ and their <span class="armour">armour</span> by $15$.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-vest">
             <MudText Color="Color.Default">
-                <Code>TitanicBulwark</Code> &ndash; 
-                    an Armour that decreases Hero's <span class="damage">damage</span> by $10$, but increases <span class="armour">armour</span> by $20$ and <span class="health">max health</span> by $50$.
+                <Code>TitanicBulwark</Code> &ndash;
+                an Armour that decreases Hero's <span class="damage">damage</span> by $10$, but increases <span class="armour">armour</span> by $20$ and <span class="health">max health</span> by $50$.
             </MudText>
         </MudListItem>
         <MudListItem Icon="fas fa-hat-wizard">
             <MudText Color="Color.Default">
-                <Code>EssenceOfMagic</Code> &ndash; 
-                    a Trinket that increases Hero's <span class="damage">damage</span> by $10$, <span class="armour">armour</span> by $5$, and <span class="health">max health</span> by $20$.
+                <Code>EssenceOfMagic</Code> &ndash;
+                a Trinket that increases Hero's <span class="damage">damage</span> by $10$, <span class="armour">armour</span> by $5$, and <span class="health">max health</span> by $20$.
             </MudText>
         </MudListItem>
     </MudList>
 
-    <LatexRenderer ContainerId="equipment-list"/>
+    <LatexRenderer ContainerId="equipment-list" />
 
-    <MudText GutterBottom="true">
+    <Paragraph>
         There's also a missing method in <Code>LootFactory</Code>.
-    </MudText>
+    </Paragraph>
 
-    <MudText GutterBottom="true">
+    <Paragraph>
         A Hero only picks up the Equipment if they have a slot to fit it into.
         If they do not then the item is ignored. This logic needs to be placed in
         <Code>Hero.TryEquip</Code>.
-    </MudText>
+    </Paragraph>
 
-    <MudText>
+    <Paragraph>
         Since picking up Loot can now result in the Hero ignoring it, we need to tweak the Loot messages a bit.
         Here's an example:
-    </MudText>
+    </Paragraph>
 
     <CodeBlock Language="plain" Code="@(@"
 The room is empty except for a large chest. And inside...
@@ -247,17 +244,17 @@ The room is empty except for a large chest. And inside...
   - Titanic Bulwark! It grants ❤️ +50 ⚔️ -10 🛡 +20!
   - Chainmail! But there's no room for it...
   - Two-handed Sword! It grants ⚔️ +20 🛡 -10!")" />
-  
+
     <MudAlert Variant="Variant.Outlined" Class="my-4">
         This is tested by the "Loot" test group, worth <Highlight>0.33</Highlight> points.
     </MudAlert>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 2. &ndash; Upgrades</MudText>
+    <Header2>Task 2. &ndash; Upgrades</Header2>
 
-    <MudText>
+    <Paragraph>
         Every piece of Equipment has a quality level. The quality level provides a multiplier
         to the Equipment's' Modifier.
-    </MudText>
+    </Paragraph>
 
     <MudList id="quality-levels-list">
         <MudListItem Icon="@Icons.Material.Filled.StarOutline">
@@ -282,38 +279,38 @@ The room is empty except for a large chest. And inside...
         </MudListItem>
     </MudList>
 
-    <MudText GutterBottom="true">
+    <Paragraph>
         All Equipment starts as Common. It can be upgraded using the ancient arcane workstations
         scattered across the dungeon. Once entered, these <Code>UpgradeRoom</Code> locations
         upgrade all Equipment on the Hero to the next level, unless it's already Heroic.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Implement this system and the <Code>UpgradeRoom</Code>. It should return a nice
         description of the upgrade operation, omitting all equipment that could not be upgraded.
         A few examples:
-    </MudText>
+    </Paragraph>
 
     <CodeBlock Language="plain" Code="@(@"
 One of the ancient arcane foundries fills this room... The Hero can upgrade their equipment.
   - Two-handed Sword upgraded to Uncommon! It now grants ⚔️ +25 🛡 -12.
   - Titanic Bulwark upgraded to Rare! It now grants ❤️ +75 ⚔️ -15 🛡 +30.
   - Essence of Magic upgraded to Heroic! It now grants ❤️ +40 ⚔️ +20 🛡 +10.
-    ")"/>
+    ")" />
     <CodeBlock Language="plain" Code="@(@"
 One of the ancient arcane foundries fills this room... The Hero can upgrade their equipment.
-However, they don't have any that could be upgraded. Time to move on.")"/>
+However, they don't have any that could be upgraded. Time to move on.")" />
 
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "Upgrades" test group, worth <Highlight>0.34</Highlight> points.
     </MudAlert>
 
-    <LatexRenderer ContainerId="quality-levels-list"/>
+    <LatexRenderer ContainerId="quality-levels-list" />
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Project structure and execution</MudText>
-    <MudText>
+    <Header2>Project structure and execution</Header2>
+    <Paragraph>
         The structure and execution stay the same. The only caveat is that you need to implement
         the Modifier operators for tests to compile.
-    </MudText>
+    </Paragraph>
 </CourseAssignment>
 @code {
 

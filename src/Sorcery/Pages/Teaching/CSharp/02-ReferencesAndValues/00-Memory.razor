@@ -2,58 +2,56 @@
 @inject CourseBook CourseBook;
 
 <CourseSection Section="@CourseBook.CSharpCourse["references-and-values"]["memory"]">
-    <MudText GutterBottom="true">
+    <Paragraph>
         Automatic memory management is one of the most important features of CLR
         that makes programming easier, since you never really have to care about
         allocation, deallocation, double-frees, memory leaks, and all the other
         great experiences of coding in C.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Allocator and collector</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Allocator and collector</Header2>
+    <Paragraph>
         At the core of managed memory we have a <Highlight>managed heap</Highlight>,
         which is allocated by the runtime for the application (or per core, depending on configuration).
         All class instances we create land on this heap.
         The management of the heap falls onto two components: the <Highlight>allocator</Highlight>
         and the <Highlight>collector</Highlight>.
-    </MudText>
-    <MudList>
-        <MudListItem Icon="@Icons.Material.Filled.Memory" IconSize="Size.Large">
-            <MudText GutterBottom="true">
-                <strong>Allocator</strong> is responsible for allocating and initialising memory requested
-                by a program running on the CLR. In theory, its job is simple &ndash; when it gets a request
-                to create a new instance it needs to check if memory is available, and initialise it if
-                it is. The allocator, however, also manages when collections happen. When there's not enough
-                memory for the request, it tells the collector to run a GC cycle.
-            </MudText>
-            <MudText>
-                That's not the only time, though. There are two parameters here that need to be balanced &ndash;
-                memory consumption and CPU time. GC collections aren't free, but calling them too rarely
-                will cause the program to use up much more system memory than it actually needs. The allocator
-                keeps track of various parameters and makes the GC <em>self-tuning</em>. It records the
-                memory usage patterns of the application that's running and learns to optimise the two conflicting
-                goals more accurately as time goes on. It will make an informed decision on whether to call for a GC
-                based on number of allocations performed, average lifetimes of allocated objects, etc.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Delete" IconSize="Size.Large">
-            <MudText>
-                <strong>Collector</strong> performs the actual garbage collection. The .NET GC is a
-                <Highlight>mark-and-sweep</Highlight> collector. When triggered, it scans the program
-                for so called <em>roots</em>, which are objects that must be alive. These are all references
-                in static fields, local variables and arguments passed to methods currently executing
-                (including all the methods up in their call-stack). It then traverses the graph of objects
-                starting from these roots, treating references contained within object instances as edges.
-                This is the mark phase. After all reachable objects have been marked, all other objects
-                are classified as dead and collected in the sweep phase, where the collector goes through
-                all objects in the managed heap and reclaims memory from the dead ones.
-            </MudText>
-        </MudListItem>
-    </MudList>
-    <MudText>
+        <MudList>
+            <MudListItem Icon="@Icons.Material.Filled.Memory" IconSize="Size.Large">
+                <Paragraph>
+                    <strong>Allocator</strong> is responsible for allocating and initialising memory requested
+                    by a program running on the CLR. In theory, its job is simple &ndash; when it gets a request
+                    to create a new instance it needs to check if memory is available, and initialise it if
+                    it is. The allocator, however, also manages when collections happen. When there's not enough
+                    memory for the request, it tells the collector to run a GC cycle.
+                </Paragraph>
+                <MudText>
+                    That's not the only time, though. There are two parameters here that need to be balanced &ndash;
+                    memory consumption and CPU time. GC collections aren't free, but calling them too rarely
+                    will cause the program to use up much more system memory than it actually needs. The allocator
+                    keeps track of various parameters and makes the GC <em>self-tuning</em>. It records the
+                    memory usage patterns of the application that's running and learns to optimise the two conflicting
+                    goals more accurately as time goes on. It will make an informed decision on whether to call for a GC
+                    based on number of allocations performed, average lifetimes of allocated objects, etc.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Delete" IconSize="Size.Large">
+                <MudText>
+                    <strong>Collector</strong> performs the actual garbage collection. The .NET GC is a
+                    <Highlight>mark-and-sweep</Highlight> collector. When triggered, it scans the program
+                    for so called <em>roots</em>, which are objects that must be alive. These are all references
+                    in static fields, local variables and arguments passed to methods currently executing
+                    (including all the methods up in their call-stack). It then traverses the graph of objects
+                    starting from these roots, treating references contained within object instances as edges.
+                    This is the mark phase. After all reachable objects have been marked, all other objects
+                    are classified as dead and collected in the sweep phase, where the collector goes through
+                    all objects in the managed heap and reclaims memory from the dead ones.
+                </MudText>
+            </MudListItem>
+        </MudList>
         This is a <em>very</em> simplified picture. The GC is a very complicated piece of engineering,
         as its performance characteristics are crucial for the performance of the entire .NET platform.
         We will discuss this in our module on performance, but for now there's one takeaway that we need:
-    </MudText>
+    </Paragraph>
     <MudAlert Class="my-4" Severity="Severity.Info" Variant="Variant.Outlined">
         Memory pressure, i.e. the amount of memory allocated by the application,
         number and frequency of these allocations, has a direct impact on its performance.
@@ -61,14 +59,14 @@
         and high turnover (a lot of objects get collected), then such GCs will be very expensive.
         Therefore, heap allocations are expensive in terms of performance.
     </MudAlert>
-    <MudText GutterBottom="true">
+    <Paragraph>
         Again, I am oversimplifying, but that's the gist. That's also what people mean when they say
         that "allocations are expensive" &ndash; it's not that the actual work performed during
         <Code>new</Code> is expensive, memory allocation in .NET is actually surprisingly fast.
         But more allocations means more memory pressure, means more GCs, means performance drops.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Stack</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Stack</Header2>
+    <Paragraph>
         Not all data needs to land on the heap. Every thread of a .NET program comes
         with a stack, which is a local memory area which can be managed without the
         involvement of the GC allocator. The stack is represented with a single pointer
@@ -80,18 +78,18 @@
         the stack pointer, so it's blazingly fast and requires no GC &ndash; things allocated
         on the stack frame of the current method effectively disappear when the method
         returns.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Summary</Header2>
+    <Paragraph>
         In .NET we have the managed heap and the execution stack of a given thread.
         The memory on the heap is managed by the garbage collection system.
         Allocating on the stack is much faster, effectively being the
         thread's scratch space.
-    </MudText>
+    </Paragraph>
 
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/standard/automatic-memory-management", "Automatic Memory Management on docs.microsoft")
-    })/>
+               ("https://docs.microsoft.com/en-us/dotnet/standard/automatic-memory-management", "Automatic Memory Management on docs.microsoft")
+               }) />
 </CourseSection>
 
 @code {

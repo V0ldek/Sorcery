@@ -2,33 +2,33 @@
 @inject CourseBook CourseBook;
 
 <CourseAssignment Assignment="@CourseBook.CSharpCourse["asynchrony"].Assignment">
-    <MudText>
+    <Paragraph>
         Does a Dungeon exist in objective reality, or is it merely a trick, a figment
         of a Hero's imagination? We must make the dark pathways concrete and visible to
         all!
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Overview</Header2>
+    <Paragraph>
         Main variety in our game comes from different possible Dungeons. Keeping
         them all just as classes hardwired in the application code is limiting.
         We'd like to have a lot of Dungeons, be able to share new ones with our users,
         maybe even allow them to construct their own. In this assignment we take a first step towards that goal,
         by persisting our maps on disk with the local filesystem.
-    </MudText>
-    
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; JSON Serialisation</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+
+    <Header2>Task 0. &ndash; JSON Serialisation</Header2>
+    <Paragraph>
         First we need to make our graph serializable. There are two major libraries in .NET
-        when it comes to JSON processing, the long established 
+        when it comes to JSON processing, the long established
         <Link Href="https://www.newtonsoft.com/json"><Code>Json.NET</Code></Link>, and the
         newer <Code>System.Text.Json</Code>, which is part of the BCL. We will use the latter
         for this assignment.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         To persist our graphs we need a more suited representation than
         the <Code>Graph&lt;IRoom&gt;</Code> class. In a new project, <Code>DungeonWalker.DataLayer</Code>,
         we define the type <Code>GraphTemplate&lt;TLabel&gt;</Code>, with only two simple properties:
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs" Code="@(@"
 /// <summary>
 ///     Gets the labels of vertices of the graph.
@@ -42,11 +42,10 @@ public IReadOnlyList<TLabel> Vertices { get; init; }
 ///     in the graph.
 /// </summary>
 public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
-    ")"/>
-    <MudText id="text-with-four-cycle">
+    ")" />
+    <Paragraph id="text-with-four-cycle">
         This is a simple encoding via adjacency lists. For example, a $4$-cycle could be encoded like this:
-    </MudText>
-    <CodeBlock Language="json" Code="@(@"
+        <CodeBlock Language="json" Code="@(@"
 {
     ""vertices"": [ ""vertex1"", ""vertex2"", ""vertex3"", ""vertex4"" ],
     ""adjacencyList"": [
@@ -56,35 +55,33 @@ public IReadOnlyList<IReadOnlyList<int>> AdjacencyList { get; init; }
         [ 0 ]
     ]
 }
-    ")"/>
-    <MudText>
+    ")" />
         The heavy lifting of getting the <Code>IRoot</Code> labels to serialize is already done.
         Your job is to implement the conversion from <Code>IGraph&lt;TLabel&gt;</Code> to <Code>GraphTemplate&lt;TLabel&gt;</Code>
         and vice-versa. All of these are located in <code>src/DungeonWalker.DataLayer/Serialization/GraphTemplate.cs</code>.
-    </MudText>
+    </Paragraph>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "Serialization" test group, worth <Highlight>1</Highlight> point.
     </MudAlert>
-    <LatexRenderer ContainerId="text-with-four-cycle"/>
-    
-    <MudText GutterBottom="true">
+    <LatexRenderer ContainerId="text-with-four-cycle" />
+
+    <Paragraph>
         To serialize and deserialize with <Code>System.Text.Json</Code> we use the <Link Href="https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializer?view=net-6.0"><Code>JsonSerializer</Code></Link> class. It has a lot of overloads for
         <Code>Serialize</Code> and <Code>Deserialize</Code> methods, including async overloads, cancellation support,
         writing directly to streams, etc.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Serialization is governed by a set of base converters that serialize basic types, and also any
         .NET object by just taking its public properties and mapping them into a JSON object. There can also
         be custom converters that manually take control of reading and writing separate JSON tokens.
         There are also some basic options, like whether to include whitespace (prettify the output),
         and whether to use PascalCase or camelCase for property names. These are all put into a
         <Code>JsonSerializerOptions</Code> object that can be passed to the serialization methods.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; File System Repository</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Task 1. &ndash; File System Repository</Header2>
+    <Paragraph>
         The interface that we need to implement is:
-    </MudText>
-    <CodeBlock FileName="src/DungeonWalker.DataLayer/IDungeonRepository.cs" Code="@(@"
+        <CodeBlock FileName="src/DungeonWalker.DataLayer/IDungeonRepository.cs" Code="@(@"
 using DungeonWalker.Logic.Dungeons;
 
 namespace DungeonWalker.DataLayer;
@@ -185,63 +182,62 @@ public interface IDungeonRepository
     /// </exception>
     Task<IReadOnlyCollection<string>> ListNamesAsync(CancellationToken cancellationToken);
 }
-    ")"/>
-    <MudText GutterBottom="true">
+    ")" />
         Save, load, and list all. We first want to implement <Code>DungeonRepositoryBase</Code>,
         which will take care of translating <Code>IGraphRoomLayout</Code> to and from a <Code>GraphTemplate&lt;RoomTemplate&gt;</Code>.
         Use the <Code>RoomTemplate.FromRoom</Code> static method and your implementation of <Code>GraphTemplate</Code>.
         To create a <Code>IGraphRoomLayout</Code> from a graph you can use the <Code>GraphTemplate.Select</Code> method
         and the  <Code>DungeonWalker.Logic.Dungeons.PredefinedGraphRoomLayout</Code> class.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Finally, you need to implement <Code>FileSystemDungeonRepository</Code>, located
         in yet another project, <Code>DungeonWalker.DataLayer.FileSystem</Code>. It extends <Code>DungeonRepositoryBase</Code>
         interface using the local filesystem as database storage. The constructor takes a directory path,
         which is the location of all saved Dungeons.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         The <Code>_options</Code> private field contains the aforementioned <Code>JsonSerializerOptions</Code>
         object that you should use for all serialisation operations. Best not to modify it, it is already configured
         to be compatible with the tests and to have converters required for serialising our game data, like
         <Code>IRoom</Code> and <Code>ILoot</Code> objects.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         The solution code is pretty short when written correctly, but requires care to get right.
         Remember all the things we talked about in this module, as well as defensive programming patterns.
         Remember that:
-    </MudText>
-    <MudList>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            All I/O operations on the filesystem may fail.
-            The exceptions called by this must be wrapped in a <Code>FileSystemRepositoryException</Code>
-            that inherits from <Code>DungeonRepositoryException</Code>.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Precondition checks for <Code>async</Code> operations should happen synchronously.
-            There are no tests for this, but I will point that out during code review. Use the local method pattern
-            to deal with that.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            All system file handles are expensive resources and must be properly disposed of.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            The <Code>CancellationToken</Code> instances passed to the methods should be used for
-            all async operations that support cancellation.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Always choose the async overload for operations on the filesystem.
-        </MudListItem>
-    </MudList>
+        <MudList>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                All I/O operations on the filesystem may fail.
+                The exceptions called by this must be wrapped in a <Code>FileSystemRepositoryException</Code>
+                that inherits from <Code>DungeonRepositoryException</Code>.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Precondition checks for <Code>async</Code> operations should happen synchronously.
+                There are no tests for this, but I will point that out during code review. Use the local method pattern
+                to deal with that.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                All system file handles are expensive resources and must be properly disposed of.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                The <Code>CancellationToken</Code> instances passed to the methods should be used for
+                all async operations that support cancellation.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Always choose the async overload for operations on the filesystem.
+            </MudListItem>
+        </MudList>
+    </Paragraph>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This is tested by the "FileSystemRepository" test group, worth <Highlight>2</Highlight> points.
     </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Demo</MudText>
-    <MudText>
+    <Header2>Demo</Header2>
+    <Paragraph>
         Finally, there is a demo that runs the code on some actual Dungeons on your local filesystem
         and test the entire repository. It's located in a new console project, <Code>DungeonWalker.FileSystemRepositoryDemo</Code>.
         Here's the output on a model solution:
-    </MudText>
-    <Asciinema CastName="persisted-pathways-demo"/>
+    </Paragraph>
+    <Asciinema CastName="persisted-pathways-demo" />
     <MudAlert Class="my-4" Variant="Variant.Outlined">
         This demo is worth <Highlight>1</Highlight> point.
     </MudAlert>

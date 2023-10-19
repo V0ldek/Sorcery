@@ -13,7 +13,7 @@
         that project. Familiarise yourself with the <Code>ClassLib.Service</Code> class,
         it has one short method that we will be testing.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Testing for Exceptions</MudText>
+    <Header2>Testing for Exceptions</Header2>
     <MudText>
         We would first like to test that passing <Code>null</Code> to the method
         results in an <Code>ArgumentNullException</Code>. All test frameworks
@@ -43,7 +43,7 @@
         To test our service we need an instance of <Code>IRepository</Code>. We could create an empty implementation
         ourselves, but it's about time to learn about mocking.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Mocking</MudText>
+    <Header2>Mocking</Header2>
     <MudText GutterBottom="true">
         Mocking is the general solution to the problem of dependencies. When unit testing a service
         we want to <em>mock</em> all the dependencies to get them out of the picture, and focus the
@@ -129,7 +129,7 @@ public void QueryAsync_GivenNull_ThrowsArgumentNullExceptionSynchronously()
         This one fails. Convert the method in <Code>Service</Code> to correctly
         throw the precondition sychronously before carrying on.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Happy path</MudText>
+    <Header3>Happy path</Header3>
     <MudText>
         We can now test the happy path of our code by using the <Code>Returns</Code>
         mocking method.
@@ -151,7 +151,7 @@ public async Task QueryAsync_GivenIdOfExistingItem_ReturnsSuccessWithItem()
     <MudText>
         You should be able to write a test for when the repository returns <Code>null</Code> by yourself now.
     </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Synchronous Failure</MudText>
+    <Header3>Synchronous Failure</Header3>
     <MudText>
         The last bit is to write a test for when the repository fails with an exception.
         The case for a synchronous exception is very easy.
@@ -171,7 +171,7 @@ public async Task QueryAsync_GivenIdOfExistingItem_ReturnsSuccessWithItem()
     Assert.Equal(exception, result.Error);
 }
 ")"/>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Asynchronous completion</MudText>
+    <Header3>Asynchronous completion</Header3>
     <MudText GutterBottom="true">
         Now, if we want to test an asynchronous case there is a small helper
         method, <Code>Task.Yield</Code>, to help us. It returns a task that does nothing except forcing us to
@@ -218,7 +218,7 @@ public async Task QueryAsync_WhenRepositoryThrowsAsynchronousException_ReturnsFa
     <MudText>
         You should now write a test for asynchronous <Code>null</Code> return by yourself.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">How It's Done</MudText>
+    <Header2>How It's Done</Header2>
     <MudText GutterBottom="true">
         Under the hood, <Code>NSubstitute</Code> uses reflection magic to achieve its effects.
         Not only does it examine the contents of the abstract type that we are trying to mock
@@ -237,7 +237,7 @@ public async Task QueryAsync_WhenRepositoryThrowsAsynchronousException_ReturnsFa
         There are facilities for creating types, members of those types, and creating methods on-the-fly
         by directly emitting IL. This is also the core namespace used by Source Generators.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Advanced Scenarios</MudText>
+    <Header2>Advanced Scenarios</Header2>
     <MudText>
         Sometimes more advanced scenarios need to be supported by mocking frameworks.
         We can configure what happens when a method is called with given arguments,

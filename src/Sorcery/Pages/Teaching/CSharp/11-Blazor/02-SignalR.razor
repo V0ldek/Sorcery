@@ -7,33 +7,33 @@
 }
 
 <CourseSection Section="@course">
-    <MudText GutterBottom="true">
+    <Paragraph>
         A common problem for frontend applications is that they want to display some dynamic
         state that might be updated independently of the user browsing the webpage. Think
         webchats, notifications, very dynamic content like stock prices, etc. A very primitive
         approach to solving that is to continuously send requests to the backend, say every second,
         asking whether there were any updates. The correct approach is using WebSockets.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         WebSocket is a communication protocol that allows the server to send information to the client
         without previous requests coming its way. Underneath it uses standard TCP and is compatible with HTTP.
         <Highlight>SignalR</Highlight> is the .NET implementation of the WebSocket protocol.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">SignalR in ASP.NET Core</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>SignalR in ASP.NET Core</Header2>
+    <Paragraph>
         In ASP.NET Core, SignalR functions by the way of Hubs, enabling a simple version of RPC (Remote Procedure Call,
         where you call methods of a process from another process). A Hub defines a set of .NET methods and expects its
         clients to implement a certain interface. Then the clients can call methods of the Hub, and the Hub can in response
         trigger method calls of connected clients.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         For example, the client sends a request to call <Code>Subscribe(int conversationId)</Code> with some parameter.
         The server processes the method call by adding the connected client to a list of subscribers on a given id.
         Then another client sends a call to <Code>SendMessage(int conversationId, string message)</Code>. The server
         processes the call and in return calls a method <Code>ReceiveMessage(string message)</Code> on all clients
         that were subscribed to the given conversation. All of this is handled via WebSockets, which allows the frontend
         clients to implement callback methods reacting to a message being received.
-    </MudText>
+    </Paragraph>
     <Resources Links=@(new [] {
                ("https://docs.microsoft.com/en-us/aspnet/core/blazor/tutorials/signalr-blazor?view=aspnetcore-6.0&tabs=visual-studio&pivots=server", "Use ASP.NET Core SignalR with Blazor"),
                ("https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-6.0", "Overview of ASP.NET Core SignalR")

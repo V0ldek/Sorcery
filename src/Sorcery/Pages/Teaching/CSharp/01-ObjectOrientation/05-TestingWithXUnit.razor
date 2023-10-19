@@ -6,75 +6,71 @@
 }
 
 <CourseSection Section="@(section)">
-    <MudText>
+    <Paragraph>
         We won't be using a notebook for this one, as we need an actual project to run the tests.
         In .NET there are three major test frameworks:
         <MudList Dense="true">
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                MSUnit
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                NUnit
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                xUnit
-            </MudText>
-        </MudListItem>
-        We're going to use xUnit, because it's pretty much the simplest one of the bunch
-        and improves on some issues of NUnit, like test isolation and throw assertions.
-        NUnit is also a very popular choice, though.
-    </MudList>
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Unit testing</MudText>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    MSUnit
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    NUnit
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    xUnit
+                </MudText>
+            </MudListItem>
+            We're going to use xUnit, because it's pretty much the simplest one of the bunch
+            and improves on some issues of NUnit, like test isolation and throw assertions.
+            NUnit is also a very popular choice, though.
+        </MudList>
+    </Paragraph>
+    <Header2>Unit testing</Header2>
     <MudText GutterBottom="true">
         The idea of unit testing is fairly simple &ndash; we take single units of our production code,
         isolate them out, and comprehensively test. In C# we have two obvious units to test, classes
         and methods. It's best to isolate individual methods, but sometimes it's impossible to really test
         a scenario without calling more than one in sequence.
     </MudText>
-    <MudText>
+    <Paragraph>
         C# also lends itself pretty well to <Highlight>Test Driven Development</Highlight>,
         which is a workflow where you repeatedly alternate between two modes:
-    </MudText>
-    <MudList Dense="true">
-        <MudListItem Icon="@Icons.Material.Filled.Science">
-            <MudText>
-                write new unit tests until they stop passing;
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Code">
-            <MudText>
-                write production code until the existing unit tests all pass.
-            </MudText>
-        </MudListItem>
-    </MudList>
-    <MudText GutterBottom="true">
+        <MudList Dense="true">
+            <MudListItem Icon="@Icons.Material.Filled.Science">
+                <MudText>
+                    write new unit tests until they stop passing;
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Code">
+                <MudText>
+                    write production code until the existing unit tests all pass.
+                </MudText>
+            </MudListItem>
+        </MudList>
+    </Paragraph>
+    <Paragraph>
         Implementing well-defined features with this workflow is extremely efficient.
         IDEs even have special switches that allow you to continuously run unit tests
         when you change your code, so the feedback loops is very tight.
-    </MudText>
-    <MudText>
         In assignments we will already have automated tests running for us,
         but it might be beneficial to write your own, additional tests to make sure your code
         works as you think it does.
-    </MudText>
-    
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Project setup</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+
+    <Header2>Project setup</Header2>
+    <Paragraph>
         We're going to create a very simple project and then test it with xUnit.
         To start, create a new library project. I'll call it <Code>Testing</Code>.
         A class library is a project without an entry point, so it can define classes for other
         project to use, but is not runnable.
-    </MudText>
-    <CodeBlock Language="bash" Code=@(@"dotnet new classlib -n Testing") />
-    <MudText>
+        <CodeBlock Language="bash" Code=@(@"dotnet new classlib -n Testing") />
         We're going to create a simple <Code>Modulo(int x, int m)</Code> method that works as follows:
-    </MudText>    
+    </Paragraph>
     <MudList Dense="true" id="list-with-math">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
@@ -92,34 +88,34 @@
             </MudText>
         </MudListItem>
     </MudList>
-    <LatexRenderer ContainerId="list-with-math"/>
-    <MudText GutterBottom="true">
+    <LatexRenderer ContainerId="list-with-math" />
+    <Paragraph>
         Let's play around with TDD. In our library we put only a stub <Code>Calculator</Code> class (you can rename and replace the existing <code>Class1.cs</code> file):
-    </MudText>
-        <CodeBlock FileName="Testing/Calculator.cs" Code="@(@"
+    </Paragraph>
+    <CodeBlock FileName="Testing/Calculator.cs" Code="@(@"
 namespace Testing;
 
 public sealed class Calculator
 {
     public int Modulo(int x, int m) => 0;
-}")"/>
-    <MudText GutterBottom="true">
+}")" />
+    <Paragraph>
         Now we create a test project. In C#, all tests are written in a special project separate from the code being tested.
         The convention is for every actual project to have an accompanying test project. My convention is to name it the same
         as the tested project, but with <code>.UnitTests</code> suffixed. We will be using the xUnit test framework,
         so create a new xUnit project:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="bash" Code="@(@"dotnet new xunit -n Testing.UnitTests")" />
-    <MudText GutterBottom="true">
+    <Paragraph>
         As is, our projects don't know about themselves. To be able to reference the code under test
         from the test project we need to add a reference to the <Code>Testing</Code> project.
         This can also be done from the CLI:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="bash" Code="@(@"dotnet add Testing.UnitTests reference Testing")" />
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Anatomy of a <code>.csproj</code></MudText>    
-    <MudText GutterBottom="true">
+    <Header3>Anatomy of a <code>.csproj</code></Header3>
+    <Paragraph>
         It might be a good time to take a look at the configuration in our <code>.csproj</code>.
-    </MudText>
+    </Paragraph>
     <CodeBlock LineNumbers="true" FileName="Testing/Testing.csproj" Language="xml" Code="@(@"
 <Project Sdk=""Microsoft.NET.Sdk"">
 
@@ -130,16 +126,16 @@ public sealed class Calculator
   </PropertyGroup>
 
 </Project>
-")"/>
-    <MudText GutterBottom="true">
+")" />
+    <Paragraph>
         Not much happening here, it's the simplest possible <code>csproj</code> for a library.
         We specify that we're using .NET 6.0 and a feature called <Highlight>implicit usings</Highlight>,
         which brings some core namespaces into scope automatically for us, e.g. <Code>System</Code>. We also
         enable <Highlight>Nullable Reference Types</Highlight>, which we will cover in-depth in the next module.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         What about the test project?
-    </MudText>    
+    </Paragraph>
     <CodeBlock LineNumbers="true" FileName="Testing.UnitTests/Testing.UnitTests.csproj" Language="xml" Code="@(@"
 <Project Sdk=""Microsoft.NET.Sdk"">
 
@@ -168,53 +164,53 @@ public sealed class Calculator
   </ItemGroup>
 
 </Project>
-")"/>   
-    <MudText GutterBottom="true">
+")" />
+    <Paragraph>
         Much more fun here. It starts similarly, although implicit usings are disabled here by default
         for reasons that elude me. The <code>IsPackable</code> bit means that if we were to publish a NuGet package
         from our library we don't want it to include this particular project, which makes sense &ndash; we don't need
         users to get our, perhaps large, test projects.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Then on lines 10-21 we have a group of <code>PackageReference</code>s. These are external references to packages
         on NuGet, the package manager mentioned in <Link Href="@CourseBook.CSharpCourse["basics"]["dotnet-taxonomy"].Route">@CourseBook.CSharpCourse["basics"]["dotnet-taxonomy"].DisplayName</Link>.
         We include the base .NET Test SDK that all testing libraries use, the xUnit package itself, its runner for the Visual Studio IDE integration
         and Coverlet, which is the default test coverage library for .NET. As you can see, in .NET we reference external packages by name and its exact version.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Finally, at line 24 we have a local reference to the <code>Testing</code> project, which is located next to us.
         This is the line added by the <Code Language="bash">dotnet add</Code> command we executed.
-    </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Solution files</MudText>    
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header3>Solution files</Header3>
+    <Paragraph>
         When working with multiple projects it's useful to organise them together using a solution file.
         A solution file is a special metadata file with the <code>.sln</code> extension that tells our IDE
         and the <code>dotnet</code> CLI that the given assemblies are all part of a single conceptual project.
         We can create a solution file with:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="bash" Code="@(@"dotnet new sln")" />
-    <MudText GutterBottom="true">
+    <Paragraph>
         This creates an empty solution file, so we need to add our projects there:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="bash" Code="@(@"
 dotnet sln add ./Testing
 dotnet sln add ./Testing.UnitTests
 ")" />
-    <MudText GutterBottom="true">
+    <Paragraph>
         There's no real reason to manually inspect a solution file, it mostly just associates unique identifiers with
         all projects. The benefit of a solution file is that if we run a <code>dotnet</code> command like
         <code>test</code> the CLI will just run all test projects in the solution; without it, we'd have to manually
         list them in the command.
-    </MudText>
+    </Paragraph>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">xUnit Facts</MudText>
-    <MudText GutterBottom="true">
+    <Header2>xUnit Facts</Header2>
+    <Paragraph>
         Okay, let's write some tests. We'll start off with a simple <Highlight>Fact</Highlight>,
         which is xUnit's lingo for a parameterless test. It's good for unit tests to resemble
         the project under test as close as possible in terms of namespace structure, to make
         navigation easier. We create a <code>CalculatorUnitTests.cs</code> file and write our first
         Fact (you can rename and replace the existing <code>UnitTest1.cs</code> file):
-    </MudText>
+    </Paragraph>
     <CodeBlock LineNumbers="true" FileName="Testing.UnitTests/CalculatorUnitTests.cs" Language="csharp" Code="@(@"
 using Testing;
 using Xunit;
@@ -233,21 +229,21 @@ public class CalculatorUnitTests
         Assert.Equal(0, result);
     }
 }
-")"/>
+")" />
 
-    <MudText GutterBottom="true">
+    <Paragraph>
         We first bring our core project and the test framework stuff into scope.
         Then we declare a class that will hold the unit tests. The xUnit runner
         initialises this class independently before each test, so you can put common
         setup into its constructor, or define some fields on it that will
         be reinitialised before every test.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Our test method is annotated with the <Code>FactAttribute</Code> that tells xUnit
         that it's actually a test that it should run, and that it has no parameters.
         We then write the test, following the <Highlight>Arrange-Act-Assert</Highlight> pattern,
         which is a useful template for writing tests that makes their logic clear to follow.
-    </MudText>    
+    </Paragraph>
     <MudList Dense="true" id="list-with-math">
         <MudListItem Icon="@Icons.Material.Filled.Build">
             <MudText>
@@ -265,23 +261,23 @@ public class CalculatorUnitTests
             </MudText>
         </MudListItem>
     </MudList>
-    <MudText GutterBottom="true">
+    <Paragraph>
         In our case, we instantiate the class, perform the operation, and then use the static <Code>Assert</Code>
         class provided by xUnit to make sure the two are equal. The semantics of <Code>Equal</Code> are that
         we ought to provide the expected value as the first argument, and the actual value as the second.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         And... that's it! Our stub implementation should actually pass this test, as it always returns zero.
         Fire up the test and check:
-    </MudText>    
+    </Paragraph>
     <CodeBlock Language="bash" Code="@(@"dotnet test")" />
 
 
     <Asciinema CastName="testing-with-xunit-first-test" />
-    
-    <MudText GutterBottom="true">
+
+    <Paragraph>
         Okay, we should probably make a test that actually fails with our code.
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Language="csharp" Code="@(@"
 [Fact]
 public void Modulo_GivenPositiveArguments_ReturnsXModuloM()
@@ -292,31 +288,31 @@ public void Modulo_GivenPositiveArguments_ReturnsXModuloM()
 
     Assert.Equal(2, result);
 }
-")"/>
+")" />
 
     <Asciinema CastName="testing-with-xunit-failing-test" />
-    <MudText GutterBottom="true">
+    <Paragraph>
         Okay, now it's time to make our code work with the new test.
-    </MudText>    
-        <CodeBlock FileName="Testing/Calculator" Language="csharp" Code="@(@"
+    </Paragraph>
+    <CodeBlock FileName="Testing/Calculator" Language="csharp" Code="@(@"
 public int Modulo(int x, int m) => x % m;
-")"/>
+")" />
     <Asciinema CastName="testing-with-xunit-another-failing-test" />
-    <MudText GutterBottom="true">
+    <Paragraph>
         Oh, it broke the other test. We cannot modulo by zero and I told you that our method must return zero in such a case
         so that I didn't have to explain throwing exceptions in this module. Right.
-    </MudText>
-        <CodeBlock FileName="Testing/Calculator" Language="csharp" Code="@(@"
+    </Paragraph>
+    <CodeBlock FileName="Testing/Calculator" Language="csharp" Code="@(@"
 public int Modulo(int x, int m) => m == 0 ? 0 : x % m;
-")"/>
+")" />
     <Asciinema CastName="testing-with-xunit-two-successes" />
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">xUnit Theories</MudText>
-    <MudText GutterBottom="true">
+    <Header2>xUnit Theories</Header2>
+    <Paragraph>
         We're testing two values, but it'd be nice to have more.
         We don't really want to duplicate the entire method and just change the three numbers,
         instead we should make a parametrised test, which in xUnit is called a Theory.
-    </MudText>
-        <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Language="csharp" Code="@(@"
+    </Paragraph>
+    <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Language="csharp" Code="@(@"
 [Theory]
 [InlineData(5, 3, 2)]
 public void Modulo_GivenPositiveArguments_ReturnsXModuloM(int x, int m, int expected)
@@ -327,13 +323,13 @@ public void Modulo_GivenPositiveArguments_ReturnsXModuloM(int x, int m, int expe
 
     Assert.Equal(expected, result);
 }
-")"/>
-    <MudText GutterBottom="true">
+")" />
+    <Paragraph>
         We change the attribute to <Code>TheoryAttribute</Code>, give the method parameters that we need,
         and then we can feed it values with the <Code>InlineDataAttribute</Code>. Now we can add more tests by just
         adding more data:
-    </MudText>
-     <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Language="csharp" Code="@(@"
+    </Paragraph>
+    <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Language="csharp" Code="@(@"
 [Theory]
 [InlineData(1, 1, 0)]
 [InlineData(5, 3, 2)]
@@ -350,14 +346,14 @@ public void Modulo_GivenPositiveArguments_ReturnsXModuloM(int x, int m, int expe
 
     Assert.Equal(expected, result);
 }
-")"/>
-    <MudText GutterBottom="true">
+")" />
+    <Paragraph>
         If we run the tests now we'll see that xUnit creates a separate test for each set of parameters:
-    </MudText>
+    </Paragraph>
     <Asciinema CastName="testing-with-xunit-theory" />
-    <MudText GutterBottom="true">
+    <Paragraph>
         Now we can add tests for the both-negative case:
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Language="csharp" Code="@(@"
 [Theory]
 [InlineData(-1, -1, 0)]
@@ -375,12 +371,12 @@ public void Modulo_GivenNegativeArguments_ReturnsNegativeXModuloM(int x, int m, 
 
     Assert.Equal(expected, result);
 }
-")"/>
+")" />
     <Asciinema CastName="testing-with-xunit-theory-2" />
-    <MudText GutterBottom="true">
+    <Paragraph>
         Would you look at that, they all pass! So these are actually the semantics of C#'s <Code>%</Code> operator.
         We have some small code duplication here, so let's alleviate that and also add the other cases to our tests.
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" LineNumbers="true" Code="@(@"
 using Testing;
 using Xunit;
@@ -445,26 +441,26 @@ public class CalculatorUnitTests
 }")">
     </CodeBlock>
 
-    <Asciinema CastName="testing-with-xunit-theory-3"/>
+    <Asciinema CastName="testing-with-xunit-theory-3" />
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Complex Theory data</MudText>
-    
-    <MudText GutterBottom="true" id="text-with-math">
+    <Header2>Complex Theory data</Header2>
+
+    <Paragraph id="text-with-math">
         I have to admit, that code isn't the cleanest. We have an obvious duplication where we test the code with
         positive and negative modulo for the same absolute values and expect the same result.
         Also, what if we wanted to generate tests? Say I wanted to test that for all numbers from $1$ to $1000$
         it holds that $x - 1 \equiv x - 1 \mod x$. We know we cannot really do that from <Link Href="@CourseBook.CSharpCourse["object-orientation"]["attributes"].Route">@CourseBook.CSharpCourse["object-orientation"]["attributes"].DisplayName</Link>, as attributes only accept compile-time constants as arguments. Well, we can, but copy-pasting a thousand lines of
         code is not really considered best practice.
-    </MudText>
-    <MudText GutterBottom="true" id="text-with-math">
+    </Paragraph>
+    <Paragraph id="text-with-math">
         If we want test data that is not compile-time constant we can use the <Code>MemberDataAttribute</Code>,
         which takes a name of a property of the test class which returns an object of a special <Code>TheoryData</Code> type.
         Now, there's a bit of magic here that we don't quite understand yet &ndash; that type is <em>generic</em>.
         We will talk about generics in the next module, but we simply cannot escape from them here.
         In short, it means that we can have data for tests for various types of parameters.
         Let's write logic that will generate the appropriate data for us:
-    </MudText>
-    <LatexRenderer ContainerId="text-with-math"/>
+    </Paragraph>
+    <LatexRenderer ContainerId="text-with-math" />
     <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Code="@(@"
 public static TheoryData<int, int, int> ModuloTestData
 {
@@ -493,11 +489,11 @@ public static TheoryData<int, int, int> ModuloTestData
         return data;
     }
 }")">
-    </CodeBlock>    
-    <MudText GutterBottom="true" id="text-with-math">
+    </CodeBlock>
+    <Paragraph id="text-with-math">
         Now we can also write that additional test I mentioned, as well as generate cases
         for the <Code>Modulo_GivenZeroAsModulus_ReturnsZero</Code> method.
-    </MudText>    
+    </Paragraph>
     <CodeBlock FileName="Testing.UnitTests/CalculatorUnitTests.cs" Code="@(@"
 public static TheoryData<int> SmallNumbersData
 {
@@ -514,10 +510,10 @@ public static TheoryData<int> SmallNumbersData
     }
 }")">
     </CodeBlock>
-    <MudText GutterBottom="true">
+    <Paragraph>
         Bringing it all together:
-    </MudText>
-        <CodeBlock LineNumbers="true" FileName="Testing.UnitTests/CalculatorUnitTests.cs" Code="@(@"
+    </Paragraph>
+    <CodeBlock LineNumbers="true" FileName="Testing.UnitTests/CalculatorUnitTests.cs" Code="@(@"
 using Testing;
 using Xunit;
 
@@ -592,25 +588,25 @@ public class CalculatorUnitTests
     }
 }")">
     </CodeBlock>
-    <Asciinema CastName="testing-with-xunit-so-many-tests"/>
-    <MudText GutterBottom="true">
+    <Asciinema CastName="testing-with-xunit-so-many-tests" />
+    <Paragraph>
         We generate over two thousand test cases, and all in under a hundred lines of code!
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Summary</Header2>
+    <Paragraph>
         Throughout the course we will be using xUnit as our test framework.
         To write tests we need a special type of a project that references other projects.
         We run tests with <Code Language="bash">dotnet test</Code>.
         xUnit allows you to test other projects with Facts and Theories.
         You can provide constant data to Theories with the <Code>InlineDataAttribute</Code>,
         and complex, non-constant data with the <Code>MemberDataAttribute</Code>.
-    </MudText>
+    </Paragraph>
 
     <Resources Links=@(new [] {
-        ("https://xunit.net/", "xUnit.net"),
-        ("https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test", "Unit testing C# in .NET Core using dotnet test and xUnit")
-    })/>
-</CourseSection> 
+               ("https://xunit.net/", "xUnit.net"),
+               ("https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test", "Unit testing C# in .NET Core using dotnet test and xUnit")
+               }) />
+</CourseSection>
 
 @code {
 

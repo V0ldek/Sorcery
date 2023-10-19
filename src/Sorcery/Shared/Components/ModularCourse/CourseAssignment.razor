@@ -11,8 +11,7 @@
         <ButtonPrevious Link="@previousSection.Route">
             Back to <Highlight>@previousSection.DisplayName</Highlight>.
         </ButtonPrevious>
-        <MudText Typo="Typo.h1" Class="mx-auto">@Assignment.DisplayName</MudText>
-        <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+        <Header1>@Assignment.DisplayName</Header1>
 
         <MudAlert Class="my-4" Variant="Variant.Outlined">
             <Link Href="@Assignment.GitHubClassroom" Target="_blank">GitHub Classroom invitation to the assignment.</Link>

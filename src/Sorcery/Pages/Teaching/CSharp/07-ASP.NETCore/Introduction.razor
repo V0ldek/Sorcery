@@ -2,21 +2,21 @@
 @inject CourseBook CourseBook;
 
 <CourseModuleIntroduction Module="@CourseBook.CSharpCourse["aspnet-core"]">
-    <MudText GutterBottom="true">
+    <Paragraph>
         In this module we will meet <Link Href="https://dotnet.microsoft.com/en-us/apps/aspnet">ASP.NET Core</Link>,
         the leading framework for creating web applications in .NET. This module will focus on creating web APIs,
         but there are many ways to create interactive web pages as well, with the cutting-edge being
         <Link Href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">Blazor</Link>,
         allowing us to create SPA applications <em>in C#, without writing any JavaScript</em>.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Unfortunately, we cannot use notebooks for this module. Running ASP.NET Core requires a different SDK
         than regular .NET programs and cannot be easily emulated from a notebook. However, the notebooks repository
         will contain some library code for you to use with the ASP.NET Core project, so it's best to work from there.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         In this module we will learn:
-    </MudText>
+    </Paragraph>
         
     <MudList Class="d-block my-4" DisablePadding="true">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">setting up a minimal HTTP server;</MudListItem>

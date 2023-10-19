@@ -6,33 +6,33 @@
 }
 
 <CourseSection Section="@course">
-    <MudText>
+    <Paragraph>
         Swagger is a generic specification for describing REST APIs, allowing both humans
         and computers to easily grasp the capabilities of an API. The newest versions of Swagger
         are called OpenAPI, but Swagger is catchier so it stuck.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Swagger UI</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Swagger UI</Header2>
+    <Paragraph>
         Swagger was already setup for us in <code>Program.cs</code>. Navigating to <code>localhost:20443/swagger</code> will
         show us the extremely exciting Adder API.
-    </MudText>
+    </Paragraph>
     <MudPaper Class="my-4 pa-4 d-flex justify-center align-center" Elevation="5">
         <MudImage Alt="Adder Swagger" ObjectPosition="ObjectPosition.Center" 
             Fluid="true" Src="/img/adder-swagger.webp" ObjectFit="ObjectFit.Fill"/>
     </MudPaper>
-    <MudText>
+    <Paragraph>
         The best part of the UI is the Try it out button, which allows us to send a request to the API
         from a much nicer interface than <code>curl</code>.
-    </MudText>
+    </Paragraph>
     <MudPaper Class="my-4 pa-4 d-flex justify-center align-center" Elevation="5">
         <MudImage Alt="Adder Swagger" ObjectPosition="ObjectPosition.Center" 
             Fluid="true" Src="/img/adder-swagger2.webp" ObjectFit="ObjectFit.Fill"/>
     </MudPaper>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Swagger JSON</MudText>
-    <MudText>
+    <Header2>Swagger JSON</Header2>
+    <Paragraph>
         The UI is nice for humans and testing the API, but for communicating with other systems the important part is
         the underlying <code>swagger.json</code>, available at <code>localhost:20443/swagger/v1/swagger.json</code>.
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="json" FileName="/swagger/v1/swagger.json" LineNumbers="true" Code="@(@"
 {
   ""openapi"": ""3.0.1"",
@@ -89,11 +89,11 @@
   ""components"": { }
 }
     ")"/>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Additional metadata</MudText>
-    <MudText>
+    <Header2>Additional metadata</Header2>
+    <Paragraph>
         We can configure the metadata in the <Code>builder.Services.AddSwaggerGen</Code> call.
         The most important thing we can do is include XML comments from our C# code.
-    </MudText>
+    </Paragraph>
     <CodeBlock Code="@(@"
 builder.Services.AddSwaggerGen(options =>
 {
@@ -123,10 +123,10 @@ builder.Services.AddSwaggerGen(options =>
         <MudImage Alt="Adder Swagger" ObjectPosition="ObjectPosition.Center" 
             Fluid="true" Src="/img/adder-swagger3.webp" ObjectFit="ObjectFit.Fill"/>
     </MudPaper>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText>
+    <Header2>Summary</Header2>
+    <Paragraph>
         We've met Swagger, which is the standard UI we will use to test and debug our APIs.
-   </MudText>
+   </Paragraph>
     <Resources Links=@(new [] {
         (
             "https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0",

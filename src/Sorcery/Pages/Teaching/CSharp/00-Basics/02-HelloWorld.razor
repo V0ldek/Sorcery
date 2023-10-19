@@ -2,42 +2,42 @@
 @inject CourseBook CourseBook;
 
 <CourseSection Section="@CourseBook.CSharpCourse["basics"]["hello-world"]">
-    <MudText GutterBottom="true">
+    <Paragraph>
         We'll learn how to build and run a "Hello, World!" program before jumping to the main portion of the
         course in interactive notebooks.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Structure of a program</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Structure of a program</Header2>
+    <Paragraph>
         C# projects consist of two core parts: the sources in <Highlight><code>.cs</code></Highlight> files, and the project configuration
         in a <Highlight><code>.csproj</code></Highlight> file. If you know Rust, this is very similar to having your sources in <code>.rs</code>
         and a configuration in <code>Cargo.toml</code>. You usually won't define <code>.csproj</code> yourself, but we will
-        be adding some stuff there on occasion. 
-    </MudText>
-    <MudText GutterBottom="true">
+        be adding some stuff there on occasion.
+    </Paragraph>
+    <Paragraph>
         The <code>.csproj</code> defines what SDK to use for building your app, which .NET version you are targeting,
         compilation flags that enable language features, dependencies on other projects, and all the external packages
         you depend on. Applications usually consist of a few separate projects that depend on each other.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Each project is a single, contained compilation unit, called an <Highlight>assembly</Highlight>.
-        The usual output is a <Highlight><code>.dll</code></Highlight> file that contains all the compiled IL 
+        The usual output is a <Highlight><code>.dll</code></Highlight> file that contains all the compiled IL
         and additional package metadata for the project. The <code>.dll</code> is fully portable
         &ndash; you can move it to a different machine running a different operating system with a completely different CPU architecture and it will still work.
         If your project contained an entry point, you can execute the <code>.dll</code> with <Code Language="bash">dotnet run</Code>.
         It is also possible to compile into an executable, but that requires you to specify the platform and is not portable.
 
         If the project doesn't have an entry point, it's just a library that can be used from other code.
-    </MudText>        
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">The classic</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>The classic</Header2>
+    <Paragraph>
         .NET comes preinstalled with a handful of templates for different kinds of applications. The most basic one is <code>console</code>.
         You use <Code Language="bash">dotnet new</Code> to create a fresh project from a template, passing the name of the project with the <Code>--name</Code>
         parameter.
-        <CodeBlock Language="bash" Code=@(@"dotnet new console -n ""HelloWorld""")/>
+        <CodeBlock Language="bash" Code=@(@"dotnet new console -n ""HelloWorld""") />
         This creates a new directory called <code>HelloWorld</code> and a project with this familiar code inside:
         <CodeBlock Language="csharp" Code="@(@"
 // See https://aka.ms/new-console-template for more information
-Console.WriteLine(""Hello, World!"");")"/>
+Console.WriteLine(""Hello, World!"");")" />
         You can run it with <Code Language="bash">dotnet build</Code> and then <Code Language="bash">dotnet run</Code>.
 
         <MudAlert Variant="Variant.Outlined" Class="my-4">
@@ -46,29 +46,26 @@ Console.WriteLine(""Hello, World!"");")"/>
         </MudAlert>
 
         <Asciinema CastName="hello-world"></Asciinema>
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Smoke, mirrors, and sorcery</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Smoke, mirrors, and sorcery</Header2>
+    <Paragraph>
         Modern programming languages are complex enough to be indistinguishable from magic (I said modern, C doesn't count).
         In the one line of code above <em>a lot</em> of magic happens. Let's lift the curtain a bit: the code above is basically equivalent to the following,
         also valid, C# code:
         <CodeBlock Code=@(@"
-using System;
-
-namespace HelloWorld;
-
-internal class Program
-{
-    static void Main(string[] args)
-    {
-        Console.WriteLine(""Hello, World!"");
-    }
-}
-
-        ")></CodeBlock>
+                   using System;
+                   namespace HelloWorld;
+                   internal class Program
+                   {
+                   static void Main(string[] args)
+                   {
+                   Console.WriteLine(""Hello, World!"");
+                   }
+                   }
+                   ")></CodeBlock>
         Let's go through that line by line.
-    </MudText>
-    <MudList> 
+    </Paragraph>
+    <MudList>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 The first line is what we call a <Code>using</Code> directive. It tells the compiler to bring into scope
@@ -111,29 +108,29 @@ internal class Program
             </MudText>
         </MudListItem>
     </MudList>
-    <MudText GutterBottom="true">
+    <Paragraph>
         So there, normally you would have to write all that code to get something printed on screen, but C# allows <Highlight>top-level statements</Highlight>,
         which means that instead of writing a <Code>Main</Code> method you can write your code script-like, and the entry point will be <Highlight>synthesised</Highlight>
         for you. Only one file in a project can have top-level statements, as every assembly can have at most one entry point.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         One notable lie here is that the actual names generated are not <Code>Program</Code> or <Code>Main</Code>, but rather magical names that only the compiler
         knows &ndash; such names are called <Highlight>unspeakable</Highlight>, because you can't refer to them in regular user code. Get used to that,
         the C# compiler is a certified level 20 Wizard. But worry not! We will make its magic clear, in time. Well, most of it.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Summary</Header2>
+    <Paragraph>
         A single compilation unit in .NET is called an assembly.
         Instead of a traditional <Code>Main</Code> method, you can write the entry code using top-level statements.
         In C#, methods are contained within types, and types are grouped into namespaces.
         You can bring types into scope from different namespaces with a <Code>using</Code> directive.
         To write things to standard output we use <Code>System.Console.Write</Code> or <Code>System.Console.WriteLine</Code>.
-    </MudText>
+    </Paragraph>
 
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/program-structure/top-level-statements", "Top-level statements on docs.microsoft"),
-        ("https://sharplab.io/", "SharpLab, .NET playground with a desugariser and a decompiler"),
-    }) />
+               ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/program-structure/top-level-statements", "Top-level statements on docs.microsoft"),
+               ("https://sharplab.io/", "SharpLab, .NET playground with a desugariser and a decompiler"),
+               }) />
 </CourseSection>
 
 @code {

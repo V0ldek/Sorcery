@@ -14,7 +14,7 @@
         <Link Href="@previousGcSection.Route">@previousGcSection.DisplayName</Link>.
         Before we talk about performance, however, we need to dive a little bit deeper into GC internals.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Talkin' 'bout My Generation</MudText>
+    <Header2>Talkin' 'bout My Generation</Header2>
     <MudText GutterBottom="true">
         The .NET GC is a <Highlight>generational</Highlight> GC. It divides the managed heap into three chunks called
         <Highlight>generations</Highlight> (and the LoC, explained below), that are collected separately.
@@ -93,7 +93,7 @@
         We cover that in <Link Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</Link>.
     </MudText>
     <LatexRenderer ContainerId="loh"/>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Finalizer</MudText>
+    <Header2>Finalizer</Header2>
     <MudText>
         The dreaded finalizer is a piece of code that is supposed to run at the end of an instance's lifetime.
         Most objects don't have finalizers, and thus when they go out of scope the GC simply murders them and
@@ -102,7 +102,7 @@
         Finalizers are hairy and scary, and you should almost never use them. We talk about
         their intended usage in <Link Href="@finalizersSection.Route">@finalizersSection.DisplayName</Link>.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <Header2>Summary</Header2>
     <MudList>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             More allocations &ndash; more collections. Decreasing allocations can improve performance by

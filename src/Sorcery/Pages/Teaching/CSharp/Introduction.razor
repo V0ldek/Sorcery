@@ -2,12 +2,12 @@
 @inject CourseBook CourseBook;
 
 <CourseIntroduction Course="@CourseBook.CSharpCourse">
-    <MudText GutterBottom="true">
+    <Paragraph>
         C# is a modern, multiparadigm programming language based on the multiplatform .NET environment.
         It focuses on developer ergonomics and productivity without sacrificing safety thanks to its automated
         memory management and robust static analysis.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         The course aims at introducing C# and .NET from the very basics. Prior knowledge of some other general-purpose
         language is assumed, as well as basic knowledge of programming concepts such as threading,
         SQL databases and object-orientation. The desired effect at the end is for the student to:
@@ -21,14 +21,14 @@
             </MudListItem>
             <MudListItem Icon="@Icons.Material.Filled.Check">have gained more throughout knowledge of the language and ecosystem than is required for a junior position as a C#.NET developer.</MudListItem>
         </MudList>
-    </MudText>
+    </Paragraph>
 
-    <MudText>
+    <Paragraph>
         The course is split into 10 modules and is accompanied by live workshops; however, the course itself is standalone and can be followed individually.
         All code used in the course is published as interactive notebooks or standalone applications.
-    </MudText>
+    </Paragraph>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-6">Teaser</MudText>
+    <Header2>Teaser</Header2>
 
     During the course we will cover:
 
@@ -48,45 +48,45 @@
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">performance-oriented programming in C#</MudListItem>
     </MudList>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-6">Grading</MudText>
+    <Header2>Grading</Header2>
 
-    <MudText GutterBottom="true">
+    <Paragraph>
         The grade is based on two components: microassignments, which are given each week at the end of a module, and the final project.
-    </MudText>
+    </Paragraph>
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" Centered="true">
         <MudTabPanel Text="Microassignments" Icon="@Icons.Material.Filled.Assignment">
-            <MudText GutterBottom="true">
+            <Paragraph>
                 Each microassignment is worth <Highlight>5</Highlight> points. 2 points are for automated testing, 3 are for code quality.
                 Assignments are given via GitHub Classroom and you will automatically see the results of automated tests when working on your code.
                 There will be at least 10 microassignments, but the maximum number of points for this module is <Highlight>50</Highlight>.
-            </MudText>
-            <MudText GutterBottom="true">
+            </Paragraph>
+            <Paragraph>
                 I will try to read your code as soon as you push any changes, so doing the assignment early is encouraged. Basically, if you go through
                 a few rounds of code review with me before the deadline you will most likely get full score. If you submit working but ugly code at the last moment,
                 you'll probably get at most 2 points. The details of working with GitHub Classroom will be introduced at the end of the first module.
-            </MudText>
-            <MudText>
+            </Paragraph>
+            <Paragraph>
                 Microassignments are meant to be a continuous feedback loop, both for you, to know how well you have grasped the material, and for me, to know how
                 bad I am at explaining it. It is therefore very important for the overall health of our course that you're doing them consistently. The time for them
                 will be up until Tuesday, 18:00, the day before next class.
-            </MudText>
+            </Paragraph>
             <MudAlert Class="my-4" Variant="Variant.Outlined" Severity="Severity.Warning">
                 To pass in the first term you need to get at least <Highlight>25</Highlight> points for these microassignments!
             </MudAlert>
-            <MudText>
+            <Paragraph>
                 Note that this threshold is chosen so that passing automated tests for all microassignments guarantees meeting it.
                 The intention is that you shouldn't have to sweat to pass, but to get a good grade you need to put in work.
-            </MudText>
+            </Paragraph>
         </MudTabPanel>
         <MudTabPanel Text="Project" Icon="@Icons.Material.Filled.Source">
-            <MudText GutterBottom="true">
+            <Paragraph>
                 Over the course of the semester you're expected to come up with an idea for a project and implement it in C#.NET using the tools you've learnt.
                 This can be any application you feel like doing, be it a web app in Blazor, a desktop app in WPF, a CLI application doing something interesting,
                 or a video game. The app will be graded in four categories &ndash; UI, logic, data layer, and tests. 
                 Each is worth <Highlight>10</Highlight> points, and there's additional
                 10 bonus points if you do something especially interesting. You can expect roughly 5 of those points be for the actual functionality, and 5 as
                 points for code quality. In total, you can get at most <Highlight>50</Highlight> points for the project.
-            </MudText>
+            </Paragraph>
             <MudList>
                 <MudListItem Icon="@Icons.Material.Filled.Devices">
                     <MudText>
@@ -113,16 +113,16 @@
                     <MudText><strong>Bonus</strong> (<Highlight>???</Highlight>): surprise me.</MudText>
                 </MudListItem>
             </MudList>
-            <MudText GutterBottom="true">
+            <Paragraph>
                 It will be clear from the modules which parts of .NET correspond to which categories of the project. 
                 Usage of Entity Framework will obviously be graded in data access, while your Blazor components will be UI.
-            </MudText>
-            <MudText>
+            </Paragraph>
+            <Paragraph>
                 You can do the project solo or in a pair. The requirements are intentionally informal and not precise &ndash; the point is to do something
                 cool with C# and .NET and showcase it. In particular, the above are just guidelines. If you want to do something crazy
                 with .NET as your project, and it doesn't work well with the grading model then hit me up!
                 The project is supposed to be your opportunity to be creative, so there's no artificial limitations.
-            </MudText>
+            </Paragraph>
         </MudTabPanel>
         <MudTabPanel Text="Grade thresholds" Icon="@Icons.Material.Filled.Grade">
             <MudTable Items="@Thresholds">
@@ -137,25 +137,25 @@
             </MudTable>
         </MudTabPanel>
         <MudTabPanel Text="Second term rules" Icon="@Icons.Material.Filled.Rule">
-            <MudText GutterBottom="true">
+            <Paragraph>
                 If you fail the first term, you will be given a special assignment to complete until September.
                 It will be a single, big assignment on GitHub Classroom spanning the entire course. The grade is binary: either you pass all tests or not.
                 You also need to complete your project &ndash; what "complete" means will be discussed on an individual basis. Either way, the grade in this case
                 is either pass or fail, meaning either a 3 or a 2.
-            </MudText>
-            <MudText GutterBottom="true">
+            </Paragraph>
+            <Paragraph>
                 If you get a passing grade in the first term, you can get a better grade in the second term by improving on your project.
                 You will have until September to work on it and can ask me for advice and review throughout. The points will be given according
                 to the same system as in the first term.
-            </MudText>
-            <MudText>
+            </Paragraph>
+            <Paragraph>
                 There is no way to regain points for microassignments in the second term.
-            </MudText>
+            </Paragraph>
         </MudTabPanel>
         <MudTabPanel Text="Grade calculator" Icon="@Icons.Material.Filled.Calculate">
-            <MudText GutterBottom="true">
+            <Paragraph>
                 You can use the below calculator to get your grade based on the points you currently have.
-            </MudText>
+            </Paragraph>
             <MudPaper Outlined="true">
                 <MudGrid Class="pa-4">
                     <MudItem xs="12" sm="7">

@@ -6,66 +6,66 @@
 }
 
 <CourseSection Section="@(section)">
-    <MudText GutterBottom="true">
+    <Paragraph>
         Continuing with <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>
         go through the next notebook, <Highlight>@($"{section.Module.Id}-{section.Module.RouteName}/{section.Id}-{section.RouteName}.dib")</Highlight>, in VS Code.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">In this section we'll cover</MudText>
-        
-    <MudList>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Access modifiers.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Classes.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Fields and <Code>readonly</Code>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Methods.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Properties.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Constructors.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Initialisers.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Target typed <Code>new</Code>.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Overloading methods.
-            </MudText>
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <MudText>
-                Static members.
-            </MudText>
-        </MudListItem>
-    </MudList>
-</CourseSection>
+        </Paragraph>
+        <Header2>In this section we'll cover</Header2>
 
-@code {
+        <MudList>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Access modifiers.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Classes.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Fields and <Code>readonly</Code>.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Methods.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Properties.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Constructors.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Initialisers.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Target typed <Code>new</Code>.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Overloading methods.
+                </MudText>
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Static members.
+                </MudText>
+            </MudListItem>
+        </MudList>
+    </CourseSection>
+
+    @code {
 
 }

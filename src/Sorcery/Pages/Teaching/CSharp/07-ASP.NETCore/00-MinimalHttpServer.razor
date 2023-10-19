@@ -6,16 +6,16 @@
 }
 
 <CourseSection Section="@course">
-    <MudText>
+    <Paragraph>
         Creating a project for ASP.NET core is a bit different from what we've been doing thus far.
         We need to use a different SDK and a completely different project type for the entry project.
-        Navigate to the <code>07-ASP.NETCore/DungeonWalker.Api</code> directory in 
+        Navigate to the <code>07-ASP.NETCore/DungeonWalker.Api</code> directory in
         <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>
         and run:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="powershell" Code="@(@"
 dotnet new webapi -o DungeonWalker.Api
-dotnet sln add ./DungeonWalker.Api")"/>
+dotnet sln add ./DungeonWalker.Api")" />
     <MudText>
         This will create a bunch of stuff for an example web API. Let's take it step-by-step, first the <code>csproj</code>:
     </MudText>
@@ -33,16 +33,16 @@ dotnet sln add ./DungeonWalker.Api")"/>
   </ItemGroup>
 
 </Project>
-    ")"/>
-    <MudText GutterBottom="true">
+    ")" />
+    <Paragraph>
         The switch to ASP.NET Core is signified with the top line, where we use the Web SDK to build the project.
         This hooks up relevant <Code>AspNetCore</Code> libraries as implicit dependencies, some analysers, as well as
         better first-class support from CLI and IDEs.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         The rest is basically the same, the referenced <Code>Swashbuckle</Code> package gives us Swagger support for free
         &ndash; more on that later. Now let's take a look at the core of the project, <code>Program.cs</code>.
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="Program.cs" LineNumbers="true" Code="@(@"
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,18 +69,18 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-    ")"/>
-    <MudText GutterBottom="true">
+    ")" />
+    <Paragraph>
         Server configuration happens inside a builder. We first add services to the Dependency Injection mechanism, which allows
         us to resolve implementation of services in a clean manner &ndash; more on that also later. <Code>AddControllers</Code>
         is a core method that makes our server run. Then a lot of Swagger things follow. In the end, we configure automatic
         redirection from HTTP to HTTPS (a standard practice for all HTTP accessible servers), configure authorization services
         (which we won't use), configure routing with <Code>MapControllers</Code> and run the server.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         You can now run the server with <Code Language="PowerShell">dotnet run --project ./DungeonWalker.Api</Code>. The output
         will look something like this, modulo paths and port numbers:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="plain" Code="@(@"
 Building...
 info: Microsoft.Hosting.Lifetime[14]
@@ -93,15 +93,14 @@ info: Microsoft.Hosting.Lifetime[0]
       Hosting environment: Development
 info: Microsoft.Hosting.Lifetime[0]
       Content root path: C:\Projects\Sorcery-CSharp-Notebooks\07-ASP.NETCore\DungeonWalker.Api\
-    ")"/>
-    <MudText id="setup-ports">
+    ")" />
+    <Paragraph id="setup-ports">
         Let's tackle the ports first. They are set in <code>Properties/launchSettings.json</code>.
         Change the <code>profiles['DungeonWalker.Api'].applicationUrl</code> values to point to ports
         $10443$ and $10080$ for HTTPS and HTTP, respectively. We can now use <Code Language="powershell">curl</Code>
         to get some response from our server.
-    </MudText>
-    <LatexRenderer ContainerId="setup-ports"/>
-    <CodeBlock Language="plain" Code="@(@"
+        <LatexRenderer ContainerId="setup-ports" />
+        <CodeBlock Language="plain" Code="@(@"
 curl localhost:10080 --verbose
 *   Trying 127.0.0.1:10080...
 * Connected to localhost (127.0.0.1) port 10080 (#0)
@@ -137,16 +136,15 @@ curl https://localhost:10443 --verbose
 < Server: Kestrel
 <
 * Connection #0 to host localhost left intact
-    ")"/>
-    <MudText>
+    ")" />
         This is as expected &ndash; HTTP redirects us to HTTPS, and HTTPS endpoint gives us 404, since our server doesn't serve anything on the <code>/</code> route.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Controllers and Routing</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Controllers and Routing</Header2>
+    <Paragraph>
         Routing is what our server does when it gets a request to determine what code to run to serve the request.
         The <em>route</em> is the part of the URL after the root server URL, so when making a request
         to <Link Href="https://gienieczko.com/teaching/csharp/7-aspnet-core/0-minimal-http-server">
-            https://gienieczko.com/teaching/csharp/7-aspnet-core/0-minimal-http-server
+        https://gienieczko.com/teaching/csharp/7-aspnet-core/0-minimal-http-server
         </Link>
         the route is '<code>/teaching/csharp/7-aspnet-core/0-minimal-http-server</code>'.
         The server has to parse that route and, em, route it to the correct handler, which in case of an ASP.NET Core is an <em>action</em>
@@ -155,13 +153,12 @@ curl https://localhost:10443 --verbose
         https://duckduckgo.com/?q=gienieczko&t=h_&ia=web</Link> we have the path '<code>/</code>', but also three query parameters:
         '<code>q</code>' with value '<code>gienieczko</code>', '<code>t</code>' with value '<code>h_</code>', and '<code>ia</code>'
         with value '<code>web</code>'.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         In ASP.NET Core the router parses the URL and determines which controller action to call. It can parse the query parameters
         from the URL and the body of the request (if there is a body), provide it as parameters to the action, and then interpret the return
         value as the response. Here is the example controller that exists in the generated template:
-    </MudText>
-    <CodeBlock FileName="Controllers/WeatherForecastController.cs" LineNumbers="true" Code="@(@"
+        <CodeBlock FileName="Controllers/WeatherForecastController.cs" LineNumbers="true" Code="@(@"
 using Microsoft.AspNetCore.Mvc;
 
 namespace DungeonWalker.Api.Controllers;
@@ -194,38 +191,34 @@ public class WeatherForecastController : ControllerBase
         .ToArray();
     }
 }
-    ")"/>
-    <MudText>
+    ")" />
         Let's break it down:
-    </MudText>
-    <MudList>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            The controller is defined as a class inheriting from <Code>ControllerBase</Code>
-            with the special <Code>ApiControllerAttribute</Code>.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            The <Code>RouteAttribute</Code> defines how to access the controller.
-            The special '<code>[controller]</code>' value evaluates to the controller class name
-            with '<code>Controller</code>' stripped, so in this case it's '<code>weatherForecast</code>'
-            (URL-s are case insensitive).
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            The controller has a <Code>ILogger&lt;WeatherForecastController&gt;</Code> dependency
-            that is magically given to it in the constructor. This is Dependency Injection.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            The controller's action is called <Code>Get</Code> and returns a sequence of
-            <Code>WeatherForecast</Code> objects. The <Code>Name</Code> is a friendly name
-            given to an action, e.g. allowing us to create a link to this particular action
-            just by using the name. It defines no explicit route, thus it is triggered
-            simply when a GET request is given to the root controller route.
-        </MudListItem>
-    </MudList>
-    <MudText>
+        <MudList>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                The controller is defined as a class inheriting from <Code>ControllerBase</Code>
+                with the special <Code>ApiControllerAttribute</Code>.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                The <Code>RouteAttribute</Code> defines how to access the controller.
+                The special '<code>[controller]</code>' value evaluates to the controller class name
+                with '<code>Controller</code>' stripped, so in this case it's '<code>weatherForecast</code>'
+                (URL-s are case insensitive).
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                The controller has a <Code>ILogger&lt;WeatherForecastController&gt;</Code> dependency
+                that is magically given to it in the constructor. This is Dependency Injection.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                The controller's action is called <Code>Get</Code> and returns a sequence of
+                <Code>WeatherForecast</Code> objects. The <Code>Name</Code> is a friendly name
+                given to an action, e.g. allowing us to create a link to this particular action
+                just by using the name. It defines no explicit route, thus it is triggered
+                simply when a GET request is given to the root controller route.
+            </MudListItem>
+        </MudList>
         We can see how this works in action right now, by issuing a GET to this action:
-    </MudText>
 
-    <CodeBlock Language="plain" Code="@(@"
+        <CodeBlock Language="plain" Code="@(@"
 curl https://localhost:10443/weatherForecast --verbose
 *   Trying 127.0.0.1:10443...
 * Connected to localhost (127.0.0.1) port 10443 (#0)
@@ -245,12 +238,10 @@ curl https://localhost:10443/weatherForecast --verbose
 < Transfer-Encoding: chunked
 <
 [{""date"":""2022-05-18T21:27:57.0462085+02:00"",""temperatureC"":-11,""temperatureF"":13,""summary"":""Balmy""},{""date"":""2022-05-19T21:27:57.0462166+02:00"",""temperatureC"":4,""temperatureF"":39,""summary"":""Chilly""},{""date"":""2022-05-20T21:27:57.0462176+02:00"",""temperatureC"":51,""temperatureF"":123,""summary"":""Hot""},{""date"":""2022-05-21T21:27:57.0462179+02:00"",""temperatureC"":-4,""temperatureF"":25,""summary"":""Warm""},{""date"":""2022-05-22T21:27:57.0462181+02:00"",""temperatureC"":31,""temperatureF"":87,""summary"":""Freezing""}]* Connection #0 to host localhost left intact
-    ")"/>
-    <MudText>
+    ")" />
         Okay, so it works. We have no idea how the controller gets instantiated, though. Does it even initialise
         the <Code>_logger</Code> field? Let's try to log something, change the <Code>Get</Code> body to:
-    </MudText>
-    <CodeBlock FileName="Controllers/WeatherForecastController.cs" Code="@(@"
+        <CodeBlock FileName="Controllers/WeatherForecastController.cs" Code="@(@"
 [HttpGet(Name = ""GetWeatherForecast"")]
 public IEnumerable<WeatherForecast> Get()
 {
@@ -265,51 +256,51 @@ public IEnumerable<WeatherForecast> Get()
     })
     .ToArray();
 }
-    ")"/>
-    <MudText>
+    ")" />
+    </Paragraph>
+    <Paragraph>
         Restart the server and run the <code>curl</code> again. You should see the following appear in the server's terminal
         (modulo the number of days):
-    </MudText>
-    <CodeBlock Language="plain" Code="@(@"
+        <CodeBlock Language="plain" Code="@(@"
 info: DungeonWalker.Api.Controllers.WeatherForecastController[0]
-      Randomised 7 days to return...")"
-    />
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Middleware</MudText>
-    <MudText>
+      Randomised 7 days to return...")" />
+    </Paragraph>
+    <Header2>Middleware</Header2>
+    <Paragraph>
         The ASP.NET Core server is based around middleware. A request to the server goes through a pipeline of methods
         that take the request, operate on the response, and call the next one in the sequence, creating a stack of execution.
         A middleware component can also short-circuit the pipeline and return early.
-    </MudText>
+    </Paragraph>
     <MudPaper Class="my-4 pa-4 d-flex justify-center align-center" Elevation="5">
-        <MudImage Alt="middleware pipeline" ObjectPosition="ObjectPosition.Center" 
-            Fluid="true" Src="/img/middleware-pipeline.svg" ObjectFit="ObjectFit.Fill"/>
+        <MudImage Alt="middleware pipeline" ObjectPosition="ObjectPosition.Center"
+                  Fluid="true" Src="/img/middleware-pipeline.svg" ObjectFit="ObjectFit.Fill" />
     </MudPaper>
-    <MudText>
+    <Paragraph>
         We can write and provide our own middleware to plug-in to this pipeline. This is a very powerful tool, allowing us
         to customise our server. You could write your own server from first principles using it. Usually we install
         some preimplemented middleware to get commonly used functionality. Every <Code>UseX</Code> call
         in <code>Program.cs</code> is a middleware. There are preimplemented middlewares for common things like
         cookies, CORS, cache, compression, sessions, etc. There's a ton more available as NuGet packages.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Cancellation</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Cancellation</Header2>
+    <Paragraph>
         ASP.NET Core injects <Code>CancellationToken</Code> values corresponding to the outside request
         into controller actions, as long as they have an appropriate parameter. Supporting cancellation in ASP.NET
         Core requires simply adding that last <Code>CancellationToken cancellationToken</Code> parameter to your method.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         You should always use it. There's no sense in wasting server resources when the outgoing request was cancelled
         by the user.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Summary</Header2>
+    <Paragraph>
         We know how to setup the skeleton for an HTTP server, complete with HTTPS support. We know what routing is and
         how they are resolved into controllers and actions
-    </MudText>
+    </Paragraph>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0", "ASP.NET Core Middleware"),
-    })/>
+               ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0", "ASP.NET Core fundamentals overview"),
+               ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0", "ASP.NET Core Middleware"),
+               }) />
 </CourseSection>
 
 @code {
