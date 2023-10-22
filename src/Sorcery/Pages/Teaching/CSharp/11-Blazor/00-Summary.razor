@@ -6,21 +6,21 @@
 }
 
 <CourseSection Section="@course">
-    <MudText GutterBottom="true">
+    <Paragraph>
         Blazor is a powerful framework that allows us to write web UI components in .NET and compile them to
         WebAssembly, the native browser language. This means you can write your application entirely in C# and never
         write a single line of JS ever again!
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         You can create standalone Blazor applications and host them without a fully-fledged ASP.NET Core server.
         This is in fact how this website is hosted! In the case of our assignment, we host it with an ASP.NET Core server.
         The client then talks to the server just like a normal client would, invoking HTTP requests to the exposed API.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         This is an extremely powerful setup. Instead of a separated development experience, where there is a traditional backend
         server and then a frontend webpage written in React, Angular, or your other favourite JS framework, you have a unified
         solution written in .NET.
-    </MudText>
+    </Paragraph>
     <Resources Links=@(new [] {
                ("https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor", "Blazor main page")
     })/>

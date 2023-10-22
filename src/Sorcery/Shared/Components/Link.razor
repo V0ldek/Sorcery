@@ -1,8 +1,7 @@
 ﻿<MudLink Typo="Typo.inherit" Href="@Href" Underline="Underline.Hover" @attributes=Attributes>
-    @ChildContent
-    <MudText Inline="true" Typo="Typo.caption" Style="margin-left: -4px; margin-right: -2px">
-        <sup>🔗</sup>
-    </MudText>
+    <span>
+        @ChildContent<sup style="margin-right: -2px">🔗</sup>
+    </span>
 </MudLink>
 
 @code {

@@ -6,18 +6,18 @@
 }
 
 <CourseSection Section="@course">
-    <MudText>
+    <Paragraph>
         Let's talk about logging. Collecting structured logs is <em>very</em> important
         to be able to make sense of a deployed application. When we have the software locally
         debugging is easy, we can plug in the debugger and see everything. On production
         you have nothing aside from the logs you configure.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Injecting Loggers</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Injecting Loggers</Header2>
+    <Paragraph>
         By default, <Code>Microsoft.Extensions.Logging</Code> is used as the logging provider.
         To get a logger we depend on <Code>ILogger&lt;T&gt;</Code>, where <Code>T</Code> is
         the type to which we are injecting the logger.
-    </MudText>
+    </Paragraph>
     <CodeBlock FileName="DungeonWalker.Api/Controllers/DungeonController.cs" Code="@(@"
 private readonly IDungeonRepository _repository;
 
@@ -26,95 +26,88 @@ private readonly ILogger<DungeonController> _logger;
 public DungeonController(IDungeonRepository repository, ILogger<DungeonController> logger) =>
     (_repository, _logger) = (repository, logger);
     ")" />
-    <MudText>
+    <Paragraph>
         This might seem unintuitive, but the idea is that we want a logger that specifically knows
         what type is using it so that it can include that metadata in the logs. That's why all the logs
         you see in the output start with
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="plain" Code="@(@"
 info: DungeonWalker.Api.Controllers.DungeonController[0]
     ")" />
-    <MudText>
+    <Paragraph>
         This is called a log <em>category</em>. We can create more granular categories by injecting
         <Code>ILoggerFactory</Code> instead and calling <Code>CreateLogger</Code>. To log something
         quick-and-dirty we call <Code>Log</Code> with an appropriate <Code>LogLevel</Code>, or, more conveniently,
         call <Code>LogX</Code> where <Code>X</Code> is the level.
-    </MudText>
+    </Paragraph>
     <CodeBlock Code="@(@"
 _logger.LogInformation(""Fetching Dungeon {Id}..."", id);
 _logger.LogError(""Unexpected exception performing operation."");
 _logger.LogCritical(""Could not connect to the application database."");
     ")" />
-    <MudText>
+    <Paragraph>
         There are 6 logging levels.
-    </MudText>
-    <MudList>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Trace &ndash; most detailed information used for tracking down hard-to-find bugs.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Debug &ndash; detailed development logs; should not be enabled on production.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Information &ndash; general flow of the application.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Warning &ndash; unexpected conditions that should be brought to attention, but
-            don't cause direct failure.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Error &ndash; a failure condition for the current operation.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Critical &ndash; a failure condition for the entire application that should cause
-            the server administrator to be woken up in the middle of the night.
-        </MudListItem>
-    </MudList>
-    <MudText>
+        <MudList>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Trace &ndash; most detailed information used for tracking down hard-to-find bugs.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Debug &ndash; detailed development logs; should not be enabled on production.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Information &ndash; general flow of the application.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Warning &ndash; unexpected conditions that should be brought to attention, but
+                don't cause direct failure.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Error &ndash; a failure condition for the current operation.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Critical &ndash; a failure condition for the entire application that should cause
+                the server administrator to be woken up in the middle of the night.
+            </MudListItem>
+        </MudList>
         We set a filter on the log level for various categories. A filter causes all messages
         on levels before the filter to not be included. So setting it to <Code>Information</Code>
         filters out all <Code>Debug</Code> and <Code>Trace</Code> messages.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Structured Logging</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Structured Logging</Header2>
+    <Paragraph>
         Did I mention logging is <em>extremely</em> important? This is the primary way of getting information
         about your app's execution when it's deployed on production. Logging is the debugging idea we are all
         familiar with &ndash; stick a bunch of <code>print</code> statements into the code and then try
         to make sense of the output &ndash; only made more sustainable.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Printing plain string values is pretty much useless &ndash; it just creates noise that makes debugging maybe
         slightly more easy, but not really. The revolutionary idea here is to not be logging plain strings.
         Instead, we give them <em>structure</em>. A structured log is an object that contains a number of named
         properties and a string template. Every log is given an identity, so that we can group different outputs
         from the same log statement together. For example, instead of doing this:
-    </MudText>
-    <CodeBlock Language="plain" Code="@(@"
+        <CodeBlock Language="plain" Code="@(@"
 _logger.LogInformation($""Could not find dungeon {name}"");
-    ")"/><MudText>
+    ")" />
         We do this:
-    </MudText>
-    <CodeBlock Language="plain" Code="@(@"
+        <CodeBlock Language="plain" Code="@(@"
 _logger.LogInformation(""Could not find dungeon {Name}"", name);
-    ")"/>
-    <MudText>
+    ")" />
         And then in our log collection system instead of seing pure strings we might see values like these:
-    </MudText>
-    <CodeBlock Language="json" Code="@(@"
+        <CodeBlock Language="json" Code="@(@"
 {
     ""EventId"": 1
     ""Level"": ""Information"",
     ""Timestamp"": ""2022-05-23T10:43:32Z"",
     ""Name"": ""Example"",
     ""Message"": ""Could not find dungeon Example""
-}    
-    ")"/>
-    <MudText>
+}
+    ")" />
         Additionally, messages can be grouped into <em>scopes</em>. We start a scope by calling
         <Code>_logger.BeginScope</Code> and passing data to it. It returns an <Code>IDisposable</Code>
-        representing the scope. The scope ends when that sentinel is disposed of. 
-        ASP.NET Core gives us a lot of additional scope information for free out of the box. 
-    </MudText>
+        representing the scope. The scope ends when that sentinel is disposed of.
+        ASP.NET Core gives us a lot of additional scope information for free out of the box.
+    </Paragraph>
     <CodeBlock Language="json" Code="@(@"
 {
   ""Timestamp"": ""10:50:08 "",
@@ -155,37 +148,39 @@ _logger.LogInformation(""Could not find dungeon {Name}"", name);
     }
 
 }
-    ")"/>
-    <MudText>
+    ")" />
+    <Paragraph>
         But, as a programmer, we will see this in our output:
-    </MudText>
-    <CodeBlock Language="plain" Code="@(@"
+        <CodeBlock Language="plain" Code="@(@"
 [10:57:20.4021] info: DungeonWalker.Api.Controllers.DungeonsController[0]
       => SpanId:e72af56e1c49e3ac, TraceId:b5aa403711efc425c5bf3db232a66581, ParentId:0000000000000000 => ConnectionId:0HMHSLC0RMD99 => RequestPath:/Dungeons/Example RequestId:0HMHSLC0RMD99:0000000F => DungeonWalker.Api.Controllers.DungeonsController.GetAsync (DungeonWalker.Api) => DungeonController.GetAsync(Example)
       Not found: Example
-    ")"/>
-    <MudText>
-        However, going to our log system we can now look at a specific Error log and say "<em>okay, show me all the
-        logs for this TraceId that happened before the error</em>". Maybe it turns out that when we look at all error messages
+    ")" />
+    </Paragraph>
+    <Paragraph>
+        However, going to our log system we can now look at a specific Error log and say "<em>
+            okay, show me all the
+            logs for this TraceId that happened before the error
+        </em>". Maybe it turns out that when we look at all error messages
         there are many coming from the same request path. And then when we do some simple SQL queries asking for the previous actions
         with the same TraceId it turns out that most of those errors have the same flow of execution leading to the error. Basically,
         we enable data science on our logs. One does not fully appreciate this power until something breaks and they need to debug it.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Typesafe and Performant Logs with <Code>LoggerMessage</Code></MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Typesafe and Performant Logs with <Code>LoggerMessage</Code></Header2>
+    <Paragraph>
         Doing logs with the <Code>LogX</Code> methods has issues. One, it doesn't validate whether we use structured
         logging the correct way. When your logs are structured, there is an obvious schema of named properties that
         every message with given structure should follow. Moreover, every time we put a message into <Code>LogX</Code>
         it needs to be parsed to determine the structure.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         To help with both of these issues, ASP.NET Core introduces the static <Code>LoggerMessage</Code> class.
         It allows us to create a precompiled delegate that takes strongly-typed values for the named parameters of
         a structured log message. The typing solves the type safety issue, while the fact that they are compiled
         and then reused solves the performance issue. Usually, the way to utilise this is to create an extension
         class for <Code>ILogger</Code> and put the message configuration there statically. Then every structured
         message becomes a special extension method. The same is true for scopes. For example:
-    </MudText>
+    </Paragraph>
     <CodeBlock Code="@(@"
 internal static class ILoggerExtensions
 {
@@ -207,26 +202,26 @@ internal static class ILoggerExtensions
 
     public static void Returning(this ILogger logger, Dungeon dungeon) => _returningDungeon(logger, dungeon, null);
 }
-    ")"/>
-    <MudText>
+    ")" />
+    <Paragraph>
         You should prefer defining your logs this way. It's a nice all-in-one solution, it makes sure
         your logs are structured, that the values are sensible and have correct types, and decouples the logging
         logic from the actual program flow.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Summary</Header2>
+    <Paragraph>
         We've learnt how to instrument our applications with structured logs in ASP.NET Core.
-   </MudText>
+    </Paragraph>
     <Resources Links=@(new [] {
-        (
-            "https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-6.0",
-            "Logging in .NET Core and ASP.NET Core"
-        ),
-        (
-            "https://andrewlock.net/defining-custom-logging-messages-with-loggermessage-define-in-asp-net-core/",
-            "LoggerMessage.Define (Andrew Lock)"
-        )
-    }) />
+               (
+               "https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-6.0",
+               "Logging in .NET Core and ASP.NET Core"
+               ),
+               (
+               "https://andrewlock.net/defining-custom-logging-messages-with-loggermessage-define-in-asp-net-core/",
+               "LoggerMessage.Define (Andrew Lock)"
+               )
+               }) />
 </CourseSection>
 
 @code {

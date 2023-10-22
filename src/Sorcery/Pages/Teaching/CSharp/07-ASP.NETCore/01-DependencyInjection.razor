@@ -6,17 +6,17 @@
 }
 
 <CourseSection Section="@course">
-    <MudText>
+    <Paragraph>
         This section is going to be a bit more software-engineering focused than before, since Dependency Injection (DI)
         is a fundamental concept for complex software with many interdependent modules.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Motivation</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Motivation</Header2>
+    <Paragraph>
         Understanding the principles of DI is done most easily with a motivating example.
         Consider the incredibly complex problem of adding two numbers together.
         We want an API endpoint that will return the sum of two numbers that are loaded from a database.
         Well, let's get cracking.
-    </MudText>
+    </Paragraph>
     <CodeBlock LineNumbers="true" Code="@(@"
 using Adder.DataLayer;
 using Microsoft.AspNetCore.Mvc;
@@ -39,91 +39,89 @@ public class AdderController : ControllerBase
         return (x ?? 0) + (y ?? 0);
     }
 }
-        ")"/>
-    <MudText>
+        ")" />
+    <Paragraph>
         This is all we need. This is scaffolded in the <code>07-ASP.NETCore/Adder.Api</code> directory.
         There's some things already configured to make the code runnable, you only need to run database setup:
-    </MudText>
-    <CodeBlock Language="powershell" Code="@(@"
+        <CodeBlock Language="powershell" Code="@(@"
 dotnet ef database update --project ./Adder.DataLayer
 dotnet run --project ./Adder.Api
-    ")"/>
-    <MudText>
+    ")" />
         Now we can <code>curl</code> seeding the database and the sum:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="plain" Code="@(@"
 curl -X POST https://localhost:20443/adder/seed
 curl https://localhost:20443/adder/sum
 5
-    ")"/>
-    <MudText GutterBottom="true">
+    ")" />
+    <Paragraph>
         Great, it works! Okay, so now, like good engineers, let's write unit tests. We need to test
         what happens when both numbers are there, when one of them is <Code>null</Code>, when
         <Code>repository</Code> throws an exception. Oh, and we need a test that will assert that the repository was
         disposed of.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         And obviously we want this to be independent from the database. We're running simple SQLite, but in
         a normal setting we'd be using Postgres or something, and unit tests need to be fast, easily runnable,
         repeatable, etc.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         <strong>How <em>on earth</em> would you do that?</strong>
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">You can't.</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>You can't.</Header2>
+    <Paragraph>
         To manage complexity of programming we use Big Words like Separation of Concerns, or
         Decoupling. This is probably the most hands-on example of this. We have glued the <Code>Sum</Code>
         method so tight to the <Code>NumberRepository</Code> <em>and</em> <Code>AdderDbContext</Code>
         so hard it won't ever go off. It's <em>terrible</em>
         for, like, infinitely many reasons.
-    </MudText>
-    <MudList>
-        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
-            If <Code>NumberRepository</Code> ever needs a different way to be constructed,
-            for example we decide to add logging and make the constructor take a logger,
-            we would have to change every place with <Code>new NumberRepository</Code>.
-            Imagine we had hundreds of actions, each instantiating its own <Code>NumberRepository</Code>...
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
-            If <Code>AdderDbContext</Code> ever needs a different way to be constructed we are also screwed.
-            You can probably see how this extrapolates &ndash; the issue becomes more and more pronounced with
-            every layer underneath us. At some point instantiating a high-level service in a controller
-            might require <Code>new</Code>-ing a dozen objects into existence.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
-            Why does the <Code>AdderController</Code> even care about whether <Code>NumberRepository</Code>
-            uses a <Code>DbContext</Code> underneath? What if we decide that we need to hold our numbers in
-            a cloud storage? Do we go around and change every instantiation of the repository to use the
-            cloud provider instead of <Code>AdderDbContext</Code>?
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
-            For that matter, why does the <Code>AdderController</Code> even care that <Code>AdderDbContext</Code> <em>exists</em>.
-            Again, does our controller need to know about every single type in the project to perform its job? If it
-            needed a high-level service it'd necessarily know all about all the types below.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
-            Why is the controller managing the lifetime of a <Code>DbContext</Code>? Just asking questions.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.Dangerous">
-            Finally, and <strong>most importantly &ndash; there is no way to test this method.</strong> None. Any unit test would necessarily have
-            to construct a database itself and then seed it with data to observe the results.
-            Changing our code to use a different database immediately invalidates all these tests.
-            Moreover, it's a nightmare to maintain &ndash; unit tests need to be simple and reliable.
-        </MudListItem>
-    </MudList>
-    <MudText GutterBottom="true">
+        <MudList>
+            <MudListItem Icon="@Icons.Material.Filled.Dangerous">
+                If <Code>NumberRepository</Code> ever needs a different way to be constructed,
+                for example we decide to add logging and make the constructor take a logger,
+                we would have to change every place with <Code>new NumberRepository</Code>.
+                Imagine we had hundreds of actions, each instantiating its own <Code>NumberRepository</Code>...
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Dangerous">
+                If <Code>AdderDbContext</Code> ever needs a different way to be constructed we are also screwed.
+                You can probably see how this extrapolates &ndash; the issue becomes more and more pronounced with
+                every layer underneath us. At some point instantiating a high-level service in a controller
+                might require <Code>new</Code>-ing a dozen objects into existence.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Dangerous">
+                Why does the <Code>AdderController</Code> even care about whether <Code>NumberRepository</Code>
+                uses a <Code>DbContext</Code> underneath? What if we decide that we need to hold our numbers in
+                a cloud storage? Do we go around and change every instantiation of the repository to use the
+                cloud provider instead of <Code>AdderDbContext</Code>?
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Dangerous">
+                For that matter, why does the <Code>AdderController</Code> even care that <Code>AdderDbContext</Code> <em>exists</em>.
+                Again, does our controller need to know about every single type in the project to perform its job? If it
+                needed a high-level service it'd necessarily know all about all the types below.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Dangerous">
+                Why is the controller managing the lifetime of a <Code>DbContext</Code>? Just asking questions.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.Dangerous">
+                Finally, and <strong>most importantly &ndash; there is no way to test this method.</strong> None. Any unit test would necessarily have
+                to construct a database itself and then seed it with data to observe the results.
+                Changing our code to use a different database immediately invalidates all these tests.
+                Moreover, it's a nightmare to maintain &ndash; unit tests need to be simple and reliable.
+            </MudListItem>
+        </MudList>
+    </Paragraph>
+    <Paragraph>
         I could go on for days about how terrible this is. The core issue of <Code>new</Code> and constructors
         is that they are completely <em>static</em>, just like <Code>static</Code> methods would be.
         All static code that our method depends on are hard baked in there. From the perspective of a unit test
         it's virtually the same as if we copy-pasted the definition of the static method into our method body.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         No, really, just look at the wall of text above. Think how many responsibilities the <Code>GetSumAsync</Code> method has.
         It's a good thing it doesn't manage the TCP socket that the request came in as well... That code is utter garbage,
         and I can say that because I wrote it myself.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         This is not the Jedi way. We figured that out waaay before &ndash; everything here is violating
         the fifth SOLID principle, Dependency Inversion, which states simply <em>depend on abstractions, not on concretions</em>.
         Abstractions we can reason about. Abstractions we can plug in and out. Abstractions clearly define their contracts.
@@ -131,13 +129,13 @@ curl https://localhost:20443/adder/sum
         repository &ndash; this effectively means that we can pass the repo as an argument to the <Code>GetSumAsync</Code>
         method. This is not enough still, as <Code>NumberRepository</Code> is a concrete class &ndash; we still can't really
         test this method without coupling tightly to whatever it does under the hood, in this case to an SQLite database.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Dependency Inversion</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Dependency Inversion</Header2>
+    <Paragraph>
         Use abstraction. Extract the contract of a repository and Invert the Dependency. Think about it. Right now the
         controller tells you what to do. It says "give me a <Code>NumberRepository</Code> or I won't do my job." That's
         unacceptable. You're the boss. You tell it what repository it will work on and it better be happy with that choice!
-    </MudText>
+    </Paragraph>
     <CodeBlock LineNumbers="true" Code="@(@"
 using Adder.DataLayer;
 using Microsoft.AspNetCore.Mvc;
@@ -162,13 +160,13 @@ public class AdderController : ControllerBase
         return (x ?? 0) + (y ?? 0);
     }
 }
-        ")"/>
-    <MudText GutterBottom="true">
+        ")" />
+    <Paragraph>
         Now the controller gets <em>some</em> implementation of <Code>INumberRepository</Code>, which has an
         appropriate <Code>GetNumberAsync</Code> method, and it has to work with that. It doesn't, nor should it, care
         about what class exactly that is.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         If you're a functional programmer you might appreciate an analogy between the <Code>AdderController</Code> class
         and a function. The beautiful effect of pure FP is that everything is easily testable, as the only things
         that a function has access to are its parameters. It's perfectly isolated from everything else.
@@ -177,11 +175,10 @@ public class AdderController : ControllerBase
         to its constructor. And, as mentioned above, the thing that breaks this beauty on a fundamental
         level is anything static, as these are dependencies that we don't pass as arguments, they are
         arbitrarily hardwired in by the class itself.
-    </MudText>
-    <MudText GutterBottom="true">
-        And now testing is a simple excercise:
-    </MudText>
-    <CodeBlock FileName="Adder.Api.UnitTests/AdderControllerUnitTests.cs" LineNumbers="true" Code="@(@"
+    </Paragraph>
+    <Paragraph>
+        And now testing is a simple exercise:
+        <CodeBlock FileName="Adder.Api.UnitTests/AdderControllerUnitTests.cs" LineNumbers="true" Code="@(@"
 using Adder.Api.Controllers;
 using Adder.DataLayer;
 
@@ -219,73 +216,70 @@ public class AdderControllerUnitTests
         public Task SeedAsync() => Task.CompletedTask;
     }
 }
-    ")"/>
-    <MudText>
+    ")" />
         I don't know how you feel about it, but for me that's a little bit too much code. We'll talk about how to make
         our tests slicker later on.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Dependency Injection with a Inversion of Control Container</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Dependency Injection with a Inversion of Control Container</Header2>
+    <Paragraph>
         We have redefined the controller to take an abstract dependency as a parameter, but we still need to Inject the Dependency
         somehow. This is done with an Inversion of Control container, where IoC refers to the pattern we described above &ndash;
         it's the outside that control what implementation the controller uses, not the controller.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         The IoC container takes responsibility of resolving dependencies required by constructors and managing
         lifetimes of the instantiated services. When a service is requested, the IoC resolves the dependency graph
         by going through the constructors and finding registered implementations of required parameters.
         It then registers the instances internally to monitor their lifetime. In the standard ASP.NET Core
         IoC, also called by its namespace, <Code>Microsoft.Extensions.DependencyInjection</Code>, there are three
         lifetime types:
-    </MudText>
-    <MudList Dense="true">
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Transient &ndash; a new instance gets created every time the service is requested.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Scoped &ndash; an intance is created per scope. By and large it means one per
-            HTTP request, but one can create more granular scopes manually.
-        </MudListItem>
-        <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
-            Singleton &ndash; one instance gets created and reused throughout the application's
-            lifetime.
-        </MudListItem>
-    </MudList>
-    <MudText GutterBottom="true">
+        <MudList Dense="true">
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Transient &ndash; a new instance gets created every time the service is requested.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Scoped &ndash; an intance is created per scope. By and large it means one per
+                HTTP request, but one can create more granular scopes manually.
+            </MudListItem>
+            <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Singleton &ndash; one instance gets created and reused throughout the application's
+                lifetime.
+            </MudListItem>
+        </MudList>
+    </Paragraph>
+    <Paragraph>
         Singletons should be obviously avoided. Turning stateless objects into singletons can be a memory optimisation,
         but only after measuring that it actually makes a difference. Most services are best as transient. Some require
         keeping state throughout a single request &ndash; for example <Code>DbContext</Code>s. We want the entity tracking
         feature to work for the entire request across services to maintain consistency.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         We register the dependencies in <code>Program.cs</code>.
-    </MudText>
-    <CodeBlock FileName="Program.cs" Code="@(@"
+        <CodeBlock FileName="Program.cs" Code="@(@"
 builder.Services.AddScoped<AdderDbContext>();
 builder.Services.AddTransient<INumberRepository, NumberRepository>();
-    ")"/>
-    <MudText GutterBottom="true">
+    ")" />
         We add the <Code>DbContext</Code> as a concrete class with scoped lifetime. This is expected, since we really do need
         the concrete database to work on. The <Code>NumberRepository</Code> is registered as a transient implementation
         of <Code>INumberRepository</Code>. Now we can actually run the server and get our two-plus-three result from refactore
         code.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         And... that's it. Everything automagically works for us when we register the dependencies. This is the flow of work
         for designing new classes &ndash; take abstract dependencies in the constructor, register newly created services
         into the IoC, shabang, clean code.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
-    <MudText>
+    </Paragraph>
+    <Header2>Summary</Header2>
+    <Paragraph>
         We've braced together through my software engineering diatribe to find out how to solve
         tight coupling problems with Dependency Inversion and IoC containers.
-   </MudText>
+    </Paragraph>
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-6.0", "Dependency injection in ASP.NET Core"),
-        ("https://ardalis.com/new-is-glue/", "New is Glue"),
-        ("https://web.archive.org/web/20110714224327/http://www.objectmentor.com/resources/articles/dip.pdf", "The Dependency Inversion Principle (Uncle Bob)"),
-        ("https://martinfowler.com/bliki/InversionOfControl.html", "Inversion of Control (Martin Fowler)"),
-    })/>
+               ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-6.0", "Dependency injection in ASP.NET Core"),
+               ("https://ardalis.com/new-is-glue/", "New is Glue"),
+               ("https://web.archive.org/web/20110714224327/http://www.objectmentor.com/resources/articles/dip.pdf", "The Dependency Inversion Principle (Uncle Bob)"),
+               ("https://martinfowler.com/bliki/InversionOfControl.html", "Inversion of Control (Martin Fowler)"),
+               }) />
 </CourseSection>
 
 @code {

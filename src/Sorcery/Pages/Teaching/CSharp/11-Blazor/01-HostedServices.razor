@@ -7,19 +7,19 @@
 }
 
 <CourseSection Section="@course">
-    <MudText GutterBottom="true">
+    <Paragraph>
         Normally, an ASP.NET Core server simply handles requests. An HTTP request comes, all of the machinery processes it, gives a response,
         and then ends. However, sometimes we want servers to be able to perform long-running tasks not tied to a particular request.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         A Hosted Service is a piece of code that runs on the server independent of requests. It will continue running
         even if users stop issuing requests. Usual use case is to have a worker service that performs tasks taken from some asynchronous queue.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         All you need to do to implement a Hosted Service is to inherit from <Code>BackgroundService</Code> and then implement its <Code>ExecuteAsync</Code>
-        method. Channels that we covered in <MudLink Href="@channels.Route">@channels.DisplayName</MudLink> are an ideal asynchronous queue
+        method. Channels that we covered in <Link Href="@channels.Route">@channels.DisplayName</Link> are an ideal asynchronous queue
         to use with such services.
-    </MudText>
+    </Paragraph>
     <Resources Links=@(new [] {
                ("https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-6.0&tabs=visual-studio", "Background tasks with hosted services in ASP.NET Core")
     })/>

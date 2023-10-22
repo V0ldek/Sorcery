@@ -28,15 +28,15 @@
         and say "see, I improved performance by $67\%$".
     </MudText>
     <LatexRenderer ContainerId="measurement-importance"/>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">BenchmarkDotNet</MudText>
+    <Header2>BenchmarkDotNet</Header2>
     <MudText>
         C# is a managed language, which makes things both easier and harder. It's easier to profile our code
         because the runtime can support the tooling better than as if we were running compiled machine code.
         It's harder, because all the layers between the code and runtime, the JITter, etc. Doing that by
         hand and accounting for all the different factors is <em>hard</em>. Quoting from
-        <MudLink Href="https://github.com/dotnet/BenchmarkDotNet/tree/5e62756c126980ecde9e4779b3c320b3225381ee#automation=">
+        <Link Href="https://github.com/dotnet/BenchmarkDotNet/tree/5e62756c126980ecde9e4779b3c320b3225381ee#automation=">
         BenchmarkDotNet README
-        </MudLink>:
+        </Link>:
     </MudText>
     <Quote>
         Let's think about what should you do in a typical case.
@@ -99,7 +99,7 @@
         The .NET team itself uses it to measure performance gains in the BCL, in ASP.NET Core, etc. When you want to prove
         to someone that something is faster, the BenchmarkDotNet results table is the way.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Case Study</MudText>
+    <Header2>Case Study</Header2>
     <MudText id="problem-statement" GutterBottom="true">
         In the notebook repository you can find the <code>CaseStudy</code> directory with an example algorithm that we'll
         be playing around with and measure. The problem statement is simple: given a pattern $p$ and an input string $w$,
@@ -124,9 +124,9 @@
     <MudText id="benchmark-description">
         The <Code>Benches</Code> class contains the benchmarks. We use a file located in <code>/data/words.txt</code>, containing
         around $5$MB of English words, separated with newlines. As the pattern, we use "interrelationships" ($18$ characters), which 
-        <MudLink Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
+        <Link Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
             scores quite highly in terms of valid substrings contained within it
-        </MudLink>. We also use a special switch that determines the size of the result
+        </Link>. We also use a special switch that determines the size of the result
         by replacing parts of the input with garbage. There are four:
     </MudText>
     <LatexRenderer ContainerId="benchmark-description" />
@@ -166,7 +166,7 @@
         <Code>GlobalSetupAttribute</Code>. Any code that is not germane to the benchmarked logic but is required to setup
         the experiment should go here. In this case we read the input file and apply the <Code>RemoveMode</Code>.
     </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Running the benchmark</MudText>
+    <Header2>Running the benchmark</Header2>
     <MudText>
         To run the benchmark we need to compile our code in the Release configuration, which enables optimisations
         and disables debugging support &ndash; in Debug configuration the compiler inserts a lot of production-irrelevant
@@ -240,7 +240,7 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
     </MudText>
     <LatexRenderer ContainerId="result-statistics"/>
     <LatexRenderer ContainerId="p-values"/>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Testing Optimisations</MudText>
+    <Header2>Testing Optimisations</Header2>
     <MudText id="optimisation">
         Let's make an optimisation to our <Code>FromShortestSearch</Code> algorithm.
         We can make it skip over things more &ndash; if we match a short substring it makes
@@ -251,7 +251,7 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
         it is slightly faster for the $0.0$ case and it allocates much less memory for $0.75$.
     </MudText>
     <LatexRenderer ContainerId="optimisation"/>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Benchmarking Golden Rules</MudText>
+    <Header2>Benchmarking Golden Rules</Header2>
     <MudList Class="py-2">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Use vetted tools that deal with the benchmark infrastructure for you.
@@ -289,7 +289,7 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
             when optimising stuff for the fun of it or for science you're free to do whatever you want.
         </MudListItem>
     </MudList>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Summary</MudText>
+    <Header2>Summary</Header2>
     <MudText>
         Use BenchmarkDotNet for benchmarking. Enough said.
     </MudText>

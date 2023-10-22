@@ -2,53 +2,53 @@
 @inject CourseBook CourseBook;
 
 <CourseAssignment Assignment="@CourseBook.CSharpCourse["concurrency"].Assignment">
-    <MudText>
+    <Paragraph>
         Running through Dungeon simulations also takes too much time.
         An ingenious idea is being thrown around &ndash; maybe independent simulations could
         be done simultaneously? This would require training for the person responsible
         for the whiteboard with run results to multitask.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Overview</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Overview</Header2>
+    <Paragraph>
         We will be parallelising dungeon runs, so that many simulations can be performed
         quickly to find best possible results for our Heroes. This will require
         creating a ranking that can be safely accessed from multiple threads.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 0. &ndash; Concurrent Ranking</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header2>Task 0. &ndash; Concurrent Ranking</Header2>
+    <Paragraph>
         Implement the <Code>ConcurrentBestRunsCollection</Code> in <Code>DungeonWalker.Logic.Statistics</Code>.
         The collection must be thread-safe for all methods. You can achieve that however you like, but the
         recommendation is <Code>System.Collections.Immutable.ImmutableSet</Code>.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         In the spirit of "immutable is thread-safe", using an immutable collections will make many things easier.
         As a reminder, immutable collections return a reference to a new collection instance on modification instead
         of actually mutating the original. You will still need to <Code>lock</Code> the reference on writes.
         Pay attention to the ranking enumerator &ndash; makes sure that it actually enumerates over a stable snapshot
         of the collection!
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         The tricky part is <Code>Remove</Code>. You need to return a boolean specifying whether the element was removed.
         The immutable collection returns only a reference to a modified collection. Note, however, that if an element
         is <em>not</em> removed, then the reference returned is the same as the original. In other words,
         if <Code>x</Code> is not in <Code>collection</Code>, then <CodeBlock Code="object.ReferenceEquals(collection, collection.Remove(x))"/>.
-    </MudText>
+    </Paragraph>
     <MudAlert id="alert1" Class="my-4" Variant="Variant.Outlined">
         This is tested by the "ConcurrentStatistics" test group, worth <Highlight>1.5</Highlight> points.
     </MudAlert>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Task 1. &ndash; Game Engine</MudText>
-    <MudText GutterBottom="true">
+    <Header2>Task 1. &ndash; Game Engine</Header2>
+    <Paragraph>
         We should now utilise this thread-safe collection in the <Code>GameEngine</Code> located in
         <Code>DungeonWalker.Logic.Execution</Code>. The <Code>RunMultiple</Code> method heuristically checks
         whether multithreading would be beneficial &ndash; at least ten times as many items as CPU cores.
         The fallback version is a simple sequential loop.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Your entire task is to implement <Code>RunMany</Code> using the <Code>ConcurrentBestRunsCollection</Code>
         for collecting results and PLINQ for processing. Note that there are no correctness tests for this
         &ndash; you will need to manually run the Play endpoind through the Swagger API, or by using the
         <code>test_multiple_runs</code> script.
-    </MudText>
+    </Paragraph>
     <MudAlert id="alert1" Class="my-4" Variant="Variant.Outlined">
         The script successfully executing is worth <Highlight>0.5</Highlight> points, the output is not checked.
     </MudAlert>

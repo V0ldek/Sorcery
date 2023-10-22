@@ -10,8 +10,8 @@
         <Paragraph>
             Modern CPUs have special instructions for a more complex mode of execution,
             together with separate registers for those instructions only. These are cheat codes
-            that compilers and library developers use to get massive performance gains without
-            fundamentally changing the algorithm being executed.
+            that compilers and library developers use to get <Highlight>massive performance gains</Highlight>
+            without fundamentally changing the algorithm being executed.
         </Paragraph>
     };
 }
@@ -31,7 +31,7 @@
 
     <Paragraph GutterBottom="false">
         Enter the world of SIMD. This series will introduce the concept from first principles,
-        starting with simple concepts at a high-level and then gradually getting us closer to the metal.
+        starting with simple techniques at a high-level and then gradually getting us closer to the metal.
         Part 1 starts with good old C# code, without any magic tricks. All the code for this part can be found
         <Link Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">on my GitHub</Link>.
     </Paragraph>
@@ -512,22 +512,47 @@ ref int Foo()
 {
     int x = 0;
     return ref x;
+    //         ^
+    // error CS8168: Cannot return local 'x' by reference because it is not a ref local
 }
     ")" />
+                </Paragraph>
+                <Paragraph>
+                    Under the hood a <Code>{ReadOnly}Span&lt;T&gt;</Code> contains a <Code>ref</Code> to the first
+                    element, and the length of the entire span. As you might expect, a <Code>ref</Code> is simply a pointer,
+                    and we can therefore manipulate it using some special unsafe methods. For example, if we have a span we can get
+                    the underlying <Code>ref</Code>, and then offset it:
+                    <CodeBlock Code="@(@"
+var tab = new int[] { 1, 2, 3, 4 };
+ReadOnlySpan<int> span = tab;
+
+ref int elem0 = ref MemoryMarshal.GetReference(span);
+ref int elem1 = ref Unsafe.Add(ref elem0, 1);
+ref int elem3 = ref Unsafe.Add(ref elem0, 3);
+
+Console.WriteLine(elem0);
+Console.WriteLine(elem1);
+Console.WriteLine(elem3);
+    ")" />
+                    this prints <Code>1 2 4</Code>. <Footnote>
+                        See this in action in <Link Href="https://sharplab.io/#gist:32320654a81f15054834864986b82c69">SharpLab</Link>.
+                        </Footnote><Footnote>
+                        The <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal?view=net-7.0">
+                        <Code>MemoryMarshal</Code>
+                        </Link> class exists specifically to help translating between a <Code>{ReadOnly}Span</Code> and its contiguous slice memory representation.
+                        The <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.add?view=net-7.0#system-runtime-compilerservices-unsafe-add-1">
+                        <Code>Unsafe.Add</Code>
+                        </Link> function is unsafe because it does not bounds check the offset and therefore can violate memory safety. Note that <Code>GetReference</Code> is also "unsafe"
+                        in some sense, as it gives a <Code>ref</Code> into a potentially <Code>ReadOnlySpan</Code>, which allows mutating the contents. C# has barely any immutability guarantees!
+                    </Footnote>
                 </Paragraph>
             </section>
             <Header4>The Code</Header4>
             <section>
                 <Paragraph>
                     Okay, let's actually write and run that.
-                    First we will take our <Code>ReadOnlySpan</Code>s and ask a helper class
-                    <Footnote>
-                        <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal?view=net-7.0">
-                        <Code>MemoryMarshal</Code>
-                        </Link>,
-                        which exists specifically to help translating between a <Code>ReadOnlySpan</Code> and its contiguous slice memory representation.
-                    </Footnote>
-                    to give us a <Code>ref</Code> to the first byte, which can be loaded into a <Code>Vector128&lt;byte&gt;</Code>.
+                    First we will take our <Code>ReadOnlySpan</Code>s and get a <Code>ref</Code> to the first byte, which can be loaded into a <Code>Vector128&lt;byte&gt;</Code>.
+                    We could go full-on into unsafe mode and use raw pointers, but that requires pinning and just feels less csharpy.
                     We will use the <Code>cmpeq</Code> map and the <Code>movemask</Code> projection to get a bitmask where set bits signify elements
                     that are the same.
                     <Footnote>
@@ -599,8 +624,8 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
 }
 ")" />
                 <Paragraph>
-                    Whew. The reference handling is a bit scary with all the "unsafe", but the rest should be
-                    understandable with our walkthrough. You can play around with the code from
+                    Whew. The reference handling is a bit scary with all the "unsafe", but the rest should feel familiar.
+                    You can play around with the code from
                     <Link Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">my GitHub</Link>
                     or on this <Link Href="https://sharplab.io/#gist:03ef2822ab66d8c680703ea870526dec">SharpLab demo</Link>.
                     So, it's a bit harder to code in this paradigm, but are the performance gains
@@ -655,7 +680,7 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
                 </MudSimpleTable>
                 <Paragraph>
                     Changing nothing about the fundamental algorithm we made it <Highlight>$16\times$ faster</Highlight>
-                    just by switching to SIMD! And apart from a few relatively uncommon ref-offset operations that's
+                    just by switching to SIMD! And apart from a few relatively uncommon <Code>ref</Code>-offset operations that's
                     just plain C# code, the JIT does the heavy lifting for us.
                 </Paragraph>
                 <Paragraph>
@@ -664,7 +689,8 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
             </section>
         </section>
         <MudAlert Variant="Variant.Outlined" Class="mb-4">
-            We will discuss juicy details in the next part. To not miss it, subscribe to the <Link Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</Link>!
+            We will discuss juicy details in the next part. To not miss it, subscribe to the <Link Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</Link>,
+            or watch the Discussions in <Link Href="@GitHub.Sorcery">the GitHub repo</Link>!
         </MudAlert>
     </section>
 </BlogPost>

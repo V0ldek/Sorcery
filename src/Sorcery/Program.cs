@@ -1,4 +1,4 @@
-﻿// Licensed under MIT, copyright Mateusz Gienieczko, .
+﻿// Licensed under MIT, copyright Mateusz Gienieczko, all rights reserved.
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

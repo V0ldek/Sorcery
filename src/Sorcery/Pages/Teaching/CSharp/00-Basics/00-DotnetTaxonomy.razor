@@ -2,63 +2,62 @@
 @inject CourseBook CourseBook;
 
 <CourseSection Section="@CourseBook.CSharpCourse["basics"]["dotnet-taxonomy"]">
-    <MudText GutterBottom="true">
+    <Paragraph>
         Here we go! This introduction is going to be a little verbose. I will limit the prose in the following sections,
         but I feel like at the beginning a more wordy sales pitch is needed.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">C#</MudText>
-    <MudText GutterBottom="true">
-        
-    <MudBreakpointProvider>
-        <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
-                <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
-            </MudPaper>
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mr-3 mb-3 pa-3" Elevation="0">
-                <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
-            </MudPaper>
-        </MudHidden>
-    </MudBreakpointProvider>
+    </Paragraph>
+    <Header2>C#</Header2>
+    <Paragraph>
+        <MudBreakpointProvider>
+            <MudHidden Breakpoint="Breakpoint.Xs">
+                <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
+                    <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
+                </MudPaper>
+            </MudHidden>
+            <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mr-3 mb-3 pa-3" Elevation="0">
+                    <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
+                </MudPaper>
+            </MudHidden>
+        </MudBreakpointProvider>
         C# (current version 10, as of this writing) &ndash; language designed in 2000 by a team led by Anders Hejlsberg for Microsoft.
         He's the madlad that also came up with TypeScript, Delphi, and authored Turbo Pascal.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Wikipedia lists C#'s programming paradigms as:
-    </MudText>
+    </Paragraph>
     <Quote>
         structured, imperative, object-oriented, event-driven, task-driven, functional, generic, reflective, concurrent
     </Quote>
-    <MudText GutterBottom="true">
+    <Paragraph>
         ... which kinda makes you wonder about the usefulness of such a classification. I'm gonna sell you my take on C#.
         C#'s main paradigm is <Highlight><em>pragmatism</em></Highlight>.
         It is oriented towards safety and developer productivity and characterised by:
-    </MudText>
+    </Paragraph>
     <MudList Class="d-block my-4" DisablePadding="true">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">memory safety;</MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">type safety and static type analysis;</MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">flexibility &ndash; you get a box of ergonomic tools that allow you to solve your problem efficiently...</MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">... but designed so that you won't shoot yourself in the foot in the process.</MudListItem>
     </MudList>
-    <MudText GutterBottom="true">
+    <Paragraph>
         That is, until we decide we want to get rid of that with <Code>dynamic</Code> or <Code>unsafe</Code>, but that will be tackled
-        at the very end of the course <MudIcon Icon="fas fa-smile-wink"/>
-    </MudText>
-    <MudText GutterBottom="true">
+        at the very end of the course <MudIcon Icon="fas fa-smile-wink" />
+    </Paragraph>
+    <Paragraph>
         C# is most often compared to Java, which is due mostly to historical reasons, but also a similar approach to object orientation.
         However, ever since C# 2.0 was released in 2005, this comparison stopped being accurate, as the languages diverged in their evolution.
         We will be highlighting those similarities and differences throughout the course, but it is important to remember that C# generously
         borrows from a lot of different languages. It uses the cumulative knowledge we have in programming language design to improve
         developer's experience. The design principle of allowing the user to achieve anything and everything in a safe,
         productive, and easy manner will become apparent as we introduce more and more features.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         This is C#. Say hello!
-    </MudText>
+    </Paragraph>
     <CodeBlock Code=@(@"System.Console.WriteLine(""Hello, World!"");")></CodeBlock>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">.NET</MudText>
+    <Header2>.NET</Header2>
 
     <MudBreakpointProvider>
         <MudHidden Breakpoint="Breakpoint.Xs">
@@ -66,7 +65,7 @@
                 <MudCardMedia Height="230" Image="img/dotnet-bot.webp" Title="dotnet-bot, the .NET mascot">
                 </MudCardMedia>
                 <MudCardContent>
-            <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
+                    <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
                 </MudCardContent>
             </MudCard>
         </MudHidden>
@@ -80,12 +79,12 @@
             </MudCard>
         </MudHidden>
     </MudBreakpointProvider>
-           
-    <MudText GutterBottom="true">
+
+    <Paragraph>
         .NET is a free, cross-platform and open source ecosystem for developers to build modern applications. It's an umbrella term for a whole host of technologies,
         allowing you to build websites, servers, console apps, mobile apps targeting Android or iOS. The current version as of writing is .NET 6.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Most important part (for us at this moment) is the .NET runtime, or <Highlight>Common Language Runtime (CLR)</Highlight>.
         What's that?
 
@@ -100,58 +99,57 @@
         </Quote>
 
         Hey, would you look at that, that's also C#'s goal!
-     </MudText>
-      <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         C# is just one of the languages running on the CLR. The other notable one is Visual Basic,
         but the interesting one is F#. It is an ML-like functional language for .NET. You might find it
         familiar if you ever programmed in ML or OCaml.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         To host multiple languages, the CLR runs bytecode that's called, extremely creatively, <Highlight>Common Intermediate Code (CIL/IL)</Highlight>.
         This code is what a compiler for C# or F# generates. You will never have to look at IL unless you're digging in the compiler,
         trying to super-optimise something, or are just curious. And we're all curious, right? It looks like this:
-    </MudText>
+    </Paragraph>
     <CodeBlock Language="cil" Code=@(@"
-.class private auto ansi abstract sealed beforefieldinit '<Program>$'
-extends [System.Private.CoreLib]System.Object
-{
-.method private hidebysig static 
-    void '<Main>$' (
-        string[] args
-    ) cil managed 
-    {
-        .maxstack 8
-        .entrypoint
-
-        IL_0000: ldstr ""Hello, World!""
-        IL_0005: call void [System.Console]System.Console::WriteLine(string)
-        IL_000a: ret
-    }
-}
-    ")/>        
-    <MudText GutterBottom="true">
+               .class private auto ansi abstract sealed beforefieldinit '<Program>$'
+               extends [System.Private.CoreLib]System.Object
+               {
+               .method private hidebysig static
+               void '<Main>$' (
+               string[] args
+               ) cil managed
+               {
+               .maxstack 8
+               .entrypoint
+               IL_0000: ldstr ""Hello, World!""
+               IL_0005: call void [System.Console]System.Console::WriteLine(string)
+               IL_000a: ret
+               }
+               }
+               ") />
+    <Paragraph>
         That is what the compiler generates for the C# Hello World program from above.
         Well, more or less, I had to lie cause there's a lot of additional metadata in the actual output.
         By the way &ndash; I will often lie during the course to simplify things, but don't worry, I'll always tell you when it happens.
         I'm a terrible liar.
-    </MudText>
-    <MudText>
+    </Paragraph>
+    <Paragraph>
         Code running under control of the CLR is also called <Highlight>managed code</Highlight>. In general, the word
         <em>managed</em> in .NET world means "under control of the CLR", and <em>unmanaged</em> means everything else,
         so for example system code somewhere in the kernel that runs when we try to print to console is unmanaged.
-    </MudText>
-    <MudText GutterBottom="true">
-        There are other implementations of CLR than .NET. The notable ones are <Highlight>.NET Framework</Highlight> and the <Highlight>Mono</Highlight> runtime. 
+    </Paragraph>
+    <Paragraph>
+        There are other implementations of CLR than .NET. The notable ones are <Highlight>.NET Framework</Highlight> and the <Highlight>Mono</Highlight> runtime.
         .NET Framework is the old .NET that was specific to Windows and closed-source. It is no longer in development, only maintained. Before version 5,
         .NET was called .NET Core to distinguish it from .NET Framework. Ever since then, all of those projects are unified under the one .NET umbrella.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         For cross-compatibility it is important to note that the CLR has an accompanying standard, called <Highlight>.NET Standard</Highlight>.
         It defines the minimum runtime capabilities that all .NET implementations need to have, so if you use only .NET Standard your app is
         guaranteed to run on all .NET Framework, Mono and future .NET releases.
-    </MudText>
+    </Paragraph>
 
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Base Class Library (BCL)</MudText>
+    <Header2>Base Class Library (BCL)</Header2>
     <MudBreakpointProvider>
         <MudHidden Breakpoint="Breakpoint.Xs">
             <MudCard Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="5">
@@ -172,51 +170,51 @@ extends [System.Private.CoreLib]System.Object
             </MudCard>
         </MudHidden>
     </MudBreakpointProvider>
-    <MudText GutterBottom="true">
+    <Paragraph>
         The Base Class Library is similar to C++'s or Rust's <Code Language="rust">std</Code> library. It contains the most
         foundational types and utilities for all other .NET libraries. Things like arrays, base collections, <Code>DateTime</Code>,
         TCP and HTTP clients, and many more.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         The BCL is open source and imposes very high quality standards. As with all good standard libraries, it is highly unlikely that
         you can write custom code that outperforms an equivalent method in the BCL. The BCL is also a very good standard for designing
         good APIs, so we will be often using examples from the BCL when talking about idiomatic C# class design.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         BCL is specific to the particular .NET implementation, but most of it is part of .NET Standard. That means that every existing
         .NET implementation shares them, so if you ever need to work on .NET Framework or Mono the library will be the same when it
         comes to this core components.
         When talking about BCL we will be implicitly talking about <em>the</em> BCL, so its implementation for .NET 6.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">Roslyn</MudText>  
+    </Paragraph>
+    <Header2>Roslyn</Header2>
     <MudBreakpointProvider>
-        <MudHidden Breakpoint="Breakpoint.Xs">    
+        <MudHidden Breakpoint="Breakpoint.Xs">
             <MudPaper MaxHeight="200px" MaxWidth="300px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
                 <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true" Height="200" Width="300" />
-            </MudPaper>  
+            </MudPaper>
         </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">    
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
             <MudPaper MaxHeight="200px" MaxWidth="300px" Class="mr-3 mb-3 pa-3" Elevation="0">
                 <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true" Height="200" Width="300" />
             </MudPaper>
         </MudHidden>
     </MudBreakpointProvider>
-    <MudText GutterBottom="true">
+    <Paragraph>
         Roslyn is the main compiler platform for C# (and Visual Basic). It's open-source and ships with .NET by default.
         One of its core features is that it's not only a compiler, but also a platform that allows other code to interface
         with the compilation process, look at the syntax tree of the program, and receive and add diagnostics.
         This allows creating static analysers, called <Highlight>Roslyn analysers</Highlight>, which allows you to add your own
         errors, warnings, and quick-fixes for them. This allows integrating your libraries into the language more, as you can
         detect common mistakes and give users first-class diagnostic messages.
-    </MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Paragraph>
         Moreover, it also allows you to write an analyser that enforces rules that are specific for your project.
         In larger projects with many developers there are often implicit usage rules that everyone is expected to follow.
-        Maybe some method is not supposed to be used in some context, or some pattern makes no sense. 
+        Maybe some method is not supposed to be used in some context, or some pattern makes no sense.
         Normally there's a note about in the documentation, or the project wiki, or in a comment somewhere.
         With Roslyn, you can write an analyser that will automatically mark such cases as warnings.
-    </MudText>
-    <MudText Typo="Typo.h2" Class="mx-auto py-2">NuGet</MudText>  
+    </Paragraph>
+    <Header2>NuGet</Header2>
     <MudBreakpointProvider>
         <MudHidden Breakpoint="Breakpoint.Xs">
             <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: right;" Class="mr-3 mb-3 pa-3" Elevation="0">
@@ -229,33 +227,33 @@ extends [System.Private.CoreLib]System.Object
             </MudPaper>
         </MudHidden>
     </MudBreakpointProvider>
-    <MudText GutterBottom="true">
+    <Paragraph>
         NuGet is <em>the</em> package manager for .NET. It provides the central repository for all the
         packages in the .NET world. Anyone can push their own package there and share it with the community.
         There are also ways of creating private NuGet repositories, which is useful when you want to reuse
         code across your organisation without making it open-source.
-    </MudText>
-    <MudText GutterBottom="true">
-        .NET packages follow <MudLink Href="https://semver.org/">Semantic Versioning (SemVer)</MudLink>, which makes updates rather painless.
+    </Paragraph>
+    <Paragraph>
+        .NET packages follow <Link Href="https://semver.org/">Semantic Versioning (SemVer)</Link>, which makes updates rather painless.
         Of course, it's not really a statically enforcible standard, so some packages might violate that, but that's semver for you.
         Turning your library into a package is actually pretty easy and simply requires the developer to associate some metadata with the
         binaries that they create.
-    </MudText>
-    <MudText Typo="Typo.h3" Class="mx-auto py-2">Summary</MudText>
-    <MudText GutterBottom="true">
+    </Paragraph>
+    <Header3>Summary</Header3>
+    <Paragraph>
         .NET is an environment for developing modern applications in a number of languages targeting .NET.
         It provides memory safety, a unified type system and a robust standard library &ndash; the BCL.
         C# is compiled with Roslyn into bytecode called IL and then executed on the CLR. Package management
         and distribution is done with NuGet.
-    </MudText>
+    </Paragraph>
 
     <Resources Links=@(new [] {
-        ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
-        ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
-        ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
-        ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
-        ("https://www.nuget.org/", "NuGet Gallery"),
-    })/>
+               ("https://docs.microsoft.com/en-us/dotnet/core/introduction", "Introduction to .NET on docs.microsoft"),
+               ("https://github.com/dotnet/csharplang/", "dotnet/csharplang, the official repository for C# language design"),
+               ("https://github.com/dotnet/runtime", "dotnet/runtime, the official repository for the .NET runtime"),
+               ("https://github.com/dotnet/roslyn", "dotnet/roslyn, the official repository of the Roslyn compiler"),
+               ("https://www.nuget.org/", "NuGet Gallery"),
+               }) />
 </CourseSection>
 
 @code {
