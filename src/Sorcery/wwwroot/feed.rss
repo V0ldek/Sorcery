@@ -8,16 +8,32 @@
     <language>en-GB</language>
     <copyright>2022 - 2023 Mateusz Gienieczko</copyright>
     <managingEditor>mat@gienieczko.com</managingEditor>
-    <lastBuildDate>Sun, 26 Feb 2023 23:01:00 Z</lastBuildDate>
+    <lastBuildDate>Sun, 22 Oct 2023 21:50:06 +0100</lastBuildDate>
     <category>software</category>
     <category>programming</category>
     <category>computer science</category>
+    <image>
+      <url>https://v0ldek.com/img/icon.png</url>
+      <title>Sourcery</title>
+      <link>https://v0ldek.com/</link>
+    </image>
     <item>
       <guid
-        isPermaLink="true">https://v0ldek.com//sourcery/alphabet-does-not-go-a-to-z</guid>
-      <link>https://v0ldek.com//sourcery/alphabet-does-not-go-a-to-z</link>
-      <title>Alphabet does not go A to Z</title>
+        isPermaLink="true">https://v0ldek.com/sourcery/alphabet-does-not-go-a-to-z</guid>
+      <link>https://v0ldek.com/sourcery/alphabet-does-not-go-a-to-z</link>
+      <author>mat@gienieczko.com</author>
+      <title>Alphabet Does Not Go A to Z</title>
       <description>Checking if a character is a letter is harder than you think.</description>
+      <pubDate>Mon, 10 Jul 2023 14:00:00 Z</pubDate>
+    </item>
+    <item>
+      <guid
+        isPermaLink="true">https://v0ldek.com/sourcery/simd-cheat-codes-for-free-performance</guid>
+      <link>https://v0ldek.com/sourcery/simd-cheat-codes-for-free-performance</link>
+      <author>mat@gienieczko.com</author>
+      <title>SIMD &amp;ndash; Cheat Codes for Free Performance</title>
+      <description>Discovering the wonderful parallel universe of local parallelism.</description>
+      <pubDate>Sun, 22 Oct 2023 22:00:00 Z</pubDate>
     </item>
   </channel>
 </rss>

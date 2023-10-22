@@ -29,7 +29,7 @@ var posts = blogBook.Posts.OrderBy(p => p.DateOfPublication);
 
 feed.Items = posts.Select(p =>
 {
-    var uri = new Uri($"https://v0ldek.com/{p.Route}");
+    var uri = new Uri($"https://v0ldek.com{p.Route}");
     return new SyndicationItem(p.Title, p.ShortDescription, uri, uri.ToString(), p.DateOfPublication!.Value)
     {
         Authors = { v0ldek },

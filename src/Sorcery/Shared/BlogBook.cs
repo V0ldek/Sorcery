@@ -15,7 +15,7 @@ public sealed class BlogBook
     {
         _posts = new()
         {
-            new ("SIMD &ndash; Cheat Codes for Free Performance", "simd-cheat-codes-for-free-performance", new DateTime(2023, 09, 27, 11, 35, 00, DateTimeKind.Utc))
+            new ("SIMD &ndash; Cheat Codes for Free Performance", "simd-cheat-codes-for-free-performance", new DateTime(2023, 10, 22, 22, 00, 00, DateTimeKind.Utc))
             {
                 Tags = new Tag[]
                 {
