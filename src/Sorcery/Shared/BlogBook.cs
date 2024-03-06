@@ -15,6 +15,17 @@ public sealed class BlogBook
     {
         _posts = new()
         {
+            new ("Who Scatters Memory, Gathers Latency", "who-scatters-memory-gathers-latency", null)
+            {
+                Tags = new Tag[]
+                {
+                    new ("simd"),
+                    new ("perf"),
+                    new ("rust"),
+                },
+                Description = Pages.Sourcery.Posts.WhoScattersMemoryGathersLatency.Introduction,
+                ShortDescription = "Poking the vectorised gather/scatter black box.",
+            },
             new ("SIMD &ndash; Cheat Codes for Free Performance", "simd-cheat-codes-for-free-performance", new DateTime(2023, 10, 22, 22, 00, 00, DateTimeKind.Utc))
             {
                 Tags = new Tag[]
@@ -40,7 +51,9 @@ public sealed class BlogBook
         };
     }
 
-    public Post SimdCheatCodesForFreePerformance => _posts[0];
+    public Post WhoScattersMemoryGathersLatency => _posts[0];
 
-    public Post AlphabetDoesNotGoAToZ => _posts[1];
+    public Post SimdCheatCodesForFreePerformance => _posts[1];
+
+    public Post AlphabetDoesNotGoAToZ => _posts[2];
 }

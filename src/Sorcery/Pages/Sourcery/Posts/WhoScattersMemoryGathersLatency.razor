@@ -1,0 +1,53 @@
+﻿@page "/sourcery/who-scatters-memory-gathers-latency"
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Blogging;
+@using Sorcery.Shared.Components.Footnotes
+@inject BlogBook BlogBook;
+
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+            Accessing memory on a modern architecture is a complex rigmarole of cache lines,
+            cache levels, smoke and mirrors, aimed at avoiding actually doing anything with 
+            physical memory at all costs. Predicting the cost of a single memory access is a
+            "fun" guessing game, so considering a vectorised parallel access to multiple
+            addresses scattered across the allocated space must be vastly more entertaining.
+            Let us entertain ourselves.
+        </Paragraph>
+    };
+}
+
+<BlogPost Post="BlogBook.WhoScattersMemoryGathersLatency">
+    @Introduction
+
+    <Paragraph>
+        It is an old wisdom that computers only do exactly that what programmers tell them to do.
+        It is also completely false. The more you learn about low level architecture of a computer
+        the more you're lead to believe they're hell-bent on <em>avoiding</em> doing what they're told at all costs.
+        The compiler will gladly rewrite your code and reorder instructions, assuming (usually correctly) that it's smarter
+        than you; the CPU itself will reorder operations, speculatively execute code you explicitly told it not to, and &ndash;
+        most importantly for this article &ndash; avoid touching physical memory like it's lava.
+    </Paragraph>
+
+    <Paragraph>
+        The level of complexity that gets introduced between you typing the code and a computer executing the program is so vast that it's basically intractable
+        for a human mind to see the full picture of interactions. Computers might fundamentally be based on math, but the circuits we've created are so complex
+        that at this point the only reliable way to make predictions is by treating the CPU as a weird natural phenomenon and poking it with experimental science.
+        I wanted to understand the characteristics of SIMD memory instructions, specifically <Code>gather</Code> and <Code>scatter</Code>, but after pulling out
+        my hair for ages reading Intel's docs and confusing <Code>perf</Code> outputs I decided a rigorous lab approach is needed to make any sense of it.
+        And an accurate mental map of memory access characteristics is crucial for writing high-performance SIMD code.
+    </Paragraph>
+
+    <Paragraph>
+        So, join me as I embark on an attempt to disentangle a mess of our own creation with some good ol' science.
+        I might be too dumb to understand memory accesses, but fortunately you don't need smarts to follow the scientific method.
+    </Paragraph>
+
+    <Header2>The Test Subjects</Header2>
+    
+    <Paragraph>
+        This post will make no sense if you don't grok SIMD &ndash; in that case I invite you to the <Link Href="@BlogBook.SimdCheatCodesForFreePerformance.Route">SIMD series</Link>.
+         z
+    </Paragraph>
+</BlogPost>
