@@ -54,7 +54,7 @@ public interface IRoom
     <Header2>Task 0. &ndash; Combat</Header2>
     <Paragraph>
         Encounters happen in a <Code>CombatRoom</Code>. Each <Code>Character</Code> in the game has three basic statistics:
-        <MudList id="statistics-list">
+        <MudList T="string" id="statistics-list">
             <MudListItem Class="health" Icon="fas fa-heart">
                 <MudText Color="Color.Default">
                     <span class="health">Health</span> &ndash; when it falls to $0$ the character dies;
@@ -111,7 +111,7 @@ Enemy vanquished!
     ")" />
     <Paragraph>
         The possible final outcomes are:
-        <MudList Dense="true">
+        <MudList T="string" Dense="true">
             <MudListItem>
                 <MudText>"Enemy vanquished!" &ndash; when the Enemy dies and the Hero survives;</MudText>
             </MudListItem>
@@ -137,7 +137,7 @@ Enemy vanquished!
     <Paragraph>
         Existing Rooms are <Code>EmptyRoom</Code>, which does nothing, and the <Code>CombatRoom</Code>.
         Implement the new <Code>LootRoom</Code>, that contains one of the following possible Loot items for the Hero:
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="fas fa-flask">
                 <MudText><Code>HealthPotion</Code> that replenishes a percentage of the Hero's max <span class="health">health</span>.</MudText>
             </MudListItem>
@@ -212,13 +212,13 @@ The room is empty except for a large chest. And inside...
          that piles should be flattened:
      </Paragraph>
 
-     <MudList Dense="true" Class="my-2">
+     <MudList T="string" Dense="true" Class="my-2">
          <MudListItem>
              <MudIcon Size="Size.Small" Icon="fas fa-boxes-stacked mx-1 my-0" /> Pile of:
-             <MudList Dense="true">
+             <MudList T="string" Dense="true">
                  <MudListItem>
                      <MudIcon Size="Size.Small" Icon="fas fa-boxes-stacked mx-1 my-0" /> Pile of:
-                     <MudList Dense="true">
+                     <MudList T="string" Dense="true">
                          <MudListItem>
                              <MudIcon Size="Size.Small" Icon="fas fa-gem mx-1 my-0" /> Damage Crystal
                          </MudListItem>
@@ -259,7 +259,7 @@ The room is empty except for a large chest. And inside...
          Adventure is used for input-output tests and touches all elements of the solution.
          But they are all rather simple, in that they are just constant Rooms you could generate
          by hand. Create two more interesting ones, both parametrised by a number $n$:
-         <MudList id="dungeon-list">
+         <MudList T="string" id="dungeon-list">
              <MudListItem Icon="fas fa-hand-fist">
                  <Code>RipAndTear</Code> &ndash;
                  In the first Room there's a Skeleton Warrior. In the second there's
@@ -292,7 +292,7 @@ The room is empty except for a large chest. And inside...
          <Highlight>Tenacity</Highlight> statistics buff, different for each Hero.
          Fill out the <Code>DungeonWalker.Logic.Factories.HeroFactory</Code> static class to return correct
          instances for Heroes:
-         <MudList id="heroes-list">
+         <MudList T="string" id="heroes-list">
              <MudListItem Icon="fas fa-wind">
                  <MudText Color="Color.Default">
                      <Code>Rogue</Code> &ndash;
@@ -368,7 +368,7 @@ The room is empty except for a large chest. And inside...
          that's not what this is about. We want to make sure that we know
          how to write clean, idiomatic C# code that would pass serious code review
          in a professional setting.
-         <MudList>
+          <MudList T="string">
              <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                  Use the correct naming convention for a given member.
              </MudListItem>

@@ -1,0 +1,74 @@
+﻿@page "/sourcery/no-i-am-not-afraid-a-wizard-will-take-my-job"
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Shared.Components.Footnotes;
+@using Sorcery.Blogging;
+@inject BlogBook BlogBook;
+
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+            They say this new Wizard is great and will replace all programmers.
+            My days are numbered and I better seek a different career because soon I will be obsolete.
+            Maybe there are some issues with the Wizard and he's not quite as good yet, but it is only a matter of time.
+            We're in the Early Days™ they say.
+            It's 2025. It's 2022. It's 2014. It's 2006. It's the same old story every time and magic still doesn't exist.
+        </Paragraph>
+    };
+}
+
+<BlogPost Post="BlogBook.NoIAmNotAfraidAWizardWillTakeMyJob">
+    @Introduction
+    
+    <Paragraph>
+        I am not a person that likes labels, but there is one that I can't deny &ndash; I am a programmer.
+        As of this writing I'm 27 and I've been programming for 11 years, 8 in a "they pay me for this" kind of way 
+        <Footnote>
+            Most people call that <q>professional capacity</q> but if I was a professional at 18
+            then what meaning could that word possibly have.
+        </Footnote>.
+        Programming brings me joy. Since you're reading this, there's a chance you know what I'm talking about.
+        There's this feeling you get from writing a neat little program, running it, seeing it do what you wanted it to do.
+        From playing a simple game, but one you wrote yourself. From writing a simple script that will sometimes
+        replace a random word on a webpage with <q>ass</q> and installing it on your teacher's PC.
+        I guess you can call it <q>satisfaction</q>, but it feels like it lacks profundity. It lacks whimsy.
+        The actual feeling has a lot more <q>oompf</q> to it, a taste that words just don't quite do justice.
+        So I am a programmer and I will remain one,
+        no matter if I'm employed in industry, in academia, unemployed, or retired and playing with whatever new hardware
+        we'll have in 2065 if humanity will still be able to make hardware by then.
+    </Paragraph>
+    <Paragraph>
+        I am also extremely lucky: One, I have found something that I'm passionate about; two, it can be
+        converted into reasonable amounts of money; three, I had education access that allowed me to get good
+        at it. It's <em>a lot</em> of luck. Since high-school I was dead sure I was going to be programming for a living.
+        And the world's been trying to convince everyone and their mother that it's a doomed career path since forever.
+    </Paragraph>
+    
+    <Header2>End of Eldorado for IT</Header2>
+    <Paragraph>
+        When I was younger I was mostly exposed to Polish news and punditry. There is this one particular phrase
+        that will live rent-free in my head until the day I die &ndash; <q>End of eldorado for IT</q>. Now, El Dorado
+        is a non-existent city that Spanish colonists used to tell myths about, filled with gold and riches, and
+        only non-white people to guard it. In this context it's used as an allegory for untapped wealth that requires
+        little effort to access, essentially a gold rush. I don't know why Polish news love that particular word so much,
+        or why they spell it as <q>eldorado</q>.
+    </Paragraph>
+    <Paragraph>
+        The first article with that headline I read was published in 2014. Since then, a similar one appeared
+        <em>every&mdash;single&mdash;year.</em> Multiple times a year. It's a phrase so popular Polish Google autocompletes
+        it for you when you type in <q>End of e</q>. The message has always been the same &ndash; it's currently very
+        easy for young people to get a job in IT that pays well, but surely the end is just around the corner because
+        of X. That X will either be mysterious market forces, interest rates, sun spots, whatever you can imagine.
+        In 2014 it was, believe it or not, blockchain.
+    </Paragraph>
+    <Paragraph>
+        Ah yes, blockchain, 2014 was the year Ethereum was (ill)-conceived.
+        I can't find that damn article now since searching for anything on the Internet is pure pain nowadays, but its main
+        thrust was that there would be no more programmers doing normal stuff, everything would be blockchain-based; thus,
+        anyone getting an education that wasn't focusing on blockchain would be unhirable and would end up flipping patties
+        at McDonald's. Assuming these weren't moved on-chain as well, I guess. Now remember that we're talking about
+        articles written by such renowned knowers-of-technology like Forbes, so it's of course no surprise they had
+        absolutely zero idea what they were talking about.
+    </Paragraph>
+
+</BlogPost>

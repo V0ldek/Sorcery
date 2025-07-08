@@ -11,7 +11,7 @@
     <Paragraph>
         The application is a Blazor website with an ASP.NET Core backend server. The server is connected to an SQLite
         database, with Entity Framework serving as data layer infrastructure.
-        <MudList>
+         <MudList T="string">
             <MudListItem>
                 <Code>Elector.Client</Code> contains the Blazor app. You will not need to modify anything here,
                 but you can. There are no tests for the client.
@@ -83,7 +83,7 @@
     <LatexRenderer ContainerId="math3" />
     <Paragraph>
         The election now proceeds in rounds.
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="fas fa-1">
                 Take all remaining ballots and assign them to the first candidate in order of preference that has not yet been elected or eliminated.
                 If a ballot contains no such candidates, it is <em>exhausted</em> and <em>discarded</em>.
@@ -128,7 +128,7 @@
     <Paragraph>
         A user creates an election through the Elections screen by supplying a name, number of seats, and the number of voters.
         The election can be in one of five states:
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 NotStarted &ndash; just after creation.
             </MudListItem>

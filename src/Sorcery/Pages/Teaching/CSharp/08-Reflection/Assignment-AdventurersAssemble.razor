@@ -23,7 +23,7 @@
         All of the work needs to happen in <Code>DungeonWalker.DataLayer.Dynamic.HeroRepository</Code>.
         It should allow us to load a given type into the repository, or load all Hero types in a given assembly.
         To be appropriately loaded, a type needs to:
-        <MudList Class="my-2">
+        <MudList T="string" Class="my-2">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 be tagged with the <Code>HeroClassAttribute</Code>;
             </MudListItem>
@@ -64,7 +64,7 @@ dotnet publish ./dynamic/Outside.Heroes -o ./dynamic/bin
     <Header2>Task 1. &ndash; <Code>HeroRepository</Code></Header2>
     <Paragraph>
         Implement the missing functions:
-        <MudList Class="my-2">
+        <MudList T="string" Class="my-2">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 <Code>GetHeroAsync</Code>
             </MudListItem>
@@ -84,7 +84,7 @@ dotnet publish ./dynamic/Outside.Heroes -o ./dynamic/bin
     <Paragraph>
         Your solution should handle errors in two ways. First of all, the associated <Code>_logger</Code>
         instance has extension methods defined for all of the failure cases we defined:
-        <MudList Class="my-2">
+        <MudList T="string" Class="my-2">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 <Code>FailedToLoadHeroClassDueToNoAttribute</Code>
             </MudListItem>

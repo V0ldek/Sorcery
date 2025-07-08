@@ -1,0 +1,109 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="mud-nav-group">
+    <MudNavLink Href="@Href" Match=@NavLinkMatch.Prefix Icon="@Icon" IconColor="@IconColor">
+        <MudItem Style="max-width: 75%">@Title</MudItem>
+    </MudNavLink>
+    <MudCollapse Expanded="@Expanded" Class="mud-navgroup-collapse">
+        <MudNavMenu>
+            @ChildContent
+        </MudNavMenu>
+    </MudCollapse>
+    <NavLink></NavLink>
+</div>
+
+@code {
+    public bool IsActive { get; private set; }
+
+    /// <summary>
+    ///     Returns whether the group is currently expanded.
+    /// </summary>
+    [Parameter]
+    public bool Expanded { get; set; }
+
+    /// <summary>
+    ///     Icon to use, if set.
+    /// </summary>
+    [Parameter]
+    public string? Icon { get; set; }
+
+    /// <summary>
+    ///     The color of the icon. It supports the theme colors, default value uses the themes drawer color.
+    /// </summary>
+    [Parameter]
+    public Color IconColor { get; set; } = Color.Default;
+
+    /// <summary>
+    ///     Link to a URL when clicked.
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public string Href { get; set; } = null!;
+
+    /// <summary>
+    ///     Title displayed on the group.
+    /// </summary>
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public NavLinkMatch Match { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private Uri? _absoluteHref;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    protected override void OnParametersSet()
+    {
+        _absoluteHref = NavigationManager.ToAbsoluteUri(Href);
+        IsActive = Matches(NavigationManager.Uri);
+        Expanded = Expanded || IsActive;
+        base.OnParametersSet();
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        var newActive = Matches(NavigationManager.Uri);
+
+        if (newActive != IsActive)
+        {
+            IsActive = newActive;
+            Expanded = Expanded || IsActive;
+            StateHasChanged();
+        }
+    }
+
+    private bool Matches(string absoluteUri)
+    {
+        if (_absoluteHref is null)
+        {
+            return false;
+        }
+
+        var href = _absoluteHref.AbsoluteUri;
+
+        if (string.Equals(absoluteUri, href, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (absoluteUri.Length == href.Length + 1 && absoluteUri[^1] == '/')
+        {
+            return true;
+        }
+
+        if (Match == NavLinkMatch.Prefix && absoluteUri.StartsWith(href, StringComparison.OrdinalIgnoreCase))
+        {
+            return href.Length == 0 || href[^1] == '/' || absoluteUri[href.Length] == '/';
+        }
+
+        return false;
+    }
+}

@@ -1,7 +1,7 @@
 ﻿<MudText Typo="Typo.h2" Class="mx-auto py-6">Resources</MudText>
 
 <MudPaper Elevation="1">
-    <MudList Clickable="true">
+    <MudList T="string" ReadOnly ="false">
         @foreach (var (url, name) in Links)
         {
             <MudLink Href="@url" Target="_blank">

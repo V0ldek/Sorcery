@@ -40,6 +40,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discrepancy.UnitTests", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sorcery.Rss", "src\Sorcery.Rss\Sorcery.Rss.csproj", "{1C6B7DFC-4800-4776-A051-D6B316BEF909}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorcery.ServerSide", "src\Sorcery.ServerSide\Sorcery.ServerSide.csproj", "{BDF04E56-83AD-412A-98A3-F750FC1F17A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{1C6B7DFC-4800-4776-A051-D6B316BEF909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C6B7DFC-4800-4776-A051-D6B316BEF909}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C6B7DFC-4800-4776-A051-D6B316BEF909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDF04E56-83AD-412A-98A3-F750FC1F17A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDF04E56-83AD-412A-98A3-F750FC1F17A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDF04E56-83AD-412A-98A3-F750FC1F17A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDF04E56-83AD-412A-98A3-F750FC1F17A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

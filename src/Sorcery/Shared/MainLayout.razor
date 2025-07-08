@@ -35,7 +35,6 @@
 </MudLayout>
 
 @code {
-
     string _copyright = ComputeCopyright();
 
     bool _drawerOpen = true;
@@ -54,18 +53,18 @@
 
         theme.PaletteDark.TextPrimary = "#BEB9B0";
 
-        theme.Palette.AppbarBackground = Colors.DeepOrange.Darken4;
+        theme.PaletteLight.AppbarBackground = Colors.DeepOrange.Darken4;
 
         theme.PaletteDark.AppbarBackground = "#992B0A";
         theme.PaletteDark.Background = "#181A1B";
-        theme.PaletteDark.BackgroundGrey = "#191B1C";
+        theme.PaletteDark.BackgroundGray = "#191B1C";
         theme.PaletteDark.DrawerBackground = "#1A1C1D";
         theme.PaletteDark.Surface = "1B1D1E";
         theme.PaletteDark.TableStriped = new MudColor(Colors.Shades.White).SetAlpha(0.06).ToString(MudColorOutputFormats.RGBA);
 
-        theme.Palette.Primary = Colors.DeepOrange.Darken2;
-        theme.Palette.PrimaryDarken = Colors.DeepOrange.Darken3;
-        theme.Palette.PrimaryLighten = Colors.DeepOrange.Darken1;
+        theme.PaletteLight.Primary = Colors.DeepOrange.Darken2;
+        theme.PaletteLight.PrimaryDarken = Colors.DeepOrange.Darken3;
+        theme.PaletteLight.PrimaryLighten = Colors.DeepOrange.Darken1;
 
         theme.PaletteDark.Primary = "#E95C30";
         theme.PaletteDark.PrimaryDarken = "#D94C20";
@@ -85,8 +84,8 @@
 
         theme.Typography.H1.FontSize = "4rem";
         theme.Typography.H1.LetterSpacing = "-.00833em";
-        theme.Typography.H1.LineHeight = 1.2;
-
+        theme.Typography.H1.LineHeight = "1.2";
+        
         theme.Typography.Default.FontSize = theme.Typography.Body1.FontSize;
         theme.Typography.Default.FontWeight = theme.Typography.Body1.FontWeight;
         theme.Typography.Default.LetterSpacing = theme.Typography.Body1.LetterSpacing;
@@ -107,7 +106,7 @@
     {
         if (firstRender)
         {
-            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            _isDarkMode = await _mudThemeProvider.GetSystemDarkModeAsync();
             StateHasChanged();
         }
     }

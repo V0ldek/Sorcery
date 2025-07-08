@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+          content="Mat Gienieczko's personal page and blog.
+                   Hosting a free, interactive, deep dive course into the C# language and the .NET platform." />
+    <title>Sourcery</title>
+    <base href="/" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="Sorcery.ServerSide.styles.css" rel="stylesheet" />
+    <link href="css/bundled/bundle.min.css" rel="stylesheet" />
+    <ImportMap />
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+    <HeadOutlet />
+</head>
+
+<body>
+    <Routes />
+    <script src="_framework/blazor.web.js"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script src="scripts/lib/asciinema-player.min.js"></script>
+    <script src="scripts/bundled/bundle.min.js"></script>
+    <script src="scripts/lib/katex-auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            window.Prism.highlightAll();
+            console.log('fire')
+        });
+    </script>
+</body>
+
+</html>

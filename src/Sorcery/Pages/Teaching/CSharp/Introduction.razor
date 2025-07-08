@@ -12,7 +12,7 @@
         language is assumed, as well as basic knowledge of programming concepts such as threading,
         SQL databases and object-orientation. The desired effect at the end is for the student to:
 
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="@Icons.Material.Filled.Check">have written couple hundred of lines of working C#, gaining practical experience;</MudListItem>
             <MudListItem Icon="@Icons.Material.Filled.Check">have built a full .NET application for their portfolio;</MudListItem>
             <MudListItem Icon="@Icons.Material.Filled.Check">
@@ -32,7 +32,7 @@
 
     During the course we will cover:
 
-    <MudList>
+     <MudList T="string">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">C# basics and birds-eye view of the .NET ecosystem;</MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">the C# type system, reference types, value types;</MudListItem>
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">exception handling, error handling, null-safety;</MudListItem>
@@ -87,7 +87,7 @@
                 10 bonus points if you do something especially interesting. You can expect roughly 5 of those points be for the actual functionality, and 5 as
                 points for code quality. In total, you can get at most <Highlight>50</Highlight> points for the project.
             </Paragraph>
-            <MudList>
+             <MudList T="string">
                 <MudListItem Icon="@Icons.Material.Filled.Devices">
                     <MudText>
                         <strong>UI</strong> (<Highlight>10</Highlight>): this can be a GUI, but it can also be a command-line interface. 
@@ -173,7 +173,7 @@
                         <MudPaper Class="pa-4 mud-height-full">
                             <MudGrid Class="mud-height-full" Justify="Justify.Center">
                                 <MudItem Class="ma-auto m">
-                                    <MudChip Icon="@Icons.Material.Filled.Functions" Label="true" Color="Color.Primary" DisableRipple="true" Size="Size.Large">
+                                    <MudChip T="string" Icon="@Icons.Material.Filled.Functions" Label="true" Color="Color.Primary" Ripple="false" Size="Size.Large">
                                         <MudText Style="min-width: 30px" Align="Align.Center">@_calculatorState.Sum</MudText>
                                     </MudChip>
                                 </MudItem>
@@ -181,13 +181,13 @@
                                 @{
                                     var color = _calculatorState.MicroassignmentsPassed ? Color.Success : Color.Error;
                                     var text = _calculatorState.MicroassignmentsPassed ? "Passed!" : "Not passed.";
-                                    <MudChip Icon="@Icons.Material.Filled.Assignment" Label="true" Color="@color" DisableRipple="true" Size="Size.Large">
+                                    <MudChip T="string" Icon="@Icons.Material.Filled.Assignment" Label="true" Color="@color" Ripple="false" Size="Size.Large">
                                         <MudText Style="min-width: 90px" Align="Align.Center">@text</MudText>
                                     </MudChip>
                                 }
                                 </MudItem>
                                 <MudItem Class="ma-auto">
-                                    <MudChip Icon="@Icons.Material.Filled.Grade" Label="true" Style="@GradeStyle(_calculatorState.Grade)" DisableRipple="true" Size="Size.Large">
+                                    <MudChip T="string" Icon="@Icons.Material.Filled.Grade" Label="true" Style="@GradeStyle(_calculatorState.Grade)" Ripple="false" Size="Size.Large">
                                         <MudText Style="min-width: 30px" Align="Align.Center">@GradeToString(_calculatorState.Grade)</MudText>
                                     </MudChip>
                                 </MudItem>
@@ -283,13 +283,13 @@
     {
         var (background, color) = grade switch
         {
-            Grade.Two => (Colors.Red.Default, Colors.Grey.Lighten5),
-            Grade.Three => (Colors.Amber.Default, Colors.Grey.Darken4),
-            Grade.ThreeAndAHalf => (Colors.Yellow.Default, Colors.Grey.Darken4),
-            Grade.Four => (Colors.Lime.Default, Colors.Grey.Darken4),
-            Grade.FourAndAHalf => (Colors.LightGreen.Default, Colors.Grey.Lighten5),
-            Grade.Five => (Colors.Green.Default, Colors.Grey.Lighten5),
-            Grade.FiveFactorial => (Colors.Green.Darken4, Colors.Grey.Lighten5),
+            Grade.Two => (Colors.Red.Default, Colors.Gray.Lighten5),
+            Grade.Three => (Colors.Amber.Default, Colors.Gray.Darken4),
+            Grade.ThreeAndAHalf => (Colors.Yellow.Default, Colors.Gray.Darken4),
+            Grade.Four => (Colors.Lime.Default, Colors.Gray.Darken4),
+            Grade.FourAndAHalf => (Colors.LightGreen.Default, Colors.Gray.Lighten5),
+            Grade.Five => (Colors.Green.Default, Colors.Gray.Lighten5),
+            Grade.FiveFactorial => (Colors.Green.Darken4, Colors.Gray.Lighten5),
             _ => throw new ArgumentOutOfRangeException(nameof(grade))
         };
 

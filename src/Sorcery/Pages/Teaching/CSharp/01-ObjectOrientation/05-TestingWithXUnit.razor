@@ -9,7 +9,7 @@
     <Paragraph>
         We won't be using a notebook for this one, as we need an actual project to run the tests.
         In .NET there are three major test frameworks:
-        <MudList Dense="true">
+        <MudList T="string" Dense="true">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 <MudText>
                     MSUnit
@@ -40,7 +40,7 @@
     <Paragraph>
         C# also lends itself pretty well to <Highlight>Test Driven Development</Highlight>,
         which is a workflow where you repeatedly alternate between two modes:
-        <MudList Dense="true">
+        <MudList T="string" Dense="true">
             <MudListItem Icon="@Icons.Material.Filled.Science">
                 <MudText>
                     write new unit tests until they stop passing;
@@ -71,7 +71,7 @@
         <CodeBlock Language="bash" Code=@(@"dotnet new classlib -n Testing") />
         We're going to create a simple <Code>Modulo(int x, int m)</Code> method that works as follows:
     </Paragraph>
-    <MudList Dense="true" id="list-with-math">
+    <MudList T="string" Dense="true" id="list-with-math">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             <MudText>
                 if <Code>m</Code> or <Code>x</Code> is zero, returns zero;
@@ -244,7 +244,7 @@ public class CalculatorUnitTests
         We then write the test, following the <Highlight>Arrange-Act-Assert</Highlight> pattern,
         which is a useful template for writing tests that makes their logic clear to follow.
     </Paragraph>
-    <MudList Dense="true" id="list-with-math">
+    <MudList T="string" Dense="true" id="list-with-math">
         <MudListItem Icon="@Icons.Material.Filled.Build">
             <MudText>
                 <strong>Arrange</strong>: initialize all objects required for the test.

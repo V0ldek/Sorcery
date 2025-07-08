@@ -205,7 +205,7 @@ public interface IDungeonRepository
         The solution code is pretty short when written correctly, but requires care to get right.
         Remember all the things we talked about in this module, as well as defensive programming patterns.
         Remember that:
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 All I/O operations on the filesystem may fail.
                 The exceptions called by this must be wrapped in a <Code>FileSystemRepositoryException</Code>

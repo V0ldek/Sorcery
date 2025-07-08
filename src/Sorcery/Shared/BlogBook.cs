@@ -48,6 +48,17 @@ public sealed class BlogBook
                 Description = Pages.Sourcery.Posts.AlphabetDoesNotGoAToZ.Introduction,
                 ShortDescription = "Checking if a character is a letter is harder than you think.",
             },
+            new ("No, I Am Not Afraid A Wizard Will Take My Job", "no-i-am-not-afraid-a-wizard-will-take-my-job", new DateTime(2025, 06, 08, 14, 00, 00, DateTimeKind.Utc))
+            {
+                Tags = new Tag[]
+                {
+                    new ("meta"),
+                    new ("industry"),
+                    new ("programming"),
+                },
+                Description = Pages.Sourcery.Posts.NoIAmNotAfraidAWizardWillTakeMyJob.Introduction,
+                ShortDescription = "Magic still does not exist.",
+            }
         };
     }
 
@@ -56,4 +67,6 @@ public sealed class BlogBook
     public Post SimdCheatCodesForFreePerformance => _posts[1];
 
     public Post AlphabetDoesNotGoAToZ => _posts[2];
+    
+    public Post NoIAmNotAfraidAWizardWillTakeMyJob => _posts[3];
 }

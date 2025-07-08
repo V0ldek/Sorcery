@@ -23,7 +23,7 @@
         to maintain a low memory footprint, while the long lived objects
         are unlikely to be collected, so there's no need to look at them most of the time.
     </MudText>
-    <MudList Class="py-2">
+    <MudList T="string" Class="py-2">
         <MudListItem Icon="fas fa-0">
             <MudText>
                 A newly allocated object lands in Generation 0. This is the short-lived generation &ndash; in .NET mortality
@@ -103,7 +103,7 @@
         their intended usage in <Link Href="@finalizersSection.Route">@finalizersSection.DisplayName</Link>.
     </MudText>
     <Header2>Summary</Header2>
-    <MudList>
+     <MudList T="string">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             More allocations &ndash; more collections. Decreasing allocations can improve performance by
             reducing GC time.

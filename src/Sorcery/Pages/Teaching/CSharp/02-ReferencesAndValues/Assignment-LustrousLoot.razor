@@ -58,7 +58,7 @@ public struct Modifier
     <Paragraph>
         We'd like it to be more useful. Your first task is to implement relevant operators and methods:
 
-        <MudList Class="my-2">
+        <MudList T="string" Class="my-2">
             <MudListItem Icon="fas fa-plus">addition of two Modifiers that simply adds all individual modifier values;</MudListItem>
             <MudListItem Icon="fas fa-minus">dual to addition, subtraction of two Modifiers</MudListItem>
             <MudListItem Icon="fas fa-xmark">multiplication by a <Code>float</Code> scalar that multiplies all individual modifier values, rounding down;</MudListItem>
@@ -128,7 +128,7 @@ private void EnableTenacity()
         Now we rework the existing Loot system to split items between Consumables and Equipment.
         Not all Equipment is equal. There are five distinct types of items the Heroes may equip:
 
-        <MudList Class="my-2">
+        <MudList T="string" Class="my-2">
             <MudListItem Icon="fas fa-hand-fist"><strong>Melee Weapon</strong></MudListItem>
             <MudListItem Icon="fas fa-wand-sparkles"><strong>Ranged Weapon</strong></MudListItem>
             <MudListItem Icon="fas fa-vest"><strong>Armour</strong></MudListItem>
@@ -138,7 +138,7 @@ private void EnableTenacity()
         These types constrain who can equip them.
     </Paragraph>
 
-    <MudList>
+     <MudList T="string">
         <MudListItem Icon="fas fa-wind">
             <MudText Color="Color.Default">
                 <Code>Rogue</Code> &ndash;
@@ -175,7 +175,7 @@ private void EnableTenacity()
         Implement the new possible Equipment drops.
     </Paragraph>
 
-    <MudList id="equipment-list">
+    <MudList T="string" id="equipment-list">
         <MudListItem Icon="fas fa-vest">
             <MudText Color="Color.Default">
                 <Code>Chainmail</Code> &ndash;
@@ -256,7 +256,7 @@ The room is empty except for a large chest. And inside...
         to the Equipment's' Modifier.
     </Paragraph>
 
-    <MudList id="quality-levels-list">
+    <MudList T="string" id="quality-levels-list">
         <MudListItem Icon="@Icons.Material.Filled.StarOutline">
             <MudText Color="Color.Default">
                 <strong>Common</strong> &ndash; $\times 1$ multiplier

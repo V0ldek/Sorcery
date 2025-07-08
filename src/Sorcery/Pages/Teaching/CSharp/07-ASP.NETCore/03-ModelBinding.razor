@@ -45,7 +45,7 @@ public async Task<ActionResult<DungeonView>> GetDungeonAsync(int id)
     ")" />
     <Paragraph>
         A few things here:
-    <MudList>
+     <MudList T="string">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             The <Code>RouteAttribute</Code> specifies a parameter named <Code>id</Code>
             that gets mapped from the last part of the URL. So <code>/dungeon/dungeons/3</code> will map to this action with

@@ -75,7 +75,7 @@ curl https://localhost:20443/adder/sum
         method so tight to the <Code>NumberRepository</Code> <em>and</em> <Code>AdderDbContext</Code>
         so hard it won't ever go off. It's <em>terrible</em>
         for, like, infinitely many reasons.
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="@Icons.Material.Filled.Dangerous">
                 If <Code>NumberRepository</Code> ever needs a different way to be constructed,
                 for example we decide to add logging and make the constructor take a logger,
@@ -233,7 +233,7 @@ public class AdderControllerUnitTests
         It then registers the instances internally to monitor their lifetime. In the standard ASP.NET Core
         IoC, also called by its namespace, <Code>Microsoft.Extensions.DependencyInjection</Code>, there are three
         lifetime types:
-        <MudList Dense="true">
+        <MudList T="string" Dense="true">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 Transient &ndash; a new instance gets created every time the service is requested.
             </MudListItem>

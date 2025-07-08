@@ -1,0 +1,21 @@
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" id="svg10" sodipodi:docname="NuGet_Logo.cdr" viewBox="105.62 236.2 381.48 370.58">
+  <metadata id="metadata16">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs id="defs14"/>
+  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="640" inkscape:window-height="480" id="namedview12"/>
+  <g id="Layer1000">
+    <g id="Layer1001">
+      <g id="Layer1002">
+        <path d="m 386.4566,574.5875 c -35.062,0 -63.4893,-28.4301 -63.4893,-63.4955 0,-35.0493 28.4273,-63.4955 63.4893,-63.4955 35.0617,0 63.489,28.4462 63.489,63.4955 0,35.0654 -28.4273,63.4955 -63.489,63.4955 z M 259.8117,429.0559 c -21.9197,0 -39.6808,-17.7786 -39.6808,-39.6847 0,-21.9218 17.7611,-39.6848 39.6808,-39.6848 21.9195,0 39.6805,17.763 39.6805,39.6848 0,21.9061 -17.761,39.6847 -39.6805,39.6847 z M 389.266,305.1763 H 283.3027 c -53.9977,0 -97.8052,43.812 -97.8052,97.8307 v 105.9582 c 0,54.0345 43.8075,97.8145 97.8052,97.8145 H 389.266 c 54.0292,0 97.8049,-43.78 97.8049,-97.8145 V 403.007 c 0,-54.0187 -43.7757,-97.8307 -97.8049,-97.8307 z" style="fill: rgb(0, 72, 128); fill-rule: evenodd; --darkreader-inline-fill: #7fc9ff;" id="path2" data-darkreader-inline-fill=""/>
+        <g id="Layer1003"/>
+        <path d="m 169.1269,267.9537 c 0,17.5405 -14.2215,31.7477 -31.7447,31.7477 -17.5388,0 -31.7443,-14.2072 -31.7443,-31.7477 0,-17.5249 14.2055,-31.7478 31.7443,-31.7478 17.5232,0 31.7447,14.2229 31.7447,31.7478 z" style="fill: rgb(0, 72, 128); fill-rule: evenodd; --darkreader-inline-fill: #7fc9ff;" id="path5" data-darkreader-inline-fill=""/>
+      </g>
+    </g>
+  </g>
+</svg>

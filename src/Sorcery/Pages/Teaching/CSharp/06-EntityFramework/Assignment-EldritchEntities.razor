@@ -49,7 +49,7 @@ dotnet ef database update --project ./src/DungeonWalker.DataLayer.Sql
 dotnet tool install --global dotnet-ef
     ")" />
         The database is created as <code>DungeonWalker.db</code> in your local user folder.
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="fa-brands fa-windows">On Windows, it's in your user's <code>AppData\Local</code> directory.</MudListItem>
             <MudListItem Icon="fa-brands fa-linux">On Linux, it's in the <code>/home/{user}/.local/share</code> directory.</MudListItem>
             <MudListItem Icon="fa-brands fa-apple">On OSX, it's in the <code>/Users/{user}/.local/share</code> directory.</MudListItem>
@@ -179,7 +179,7 @@ COMMIT;
     </Paragraph>
     <Paragraph>
         Hints and warnings:
-        <MudList>
+         <MudList T="string">
             <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
                 Remember that the save semantics are "overwrite if exists". For a database that means that you need to
                 first remove a graph with the given name, if it exists.

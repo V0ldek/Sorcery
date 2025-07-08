@@ -10,7 +10,7 @@
         When dealing with performance there are three golden rules that we need to follow to make sure
         we reach our goals. These are:
     </MudText>
-    <MudList Class="py-2">
+    <MudList T="string" Class="py-2">
         <MudListItem Icon="@Icons.Material.Filled.CandlestickChart">
             Measure,
         </MudListItem>
@@ -130,7 +130,7 @@
         by replacing parts of the input with garbage. There are four:
     </MudText>
     <LatexRenderer ContainerId="benchmark-description" />
-    <MudList id="remove-modes" Class="py-2">
+    <MudList T="string" id="remove-modes" Class="py-2">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             $1.0$ &ndash; search through unchanged input, which contains the word "interrelationships";
         </MudListItem>
@@ -252,7 +252,7 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
     </MudText>
     <LatexRenderer ContainerId="optimisation"/>
     <Header2>Benchmarking Golden Rules</Header2>
-    <MudList Class="py-2">
+    <MudList T="string" Class="py-2">
         <MudListItem Icon="@Icons.Material.Filled.ChevronRight">
             Use vetted tools that deal with the benchmark infrastructure for you.
         </MudListItem>
