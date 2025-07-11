@@ -4,8 +4,8 @@
 
 @font-face {
     font-family: "Terminal Nerd Font";
-    src: url("css/fonts/MesloLGS-NF-Regular.woff2") format("woff2"),
-         url("css/fonts/MesloLGS-NF-Regular.woff") format("woff");
+    src: url("/css/fonts/MesloLGS-NF-Regular.woff2") format("woff2"),
+         url("/css/fonts/MesloLGS-NF-Regular.woff") format("woff");
 }
 
 .asciinema-terminal {
@@ -142,4 +142,32 @@ div.code-toolbar > .toolbar {
     transform: scale(0.875);
     filter: brightness(0.75);
   }
+}
+
+.h3-fa-icon {
+    font-size: 2.25rem;
+    height: 2.25rem;
+    width: 2.25rem;
+    margin-right: 1rem;
+}
+
+.h3-mat-icon {
+    font-size: 2.25rem;
+    height: 2.25rem;
+    width: 2.25rem;
+    margin-right: 1rem;
+    vertical-align: bottom;
+    margin-bottom: 8pt;
+}
+
+.blog-post-card {
+    position: relative;
+}
+
+.blog-post-card-link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

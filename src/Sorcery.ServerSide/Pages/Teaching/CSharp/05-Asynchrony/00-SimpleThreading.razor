@@ -1,0 +1,30 @@
+﻿@page "/teaching/csharp/5-asynchrony/0-simple-threading"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["asynchrony"]["simple-threading"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            The low-level <Code>Thread</Code> API basics.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            The <Code>lock</Code> statement.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.threading.thread?view=net-6.0#remarks=", "Thread class remarks"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/statements/lock", "Lock statement"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

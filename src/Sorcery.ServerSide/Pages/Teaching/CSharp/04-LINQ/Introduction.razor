@@ -1,0 +1,26 @@
+﻿@page "/teaching/csharp/4-linq"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["linq"]">
+    <MudText GutterBottom="true">
+        The goal of this module is to introduce a C# staple &ndash; Language Integrated Query, LINQ for short.
+        It will give us ergonomic tools for declaratively processing any and all data sources.
+        This time we need to go through a variety of features, most of which were actually introduced specifically
+        to make LINQ work: extension methods, anonymous types, and lambda expressions. In this module we will learn:
+    </MudText>
+        
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">generic variance;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">iterators (a.k.a. generators);</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">extension methods;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">ad-hoc data with anonymous types;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">first-class strongly typed functions &ndash; delegates;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">lambda expressions;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">LINQ queries;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">local methods.</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

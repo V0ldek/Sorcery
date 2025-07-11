@@ -1,0 +1,71 @@
+﻿@page "/teaching/csharp/1-object-orientation/0-classes"
+@inject CourseBook CourseBook;
+
+@{
+    var section = CourseBook.CSharpCourse["object-orientation"]["classes"];
+}
+
+<CourseSection Section="@(section)">
+    <Paragraph>
+        Continuing with <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>
+        go through the next notebook, <Highlight>@($"{section.Module.Id}-{section.Module.RouteName}/{section.Id}-{section.RouteName}.dib")</Highlight>, in VS Code.
+        </Paragraph>
+        <Header2>In this section we'll cover</Header2>
+
+        <OList>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Access modifiers.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Classes.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Fields and <Code>readonly</Code>.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Methods.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Properties.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Constructors.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Initialisers.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Target typed <Code>new</Code>.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Overloading methods.
+                </MudText>
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <MudText>
+                    Static members.
+                </MudText>
+            </ListItem>
+        </OList>
+    </CourseSection>
+
+    @code {
+
+}

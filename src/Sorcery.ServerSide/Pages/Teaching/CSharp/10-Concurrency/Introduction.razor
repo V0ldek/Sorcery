@@ -1,0 +1,29 @@
+﻿@page "/teaching/csharp/10-concurrency"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["concurrency"]">
+    <MudText GutterBottom="true">
+        Multithreading is a very important concept in modern architectures, where
+        single-core performance is often very limited and basically all CPUs come with at least four cores.
+        Writing correct multithreading code is complicated and requires synchronisation,
+        which is particualarly difficult for collections of objects. Fortunately .NET gives us many high-level tools
+        that make it very simple to get it right.
+    </MudText>
+    <MudText>
+        In this module we will learn:
+    </MudText>
+
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">how to use low-level synchronisation primitives;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            what thread-safe collections are available out-of-the-box;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">synchronous producer-consumer model;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">PLINQ;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">asynchronous producer-consumer model with channels.</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+    
+}

@@ -1,0 +1,46 @@
+﻿<li class="mud-list-item mud-list-item-gutters @(Dense ? "mud-list-item-dense" : "") @(Clickable ? "mud-list-item-clickable mud-ripple" : "")">
+    @if (!string.IsNullOrWhiteSpace(Icon))
+    {
+        <div class="mud-list-item-icon">
+            <MudIcon Icon="@Icon"
+                     Disabled="true"
+                     Color="@IconColor"
+                     Size="@IconSize"/>
+            @if (!string.IsNullOrWhiteSpace(IconText))
+            {
+                <MudText Typo="Typo.button" Class="px-4">@IconText</MudText>
+            }
+        </div>   
+    }
+    <div class="mud-list-item-text" @attributes="@Attributes">
+        <MudText Typo="@Typo">
+            @ChildContent
+        </MudText>
+    </div>
+</li>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    [Parameter]
+    public string? Icon { get; set; }
+    
+    [Parameter]
+    public Color IconColor { get; set; } = Color.Inherit;
+    
+    [Parameter]
+    public Size IconSize { get; set; } = Size.Medium;
+    
+    [Parameter]
+    public string? IconText { get; set; }
+    
+    [Parameter]
+    public bool Clickable { get; set; }
+
+    [CascadingParameter] protected bool Dense { get; set; }
+    private Typo Typo => Dense ? Typo.body2 : Typo.body1;
+    
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+}

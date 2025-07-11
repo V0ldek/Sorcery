@@ -10,6 +10,11 @@
     <title>Sourcery</title>
     <base href="/" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link id="mud-dark-stylesheet-link" class="sorcery-disabled-on-light"
+          href="css/bundled/mud-dark.min.css" rel="stylesheet" disabled />
+    <link id="mud-light-stylesheet-link" class="sorcery-disabled-on-dark"
+          href="css/bundled/mud-light.min.css" rel="stylesheet" disabled />
+    <script src="scripts/bundled/theming-choose-stylesheet.min.js"></script>
     <link href="Sorcery.ServerSide.styles.css" rel="stylesheet" />
     <link href="css/bundled/bundle.min.css" rel="stylesheet" />
     <ImportMap />
@@ -21,15 +26,8 @@
     <Routes />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-    <script src="scripts/lib/asciinema-player.min.js"></script>
     <script src="scripts/bundled/bundle.min.js"></script>
-    <script src="scripts/lib/katex-auto-render.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", (event) => {
-            window.Prism.highlightAll();
-            console.log('fire')
-        });
-    </script>
+    <script src="scripts/lib/asciinema-player.min.js"></script>
 </body>
 
 </html>

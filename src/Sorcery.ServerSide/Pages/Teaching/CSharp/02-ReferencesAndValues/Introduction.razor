@@ -1,0 +1,24 @@
+﻿@page "/teaching/csharp/2-references-and-values"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["references-and-values"]">
+    <Paragraph>
+        We carry on to more advanced features specific to C# and the .NET type system. In this module we will learn:
+    </Paragraph>
+        
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">how CLR manages memory, basics of Garbage Collection;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">the difference between reference types and value types;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>switch</Code></ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">default values;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">operator overloading;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">exceptions for defensive programming;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">nullability, Nullable Reference Types;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">casting, <Code>is</Code>, <Code>as</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">passing by reference.</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

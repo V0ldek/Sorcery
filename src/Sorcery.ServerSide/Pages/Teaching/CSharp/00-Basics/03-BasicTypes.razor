@@ -1,0 +1,66 @@
+﻿@page "/teaching/csharp/0-basics/3-basic-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["basics"]["basic-types"];
+}
+
+<CourseSection Section="@course">
+    <Paragraph>
+        Download <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link> 
+        and go through the first notebook, <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>, in VS Code.
+    </Paragraph>
+    <Header2>In this section we'll cover</Header2>
+        
+    <OList> 
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Basic built-in types.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Variable declarations and type inference.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Constant locals.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Numeric literals.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Implicit and explicit numeric conversions.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Operators.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Strings and string literals.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                String formatting.
+            </MudText>
+        </ListItem>
+    </OList>
+
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types", "List of built-in types on docs.microsoft"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/", "C# reference - operators"),
+    }) />
+</CourseSection>
+
+@code {
+
+}

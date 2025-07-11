@@ -10,6 +10,9 @@ public sealed class BlogBook
 
     public IEnumerable<Post> Posts =>
         _posts.Where(p => p.DateOfPublication is not null).OrderByDescending(p => p.DateOfPublication!.Value);
+    
+    public IEnumerable<Tag> AllTags =>
+        _posts.SelectMany(p => p.Tags).Distinct();
 
     public BlogBook()
     {
@@ -23,7 +26,7 @@ public sealed class BlogBook
                     new ("perf"),
                     new ("rust"),
                 },
-                Description = null,//Pages.Sourcery.Posts.WhoScattersMemoryGathersLatency.Introduction,
+                Description = Pages.Sourcery.Posts.WhoScattersMemoryGathersLatency.Introduction,
                 ShortDescription = "Poking the vectorised gather/scatter black box.",
             },
             new ("SIMD &ndash; Cheat Codes for Free Performance", "simd-cheat-codes-for-free-performance", new DateTime(2023, 10, 22, 22, 00, 00, DateTimeKind.Utc))
@@ -34,7 +37,7 @@ public sealed class BlogBook
                     new ("csharp"),
                     new ("perf"),
                 },
-                Description = null,//Pages.Sourcery.Posts.SimdCheatCodesForFreePerformance.Introduction,
+                Description = Pages.Sourcery.Posts.SimdCheatCodesForFreePerformance.Introduction,
                 ShortDescription = "Discovering the wonderful parallel universe of local parallelism.",
             },
             new ("Alphabet Does Not Go A to Z", "alphabet-does-not-go-a-to-z", new DateTime(2023, 07, 10, 14, 00, 00, DateTimeKind.Utc))
@@ -45,10 +48,10 @@ public sealed class BlogBook
                     new ("i18n"),
                     new ("regex"),
                 },
-                Description = null,//Pages.Sourcery.Posts.AlphabetDoesNotGoAToZ.Introduction,
+                Description = Pages.Sourcery.Posts.AlphabetDoesNotGoAToZ.Introduction,
                 ShortDescription = "Checking if a character is a letter is harder than you think.",
             },
-            new ("No, I Am Not Afraid A Wizard Will Take My Job", "no-i-am-not-afraid-a-wizard-will-take-my-job", new DateTime(2025, 06, 08, 14, 00, 00, DateTimeKind.Utc))
+            new ("No, I Am Not Afraid A Wizard Will Take My Job", "no-i-am-not-afraid-a-wizard-will-take-my-job", null)
             {
                 Tags = new Tag[]
                 {
@@ -56,7 +59,7 @@ public sealed class BlogBook
                     new ("industry"),
                     new ("programming"),
                 },
-                Description = null,//Pages.Sourcery.Posts.NoIAmNotAfraidAWizardWillTakeMyJob.Introduction,
+                Description = Pages.Sourcery.Posts.NoIAmNotAfraidAWizardWillTakeMyJob.Introduction,
                 ShortDescription = "Magic still does not exist.",
             }
         };

@@ -5,6 +5,6 @@ using AspNetStatic;
 namespace Sorcery.ServerSide.AspNetStatic;
 
 [Serializable]
-internal class TextResource(string route) : BinResource(route)
+internal sealed class TextResource(string route) : BinResource(route)
 {
 }

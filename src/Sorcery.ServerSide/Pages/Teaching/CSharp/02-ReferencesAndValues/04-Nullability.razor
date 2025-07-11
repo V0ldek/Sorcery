@@ -1,0 +1,56 @@
+﻿@page "/teaching/csharp/2-references-and-values/4-nullability"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["references-and-values"]["nullability"];
+}
+
+<CourseSection Section="@course">
+    <Paragraph>
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </Paragraph>
+        <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                The Billion-Dollar Mistake.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Nullable Reference Types.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Null-coalescing operators.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Nullable Value Types &ndash; <Code>Nullable&lt;T&gt;</Code>.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Lifted operators.
+            </MudText>
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://devblogs.microsoft.com/dotnet/nullable-reference-types-in-csharp/", "Introducing Nullable Reference Types in C# (Mads Torgersen)"),
+        ("https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/", "The Billion Dollar Mistake (sir Tony Hoare, QCon)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references", "Nullable Reference Types on docs.microsoft"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/nullable-warnings", "Nullable Wranings on docs.microsoft"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/member-access-operators#null-conditional-operators--and-", "Null-conditional operators (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-coalescing-operator",
+        "?? and ?= operators (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types",
+        "Nullable Value Types (C# reference)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

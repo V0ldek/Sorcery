@@ -1,20 +1,20 @@
 ﻿<CascadingValue Value="@this">
     @ChildContent
 </CascadingValue>
-    
+
 @if (Footnotes.Any())
 {
     <MudDivider Class="mt-2 mb-6" DividerType="DividerType.FullWidth" Vertical="false" />
-    <MudList T="string" Dense="true">
+    <OList Dense="true">
         @foreach (var footnote in Footnotes)
         {
-            <MudListItem class="footnote" id="@footnote.TargetId">
+            <ListItem class="footnote" id="@footnote.TargetId">
                 <span class="mud-typography-caption">
                     <Intralink Id="@footnote.Id">[@footnote.Number]</Intralink>. @footnote.ChildContent
                 </span>
-            </MudListItem>
+            </ListItem>
         }
-    </MudList>
+    </OList>
 }
 
 @code {

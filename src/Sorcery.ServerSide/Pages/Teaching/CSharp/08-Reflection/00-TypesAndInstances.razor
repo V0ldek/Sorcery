@@ -1,0 +1,43 @@
+﻿@page "/teaching/csharp/8-reflection/0-types-and-instances"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["reflection"]["types-and-instances"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>typeof</Code> and <Code>GetType</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            The <Code>Type</Code> class.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Working with generic types with reflection.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Instantiating objects with <Code>Activator</Code>.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/reflection", "Reflection (C# Programming Guide)"),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/how-to-examine-and-instantiate-generic-types-with-reflection",
+            "Examine and Instantiate Generic Types with Reflection"
+        ),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/security-considerations-for-reflection",
+            "Security Considerations for Reflection"
+        )
+    })/>
+</CourseSection>
+
+@code {
+
+}

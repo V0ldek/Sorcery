@@ -1,0 +1,33 @@
+﻿@page "/teaching/csharp/6-entity-framework/0-expression-trees"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["entity-framework"]["expression-trees"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Lambdas into expression trees.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Expression trees into lambdas.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            The <Code>IQueryable&lt;T&gt;</Code> interface.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/expression-trees", "Expression Trees"),
+        ("https://tyrrrz.me/blog/expression-trees/", "Working with Expression Trees in C# (Oleksii Holub) (reflection and dynamic vs Expressions)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

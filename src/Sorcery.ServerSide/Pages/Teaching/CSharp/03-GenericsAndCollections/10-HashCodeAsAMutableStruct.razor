@@ -1,0 +1,29 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/10-hashcode-as-a-mutable-struct"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["hashcode-as-a-mutable-struct"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            How to create more complex hash codes.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>HashCode</Code> being an example of a mutable struct.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.hashcode?view=net-6.0", "HashCode documentation"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

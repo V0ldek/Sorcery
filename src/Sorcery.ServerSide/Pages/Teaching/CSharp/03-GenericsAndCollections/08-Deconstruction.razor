@@ -1,0 +1,38 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/8-deconstruction"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["deconstruction"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Deconstructing tuples.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Deconstructing <Code>KeyValuePair&lt;TKey, TValue&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Code patterns using deconstruction.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Implementing deconstruction for custom types.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Discarding irrelevant values.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/deconstruct", "Deconstructing tuples and other types"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

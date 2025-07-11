@@ -4,7 +4,7 @@ using AspNetStatic;
 
 namespace Sorcery.ServerSide.AspNetStatic;
 
-internal class SorceryStaticResourcesInfoProvider : StaticResourcesInfoProvider
+internal sealed class SorceryStaticResourcesInfoProvider : StaticResourcesInfoProvider
 {
     public SorceryStaticResourcesInfoProvider Add(TextResource textResource)
     {

@@ -16,6 +16,30 @@
     }
   },
   {
+    "outputFileName": "wwwroot/css/bundled/mud-dark.min.css",
+    "inputFiles": [
+      "wwwroot/css/mud-dark.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "hacks",
+      "gzip": true,
+      "adjustRelativePaths": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/bundled/mud-light.min.css",
+    "inputFiles": [
+      "wwwroot/css/mud-light.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "hacks",
+      "gzip": true,
+      "adjustRelativePaths": true
+    }
+  },
+  {
     "outputFileName": "wwwroot/css/bundled/giscus.min.css",
     "inputFiles": [
       "wwwroot/css/lib/giscus.css"
@@ -42,12 +66,27 @@
   {
     "outputFileName": "wwwroot/scripts/bundled/bundle.min.js",
     "inputFiles": [
-      "wwwroot/scripts/lib/*.js",
-      "!wwwroot/scripts/lib/asciinema-player.min.js",
-      "!wwwroot/scripts/lib/katex-auto-render.js"
+      "wwwroot/scripts/lib/prism.js",
+      "wwwroot/scripts/lib/prism-autoloader.js",
+      "wwwroot/scripts/lib/katex.js",
+      "wwwroot/scripts/lib/katex-auto-render.min.js",
+      "wwwroot/scripts/app/*.js",
+      "!wwwroot/scripts/app/theming-choose-stylesheet.js",
+      "!wwwroot/scripts/lib/asciinema-player.min.js"
     ],
     "minify": {
-      "enabled": true,
+      "enabled": false,
+      "gzip": true,
+      "preserveImportantComments": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/scripts/bundled/theming-choose-stylesheet.min.js",
+    "inputFiles": [
+      "wwwroot/scripts/app/theming-choose-stylesheet.js"
+    ],
+    "minify": {
+      "enabled": false,
       "gzip": true,
       "preserveImportantComments": false
     }

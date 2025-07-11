@@ -1,0 +1,29 @@
+﻿@page "/teaching/csharp/6-entity-framework/3-inheritance"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["entity-framework"]["inheritance"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Table-per-Hierarchy model.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Table-per-Type model.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/ef/core/modeling/inheritance", "Inheritance (EF Docs)"),
+     })/>
+</CourseSection>
+
+@code {
+
+}

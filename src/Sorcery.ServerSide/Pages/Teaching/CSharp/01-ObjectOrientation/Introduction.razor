@@ -1,0 +1,22 @@
+﻿@page "/teaching/csharp/1-object-orientation"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["object-orientation"]">
+    <Paragraph>
+        We continue C# basics by introducing object orientation in the form of classes and interfaces.
+        In this module we will learn:
+    </Paragraph>
+
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">classes, methods, fields, properties;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">abstract classes, interfaces, inheritance;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">static classes, attributes;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">operating on strings;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">testing with xUnit;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">how to use GitHub Classroom and submit your first microassignment.</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

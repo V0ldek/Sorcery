@@ -1,0 +1,70 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/5-collections"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["collections"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Generic collections in the BCL.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>IEnumerable&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>ICollection&lt;T&gt;</Code>, <Code>IList&lt;T&gt;</Code>, <Code>IDictionary&lt;TKey, TValue&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Read-only views.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>List&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>HashSet&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>SortedSet&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>Queue&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>Stack&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>SortedList&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>LinkedList&lt;T&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>PriorityQueue&lt;TElement, TPriority&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>Dictionary&lt;TKey, TValue&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>SortedDictionary&lt;TKey, TValue&gt;</Code>.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Immutable collections.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/guidelines-for-collections", "Collection Design Guidelines"),
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic?view=net-6.0", "System.Collections.Generic"),
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable?view=net-6.0", "System.Collections.Immutable"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

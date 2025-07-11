@@ -1,0 +1,17 @@
+﻿@inject IJSRuntime JSRuntime
+<div class="my-4 render-asciinema-player" data-cols="@Cols" data-rows="@Rows" data-cast="asciicast/@(CastName).cast">
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string CastName { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public int Cols { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public int Rows { get; set; }
+}

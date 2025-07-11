@@ -1,0 +1,129 @@
+﻿@page "/teaching/csharp/0-basics/1-configuring-your-environment"
+@inject CourseBook CourseBook;
+
+<CourseSection Section="@CourseBook.CSharpCourse["basics"]["configuring-your-environment"]">
+    <Paragraph>
+        Before we start playing with C# we need to first get all the required components. The guide will assume you're using
+        either Windows or Linux. As for MacOS, I don't own one, so I wouldn't be able to test it. Use the resources at the bottom
+        if you're struggling.
+    </Paragraph>
+    <MudAlert Severity="Severity.Info" Class="my-4" Variant="Variant.Outlined">
+        Note: this course uses .NET 6. While .NET is backwards-compatible for the most part, keep that in mind
+        if a newer version is already out. It is guaranteed to be <em>incompatible</em> with .NET 5 and .NET Core.
+    </MudAlert>
+    <MudAlert Severity="Severity.Warning" Class="my-4" Variant="Variant.Outlined">
+        As of this writing the .NET Interactive extension requires .NET 5 installed.
+        You still need .NET 6 for the code, but the interactive runtime itself needs 5.
+        This amounts to downloading the other binary or running <Code Language="bash">apt install dotnet-sdk-5.0</Code>.
+    </MudAlert>
+    <Header2>.NET, i.e. <Code Language="bash">dotnet</Code></Header2>
+    <Paragraph>
+        The <Link Href="https://dotnet.microsoft.com/en-us/download">.NET installation instructions</Link> are detailed and
+        guaranteed to be up-to-date, so I won't copy most of it.
+    </Paragraph>
+    <Header3>Windows</Header3>
+    <Paragraph>
+        Go to <Link Href="https://dotnet.microsoft.com/en-us/download">https://dotnet.microsoft.com/en-us/download</Link> and download the .NET SDK for your platform.
+        If you don't have your shell environment configured on Windows, I recommend grabbing <Link Href="https://docs.microsoft.com/en-us/windows/terminal/install">Windows Terminal</Link>.
+        It will make your life much easier. If I ever show commandline in the tutorial, it will be from Linux via WSL2, but only because Asciinema only works there.
+        However, all <Code Language="bash">dotnet</Code> commands work the same on both platforms.
+    </Paragraph>
+    <Header3>Linux</Header3>
+    <Paragraph>
+        Navigate to <Link Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux">https://docs.microsoft.com/en-gb/dotnet/core/install/linux</Link> for
+        installation instructions on Linux. If you're using Ubuntu, Debian or something else that manages their dependencies through <Code Language="bash">apt-get</Code> then follow
+        me below. If not you're on your own, but you're using Linux, so you should be used to that.
+    </Paragraph>
+    <Paragraph>
+        We just need to cast a simple spell and we're golden:
+        <CodeBlock Language="bash" Code=@(@"            
+wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+
+sudo apt-get update; \
+sudo apt-get install -y apt-transport-https && \
+sudo apt-get update && \
+sudo apt-get install -y dotnet-sdk-6.0")/>
+        
+        Here's the output of that on a clean Ubuntu:
+
+        <Asciinema CastName="configuring-your-environment-install"/>
+            
+        <MudAlert Severity="Severity.Warning" Class="my-4" Variant="Variant.Outlined">
+            Be aware that installing <Code Language="bash">dotnet</Code> with <Code Language="bash">snap</Code> is known to be weird
+            and/or fail. If you have issues, there is always the <Link Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux#manual-installation">manual installation</Link>
+            path, without a package manager. The best way to do that is the <Link Href="https://docs.microsoft.com/en-gb/dotnet/core/install/linux-scripted-manual#scripted-install">dotnet-install.sh</Link>
+            script.
+        </MudAlert>
+    </Paragraph>
+    <Header3>Verifying</Header3>
+    <Paragraph>
+        To verify that <Code Language="bash">dotnet</Code> is correctly installed, run <Code Language="bash">dotnet --info</Code>. It should look
+        something like this:
+
+        <Asciinema CastName="configuring-your-environment-verify"/>
+    </Paragraph>
+    <Paragraph>Visual Studio Code</Paragraph>
+    <Paragraph>
+        We will be using VS Code for interactive notebooks and GitHub Classroom integration. 
+        If you already have Code configured, check the extension list to make sure you have them all.
+    </Paragraph>      
+    <Paragraph>
+        To install Code, you go to <Link Href="https://code.visualstudio.com/Download">https://code.visualstudio.com/Download</Link>
+        and select your platform. Once it's installed you should be able to run it from your shell using <Code Language="bash">code &lang;dir&rang;</Code> to open it in the specified
+        directory.
+    </Paragraph>       
+    <Paragraph>
+        Here are the extensions that we need to install in Code:
+        <UList>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                C# (<Link Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp">Marketplace</Link>)
+                &ndash; IDE for C# .NET development
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                .NET Interactive Notebooks (<Link Href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode">Marketplace</Link>)
+                &ndash; to use interactive notebooks in Code.
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                NuGet Gallery (<Link Href="https://marketplace.visualstudio.com/items?itemName=patcx.vscode-nuget-gallery">Marketplace</Link>)
+                &ndash; for browsing and installing C# libraries.
+            </ListItem>
+        </UList>
+    </Paragraph>       
+    <Paragraph>
+        There are also a few very helpful extensions that you might want to install if you haven't already:
+        <UList>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Error Lens (<Link Href="https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens">Marketplace</Link>)
+                &ndash; shows diagnostics (warnings, errors, etc.) inline in your code. Very useful in notebooks where we show intentionally wrong
+                code, so that you know at a glance what the error is.
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Test Explorer UI (<Link Href="https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer">Marketplace</Link>)
+                and .NET Core Test Explorer (<Link Href="https://marketplace.visualstudio.com/items?itemName=formulahendry.dotnet-test-explorer">Marketplace</Link>)
+                &ndash; view and run .NET tests from the VS Code UI.
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                Code Spell Checker (<Link Href="https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker">Marketplace</Link>)
+                &ndash; so that your final project doesn't contain those emberesing speling miskates. <!-- These are obviously intentional -->
+            </ListItem>
+        </UList>
+        There's one more step left for configuring C# &ndash; go to the C#'s extension settings, search for
+        <Highlight>Semantic Highlighting</Highlight>, and turn it on. Without it, syntax highlighting can get borked
+        with some of the new language features.
+    </Paragraph>
+    <Paragraph>Summary</Paragraph>
+    <Paragraph>
+        Everything's set up, let's write and run some code!
+    </Paragraph>
+
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-gb/dotnet/core/install", ".NET installation guide (multiplatform)"),
+        ("https://marketplace.visualstudio.com", "VS Code Extension marketplace"),
+    }) />
+</CourseSection>
+
+@code {
+
+}

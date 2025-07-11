@@ -1,0 +1,51 @@
+﻿@page "/teaching/csharp/9-performance/3-ref-structs"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["performance"]["ref-structs"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            slices &ndash; <Code>Span&lt;T&gt;</Code> and <Code>Memory&lt;T&gt;</Code>;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>ref</Code> structs and their rules;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            using <Code>Span&lt;T&gt;</Code> overloads;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            custom <Code>ref</Code> structs;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>ref</Code> locals and <Code>ref</Code> returns;
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/struct#ref-struct", "Ref structs"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/ref-returns", "Ref returns and ref locals"),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/write-safe-efficient-code#use-ref-struct-types",
+            "Write safe and efficient C# code – Use ref struct types"
+        ),        
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/write-safe-efficient-code#use-ref-readonly-return-statements",
+            "Write safe and efficient C# code – Use ref readonly return statements"
+        ),
+        (
+            "https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay",
+            "All About Span: Exploring a New .NET Mainstay"
+        ),
+    })/>
+</CourseSection>
+
+@code {
+
+}

@@ -11,6 +11,8 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
                     ^[\s]*@page[\s]+"([^"]+)"
                     """)]
     private static partial Regex PageDirectiveRegex();
+
+    private static BlogBook BlogBook => new BlogBook();
     
     /// <summary>
     /// Find all Blazor pages and add them to the static resources.
@@ -25,6 +27,7 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
         ArgumentNullException.ThrowIfNull(provider);
         ArgumentNullException.ThrowIfNull(environment);
         const string RazorExtension = ".razor";
+        const string TagParameter = "{tagString}";
         var pageDirectiveRegex = PageDirectiveRegex();
         
         // Pages are located in Pages/.
@@ -35,14 +38,24 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
             pagesFolderPath,
             $"*{RazorExtension}",
             SearchOption.AllDirectories);
-        var razorPageRoutes = 
+        var razorPageRoutes =
             from razorPage in razorPageFiles
             let fileContents = File.ReadAllText(razorPage)
             let match = pageDirectiveRegex.Match(fileContents)
             where match.Success
             select match.Groups[1].Value;
 
-        provider.Add(razorPageRoutes.Select(route => new PageResource(route)));
+        // Tags are special because they're parameterised. We need to get all tags and manually fill in the parameter.
+        var withTagsReplaced =
+            from route in razorPageRoutes
+            let isTagParameterized = route.Contains(TagParameter)
+            let result = isTagParameterized
+                ? from tag in BlogBook.AllTags select route.Replace(TagParameter, tag.Value)
+                : [route]
+            from x in result
+            select x;
+        
+        provider.Add(withTagsReplaced.Select(route => new PageResource(route)));
 
         return provider;
     }
@@ -88,6 +101,7 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
             .Add(new JsResource("/_content/MudBlazor/MudBlazor.min.js"))
             .Add(new JsResource("/scripts/lib/asciinema-player.min.js"))
             .Add(new JsResource("/scripts/bundled/bundle.min.js"))
+            .Add(new JsResource("/scripts/bundled/theming-choose-stylesheet.min.js"))
             .Add(new JsResource("/scripts/lib/katex-auto-render.min.js"));
         return provider;
     }
@@ -98,7 +112,9 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
     {
         provider.Add(new CssResource("/_content/MudBlazor/MudBlazor.min.css"))
             .Add(new CssResource("/Sorcery.ServerSide.styles.css"))
-            .Add(new CssResource("/css/bundled/bundle.min.css"));
+            .Add(new CssResource("/css/bundled/bundle.min.css"))
+            .Add(new CssResource("/css/bundled/mud-light.min.css"))
+            .Add(new CssResource("/css/bundled/mud-dark.min.css"));
         return provider;
     }
 

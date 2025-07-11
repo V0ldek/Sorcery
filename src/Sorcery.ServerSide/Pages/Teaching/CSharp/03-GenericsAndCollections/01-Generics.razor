@@ -1,0 +1,54 @@
+﻿@page "/teaching/csharp/3-generics-and-collections/1-generics"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["generics-and-collections"]["generics"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Motivation behind generics.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Generic types and methods.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                How the compiler treats generics.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Generic constraints.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Inheriting from generic types.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Nullability with generics.
+            </MudText>
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics", "Generics on docs.microsoft"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references#generics", "NRTs and generics on docs.microsoft"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

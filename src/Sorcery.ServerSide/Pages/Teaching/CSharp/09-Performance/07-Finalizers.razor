@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/9-performance/7-finalizers"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["performance"]["finalizers"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            why we should not use finalizers;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            how to not use finalizers;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            how to not use finalizers even when you need a finalizer with <Code>SafeHandle</Code>;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            just don't.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://ericlippert.com/2015/05/18/when-everything-you-know-is-wrong-part-one/", "When Everything You Know Is Wrong I (Eric Lippert)"),
+        ("https://ericlippert.com/2015/05/21/when-everything-you-know-is-wrong-part-two/", "When Everything You Know Is Wrong II (Eric Lippert)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

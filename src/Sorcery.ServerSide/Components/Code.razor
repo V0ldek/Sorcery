@@ -1,4 +1,5 @@
-﻿<code class="@_class">@ChildContent</code>
+﻿<code class="language-@Language dark sorcery-hidden-on-light">@ChildContent</code>
+<code class="language-@Language light sorcery-hidden-on-dark" hidden>@ChildContent</code>
 
 @code {
     /// <summary>
@@ -9,13 +10,4 @@
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
-
-    /*[CascadingParameter]
-    protected ThemeInfo? ThemeInfo { get; set; }*/
-
-    private string _class = "";
-
-    protected override void OnParametersSet() =>
-        //_class = $"language-{Language} {(ThemeInfo?.IsDarkMode is true ? "dark" : "light")}";
-        _class = $"language-{Language} dark";
 }

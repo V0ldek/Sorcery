@@ -1,0 +1,20 @@
+﻿@page "/teaching/csharp/0-basics"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["basics"]">
+    <Paragraph>
+        We introduce the basics of programming in C# using interactive notebooks. In this module we will learn:
+    </Paragraph>
+        
+    <OList  Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">what is C#, .NET, and all those others acronyms;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">how to configure your environment;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">how to write a C# program;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">basic built-in types, variables, control-flow, scoping rules;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">arrays, indexing, ranges and the <Code>foreach</Code> statement;</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

@@ -1,0 +1,44 @@
+﻿@page "/teaching/csharp/1-object-orientation/3-strings"
+@inject CourseBook CourseBook;
+
+@{
+    var section = CourseBook.CSharpCourse["object-orientation"]["strings"];
+}
+
+<CourseSection Section="@(section)">
+    <Paragraph>
+        Continuing with <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>
+        go through the next notebook, <Highlight>@($"{section.Module.Id}-{section.Module.RouteName}/{section.Id}-{section.RouteName}.dib")</Highlight>, in VS Code.
+    </Paragraph>
+        <Header2>In this section we'll cover</Header2>
+    <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Basic string operations.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                String comparison.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                String indexer.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                <Code>StringBuilder</Code>.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                <Code>nameof</Code>
+            </MudText>
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/api/system.text.stringbuilder?view=net-6.0", "StringBuilder documentation")
+    })/>
+</CourseSection>

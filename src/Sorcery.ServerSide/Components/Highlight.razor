@@ -1,0 +1,10 @@
+﻿<MudText Color="Color.Primary" Inline="true" Typo="@Typo">@ChildContent</MudText>
+
+@code {
+    [Parameter]
+    public Typo Typo { get; set; } = Typo.inherit;
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; } = null!;
+}

@@ -1,0 +1,37 @@
+﻿@page "/teaching/csharp/9-performance/4-the-in-modifier"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["performance"]["the-in-modifier"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            passing by immutable reference with <Code>in</Code>;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            when to use to avoid performance penalties.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/in-parameter-modifier", "in parameter modifier (C# Reference)"),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/csharp/write-safe-efficient-code#use-the-in-parameter-modifier",
+            "Write safe and efficient C# code – Use the in parameter modifier"
+        ),
+        (
+            "https://devblogs.microsoft.com/premier-developer/the-in-modifier-and-the-readonly-structs-in-c/",
+            "The ‘in’-modifier and the readonly structs in C# (Sergey Tepliakov)"
+        ),
+    })/>
+</CourseSection>
+
+@code {
+
+}

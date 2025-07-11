@@ -1,0 +1,37 @@
+﻿@page "/teaching/csharp/4-linq/3-anonymous-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["anonymous-types"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Creating anonymous types.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Anonymous types under the hood.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Nondestructive mutation via the <Code>with</Code> expression.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Anonymous types vs. tuples.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types", "Anonymous Types"),
+        ("https://docs.microsoft.com/en-us/dotnet/standard/base-types/choosing-between-anonymous-and-tuple", "Choosing between anonymous and tuple types"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/with-expression", "with expression (C# reference)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}

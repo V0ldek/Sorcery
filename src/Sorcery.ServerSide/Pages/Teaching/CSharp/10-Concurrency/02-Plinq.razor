@@ -1,0 +1,36 @@
+﻿@page "/teaching/csharp/10-concurrency/2-plinq"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["concurrency"]["plinq"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Parallel LINQ;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            partitioners;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            parallel loops.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/introduction-to-plinq", "Introduction to PLINQ"),
+        (
+            "https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/custom-partitioners-for-plinq-and-tpl",
+            "Custom Partitioners for PLINQ"
+        ),
+    })/>
+</CourseSection>
+
+@code {
+
+}

@@ -1,0 +1,31 @@
+﻿@page "/teaching/csharp/3-generics-and-collections"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["generics-and-collections"]">
+    <MudText GutterBottom="true">
+        We introduce more advanced types in .NET in form of generics.
+        The overall goal is to introduce the basic BCL collections and how they work.
+        To do that we also need to talk about equality. We also introduce tuples and
+        deconstruction. In this module we will learn:
+    </MudText>
+        
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">defining indexers;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">generic types and methods;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">how nullability interacts with generics;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">referential and structural equality;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">custom equality;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>GetHashCode</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>IEquatable&lt;T&gt;</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>IComparable&lt;T&gt;</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">basic collections in the BCL;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">comparer types <Code>IEqualityComparer&lt;T&gt;</Code> and <Code>IComparer&lt;T&gt;</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">tuples;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">deconstruction;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">nested types.</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

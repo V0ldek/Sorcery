@@ -19,18 +19,4 @@
     <ProjectReference Include="..\Sorcery.Blogging\Sorcery.Blogging.csproj" />
     <ProjectReference Include="..\Sorcery.ModularCourse\Sorcery.ModularCourse.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\css\bundled\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="Components\Blogging\BlogPost.razor" />
-    <AdditionalFiles Include="Components\Blogging\BlogPostCard.razor" />
-    <AdditionalFiles Include="Components\Blogging\BlogPostTags.razor" />
-    <AdditionalFiles Include="Components\Footnotes\Footnote.razor" />
-    <AdditionalFiles Include="Components\Footnotes\FootnoteContainer.razor" />
-    <AdditionalFiles Include="Pages\Error.razor" />
-    <AdditionalFiles Include="Pages\Home.razor" />
-  </ItemGroup>
 </Project>

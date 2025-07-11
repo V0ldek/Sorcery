@@ -1,0 +1,51 @@
+﻿@page "/teaching/csharp/2-references-and-values/1-reference-types-and-value-types"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["references-and-values"]["reference-types-and-value-types"];
+}
+
+<CourseSection Section="@CourseBook.CSharpCourse["references-and-values"]["reference-types-and-value-types"]">
+    <Paragraph>
+        We're going back to <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>.
+        Go through <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </Paragraph>
+        <Header2>In this section we'll cover</Header2>
+    <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                The difference between reference types and value types.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Declaring custom value types &ndash; <Code>enum</Code> and <Code>struct</Code>.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Default values.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Value types and memory management.
+            </MudText>
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <MudText>
+                Boxing.
+            </MudText>
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-types",
+            "Value types (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/enum", "Enumeration types (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/struct", "Structure types (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/default", "default value expressions (C# reference)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing", "Boxing and Unboxing (C# Programming Guide)"),
+        ("https://ericlippert.com/2009/04/27/the-stack-is-an-implementation-detail-part-one/", "The Stack Is An Implementation Detail, Part One (Eric Lippert)"),
+        ("https://ericlippert.com/2009/05/04/the-stack-is-an-implementation-detail-part-two/", "The Stack Is An Implementation Detail, Part Two (Eric Lippert)")
+    })/>
+</CourseSection>

@@ -1,0 +1,16 @@
+﻿<ul class="mud-list" @attributes="@Attributes">
+    <CascadingValue Value="@Dense" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</ul>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    [Parameter]
+    public bool Dense { get; set; } 
+    
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+}

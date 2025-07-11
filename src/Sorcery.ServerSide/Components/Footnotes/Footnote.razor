@@ -1,4 +1,4 @@
-﻿<span id="@Id" style="margin-left: -4px" class="footnote" tabindex="0">
+﻿<span id="@Id" class="footnote" tabindex="0">
     <sup><Intralink Id="@TargetId"><MudText Typo="Typo.caption">[@Number]</MudText></Intralink></sup>
 </span>
 
@@ -9,25 +9,23 @@
 
     public int Number { get; set; }
 
+    private FootnoteContainer? _footnoteContainer;
+
     [CascadingParameter]
-    protected FootnoteContainer? FootnoteContainer { get; set; }
+    protected FootnoteContainer? FootnoteContainer
+    {
+        get => _footnoteContainer;
+        set
+        {
+            if (!ReferenceEquals(_footnoteContainer, value))
+            {
+                _footnoteContainer = value;
+                _footnoteContainer?.AddFootnote(this);
+            }
+        }
+    }
 
     [Parameter]
     [EditorRequired]
     public RenderFragment ChildContent { get; set; } = null!;
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            if (FootnoteContainer is null)
-            {
-                throw new InvalidOperationException("Footnote without an associated footnote container.");    
-            }
-
-            FootnoteContainer.AddFootnote(this);
-        }
-    }
 }

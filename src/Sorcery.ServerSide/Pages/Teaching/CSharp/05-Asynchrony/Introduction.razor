@@ -1,0 +1,30 @@
+﻿@page "/teaching/csharp/5-asynchrony"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["asynchrony"]">
+    <MudText GutterBottom="true">
+        The goal of this module is to introduce <Code>async</Code> and <Code>await</Code>,
+        the standard way of dealing with long running and I/O bound operations. We will
+        also need to cover some basics of multithreaded execution. In this module we will learn:
+    </MudText>
+        
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">simple <Code>Thread</Code> usage;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">the <Code>lock</Code> statement</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">events;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">exception handling, <Code>catch</Code>, <Code>finally</Code> blocks;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">disposable resources, <Code>IDisposable</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">asynchrony;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>Task</Code>, <Code>Task&lt;TResult&gt;</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>async</Code>, <Code>await</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>Task.WhenAll</Code>, <Code>Task.WhenAny</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">intuition behind <Code>await</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">the <Code>ThreadPool</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">entering the pool with <Code>Task.Run</Code> and <Code>Task.Factory.StartNew</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">supporting cancellation with <Code>CancellationToken</Code> and <Code>CancellationTokenSource</Code>.</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

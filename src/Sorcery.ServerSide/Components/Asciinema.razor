@@ -1,0 +1,14 @@
+﻿@using Sorcery.ServerSide.Components.Internal
+
+<MudContainer Class="d-flex d-sm-none">
+    <AsciinemaPlayer CastName="@CastName" Cols="80" Rows="30"/>
+</MudContainer>
+<MudContainer Class="d-none d-sm-flex">
+    <AsciinemaPlayer CastName="@CastName" Cols="120" Rows="30"/>
+</MudContainer>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string CastName { get; set; } = null!;
+}

@@ -1,0 +1,43 @@
+﻿@page "/teaching/csharp/9-performance"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["performance"]">
+    <MudText GutterBottom="true">
+        C# is a jack-of-all-trades language, and performance is a very important factor for the
+        runtime and the BCL. Being a compiled language, it's in a completely different weight class
+        than Python for performance, and thanks to sensible generics it gets a major upperhand over
+        Java.
+    </MudText>
+    <MudText GutterBottom="true">
+        Even though C# is fast by default, there are many techniques that allow us to squeeze
+        out last bits of CPU speed from our code <em>without</em> sacrificing type and memory safety.
+        Thanks to advanced tooling measuring and profiling C# is a breeze, and the ever-evolving
+        language support for performance critical facilities like <Code>Span</Code> and other ref structs
+        gives ample opportunities for optimisation.
+    </MudText>
+    <MudText GutterBottom="true">
+        In the end, C# allows us to ditch memory safety for a while to do pointer-twiddling on stuff
+        that requires twiddling pointers. While rarely used in most applications (I've never written production
+        code with <Code>unsafe</Code>), in others this is bread-and-butter.
+    </MudText>
+    <MudText>
+        In this module we will learn:
+    </MudText>
+
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">how to reliably benchmark .NET code;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            how to profile C# code with Visual Studio (and alternatives);
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">more details about Garbage Collection;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>ref struct</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>Span&lt;T&gt;</Code> and <Code>Memory&lt;T&gt;</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>stackalloc</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight"><Code>unsafe</Code>;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">finalizers.</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+    
+}

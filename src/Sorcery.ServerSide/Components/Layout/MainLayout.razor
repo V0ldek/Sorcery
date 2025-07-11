@@ -1,21 +1,26 @@
-﻿@using MudBlazor.Utilities
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudLayout>
-    <MudAppBar Elevation="1">        
+    <MudAppBar Elevation="1">
         <MudAvatar Variant="Variant.Filled">
             <MudImage Src="/img/v0ldek.webp" Alt="my gravatar" Class="mud-avatar-img" ObjectFit="ObjectFit.Cover" />
         </MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Mat Gienieczko</MudText>
         <MudSpacer />
-        <MudContainer class=".d-none .d-sm-flex">
+        <span class="d-none d-sm-flex flex-row justify-center align-center">
+            <MudIconButton id="enable-dark-mode-button" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit"
+                           Class="sorcery-hidden-on-dark"
+                           aria-label="Dark mode toggle" hidden></MudIconButton>
+            <MudIconButton id="enable-light-mode-button" Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit"
+                           Class="sorcery-hidden-on-light"
+                           aria-label="Light mode toggle"></MudIconButton>
             <MudIconButton Icon="@Icons.Material.Filled.RssFeed" Color="Color.Inherit" Href="/feed.rss" aria-label="RSS feed"></MudIconButton>
             <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="@GitHub.Sorcery" aria-label="GitHub"></MudIconButton>
+            <MudIconButton Icon="fa-brands fa-bluesky" Color="Color.Inherit" Href="https://bsky.app/profile/gienieczko.com" aria-label="BlueSky"></MudIconButton>
             <MudText Typo="Typo.caption" Class="ps-4"><footer><small>Copyright &copy; @Copyright Mateusz Gienieczko</small></footer></MudText>
-        </MudContainer>
+        </span>
     </MudAppBar>
     <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
@@ -41,98 +46,6 @@
     }
 
     private bool _drawerOpen = true;
-    private bool _isDarkMode = true;
-    private MudTheme? _theme = null;
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        _theme = new()
-        {
-            PaletteLight = _lightPalette,
-            PaletteDark = _darkPalette,
-            LayoutProperties = new LayoutProperties(),
-        };
-        _theme.Typography.H1.FontSize = "4rem";
-        _theme.Typography.H1.LetterSpacing = "-.00833em";
-        _theme.Typography.H1.LineHeight = "1.2";
-
-        _theme.Typography.Default.FontFamily = ["Fira Sans"];
-        _theme.Typography.Default.FontSize = _theme.Typography.Body1.FontSize;
-        _theme.Typography.Default.FontWeight = _theme.Typography.Body1.FontWeight;
-        _theme.Typography.Default.LetterSpacing = _theme.Typography.Body1.LetterSpacing;
-        _theme.Typography.Default.LineHeight = _theme.Typography.Body1.LineHeight;
-        _theme.Typography.Default.TextTransform = _theme.Typography.Body1.TextTransform;
-    }
-
-    private void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    private void DarkModeToggle()
-    {
-        _isDarkMode = !_isDarkMode;
-    }
-
-    private readonly PaletteLight _lightPalette = new()
-    {
-        Black = "#110e2d",
-        AppbarText = "#424242",
-        AppbarBackground = Colors.DeepOrange.Darken4,
-        Primary = Colors.DeepOrange.Darken2,
-        PrimaryDarken = Colors.DeepOrange.Darken3,
-        PrimaryLighten = Colors.DeepOrange.Darken1,
-        DrawerBackground = "#ffffff",
-        GrayLight = "#e8e8e8",
-        GrayLighter = "#f9f9f9",
-    };
-
-    private readonly PaletteDark _darkPalette = new()
-    {
-        Primary = "#E95C30",
-        PrimaryDarken = "#D94C20",
-        PrimaryLighten = "#FF7246",
-        Info = Colors.Blue.Lighten3,
-        InfoDarken = Colors.Blue.Lighten2,
-        InfoLighten = Colors.Blue.Lighten4,
-        Warning = Colors.Orange.Lighten2,
-        WarningDarken = Colors.Orange.Lighten1,
-        WarningLighten = Colors.Orange.Lighten3,
-        Error = Colors.Red.Lighten2,
-        ErrorDarken = Colors.Red.Lighten1,
-        ErrorLighten = Colors.Red.Lighten3,
-        AppbarBackground = "#992B0A",
-        Background = "#181A1B",
-        BackgroundGray = "#191B1C",
-        DrawerBackground = "#1A1C1D",
-        Surface = "#1B1D1E",
-        TableStriped = new MudColor(Colors.Shades.White).SetAlpha(0.06).ToString(MudColorOutputFormats.RGBA),
-        TextPrimary = "#BEB9B0",
-        // Defaults
-        /*AppbarText = "#92929f",
-        ActionDefault = "#74718e",
-        ActionDisabled = "#9999994d",
-        ActionDisabledBackground = "#605f6d4d",
-        TextSecondary = "#92929f",
-        TextDisabled = "#ffffff33",
-        DrawerIcon = "#92929f",
-        DrawerText = "#92929f",
-        GrayLight = "#2a2833",
-        GrayLighter = "#1e1e2d",
-        Success = "#3dcb6c",
-        LinesDefault = "#33323e",
-        TableLines = "#33323e",
-        Divider = "#292838",
-        OverlayLight = "#1e1e2d80",*/
-    };
-
-    public string DarkLightModeButtonIcon => _isDarkMode switch
-    {
-        true => Icons.Material.Rounded.AutoMode,
-        false => Icons.Material.Outlined.DarkMode,
-    };
 }
 
 

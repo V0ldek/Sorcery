@@ -1,0 +1,41 @@
+﻿@page "/teaching/csharp/8-reflection"
+@inject CourseBook CourseBook;
+
+<CourseModuleIntroduction Module="@CourseBook.CSharpCourse["reflection"]">
+    <MudText GutterBottom="true">
+        The ability to self-reflect is very important, not only for humans.
+        Reflection in .NET allows many metadata driven solutions that we otherwise
+        take for granted. All testing frameworks, ASP.NET, Entity Framework, JSON serializers,
+        and who knows what else depend on reflection.
+    </MudText>
+    <MudText GutterBottom="true">
+        Reflection used correctly is relatively fast and very powerful. Used incorrectly
+        it becomes an ugly hack. Reflection performance is much lower than regular code,
+        sometimes orders of magnitude slower. This is by design &ndash; the design goals
+        of the CLR explicitly state that reflection being fast in all cases is <em>not</em>
+        a goal.
+    </MudText>
+    <MudText>
+        In this module we will learn:
+    </MudText>
+
+    <OList Class="d-block my-4" Padding="false">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">retrieving type metadata;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            retrieving metadata for members;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">invoking methods via reflection;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">modifying fields and properties via reflection;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">retrieving attribute metadata;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">defining custom attributes;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">using attributes at runtime;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Caller Info Attributes;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">system attributes;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">the Dynamic Language Runtime;</ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">calling Python from .NET;</ListItem>
+    </OList>
+</CourseModuleIntroduction>
+
+@code {
+
+}

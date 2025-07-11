@@ -1,0 +1,38 @@
+﻿@page "/teaching/csharp/4-linq/2-extension-methods"
+@inject CourseBook CourseBook;
+
+@{
+    var course = CourseBook.CSharpCourse["linq"]["extension-methods"];
+}
+
+<CourseSection Section="@course">
+    <MudText GutterBottom="true">
+        Next one in <Link Href="@GitHub.CSharpNotebooks" Target="_blank">the notebooks repository</Link>:
+        <Highlight>@($"{course.Module.Id}-{course.Module.RouteName}/{course.Id}-{course.RouteName}.dib")</Highlight>.
+    </MudText>
+    <Header2>In this section we'll cover</Header2>
+     <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Defining extension methods.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Extending interfaces.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Generic extension methods.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            Scoping rules and namespace guidelines.
+        </ListItem>
+    </OList>
+    <Resources Links=@(new [] {
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods", "Extension Methods (C# Programming Guide)"),
+        ("https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/extension-methods", "Extension Methods (Design Guidelines)"),
+        ("https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive#static-modifier", "Static using directive"),
+        ("https://www.martinfowler.com/bliki/FluentInterface.html", "FluentInterface (Martin Fowler)"),
+    })/>
+</CourseSection>
+
+@code {
+
+}
