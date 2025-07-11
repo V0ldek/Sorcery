@@ -1,0 +1,165 @@
+﻿@page "/sourcery/simd-part-two-intrinsics-and-you"
+@using Sorcery.Shared.Components.Blogging;
+@using Sorcery.Blogging;
+@using Sorcery.Shared.Components.Footnotes
+@inject BlogBook BlogBook;
+
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+            Compiler designers put abstraction layers making SIMD portable and more palatable to the average programmer,
+            but underneath there lurk the basic building blocks of raw CPU instructions. Instead of relying on the compiler
+            to emit proper opcodes for the host platform, we can use the power of <Highlight>intrinsics</Highlight>
+            to build up SIMD programs ourselves.
+        </Paragraph>
+    };
+}
+
+<BlogPost Post="BlogBook.SimdPartTwoIntrinsicsAndYou">
+    @Introduction
+
+    <MudAlert Variant="Variant.Outlined" Class="mb-4">
+        This is Part 2 of the SIMD introductory series and might make no sense for you without the context of the
+        previous post below.
+    
+        <BlogPostCard Post="@BlogBook.SimdCheatCodesForFreePerformance" class="my-2"/>
+    </MudAlert>
+    
+    <Paragraph>
+        While a portable SIMD abstraction is an extremely useful tool, as is common for the craft of sourcery,
+        it is not enough to just know the surface. <Footnote>
+            Indeed, <Link Href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/">
+                all abstractions leak
+            </Link> and you can only fix the leak if you understand what's being abstracted away.
+        </Footnote>
+        We need to know what work the JIT is actually doing and how to check
+        that work if something goes awry, for example the performance of our vectorised code is not as we expected.
+        Fortunately, with intrinsics I believe I can explain it to you without actually showing scary assembly code.
+    </Paragraph>
+    
+    <Paragraph>
+        I'll first tell you what intrinsics are and give you a glimpse at the madness of all the different SIMD instruction
+        sets, then we'll apply this by reimplementing last post's Discrepancy algorithm using intrinsics, and finally
+        we'll see that we can use it to directly access operations that are not exposed in the portable <Code>VectorN</Code>
+        API.
+    </Paragraph>
+    
+    <Header2>Intrinsics</Header2>
+    
+    <Paragraph>
+        A <Highlight>compiler intrinsic</Highlight> is a function in a high-level programming language that is not
+        actually a function implemented in that language, rather a special codeword for the compiler to emit a specific
+        low-level operation; this can be a single instruction or a sequence of multiple instructions, depending on the
+        intrinsic. They are not a SIMD-specific concept &ndash; indeed, two most popular intrinsics on x86 are bitwise
+        operations on a regular register, <Code>lzcnt</Code> and <Code>popcnt</Code>.
+    </Paragraph>
+    
+    <Paragraph>
+        Leading zero count, <Code>lzcnt</Code>, is a hardware instruction available on x86 with the BMI instruction
+        set extension. It returns the number of zeroes in a given machine word counting from "the left", or from
+        the most significant bit (x86 is little-endian). For example, on x86-64:
+        <MudList Dense="true">
+            <MudListItem><Code>lzcnt 0</Code> is $64$;</MudListItem>
+            <MudListItem><Code>lzcnt 1</Code> is $63$;</MudListItem>
+            <MudListItem><Code>lzcnt 64</Code> ($2^{6}$) is $57$;</MudListItem>
+            <MudListItem><Code>lzcnt 2147483648</Code> ($2^{32}$) is $32$;</MudListItem>
+            <MudListItem><Code>lzcnt 9223372036854775808</Code> ($2^{63}$) is $0$.</MudListItem>
+        </MudList>
+        This can be computed "by hand" by computing $\log_2$ with some fancy bit-tricks,<Footnote>
+            <Link Href="https://stackoverflow.com/a/11398748/4646738">See this DeBruijn algorithm.</Link>
+        </Footnote> but the dedicated <Code>lzcnt</Code> instruction is faster.
+        The <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.numerics.bitoperations.leadingzerocount"><Code>BitOperations.LeadingZeroCount</Code></Link>
+        is a portable function &ndash; on a platform that supports <Code>lzcnt</Code> it will use that, falling
+        back to a manual implementation otherwise.
+    </Paragraph>
+    
+    <Paragraph>
+        <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.x86.lzcnt.leadingzerocount?view=net-8.0#system-runtime-intrinsics-x86-lzcnt-leadingzerocount(system-uint32)">
+            <Code>System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount</Code>
+        </Link> is an <em>intrinsic</em>. It doesn't actually have a body, it just tells the compiler to always emit
+        the <Code>lzcnt</Code> instruction in its place. This gives us direct control over the emitted instructions,
+        but doesn't throw us directly into assembly land &ndash; from the programmer's perspective it acts just like
+        a regular .NET method, taking a regular <Code>uint</Code> and giving a regular <Code>uint</Code> in return.
+        However, it also requires us to be certain that the instruction set actually supports what we want to emit.
+    </Paragraph>
+    
+    <Header2>Instruction Sets and Extensions</Header2>
+    
+    <Paragraph>
+        An <Highlight>instruction set</Highlight> defines, among others, registers and instructions that have
+        to be available on a CPU implementing it. Different architectures, x86, x86-64 ARM, RISC-V, or even WebAssembly
+        in a browser, have completely different instructions even for the basic operations,
+        like adding together two integers; naturally, their
+        SIMD operations are also different, and often fundamentally irreconcilable. <Footnote>
+            For example, as of this writing ARM has no counterpart for the 
+            <Link Href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm256_mask_compress_epi8&ig_expand=1319">
+                <Code>compresstore</Code> instruction
+            </Link>
+            and it's basically impossible to emulate it with simpler operations.
+        </Footnote>
+        The x86-64 instruction by itself doesn't define SIMD operations, neither does ARM or wasm,
+        but there are multiple <Highlight>extensions</Highlight> that a particular implementation can include.
+    </Paragraph>
+    
+    <Paragraph>
+        From now on let's focus on x86, since it's frankly the most complicated zoo of extensions.
+        The most basic one is SSE (Streaming SIMD Extensions) and SSE2.
+        <Footnote>
+            SSE only defined SIMD for 32-bit floating point numbers, while SSE2 introduced 64-bit floats and 8- through 64-bit integers.
+        </Footnote>
+        They define 128-bit wide SIMD vectors and operations on them. Later these were extended by SSE3, SSSE3, and SSE4.
+        Next up came AVX (Advanced Vector Extensions), and AVX2 which introduced 256-bit registers. The hottest and
+        newest is AVX512, which provides 512-bit registers and fun masking operations; however, this is not an extension
+        in itself, instead it's a whole family of separate extensions starting from AVX512-F, through
+        AVX512-{CD, ER, PF, VL, DQ, BW, IFMA, VBMI, 4VNNIW, 4FMAPS, VPOPCNTDQ,
+        VKITCHENSINK, VNNI, VBMI2, BITALG, VP2INTERSECT, GFNI, VPCLMULQDQ, VAES}.
+        <Footnote>
+            I can't stress how funny it is that CLMUL is still a super special little boy that needs its own extension
+            flag. It's a fundamentally simpler operation than a full MUL, which doesn't need any special flags!
+        </Footnote>
+        Only one of those I just made up. Needless to say, it's a mess.
+    </Paragraph>
+    
+    <Paragraph>
+        The relations between those are not obvious. For example, every CPU that implements SSSE3 must also implement
+        SSE3, which in turn guarantees SSE2;
+        every CPU that supports AVX2 supports AVX and SSE4; <em>but</em> a CPU can support AVX and not SSE3. For a more
+        horrific example, CLMUL is a separate extension that introduces one instruction, <Code>pclmulqdq</Code>, and is
+        guaranteed by AVX2, but not by any earlier extension. This doesn't mean it <em>can't</em> be present &ndash;
+        a CPU with SSSE3 and CLMUL but not AVX2 can exist! And figuring out which individual morsels of AVX512 are
+        enabled where <Link Href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#CPUs_with_AVX-512">is a nightmare</Link>.
+    </Paragraph>
+    
+    <Paragraph>
+        When playing with <Code>Vector128</Code>/<Code>Vector256</Code> from the previous post we don't have to worry
+        about any of this. The compiler will automatically use the best instructions it can. If we use
+        <Code>Vector256</Code> on a platform that only has SSE2, the JIT will emulate 256-bit wide instructions by
+        using twice as many 128-bit instructions. It can also automatically figure out that some of the operations
+        defined on <Code>Vector128</Code> can be executed more efficiently using operations from AVX512-VL, which
+        allows masking instructions from AVX512 to operate on registers from SSE2, if the host platform supports
+        that extension.
+    </Paragraph>
+    
+    <Paragraph>
+        When going to the level of intrinsics we <em>absolutely</em> need to worry about this, because the compiler will
+        dutifully emit exactly what we tell it to, and if that code then executes on an unsupported platform the sky
+        will fall &ndash; most likely the CPU won't understand the opcode and a SIGILL will kill the process.
+        <Footnote>
+            Funnily enough, this is arguably relatively benign compared to UB that could corrupt your memory or lead to
+            invalid logic being executed.
+        </Footnote>
+    </Paragraph>
+    
+    <Header2>Back to Discrepancy</Header2>
+    
+    <Paragraph>
+        As an exercise, let us reimplement the exact same algorithm as last time, but specifically for x86-64 AVX2
+        instructions using intrinsics. We will be able to verify that we get the exact same performance.
+    </Paragraph>
+    
+    <MudAlert Variant="Variant.Outlined" Class="mb-4">
+        We will discuss juicy details in the next part. To not miss it, subscribe to the <Link Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</Link>,
+        or watch the Discussions in <Link Href="@GitHub.Sorcery">the GitHub repo</Link>!
+    </MudAlert>
+</BlogPost>

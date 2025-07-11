@@ -29,7 +29,7 @@
 
     @Introduction
 
-    <Paragraph GutterBottom="false">
+    <Paragraph>
         Enter the world of SIMD. This series will introduce the concept from first principles,
         starting with simple techniques at a high-level and then gradually getting us closer to the metal.
         Part 1 starts with good old C# code, without any magic tricks. All the code for this part can be found
@@ -688,9 +688,9 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
                 </Paragraph>
             </section>
         </section>
-        <MudAlert Variant="Variant.Outlined" Class="mb-4">
-            We will discuss juicy details in the next part. To not miss it, subscribe to the <Link Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</Link>,
-            or watch the Discussions in <Link Href="@GitHub.Sorcery">the GitHub repo</Link>!
-        </MudAlert>
+    <MudAlert Variant="Variant.Outlined" Class="mb-4">
+        The SIMD adventure continues in the post below!
+        <BlogPostCard Post="@BlogBook.SimdPartTwoIntrinsicsAndYou" class="my-2"/>
+    </MudAlert>
     </section>
 </BlogPost>

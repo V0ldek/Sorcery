@@ -1,4 +1,6 @@
 ﻿// Licensed under MIT, copyright Mateusz Gienieczko, all rights reserved.
+
+using System.Numerics;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Xml;
