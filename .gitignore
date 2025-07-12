@@ -6,6 +6,9 @@
 # Custom
 src/Sorcery/wwwroot/css/bundled/*
 src/Sorcery/wwwroot/scripts/bundled/*
+src/Sorcery.ServerSide/wwwroot/css/bundled/*
+src/Sorcery.ServerSide/wwwroot/scripts/bundled/*
+src/Sorcery.ServerSide/static-content
 
 # User-specific files
 *.rsuser

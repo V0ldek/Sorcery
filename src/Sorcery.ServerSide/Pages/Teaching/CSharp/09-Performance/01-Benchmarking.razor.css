@@ -1,0 +1,19 @@
+.benchmark-dot-net-logo-card {
+    max-width: 400px;
+}
+
+.benchmark-dot-net-logo-card-image-large {
+    width: 400px;
+    max-width: 500px;
+    max-height: 200px;
+}
+
+.benchmark-dot-net-logo-card-image {
+    background-size: contain;
+    max-width: 400px;
+    max-height: 200px;
+}
+
+.large-benchmark-table {
+    overflow-x: auto;
+}

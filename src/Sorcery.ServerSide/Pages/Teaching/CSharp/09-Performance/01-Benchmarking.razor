@@ -59,38 +59,30 @@
         good scientific experiments, should be reliable, repeatable, verifiable by others, and controlled
         for bias and inadvertent influencing of the results.
     </MudText>
-    <MudBreakpointProvider>
-        <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudCard Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="5">
-                <MudCardMedia Height="200" Style="width: 400px; max-width: 500px; max-height: 200px" Image="img/benchmark-dot-net-logo.webp" Title="BenchmarkDotNet logo">
-                </MudCardMedia>
-                <MudCardContent>
+    <MudCard Class="mr-3 mb-3 pa-3 sorcery-float-left d-none d-sm-flex" Elevation="5">
+        <MudCardMedia Height="200" Class="benchmark-dot-net-logo-card-image-large" Image="img/benchmark-dot-net-logo.webp" Title="BenchmarkDotNet logo">
+        </MudCardMedia>
+        <MudCardContent>
             <MudText Typo="Typo.caption">BenchmarkDotNet &ndash; Powerful .NET library for benchmarking.</MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudCard Class="mx-auto mb-3 pa-3" Style="max-width: 400px" Elevation="5">
-                <MudCardMedia Image="img/benchmark-dot-net-logo.webp" Style="background-size: contain; max-width: 400px; max-height: 200px" Title="BenchmarkDotNet logo">
-                </MudCardMedia>
-                <MudCardContent>
-                    <MudText Typo="Typo.caption">BenchmarkDotNet &ndash; Powerful .NET library for benchmarking.</MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudHidden>
-    </MudBreakpointProvider>
+        </MudCardContent>
+    </MudCard>
+    <MudCard Class="mx-auto mb-3 pa-3 d-flex d-sm-none benchmark-dot-net-logo-card" Elevation="5">
+        <MudCardMedia Image="img/benchmark-dot-net-logo.webp" Class="benchmark-dot-net-logo-card-image" Title="BenchmarkDotNet logo">
+        </MudCardMedia>
+        <MudCardContent>
+            <MudText Typo="Typo.caption">BenchmarkDotNet &ndash; Powerful .NET library for benchmarking.</MudText>
+        </MudCardContent>
+    </MudCard>
     <MudText GutterBottom="true">
-        For very simple benchmarks, once we've seen before in a few modules, the good ol' <Code>System.Diagnostics.Stopwatch</Code>
+        For very simple benchmarks, ones we've seen before in a few modules, the good ol' <Code>System.Diagnostics.Stopwatch</Code>
         is good enough. If we want to show a difference between a method executing for a second and for ten seconds, a <Code>Stopwatch</Code>
         is enough. But when we want to be precise, and when the operation times start falling into the milli, micro, <em>nanosecond</em>
         range, the <Code>Stopwatch</Code> is basically useless. It's like trying to measure differences in atom sizes with a ruler.
-        The solution is there, and its name is <Highlight>BenchmarkDotNet</Highlight>. 
-        <MudText Inline="true" Typo="Typo.subtitle1">
+        The solution is there, and its name is <Highlight>BenchmarkDotNet</Highlight>.
         <em>
             Note, you could also try to use <Code>DateTime.Now</Code> as a timestamping mechanism, but it's strictly
             worse than <Code>Stopwatch</Code> and also yikes.
         </em>
-        </MudText>
     </MudText>
     <MudText>
         BenchmarkDotNet allows us to focus on providing good benchmark data and configuring <em>what</em> we want to benchmark,
@@ -195,7 +187,7 @@ Intel Core i5-8600K CPU 3.60GHz (Coffee Lake), 1 CPU, 6 logical and 6 physical c
   .NET 6.0 : .NET 6.0.5 (6.0.522.21309), X64 RyuJIT"
                             )"/>
     <CodeBlock Language="ini" Code="@("Job=.NET 6.0  Runtime=.NET 6.0")"/>
-    <MudSimpleTable Class="my-4" Dense="true" Bordered="true" Striped="true" Style="overflow-x: auto;">
+    <MudSimpleTable Class="my-4 .large-benchmark-table" Dense="true" Bordered="true" Striped="true">
 <thead><tr><th>      Method</th><th>ResultSize</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>MannWhitney(3%)/p-values</th><th>RatioSD</th><th>Allocated</th>
 </tr>
 </thead><tbody><tr><td>FromLongestSearch</td><td>0</td><td>69.278 ms</td><td>0.4861 ms</td><td>0.4059 ms</td><td>1.00</td><td>Base: ?|?</td><td>0.00</td><td>8,142 B</td>

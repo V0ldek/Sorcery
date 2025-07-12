@@ -1,0 +1,31 @@
+.sorcery-blog-post-card {
+    position: relative;
+}
+
+.sorcery-blog-post-card .full-card-link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.sorcery-blog-post-card .header-title {
+    width: 55%;
+}
+
+.sorcery-blog-post-card .header-metadata {
+    width: 45%;
+}
+
+.sorcery-blog-post-card .header-metadata div {
+    text-align: right;
+}
+
+.sorcery-blog-post-card .header-metadata div > span {
+    width: 100%;
+}
+
+.sorcery-blog-post-card .tags {
+    width: 100%;
+}

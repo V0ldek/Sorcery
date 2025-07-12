@@ -6,7 +6,7 @@
       "wwwroot/css/lib/fontawesome/**/*.css",
       "!wwwroot/scripts/lib/giscus.css",
       "wwwroot/css/fira.css",
-      "wwwroot/css/app.css"
+      "wwwroot/css/app/*.css"
     ],
     "minify": {
       "enabled": true,

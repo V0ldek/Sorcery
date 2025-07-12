@@ -1,0 +1,17 @@
+.dotnet-bot-card {
+    max-width: 250px;
+}
+
+.dotnet-bot-card-image {
+    max-width: 250px;
+    max-height: 230px;
+}
+
+.base-class-library-card {
+    max-width: 300px;
+}
+
+.base-class-library-card-image {
+    max-width: 300px;
+    max-height: 150px;
+}

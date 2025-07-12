@@ -1,0 +1,43 @@
+.mud-main-content {
+    --mud-typography-h1-size: 2rem;
+    --mud-typography-h2-size: 1.875rem;
+    --mud-typography-h3-size: 1.5rem;
+    --mud-typography-h4-size: 1.0625rem;
+}
+
+@media (min-width: 600px) {
+    .mud-main-content {
+        --mud-typography-h1-size: 4rem;
+        --mud-typography-h2-size: 3.75rem;
+        --mud-typography-h3-size: 3rem;
+        --mud-typography-h4-size: 2.125rem;
+    }
+}
+
+.mud-typography-gutterbottom {
+    margin-bottom: 1em !important
+}
+
+.h3-fa-icon {
+    font-size: 2.25rem;
+    height: 2.25rem;
+    width: 2.25rem;
+    margin-right: 1rem;
+}
+
+.h3-mat-icon {
+    font-size: 2.25rem;
+    height: 2.25rem;
+    width: 2.25rem;
+    margin-right: 1rem;
+    vertical-align: bottom;
+    margin-bottom: 8pt;
+}
+
+.mud-link.mud-primary-text {
+     color: var(--mud-palette-primary-lighten) !important;
+}
+
+.sorcery-typography-nowrap {
+    white-space: nowrap;
+}

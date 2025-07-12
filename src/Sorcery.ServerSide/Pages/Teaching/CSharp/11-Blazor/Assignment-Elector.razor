@@ -4,7 +4,9 @@
 <CourseAssignment Assignment="@CourseBook.CSharpCourse["blazor"].Assignment">
     <Paragraph>
         Change of pace &ndash; we are leaving the DungeonWalker project alone.
-        In this assignment you will implement the backend of <Highlight>Elector</Highlight>, an election system/simulator,
+        In this assignment you will implement the backend of
+        <Highlight>Elector</Highlight>
+        , an election system/simulator,
         and as an aside learn why First-Past-the-Post is an awful voting system.
     </Paragraph>
     <Header2>Overview</Header2>
@@ -18,27 +20,35 @@
             but you can. There are no tests for the client.
         </ListItem>
         <ListItem>
-            <Code>Elector.Server</Code> is the ASP.NET Core server. You will need to work on the controllers defined here.
+            <Code>Elector.Server</Code> is the ASP.NET Core server. You will need to work on the controllers defined
+            here.
             It also contains SignalR hubs in the <Code>Hubs</Code> namespace. SignalR is a WebSocket framework that
-            allows asynchronous communication between the server and the client. You won't need to touch SignalR components,
+            allows asynchronous communication between the server and the client. You won't need to touch SignalR
+            components,
             or know how they work, but they're really nifty.
         </ListItem>
         <ListItem>
-            <Code>Elector.ViewModels</Code> contains view models that the server uses to communicate with the client, while the client
-            displays the information contained within them. You won't need to change those, but you will be constructing instances
+            <Code>Elector.ViewModels</Code> contains view models that the server uses to communicate with the client,
+            while the client
+            displays the information contained within them. You won't need to change those, but you will be constructing
+            instances
             of those types.
         </ListItem>
         <ListItem>
-            <Code>Elector.Voting</Code> contains logic for generating random ballots. This is provided for you and needs no modifications.
+            <Code>Elector.Voting</Code> contains logic for generating random ballots. This is provided for you and needs
+            no modifications.
         </ListItem>
         <ListItem>
-            <Code>Elector.System</Code> contains logic for deciding an election's outcome based on gathered votes. You will be implementing this logic.
+            <Code>Elector.System</Code> contains logic for deciding an election's outcome based on gathered votes. You
+            will be implementing this logic.
         </ListItem>
         <ListItem>
-            <Code>Elector.Data</Code> contains repositories and the database context. You will be implementing the repositories and database model.
+            <Code>Elector.Data</Code> contains repositories and the database context. You will be implementing the
+            repositories and database model.
         </ListItem>
         <ListItem>
-            <Code>Elector.Dependencies</Code> is our usual dependency injection project that registers all different services from other projects.
+            <Code>Elector.Dependencies</Code> is our usual dependency injection project that registers all different
+            services from other projects.
         </ListItem>
         <ListItem>
             <Code>Elector.Common</Code> contains some general-usefulness utilities.
@@ -46,66 +56,86 @@
     </OList>
     <Header2>Task 0.0. &ndash; Understand Single Transferable Vote (STV)</Header2>
     <Paragraph>
-        STV is the most popular ranked-choice voting system. Ranked choice means that ballots (the forms that a single voter gets to fill in)
-        are filled with a ranked list of candidates instead of a single checkmark next to the most favoured candidate. This makes elections more
+        STV is the most popular ranked-choice voting system. Ranked choice means that ballots (the forms that a single
+        voter gets to fill in)
+        are filled with a ranked list of candidates instead of a single checkmark next to the most favoured candidate.
+        This makes elections more
         representative and avoids power consolidation.
     </Paragraph>
     <Paragraph class="render-latex">
         Imagine a system where there are three parties, Red, Blue, and Green. Red gets around $45\%$
-        of the popular vote, Blue gets $40\%$ and Green also gets $15\%$, and we have single-winner elections, e.g. presidential elections.
-        In First-Past-the-Post (FPtP), Red wins in a landslide. But it turns out that Green voters would much rather see a Blue candidate than a Red one.
-        In FPtP Green effectively jeopardises Blue's chances, by taking away its electorate. This encourages big parties, limiting representation.
-        <em>Any similarities to the electorial shitshow of any well-known, big country is entirely not coincidental.</em>
+        of the popular vote, Blue gets $40\%$ and Green also gets $15\%$, and we have single-winner elections, e.g.
+        presidential elections.
+        In First-Past-the-Post (FPtP), Red wins in a landslide. But it turns out that Green voters would much rather see
+        a Blue candidate than a Red one.
+        In FPtP Green effectively jeopardises Blue's chances, by taking away its electorate. This encourages big
+        parties, limiting representation.
+        <em>Any similarities to the electorial shitshow of any well-known, big country is entirely not
+            coincidental.</em>
     </Paragraph>
     <Paragraph>
-        In a ranked-choice voting system, the Green voters would be able to specify Blue as their second choice. In SVT, their votes would be transfered
-        to the Blue party and help them win. There are many different ranked-choice system, and SVT is not necessarily the best one, but it is rather simple
+        In a ranked-choice voting system, the Green voters would be able to specify Blue as their second choice. In SVT,
+        their votes would be transfered
+        to the Blue party and help them win. There are many different ranked-choice system, and SVT is not necessarily
+        the best one, but it is rather simple
         to understand.
     </Paragraph>
     <Paragraph id="math2" class="render-latex">
-        Every ballot contains a list of votes, where some candidates are given a preference. Those preferences create an ordered list.
+        Every ballot contains a list of votes, where some candidates are given a preference. Those preferences create an
+        ordered list.
         So, a ballot by a Green voter could give preference $1$ to Green, $2$ to Blue, and no preference to $Red$.
     </Paragraph>
     <MudAlert Class="my-4" Variant="Variant.Outlined" Severity="Severity.Warning">
-        For the purposes of this exercise, any ballot that contains no preferences or assigns the same ordinal to multiple candidates is an invalid vote.
+        For the purposes of this exercise, any ballot that contains no preferences or assigns the same ordinal to
+        multiple candidates is an invalid vote.
     </MudAlert>
     <Paragraph id="math3" class="render-latex">
-        After the votes are gathered, the outcome is determined in rounds. First, a quota is established &ndash; the required number of votes for a candidate
+        After the votes are gathered, the outcome is determined in rounds. First, a quota is established &ndash; the
+        required number of votes for a candidate
         to be elected. There are many choices for the quota, but we will be using the Droop quota, formulated as:
 
         $$\left\lfloor \frac{\text{valid votes}}{\text{available seats} + 1} \right\rfloor + 1$$
 
-        To understand its justification, see that for a single seat (single-winner elections) the quota is simply the majority of votes.
+        To understand its justification, see that for a single seat (single-winner elections) the quota is simply the
+        majority of votes.
     </Paragraph>
     <Paragraph GutterBottom="false">
         The election now proceeds in rounds.
     </Paragraph>
     <OList class="mud-typography-gutterbottom">
         <ListItem Icon="fas fa-1">
-            Take all remaining ballots and assign them to the first candidate in order of preference that has not yet been elected or eliminated.
+            Take all remaining ballots and assign them to the first candidate in order of preference that has not yet
+            been elected or eliminated.
             If a ballot contains no such candidates, it is <em>exhausted</em> and <em>discarded</em>.
         </ListItem>
         <ListItem Icon="fas fa-2">
             If there are as many candidates as seats remaining, elect all remaining candidates and end the election.
         </ListItem>
         <ListItem Icon="fas fa-3">
-            Otherwise, if no candidate has at least as many votes as the quota, eliminate the candidate with the lowest number of votes.
+            Otherwise, if no candidate has at least as many votes as the quota, eliminate the candidate with the lowest
+            number of votes.
             All of their ballots return to the pool of remaining ballots. Go to 1.
         </ListItem>
         <ListItem Icon="fas fa-4">
-            Otherwise, elect all candidates that have enough votes. For each such candidate, calculate the <em>surplus</em> of votes,
-            i.e. how many votes above quota they have. Then look at all of their votes and gather the <em>transferable</em> votes,
-            i.e. votes that have a next-preference candidate that is not yet elected or eliminated (in other words, will not be exhausted
+            Otherwise, elect all candidates that have enough votes. For each such candidate, calculate the
+            <em>surplus</em> of votes,
+            i.e. how many votes above quota they have. Then look at all of their votes and gather the
+            <em>transferable</em> votes,
+            i.e. votes that have a next-preference candidate that is not yet elected or eliminated (in other words, will
+            not be exhausted
             if returned to the pool). All other votes are non-transferrable and stay with the candidate.
         </ListItem>
         <ListItem Icon="fas fa-5">
-            If there are at most as many transferable votes as the surplus, then the operation is simple &ndash; transfer all ballots to their
+            If there are at most as many transferable votes as the surplus, then the operation is simple &ndash;
+            transfer all ballots to their
             next-preference candidate.
         </ListItem>
         <ListItem id="math4" Icon="fas fa-6" Class="render-latex">
-            Otherwise, for each next-preference candidate only a fraction of votes is transfered. The exact number is calculated as:
+            Otherwise, for each next-preference candidate only a fraction of votes is transfered. The exact number is
+            calculated as:
 
-            $$\lfloor \frac{\text{transferable votes for next-preference} \cdot \text{surplus}}{\text{total transferable votes}} \rfloor$$
+            $$\lfloor \frac{\text{transferable votes for next-preference} \cdot \text{surplus}}{\text{total transferable
+            votes}} \rfloor$$
 
             The votes to be transfered are selected at random. Remaining votes are exhausted.
             See the warning in Task 2. for details.
@@ -115,13 +145,16 @@
         </ListItem>
     </OList>
     <Paragraph>
-        Note that there are many ways of transfering votes under STV, including ones that consider fractional votes. Again, this one is the simplest,
-        so we will go with it for the purposes of the exercise. It's also the one that most implementations of STV use, for example for the Irish lower-house
+        Note that there are many ways of transfering votes under STV, including ones that consider fractional votes.
+        Again, this one is the simplest,
+        so we will go with it for the purposes of the exercise. It's also the one that most implementations of STV use,
+        for example for the Irish lower-house
         elections or for the Australian senate.
     </Paragraph>
     <Header2>Task 0.1. &ndash; Understand the architecture and the user flow</Header2>
     <Paragraph GutterBottom="false">
-        A user creates an election through the Elections screen by supplying a name, number of seats, and the number of voters.
+        A user creates an election through the Elections screen by supplying a name, number of seats, and the number of
+        voters.
         The election can be in one of five states:
     </Paragraph>
     <OList class="mud-typography-gutterbottom">
@@ -159,7 +192,8 @@
         the repositories from <Code>Elector.Data</Code>, and the SignalR Hub. The ballot source is already implemented
         and creates a stream of pseudorandomly generated ballots, with a small chance of generating an invalid one.
         All ballots need to be persisted in the database. The ballots are flushed in batches of $100$. Every flush,
-        a message is posted to the SignalR Hub. The message is sent to the front-end, so that it can update the vote screen.
+        a message is posted to the SignalR Hub. The message is sent to the front-end, so that it can update the vote
+        screen.
     </Paragraph>
     <Paragraph>
         After votes are gathered, the user can click a button to calculate the outcome.
@@ -178,10 +212,12 @@
     <Paragraph>
         Take notice that some of the repository operations may fail &ndash; they return a <Code>Result</Code>
         object. If the result is a failure, the operation should respond with a BadRequest with the error message
-        as body(with the exception of <Code>GetAsync</Code> in <Code>ElectionsController</Code>, which should return a NotFound).
+        as body(with the exception of <Code>GetAsync</Code> in <Code>ElectionsController</Code>, which should return a
+        NotFound).
     </Paragraph>
     <Paragraph>
-        As usual, you can use the Swagger UI to see all actions and make test runs. Find them at https://localhost:20443/swagger.
+        As usual, you can use the Swagger UI to see all actions and make test runs. Find them at
+        https://localhost:20443/swagger.
     </Paragraph>
     <MudAlert id="alert1" Class="my-4" Variant="Variant.Outlined">
         This is tested by the <code>Controllers</code> test group.
@@ -214,24 +250,31 @@
     <Header2>Task 3. &ndash; Repositories</Header2>
     <Paragraph>
         The last step between us and a fully working solution is the database. You need to configure the
-        model, which is pretty straight-forward, and then implement the missing repository, the <Code>BallotsRepository</Code>.
+        model, which is pretty straight-forward, and then implement the missing repository, the
+        <Code>BallotsRepository</Code>.
     </Paragraph>
     <Paragraph>
         <Code>AddBallotsAsync</Code> must add ballots and votes to a given election. If an election with given Id
-        does not exist, a failure should be returned. If saving changes fails for any reason, a failure should be returned.
+        does not exist, a failure should be returned. If saving changes fails for any reason, a failure should be
+        returned.
         <Code>GetAllValidBallotsForElectionAsync</Code> should return a list of valid ballots of a given election.
         As a reminder, ballots need to have any candidate marked with some preference and there cannot be two candidates
-        with the same preference. <Code>GetElectionOutcomeReportAsync</Code> should return a report about elected candidates,
-        consisting of a dictionary mapping candidate ids to nullable boolean values &ndash; if the candidate was elected,
+        with the same preference. <Code>GetElectionOutcomeReportAsync</Code> should return a report about elected
+        candidates,
+        consisting of a dictionary mapping candidate ids to nullable boolean values &ndash; if the candidate was
+        elected,
         it should be <code>true</code>, if eliminated, then <code>false</code>, otherwise <code>null</code>.
     </Paragraph>
     <Paragraph>
         The most involved one is <Code>GetElectionVoteReportAsync</Code>. You need to calculate the number of valid
-        and invalid ballots, as well as the number of first-preference votes for each candidate, so the number of ballots
-        with that candidate marked as first preference. As a challenge, try to do it in two database queries only (this is not checked)!
+        and invalid ballots, as well as the number of first-preference votes for each candidate, so the number of
+        ballots
+        with that candidate marked as first preference. As a challenge, try to do it in two database queries only (this
+        is not checked)!
     </Paragraph>
-    <MudPaper MaxHeight="500px" MaxWidth="50%" Style="float: left" Class="mr-3 mb-3 pa-3" Elevation="5">
-        <MudImage Alt="ERD diagram of the database" title="ERD diagram of the database" Src="img/elector-database-schema.webp" Fluid="true" Height="500" Width="500" />
+    <MudPaper MaxHeight="500px" MaxWidth="50%" Class="mr-3 mb-3 pa-3 sorcery-float-left" Elevation="5">
+        <MudImage Alt="ERD diagram of the database" title="ERD diagram of the database"
+                  Src="img/elector-database-schema.webp" Fluid="true" Height="500" Width="500"/>
     </MudPaper>
     <Paragraph>
         After this is implemented you should be able to run the app end-to-end. As a reminder, to setup the database
@@ -240,12 +283,15 @@
     <CodeBlock Language="powershell" Code=@(@"
                dotnet ef migrations add Initial --project ./src/Elector.Data
                dotnet ef database update --project ./src/Elector.Data
-               ") />
+               ")/>
     <Paragraph>
         There a number of tests that rely on the API to run in the background.
-        First, run the server in a terminal window, then run the <Code>Elector.ApiTests</Code> test project. You can also use the <code>api_tests</code>
-        script in the <code>tests</code> directory to automatically run the suite. There is also a PowerShell script <code>create_test_elections</code>
-        that creates the two complex test cases from the <Code>Elector.ApiTests</Code> suite that you can then manually debug, skipping the tedious
+        First, run the server in a terminal window, then run the <Code>Elector.ApiTests</Code> test project. You can
+        also use the <code>api_tests</code>
+        script in the <code>tests</code> directory to automatically run the suite. There is also a PowerShell script
+        <code>create_test_elections</code>
+        that creates the two complex test cases from the <Code>Elector.ApiTests</Code> suite that you can then manually
+        debug, skipping the tedious
         manual candidate creation.
     </Paragraph>
     <MudAlert id="alert3" Class="my-4" Variant="Variant.Outlined">
@@ -253,12 +299,14 @@
     </MudAlert>
     <MudAlert id="alert4" Class="my-4 render-latex" Variant="Variant.Outlined" Severity="Severity.Warning">
         The <Code>Elector.Shared.SystemRandomNumberGenerator</Code> is responsible for generating votes
-        and has a fixed seed in the code. This means that a given election configuration (candidates/seats/eligible votes)
+        and has a fixed seed in the code. This means that a given election configuration (candidates/seats/eligible
+        votes)
         will have the same vote distribution and outcome every time you run it. You can remove the fixed seed to see
         various possible outcomes, but in your final commit the seed should be set to $123456789$ &ndash; the API tests
         depend on it.
     </MudAlert>
 </CourseAssignment>
+
 @code {
 
 }

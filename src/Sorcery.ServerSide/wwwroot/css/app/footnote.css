@@ -1,0 +1,7 @@
+.sorcery-footnote[data-intralink-focused]:focus {
+    border: solid 1px;
+}
+
+.sorcery-footnote-intralink {
+    cursor: pointer;
+}

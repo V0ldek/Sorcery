@@ -203,7 +203,7 @@ private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
                     </Link>!
                 </Footnote>
             </Paragraph>
-            <MudSimpleTable Class="my-4" Bordered="true" Striped="true" Style="overflow-x: auto; border: solid 1px;">
+            <MudSimpleTable Class="my-4 sorcery-benchmarks-table" Bordered="true" Striped="true">
                 <thead>
                     <tr>
                         <th>Method</th>
@@ -635,7 +635,7 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
                     &ndash; <Code>Vector128</Code> is replaced with <Code>Vector256</Code>, <Code>Size</Code>
                     is set to $32$, ant the mask is compared against <Code>0xFFFFFFFF</Code>.
                 </Paragraph>
-                <MudSimpleTable Class="my-4" Bordered="true" Striped="true" Style="overflow-x: auto; border: solid 1px;">
+                <MudSimpleTable Class="my-4 sorcery-benchmarks-table" Bordered="true" Striped="true">
                     <thead>
                         <tr>
                             <th>Method</th>

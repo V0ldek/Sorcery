@@ -1,6 +1,6 @@
 ﻿// Hook intralink click handlers.
 document.addEventListener("DOMContentLoaded", (event) => {
-    const intralinks = document.getElementsByClassName("sorcery-footnote");
+    const intralinks = document.getElementsByClassName("sorcery-footnote-intralink");
     let currentIntralinkFocus = null;
 
     for (let intralink of intralinks) {

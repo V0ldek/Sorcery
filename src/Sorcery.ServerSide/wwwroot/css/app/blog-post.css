@@ -1,0 +1,19 @@
+.sorcery-blog-post .title-container {
+    width: 80%;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    display: flex;
+    flex-grow: 1;
+}
+
+.sorcery-blog-post .metadata-container {
+    width: auto;
+    text-align: left;
+    margin-left: auto;
+    display: flex;
+    flex-grow: 1;
+}
+
+.sorcery-blog-post .metadata-container span {
+    width: 100%;
+}

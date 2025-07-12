@@ -18,9 +18,9 @@
         A natural representation of such a Dungeon is a series of layers. Think the map from Slay the Spire,
         if you're familiar with the game. At each layer there's a number of reachable rooms, and each edge
         leads into a room from a higher layer. At the bottom are the entrances, at the top is the exit.
-    </Paragraph>            
-    
-    <MudCard Style="align-self: center" Class="my-3 pa-3" Elevation="5">
+    </Paragraph>
+
+    <MudCard Class="my-3 pa-3 align-self-center" Elevation="5">
         <MudCardMedia Height="500" Image="img/slaythespiremap.webp" Title="Example Slay the Spire map">
         </MudCardMedia>
         <MudCardContent>
@@ -31,7 +31,7 @@
         In this assignment your task is to implement an algorithm that decides if a graph is acyclic,
         and if yes partitions the vertices into layers, as described below.
     </Paragraph>
-    
+
     <Header2>Algorithm</Header2>
     <Paragraph>
         In graph theory parlance the problem we want to solve is called <strong>topological sorting</strong>
@@ -52,9 +52,12 @@
     <Paragraph GutterBottom="false">
         There's a number of different algorithms for this, and you are free to use your
         favourite, if you have one. If not, here's the arguably simplest one, attributed to Tarjan.
-        We will construct a list of vertices in <em>reverse</em> topological order. First, initialize it to an empty list.
+        We will construct a list of vertices in <em>reverse</em> topological order. First, initialize it to an empty
+        list.
         Pick any vertex from the graph and run a depth-first search. We keep the usual status of a vertex as we go:
-        <strong>active</strong> if we've recursed down one of its neighbours, <strong>visited</strong> if we already processed all of its non-DFS-parent neighbours, unvisited otherwise. When we consider an edge there are three cases:
+        <strong>active</strong> if we've recursed down one of its neighbours, <strong>visited</strong> if we already
+        processed all of its non-DFS-parent neighbours, unvisited otherwise. When we consider an edge there are three
+        cases:
     </Paragraph>
     <UList Dense="true">
         <ListItem Icon="@Icons.Material.Filled.ChevronRight">
@@ -68,7 +71,7 @@
         </ListItem>
     </UList>
     <Paragraph>
-        Once we consider all the edges, mark the vertex as visited and add it to the result list. 
+        Once we consider all the edges, mark the vertex as visited and add it to the result list.
         Once all vertices in the graph are visited, we return the reversed list as our result.
     </Paragraph>
     <Paragraph>
@@ -80,15 +83,18 @@
     </Paragraph>
     <Header2>Task 0. &ndash; Topological Sort</Header2>
     <Paragraph>
-        Your job is pretty simple &ndash; complete the implementation in <Code>DungeonWalker.Graphs.Algorithms.TopologicalSort&lt;TLabel&gt;</Code>. The missing method is:
-    <CodeBlock Code="@(@"
+        Your job is pretty simple &ndash; complete the implementation in <Code>DungeonWalker.Graphs.Algorithms.TopologicalSort&lt;TLabel&gt;</Code>.
+        The missing method is:
+        <CodeBlock Code="@(@"
 public bool TrySort([NotNullWhen(true)] out TopologicalSortResult<TLabel>? result)
 ")"/>
         The method return <Code>false</Code> if the graph has a cycle, otherwise
         it returns <Code>true</Code> and fills in the layered result.
     </Paragraph>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
-        This is tested by the "TopologicalSort" test group, worth <Highlight>1</Highlight> point.
+        This is tested by the "TopologicalSort" test group, worth
+        <Highlight>1</Highlight>
+        point.
     </MudAlert>
     <Header2>Task 1. &ndash; Performance Considerations</Header2>
     <Paragraph>
@@ -105,12 +111,17 @@ public bool TrySort([NotNullWhen(true)] out TopologicalSortResult<TLabel>? resul
         Therefore, the main issue for these tests is not speed, but the stack limit. The solution is conceptually
         simple &ndash; we need to create an explicit <Code>Stack&lt;T&gt;</Code> and use it instead of recursion.
         That should be enough to pass the tests, no need to fiddle with microoptimisations. We will tackle performance
-        fun in a later module <MudIcon Icon="fas fa-smile-wink"/>.
+        fun in a later module
+        <MudIcon Icon="fas fa-smile-wink"/>
+        .
     </Paragraph>
     <MudAlert Class="my-4" Variant="Variant.Outlined">
-        This is tested by the "TopologicalSortPerformance" test group, worth <Highlight>1</Highlight> point.
+        This is tested by the "TopologicalSortPerformance" test group, worth
+        <Highlight>1</Highlight>
+        point.
     </MudAlert>
 </CourseAssignment>
+
 @code {
 
 }

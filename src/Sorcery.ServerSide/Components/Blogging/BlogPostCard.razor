@@ -1,23 +1,38 @@
 ﻿@using System.Web;
 @using Sorcery.Blogging;
 
-<MudCard Class="mud-button blog-post-card" Elevation="5" @attributes="@Attributes">
-    <a class="blog-post-card-link" href="@Post.Route"></a>
+<MudCard Class="mud-button sorcery-blog-post-card" Elevation="5" @attributes="@Attributes">
+    <a class="full-card-link" href="@Post.Route"></a>
     <MudCardHeader>
         <CardHeaderContent>
-            <div class="d-flex gap-4">
-                <div class="d-flex flex-grow-1" style="width: 55%">
+            <div class="d-none d-sm-flex gap-4">
+                <div class="d-flex flex-grow-1 header-title">
                     <MudLink Href="@Post.Route">
                         <MudText Typo="Typo.h6" Color="Color.Primary">@HttpUtility.HtmlDecode(Post.Title)</MudText>
                     </MudLink>
                 </div>
-                <div style="width: 45%">
-                    <div class="d-flex flex-grow-1" style="text-align: right">
-                        <MudText Typo="Typo.caption" Style="width: 100%">Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")</MudText>
+                <div class="header-metadata">
+                    <div class="d-flex flex-grow-1">
+                        <MudText Typo="Typo.caption">Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")</MudText>
                     </div>
-                    <div class="d-flex" style="text-align: right">
-                        <MudText Typo="Typo.caption" Style="width: 100%">Tags: <BlogPostTags Tags="@Post.Tags"/></MudText>
+                    <div class="d-flex">
+                        <MudText Typo="Typo.caption" Class="tags">Tags: <BlogPostTags Tags="@Post.Tags"/></MudText>
                     </div>
+                </div>
+            </div>
+            <div class="d-block d-sm-none gap-4">
+                <div class="my-2">
+                    <div class="d-flex flex-grow-1">
+                        <MudText Typo="Typo.caption">Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")</MudText>
+                    </div>
+                    <div class="d-flex">
+                        <MudText Typo="Typo.caption" Class="tags">Tags: <BlogPostTags Tags="@Post.Tags"/></MudText>
+                    </div>
+                </div>
+                <div class="d-flex flex-grow-1">
+                    <MudLink Href="@Post.Route">
+                        <MudText Typo="Typo.h6" Color="Color.Primary">@HttpUtility.HtmlDecode(Post.Title)</MudText>
+                    </MudLink>
                 </div>
             </div>
         </CardHeaderContent>

@@ -2,27 +2,32 @@
 
 <MudDialogProvider />
 <MudSnackbarProvider />
-<MudLayout>
+<MudLayout id="mud-layout">
     <MudAppBar Elevation="1">
-        <MudAvatar Variant="Variant.Filled">
-            <MudImage Src="/img/v0ldek.webp" Alt="my gravatar" Class="mud-avatar-img" ObjectFit="ObjectFit.Cover" />
-        </MudAvatar>
-        <MudText Typo="Typo.h5" Class="ml-3">Mat Gienieczko</MudText>
-        <MudSpacer />
-        <span class="d-none d-sm-flex flex-row justify-center align-center">
+        <MudIconButton id="drawer-toggle-button" Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" aria-label="Menu" />
+        <a class="d-flex" href="/">
+            <MudAvatar Variant="Variant.Filled">
+                <MudImage Src="/img/v0ldek.webp" Alt="my gravatar" Class="mud-avatar-img" ObjectFit="ObjectFit.Cover"/>
+            </MudAvatar>
+            <MudText Typo="Typo.h5" Class="ml-3 mt-auto mb-auto">Mat Gienieczko</MudText>
+        </a>
+        <MudSpacer/>
+        <span class="d-flex flex-row justify-center align-center">
             <MudIconButton id="enable-dark-mode-button" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit"
                            Class="sorcery-hidden-on-dark"
                            aria-label="Dark mode toggle" hidden></MudIconButton>
             <MudIconButton id="enable-light-mode-button" Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit"
                            Class="sorcery-hidden-on-light"
                            aria-label="Light mode toggle"></MudIconButton>
-            <MudIconButton Icon="@Icons.Material.Filled.RssFeed" Color="Color.Inherit" Href="/feed.rss" aria-label="RSS feed"></MudIconButton>
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="@GitHub.Sorcery" aria-label="GitHub"></MudIconButton>
-            <MudIconButton Icon="fa-brands fa-bluesky" Color="Color.Inherit" Href="https://bsky.app/profile/gienieczko.com" aria-label="BlueSky"></MudIconButton>
-            <MudText Typo="Typo.caption" Class="ps-4"><footer><small>Copyright &copy; @Copyright Mateusz Gienieczko</small></footer></MudText>
+            <span class="d-none d-sm-flex flex-row justify-center align-center">
+                <MudIconButton Icon="@Icons.Material.Filled.RssFeed" Color="Color.Inherit" Href="/feed.rss" aria-label="RSS feed"></MudIconButton>
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="@GitHub.Sorcery" aria-label="GitHub"></MudIconButton>
+                <MudIconButton Icon="fa-brands fa-bluesky" Color="Color.Inherit" Href="https://bsky.app/profile/gienieczko.com" aria-label="BlueSky"></MudIconButton>
+                <MudText Typo="Typo.caption" Class="ps-4"><footer><small>Copyright &copy; @Copyright Mateusz Gienieczko</small></footer></MudText>
+            </span>
         </span>
     </MudAppBar>
-    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+    <MudDrawer id="nav-drawer" Open="true" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
     </MudDrawer>
     <MudMainContent Class="pt-16 pa-4">
@@ -35,7 +40,7 @@
 
 
 @code {
-    private string Copyright
+    private static string Copyright
     {
         get
         {
@@ -44,8 +49,6 @@
             return year == startYear ? startYear.ToString() : $"{startYear} - {year}";
         }
     }
-
-    private bool _drawerOpen = true;
 }
 
 

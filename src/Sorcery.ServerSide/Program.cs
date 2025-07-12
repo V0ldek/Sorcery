@@ -34,5 +34,6 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .DisableAntiforgery();
 
-app.GenerateStaticContent(@"D:\SSG-Output-Folder");
+var outputDirectory = Environment.GetEnvironmentVariable("SOURCERY_STATIC_CONTENT_DIR");
+app.GenerateStaticContent(outputDirectory ?? "./static-content");
 app.Run();

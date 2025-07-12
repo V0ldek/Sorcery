@@ -1,0 +1,7 @@
+div.code-toolbar > .toolbar {
+    opacity: 1 !important;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button {
+    top: -0.01em
+}

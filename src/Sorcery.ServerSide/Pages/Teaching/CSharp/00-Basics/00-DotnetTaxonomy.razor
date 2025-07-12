@@ -7,19 +7,13 @@
         but I feel like at the beginning a more wordy sales pitch is needed.
     </Paragraph>
     <Header2>C#</Header2>
+    <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mx-auto mb-3 pa-3 sorcery-float-left d-none d-sm-flex" Elevation="0">
+        <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
+    </MudPaper>
+    <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mx-auto mb-3 pa-3 d-flex d-sm-none" Elevation="0">
+        <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
+    </MudPaper>
     <Paragraph>
-        <MudBreakpointProvider>
-            <MudHidden Breakpoint="Breakpoint.Xs">
-                <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
-                    <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
-                </MudPaper>
-            </MudHidden>
-            <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-                <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mr-3 mb-3 pa-3" Elevation="0">
-                    <MudImage Alt="C# sticker" title="C# sticker" Src="img/csharp.svg" Fluid="true" Height="200" Width="200" />
-                </MudPaper>
-            </MudHidden>
-        </MudBreakpointProvider>
         C# (current version 10, as of this writing) &ndash; language designed in 2000 by a team led by Anders Hejlsberg for Microsoft.
         He's the madlad that also came up with TypeScript, Delphi, and authored Turbo Pascal.
     </Paragraph>
@@ -59,26 +53,20 @@
 
     <Header2>.NET</Header2>
 
-    <MudBreakpointProvider>
-        <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudCard Style="float: right;" Class="ml-3 mb-3 pa-3" Elevation="5">
-                <MudCardMedia Height="230" Image="img/dotnet-bot.webp" Title="dotnet-bot, the .NET mascot">
-                </MudCardMedia>
-                <MudCardContent>
-                    <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudCard Class="mx-auto mb-3 pa-3" Style="max-width: 250px" Elevation="5">
-                <MudCardMedia Image="img/dotnet-bot.webp" Style="max-width: 250px; max-height: 230px" Title="dotnet-bot, the .NET mascot">
-                </MudCardMedia>
-                <MudCardContent>
-                    <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudHidden>
-    </MudBreakpointProvider>
+    <MudCard Class="ml-3 mb-3 pa-3 sorcery-float-right d-none d-sm-flex" Elevation="5">
+        <MudCardMedia Height="230" Image="img/dotnet-bot.webp" Title="dotnet-bot, the .NET mascot">
+        </MudCardMedia>
+        <MudCardContent>
+            <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
+        </MudCardContent>
+    </MudCard>
+    <MudCard Class="mx-auto mb-3 pa-3 d-flex d-sm-none dotnet-bot-card" Elevation="5">
+        <MudCardMedia Image="img/dotnet-bot.webp" Class="dotnet-bot-card-image" Title="dotnet-bot, the .NET mascot">
+        </MudCardMedia>
+        <MudCardContent>
+            <MudText Typo="Typo.caption">This is dotnet-bot, the .NET mascot.</MudText>
+        </MudCardContent>
+    </MudCard>
 
     <Paragraph>
         .NET is a free, cross-platform and open source ecosystem for developers to build modern applications. It's an umbrella term for a whole host of technologies,
@@ -149,26 +137,20 @@
     </Paragraph>
 
     <Header2>Base Class Library (BCL)</Header2>
-    <MudBreakpointProvider>
-        <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudCard Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="5">
-                <MudCardMedia Height="150" Image="img/baselibrary.webp" Title="Base library (?)">
-                </MudCardMedia>
-                <MudCardContent>
-                    <MudText Typo="Typo.caption">"Base library or something, I don't know, I code in C."</MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudCard Class="mx-auto mb-3 pa-3" Style="max-width: 300px" Elevation="5">
-                <MudCardMedia Image="img/baselibrary.webp" Style="max-width: 300px; max-height: 150px" Title="Base library (?)">
-                </MudCardMedia>
-                <MudCardContent>
-                    <MudText Typo="Typo.caption">"Base library or something, I don't know, I code in C."</MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudHidden>
-    </MudBreakpointProvider>
+    <MudCard Class="mr-3 mb-3 pa-3 d-none d-sm-flex sorcery-float-left" Elevation="5">
+        <MudCardMedia Height="150" Image="img/baselibrary.webp" Title="Base library (?)">
+        </MudCardMedia>
+        <MudCardContent>
+            <MudText Typo="Typo.caption">"Base library or something, I don't know, I code in C."</MudText>
+        </MudCardContent>
+    </MudCard>
+    <MudCard Class="mx-auto mb-3 pa-3 d-flex d-sm-none base-class-library-card" Elevation="5">
+        <MudCardMedia Image="img/baselibrary.webp" Class="base-class-library-card-image" Title="Base library (?)">
+        </MudCardMedia>
+        <MudCardContent>
+            <MudText Typo="Typo.caption">"Base library or something, I don't know, I code in C."</MudText>
+        </MudCardContent>
+    </MudCard>
     <Paragraph>
         The Base Class Library is similar to C++'s or Rust's <Code Language="rust">std</Code> library. It contains the most
         foundational types and utilities for all other .NET libraries. Things like arrays, base collections, <Code>DateTime</Code>,
@@ -186,18 +168,12 @@
         When talking about BCL we will be implicitly talking about <em>the</em> BCL, so its implementation for .NET 6.
     </Paragraph>
     <Header2>Roslyn</Header2>
-    <MudBreakpointProvider>
-        <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudPaper MaxHeight="200px" MaxWidth="300px" Style="float: left;" Class="mr-3 mb-3 pa-3" Elevation="0">
-                <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true" Height="200" Width="300" />
-            </MudPaper>
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudPaper MaxHeight="200px" MaxWidth="300px" Class="mr-3 mb-3 pa-3" Elevation="0">
-                <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true" Height="200" Width="300" />
-            </MudPaper>
-        </MudHidden>
-    </MudBreakpointProvider>
+    <MudPaper MaxHeight="200px" MaxWidth="300px" Class="mr-3 mb-3 pa-3 d-none d-sm-flex sorcery-float-left" Elevation="0">
+        <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true" Height="200" Width="300" />
+    </MudPaper>
+    <MudPaper MaxHeight="200px" MaxWidth="300px" Class="mx-auto mb-3 pa-3 d-flex d-sm-none" Elevation="0">
+        <MudImage Alt="Roslyn logo" title="Roslyn logo" Src="img/roslyn.webp" Fluid="true" Height="200" Width="300" />
+    </MudPaper>
     <Paragraph>
         Roslyn is the main compiler platform for C# (and Visual Basic). It's open-source and ships with .NET by default.
         One of its core features is that it's not only a compiler, but also a platform that allows other code to interface
@@ -214,18 +190,12 @@
         With Roslyn, you can write an analyser that will automatically mark such cases as warnings.
     </Paragraph>
     <Header2>NuGet</Header2>
-    <MudBreakpointProvider>
-        <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudPaper MaxHeight="200px" MaxWidth="200px" Style="float: right;" Class="mr-3 mb-3 pa-3" Elevation="0">
-                <MudImage Alt="C# sticker" title="C# sticker" Src="img/nuget.svg" Fluid="true" Height="200" Width="200" />
-            </MudPaper>
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mr-3 mb-3 pa-3" Elevation="0">
-                <MudImage Alt="C# sticker" title="C# sticker" Src="img/nuget.svg" Fluid="true" Height="200" Width="200" />
-            </MudPaper>
-        </MudHidden>
-    </MudBreakpointProvider>
+    <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mr-3 mb-3 pa-3 d-none d-sm-flex sorcery-float-right" Elevation="0">
+        <MudImage Alt="C# sticker" title="C# sticker" Src="img/nuget.svg" Fluid="true" Height="200" Width="200" />
+    </MudPaper>
+    <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mx-auto mb-3 pa-3 d-flex d-sm-none" Elevation="0">
+        <MudImage Alt="C# sticker" title="C# sticker" Src="img/nuget.svg" Fluid="true" Height="200" Width="200" />
+    </MudPaper>
     <Paragraph>
         NuGet is <em>the</em> package manager for .NET. It provides the central repository for all the
         packages in the .NET world. Anyone can push their own package there and share it with the community.
