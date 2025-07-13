@@ -75,7 +75,7 @@
       "!wwwroot/scripts/lib/asciinema-player.min.js"
     ],
     "minify": {
-      "enabled": false,
+      "enabled": true,
       "gzip": true,
       "preserveImportantComments": false
     }
@@ -86,7 +86,7 @@
       "wwwroot/scripts/app/theming-choose-stylesheet.js"
     ],
     "minify": {
-      "enabled": false,
+      "enabled": true,
       "gzip": true,
       "preserveImportantComments": false
     }

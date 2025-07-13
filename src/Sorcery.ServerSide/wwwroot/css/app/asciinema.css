@@ -1,5 +1,6 @@
 @font-face {
     font-family: "Terminal Nerd Font";
+    font-display: block;
     src: url("/css/fonts/MesloLGS-NF-Regular.woff2") format("woff2"),
     url("/css/fonts/MesloLGS-NF-Regular.woff") format("woff");
 }
