@@ -79,7 +79,7 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
         
         // Add all img and pdf content as binary files.
         AddImgContent(provider, environment);
-        AddPdfContent(provider, environment);
+        AddMediaContent(provider, environment);
         
         // Add the RSS feed.
         provider.Add(new TextResource("/feed.rss"));
@@ -179,15 +179,15 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
         return provider;
     }
     
-    private static SorceryStaticResourcesInfoProvider AddPdfContent(
+    private static SorceryStaticResourcesInfoProvider AddMediaContent(
         this SorceryStaticResourcesInfoProvider provider,
         IWebHostEnvironment environment)
     {
-        // We don't filter on extension, just assume everything in pdf is a binary resource.
-        var pdfDirectory = Path.Combine(environment.WebRootPath, "pdf");
+        // We don't filter on extension, just assume everything in media is a binary resource.
+        var media = Path.Combine(environment.WebRootPath, "media");
         var pdfFiles = 
             from file in Directory.GetFiles(
-                pdfDirectory,
+                media,
                 "*",
                 SearchOption.AllDirectories)
             select file;
