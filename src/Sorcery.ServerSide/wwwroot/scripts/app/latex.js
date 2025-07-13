@@ -16,8 +16,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             ],
             throwOnError: true
         };
-    const containers = document.getElementsByClassName("render-latex");
-    for (const container of containers) {
+    for (const container of document.getElementsByClassName("render-latex")) {
         renderMathInElement(container, configuration);
     }
 });

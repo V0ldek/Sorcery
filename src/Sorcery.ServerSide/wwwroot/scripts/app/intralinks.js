@@ -1,9 +1,8 @@
 ﻿// Hook intralink click handlers.
 document.addEventListener("DOMContentLoaded", (event) => {
-    const intralinks = document.getElementsByClassName("sorcery-footnote-intralink");
     let currentIntralinkFocus = null;
 
-    for (let intralink of intralinks) {
+    for (let intralink of document.getElementsByClassName("sorcery-footnote-intralink")) {
         const container = document.getElementById(intralink.dataset.targetId);
         intralink.addEventListener("click", (event) => {
             container.scrollIntoView({block: "center"});
