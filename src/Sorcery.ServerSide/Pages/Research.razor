@@ -1,0 +1,155 @@
+﻿@page "/research"
+@using Sorcery.ServerSide.Components.Footnotes
+
+<PageTitle>Mat Gienieczko &ndash; Research</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
+        <FootnoteContainer>
+        <article>
+            <Header1>Research</Header1>
+            <Paragraph>
+                I am interested in things going <em><span class="fas fa-bolt"></span>fast<span class="fas fa-bolt"></span></em>,
+                in particular databases. I believe there's tons of improvements we can bring to compilers, databases,
+                operating systems, and other foundational technologies, to allow developers to achieve more with less.
+            </Paragraph>
+            <Paragraph>
+                Of course, in @CurrentYear there is a revolution on the horizon, as an extremely important technological
+                shift is poised to change everything &ndash; that's right, I'm of course talking about the advent
+                of the post-Moore era! We need to build a truly robust database system that is able to leverage accelerators,
+                non-homogenous memory configurations, and modern smart storage solutions.
+            </Paragraph>
+            <Paragraph>
+                I am currently pursuing a PhD at the Technical University of Munich, under supervision by
+                <LinkA Href="https://db.in.tum.de/people/sites/giceva/?lang=en">prof. Jana Giceva</LinkA>.
+                If you're interested in our work or collaboration, please visit her site and/or take a look at
+                <LinkA Href="https://db.in.tum.de/research/?lang=en">our group's research</LinkA>. Here I will highlight
+                some of my work and papers.<Footnote>
+                    Side note: anything that you read on this site is entirely my personal opinion and is in no way
+                    endorsed by TUM or representative of our group's positions. There is a reason this personal site is
+                    separate from my <LinkA Href="https://db.in.tum.de/people/sites/gienieczko/?lang=en">work db.in.tum.de site</LinkA>.
+                </Footnote>
+            </Paragraph>
+            <section>
+                <Header2>Projects</Header2>
+                <Paragraph>
+                    This is a list of projects I created or was heavily involved in &ndash; you can see all projects our
+                    group is involved in <LinkA Href="https://db.in.tum.de/research/projects/?lang=en">here</LinkA>.
+                
+                    All of these are open-source and I am always happy to collaborate or to advise
+                    student theses that work on improvements to them. 
+                </Paragraph>
+                <Header3>AnyBlox</Header3>
+                <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mx-auto mb-3 pa-3 sorcery-float-left d-none d-sm-flex" Elevation="0">
+                    <MudImage Alt="AnyBlox logo" title="AnyBlox logo" Src="img/anyblox-logo.svg" Fluid="true" Height="200" Width="200" />
+                </MudPaper>
+                <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mx-auto mb-3 pa-3 d-flex d-sm-none" Elevation="0">
+                    <MudImage Alt="AnyBlox logo" title="AnyBlox logo" Src="img/anyblox-logo.svg" Fluid="true" Height="200" Width="200" />
+                </MudPaper>
+                <Paragraph>
+                    <LinkA Href="@GitHub.AnyBlox">AnyBlox</LinkA> is <strong>a framework for reading arbitrary datasets using lightweight WebAssembly decoders bundled with the data</strong>.
+                </Paragraph>
+                <Paragraph>
+                    We develop newer and better encodings and compression schemes for data, but your datasets are stuck on using whatever
+                    your query engine supports reading &ndash; which, unless you're using the cutting edge, is not much.
+                    We propose a different paradigm for data encodings &ndash; making datasets <em>decode themselves</em>.
+                </Paragraph>
+                <Paragraph>
+                    WebAssembly decoders can be produced from basically any general-purpose language, which means you can
+                    take your existing code, compile it to Wasm, and you're ready to use it with AnyBlox. Our framework
+                    then allows you to seamlessly share memory with the decoder sandbox and thus makes your data portable,
+                    secure and efficient to decode, and allows you to change the encoding without breaking consumers.
+                </Paragraph>
+                <Header3>rsonpath</Header3>
+                <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mx-auto mb-3 pa-3 sorcery-float-left d-none d-sm-flex" Elevation="0">
+                    <MudImage Alt="rsonpath logo" title="rsonpath logo" Src="img/rsonquery-logo.svg" Fluid="true" Height="200" Width="200" />
+                </MudPaper>
+                <MudPaper MaxHeight="200px" MaxWidth="200px" Class="mx-auto mb-3 pa-3 d-flex d-sm-none" Elevation="0">
+                    <MudImage Alt="rsonpath logo" title="rsonpath logo" Src="img/rsonquery-logo.svg" Fluid="true" Height="200" Width="200" />
+                </MudPaper>
+                <Paragraph>
+                    The <LinkA Href="@GitHub.Rsonpath">rsonpath</LinkA> engine is 
+                    <strong>the fastest JSONPath query engine</strong> with a tiny memory footprint.
+                    Unlike other solutions, we never construct the JSON tree structure (DOM) in memory &ndash; the entire
+                    algorithm is fully streaming.
+                </Paragraph>
+                <Paragraph>
+                    We put emphasis on being a robust, production-ready solution for JSON processing that all but
+                    guarantees your queries will be processed at GB/s throughput. The project currently lags behind
+                    on implementing the full JSONPath spec because I'm putting more focus on my main PhD research,
+                    which is why I'd be extremely happy with any contributions or students that wish to write a thesis
+                    focusing on high-performance algorithms, SIMD, and automata.
+                </Paragraph>
+            </section>
+            <section>
+                <Header2>Publications</Header2>
+                <MudTable Items="@Publications">
+                    <HeaderContent>
+                        <MudTh>Year</MudTh>
+                        <MudTh>Title</MudTh>
+                        <MudTh>Venue</MudTh>
+                        <MudTh>Authors</MudTh>
+                        <MudTh>Access</MudTh>
+                        <MudTh>Talk</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Year">@context.Year</MudTd>
+                        <MudTd DataLabel="Title"><strong>@context.Title</strong></MudTd>
+                        <MudTd DataLabel="Venue">@context.Venue</MudTd>
+                        <MudTd DataLabel="Authors"><em>@context.AuthorsString</em></MudTd>
+                        <MudTd DataLabel="Access"><LinkA Href="@context.PdfLink">PDF</LinkA></MudTd>
+                        <MudTd DataLabel="Talk">@if (context.HasTalk)
+                                                {
+                                                    <LinkA Href="@context.TalkLink"><span>Video</span></LinkA>
+                                                }
+                                                else
+                                                {
+                                                    <span>-</span>
+                                                }
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </section>
+        </article>
+        </FootnoteContainer>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    string CurrentYear => DateTime.Now.Year.ToString();
+
+    public record class Publication(int Year, string Title, string Venue, string PdfLink)
+    {
+        private readonly string[] _authors = [];
+
+        public string AuthorsString => string.Join(", ", _authors);
+
+        public string? TalkLink { get; init; }
+
+        public bool HasTalk => TalkLink is not null;
+        
+        public Publication(int year, string title, string venue, string pdfLink, IEnumerable<string> authors)
+            : this(year, title, venue, pdfLink) => 
+            _authors = authors.ToArray();
+    }
+
+    public List<Publication> Publications { get; } =
+    [
+        new (2025, "AnyBlox: A Framework for Self-Decoding Datasets", "VLDB '25 (accepted)", "/anyblox-paper", [
+            "Mateusz Gienieczko",
+            "Maximilian Kuschewski",
+            "Thomas Neumann",
+            "Viktor Leis",
+            "Jana Giceva"
+        ]),
+        new (2023, "Supporting Descendants in SIMD-Accelerated JSONPath", "ASPLOS '23", "rsonpath-paper", [
+            "Mateusz Gienieczko",
+            "Filip Murlak",
+            "Charles Paperman"
+        ])
+        {
+            TalkLink = "/rsonpath-asplos-talk"
+        }
+    ];
+
+}

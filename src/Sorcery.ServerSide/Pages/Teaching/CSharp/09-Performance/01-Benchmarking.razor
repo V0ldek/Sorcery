@@ -33,9 +33,9 @@
         because the runtime can support the tooling better than as if we were running compiled machine code.
         It's harder, because all the layers between the code and runtime, the JITter, etc. Doing that by
         hand and accounting for all the different factors is <em>hard</em>. Quoting from
-        <Link Href="https://github.com/dotnet/BenchmarkDotNet/tree/5e62756c126980ecde9e4779b3c320b3225381ee#automation=">
+        <LinkA Href="https://github.com/dotnet/BenchmarkDotNet/tree/5e62756c126980ecde9e4779b3c320b3225381ee#automation=">
         BenchmarkDotNet README
-        </Link>:
+        </LinkA>:
     </MudText>
     <Quote>
         Let's think about what should you do in a typical case.
@@ -113,9 +113,9 @@
     <MudText id="benchmark-description" Class="render-latex">
         The <Code>Benches</Code> class contains the benchmarks. We use a file located in <code>/data/words.txt</code>, containing
         around $5$MB of English words, separated with newlines. As the pattern, we use "interrelationships" ($18$ characters), which 
-        <Link Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
+        <LinkA Href="https://puzzling.stackexchange.com/questions/53277/english-word-with-most-valid-substrings">
             scores quite highly in terms of valid substrings contained within it
-        </Link>. We also use a special switch that determines the size of the result
+        </LinkA>. We also use a special switch that determines the size of the result
         by replacing parts of the input with garbage. There are four:
     </MudText>
     <OList id="remove-modes" Class="py-2 render-latex">

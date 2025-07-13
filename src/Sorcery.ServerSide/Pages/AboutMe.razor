@@ -6,7 +6,7 @@
     <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
         <MudGrid Justify="Justify.SpaceBetween">
             <MudItem xs="6">
-                 <MudText Typo="Typo.h1">About me</MudText>
+                 <MudText Typo="Typo.h1">About Me</MudText>
             </MudItem>
             <MudItem xs="6" sm="3" Class="ma-auto">
                 <MudAvatarGroup MaxSize="Size.Large" Outlined="true" OutlineColor="Color.Primary">
@@ -29,15 +29,16 @@
                 I'm a programmer and a computer scientist, by education, choice, and heart.
                 I'm currently pursuing a PhD in Computer Science at the Technical University of Munich.
                 Graduated with a Master's in Computer Science at the University of Warsaw.
-                I like making stuff <em>fast</em>, with focus on databases, compilation, modern hardware,
-                with a little affinity for automata and theory of computation.
+                I like making stuff <em><span class="fas fa-bolt"></span>fast<span class="fas fa-bolt"></span></em>
+                with focus on databases, compilation, modern hardware,
+                and personal affinity for automata and theory of computation.
             </Paragraph>
 
             <Paragraph>
-                I'm the author of <Link Href="https://github.com/rsonquery/rsonpath">rsonpath</Link> and
-                <Link Href="https://github.com/AnyBlox"></Link>.
-                You can find my published research under <Link Href="/publications"></Link> or at ORCID:
-                <Link
+                I'm the author of <LinkA Href="https://github.com/rsonquery/rsonpath">rsonpath</LinkA> and
+                <LinkA Href="https://github.com/AnyBlox">AnyBlox</LinkA>.
+                You can find my published research under <LinkA Href="/research">Research</LinkA> or at ORCID:
+                <LinkA
                     Href="https://orcid.org/0000-0002-6410-8884"
                     id="cy-effective-orcid-url"
                     class="underline orcid-id"
@@ -48,7 +49,7 @@
                         class="orcid-id-icon"
                         alt="ORCID iD icon"/>
                     Mateusz Gienieczko (ORCID)
-                </Link>
+                </LinkA>
             </Paragraph>
 
             <Paragraph>
@@ -83,7 +84,7 @@
                         <MudText Typo="Typo.caption">
                             Thesis: Product Scanner &ndash; 
                             an image reconstruction app for generating fully textured 3D models of products
-                            with an Azure Kinect camera. Unfortunately proprietary, IP went to <Link Href="https://aifi.com/" Typo="@Typo.caption">AiFi</Link>.
+                            with an Azure Kinect camera. Unfortunately proprietary, IP went to <LinkA Href="https://aifi.com/" Typo="@Typo.caption">AiFi</LinkA>.
                         </MudText>
                     </MudPaper>
                 </ItemContent>
@@ -97,7 +98,7 @@
                         <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Master's in Computer Science</MudText>
                         <MudText Typo="Typo.caption">
                             Thesis: rapid execution of queries on JSON documents with SIMD.
-                            Available <Link Href="/masters">here</Link>.
+                            Available <LinkA Href="/masters">here</LinkA>.
                         </MudText>
                     </MudPaper>
                 </ItemContent>

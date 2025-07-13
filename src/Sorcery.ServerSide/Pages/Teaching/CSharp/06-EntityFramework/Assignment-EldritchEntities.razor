@@ -10,8 +10,8 @@
     <Paragraph>
         The goal of this assignment is to implement the <Code>IDungeonRepository</Code> interface known from
         the
-        <Link Href="@CourseBook.CSharpCourse["asynchrony"].Assignment!.Route">
-        previous assignment</Link>,
+        <LinkA Href="@CourseBook.CSharpCourse["asynchrony"].Assignment!.Route">
+        previous assignment</LinkA>,
         but using Entity Framework with an SQLite database.
     </Paragraph>
     <Paragraph>
@@ -44,9 +44,9 @@
     </Paragraph>
     <Paragraph>
         You need to define the actual model in <Code>DungeonWalkerDbContext.OnModelCreating</Code>. It should use
-        <Link
+        <LinkA
             Href="https://docs.microsoft.com/en-us/ef/core/modeling/inheritance#table-per-hierarchy-and-discriminator-configuration">
-        TPH inheritance</Link>
+        TPH inheritance</LinkA>
         for both rooms and loot. The core entity is <Code>Graph&lt;RoomTemplate&gt;</Code> and will be the one queried
         in the repository implementation.
         Included is an ERD diagram of the expected database schema.
@@ -75,11 +75,11 @@ dotnet tool install --global dotnet-ef
     </Paragraph>
     <Paragraph>
         You can connect to the database from the outside, which should be useful for debugging. I recommend
-        <Link Href="https://dbeaver.io/download/">
-        DBeaver</Link>,
+        <LinkA Href="https://dbeaver.io/download/">
+        DBeaver</LinkA>,
         (Community Edition), an open-source database tool. Its usage is straightforward, the only hard thing is
-        <Link Href="https://programmersought.com/article/24818171626/">
-        installing the dark mode</Link>.
+        <LinkA Href="https://programmersought.com/article/24818171626/">
+        installing the dark mode</LinkA>.
     </Paragraph>
     <Paragraph>
         And to drive the point home even more, here's the migration script generated from the expected model. You can
@@ -224,10 +224,10 @@ COMMIT;
                     var navigation = CourseBook.CSharpCourse["entity-framework"]["navigation-properties"];
                 }
                 The relation model is quite deep. You will need to use stuff described in
-                <Link Href="@(navigation.Route)">@(navigation.DisplayName)</Link>,
+                <LinkA Href="@(navigation.Route)">@(navigation.DisplayName)</LinkA>,
                 including <Code>ThenInclude</Code>, which you can find in the linked resource:
-                <Link Href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager">
-                Eager Loading of Related Data</Link>.
+                <LinkA Href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager">
+                Eager Loading of Related Data</LinkA>.
             </ListItem>
             <ListItem Icon="@Icons.Material.Filled.ChevronRight">
                 During loading, try to perform as much simplification as possible inside the query. If you need only a

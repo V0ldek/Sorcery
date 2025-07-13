@@ -2,12 +2,12 @@
 
 @foreach (var tag in Tags.Take(Tags.Count - 1))
 {
-    <span><Sorcery.ServerSide.Components.Link Typo="@Typo.inherit" Href="@($"/sourcery/tags/{tag}")">@tag</Sorcery.ServerSide.Components.Link>, </span>
+    <span><LinkA Typo="@Typo.inherit" Href="@($"/sourcery/tags/{tag}")">@tag</LinkA>, </span>
 }
 
 @if (Tags.Any())
 {
-    <Sorcery.ServerSide.Components.Link Typo="@Typo.inherit" Href="@($"/sourcery/tags/{Tags[^1]}")">@Tags[^1]</Sorcery.ServerSide.Components.Link>
+    <LinkA Typo="@Typo.inherit" Href="@($"/sourcery/tags/{Tags[^1]}")">@Tags[^1]</LinkA>
 }
 
 @code {

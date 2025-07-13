@@ -32,7 +32,7 @@
         Enter the world of SIMD. This series will introduce the concept from first principles,
         starting with simple techniques at a high-level and then gradually getting us closer to the metal.
         Part 1 starts with good old C# code, without any magic tricks. All the code for this part can be found
-        <Link Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">on my GitHub</Link>.
+        <LinkA Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">on my GitHub</LinkA>.
     </Paragraph>
 
     <Header2>What Is SIMD?</Header2>
@@ -77,9 +77,9 @@ int? Sequential(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
     return null;
 }")" />
             <Paragraph>
-                I'm using <Link Href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2018/january/csharp-all-about-span-exploring-a-new-net-mainstay">
+                I'm using <LinkA Href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2018/january/csharp-all-about-span-exploring-a-new-net-mainstay">
                 <Code>ReadOnlySpan&lt;byte&gt;</Code>
-                </Link> to abstract the actual input format. It can be any contiguous sequence of bytes somewhere in memory.
+                </LinkA> to abstract the actual input format. It can be any contiguous sequence of bytes somewhere in memory.
             </Paragraph>
         </section>
         <Header3>Engineer's First SIMD</Header3>
@@ -198,9 +198,9 @@ private int? Simd64(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sensor2)
                     For completeness, this is run with .NET 7.0.4 on an AMD Ryzen 9 7950X.
                     Benchmarks are, naturally, ran with Benchmark.NET.
                     If you're not familiar with benchmarking .NET code, I have
-                    <Link Href="teaching/csharp/9-performance/1-benchmarking">
+                    <LinkA Href="teaching/csharp/9-performance/1-benchmarking">
                     a whole section on benchmarking in the Performance module of my course
-                    </Link>!
+                    </LinkA>!
                 </Footnote>
             </Paragraph>
             <MudSimpleTable Class="my-4 sorcery-benchmarks-table" Bordered="true" Striped="true">
@@ -337,9 +337,9 @@ if (xor != 0)
         <Paragraph>
             Different languages have different ways of providing portable SIMD. In C# land these facilities
             live in <Code>System.Runtime.Intrinsics</Code> as
-            <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128-1?view=net-7.0"><Code>Vector128</Code></Link>,
-            <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector256-1?view=net-7.0"><Code>Vector256</Code></Link>,
-            and (in .NET 8) <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector512-1?view=net-8.0"><Code>Vector512</Code></Link>.
+            <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128-1?view=net-7.0"><Code>Vector128</Code></LinkA>,
+            <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector256-1?view=net-7.0"><Code>Vector256</Code></LinkA>,
+            and (in .NET 8) <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector512-1?view=net-8.0"><Code>Vector512</Code></LinkA>.
             The main purpose of portable SIMD is to allow the programmer to write code with vector acceleration in mind,
             but leave it to the compiler to figure out what specific extensions the target platform supports
             and what code to generate to get the best performance. This is especially natural for a JIT-compiled language
@@ -462,12 +462,12 @@ if (xor != 0)
                     of type <Code>Vector128&lt;byte&gt;</Code> or <Code>Vector128&lt;int&gt;</Code>.
                 </Footnote>
                 The <Code>cmpeq</Code> operation is exposed as
-                <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128.equals?view=net-7.0#system-runtime-intrinsics-vector128-equals-1(system-runtime-intrinsics-vector128((-0))-system-runtime-intrinsics-vector128((-0)))">
+                <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128.equals?view=net-7.0#system-runtime-intrinsics-vector128-equals-1(system-runtime-intrinsics-vector128((-0))-system-runtime-intrinsics-vector128((-0)))">
                 the <Code>Equals</Code> method
-                </Link> on the <Code>Vector</Code> types, while <Code>movemask</Code> is given as
-                <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128.extractmostsignificantbits?view=net-7.0">
+                </LinkA> on the <Code>Vector</Code> types, while <Code>movemask</Code> is given as
+                <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.vector128.extractmostsignificantbits?view=net-7.0">
                 the <Code>ExtractMostSignificantBits</Code> method
-                </Link>.
+                </LinkA>.
             </Paragraph>
             <Paragraph>
                 The tricky part is getting the vectors loaded. Normally when coding in C# we really don't want to think about
@@ -502,7 +502,7 @@ Console.WriteLine(x);
 Console.WriteLine(y);
 ")" />
                     prints <Code>1 1 2 2</Code>,<Footnote>
-                        See this in action in <Link Href="https://sharplab.io/#gist:08dd877124917daf18f3b5c5533f7e31">SharpLab</Link>.
+                        See this in action in <LinkA Href="https://sharplab.io/#gist:08dd877124917daf18f3b5c5533f7e31">SharpLab</LinkA>.
                     </Footnote>
                     while any attempts to return a potentially invalid <Code>ref</Code> will fail:
                     <CodeBlock Code="@(@"
@@ -534,14 +534,14 @@ Console.WriteLine(elem1);
 Console.WriteLine(elem3);
     ")" />
                     this prints <Code>1 2 4</Code>. <Footnote>
-                        See this in action in <Link Href="https://sharplab.io/#gist:32320654a81f15054834864986b82c69">SharpLab</Link>.
+                        See this in action in <LinkA Href="https://sharplab.io/#gist:32320654a81f15054834864986b82c69">SharpLab</LinkA>.
                         </Footnote><Footnote>
-                        The <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal?view=net-7.0">
+                        The <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal?view=net-7.0">
                         <Code>MemoryMarshal</Code>
-                        </Link> class exists specifically to help translating between a <Code>{ReadOnly}Span</Code> and its contiguous slice memory representation.
-                        The <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.add?view=net-7.0#system-runtime-compilerservices-unsafe-add-1">
+                        </LinkA> class exists specifically to help translating between a <Code>{ReadOnly}Span</Code> and its contiguous slice memory representation.
+                        The <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.add?view=net-7.0#system-runtime-compilerservices-unsafe-add-1">
                         <Code>Unsafe.Add</Code>
-                        </Link> function is unsafe because it does not bounds check the offset and therefore can violate memory safety. Note that <Code>GetReference</Code> is also "unsafe"
+                        </LinkA> function is unsafe because it does not bounds check the offset and therefore can violate memory safety. Note that <Code>GetReference</Code> is also "unsafe"
                         in some sense, as it gives a <Code>ref</Code> into a potentially <Code>ReadOnlySpan</Code>, which allows mutating the contents. C# has barely any immutability guarantees!
                     </Footnote>
                 </Paragraph>
@@ -565,9 +565,9 @@ Console.WriteLine(elem3);
                     is flipped, we have bits set for identical elements whereas the previous XOR trick
                     left bits set for differing elements. After the check is done we need to use another helper
                     <Footnote>
-                        <Link Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.add?view=net-7.0#system-runtime-compilerservices-unsafe-add-1">
+                        <LinkA Href="https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.unsafe.add?view=net-7.0#system-runtime-compilerservices-unsafe-add-1">
                         <Code>Unsafe.Add</Code>
-                        </Link>;
+                        </LinkA>;
                         note that we could also keep track of the offset manually in a <Code>nuint</Code> and pass it to the <Code>LoadUnsafe</Code> function,
                         but I didn't want to introduce the concept of a native int here.
                     </Footnote>
@@ -625,8 +625,8 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
                 <Paragraph>
                     Whew. The reference handling is a bit scary with all the "unsafe", but the rest should feel familiar.
                     You can play around with the code from
-                    <Link Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">my GitHub</Link>
-                    or on this <Link Href="https://sharplab.io/#gist:03ef2822ab66d8c680703ea870526dec">SharpLab demo</Link>.
+                    <LinkA Href="https://github.com/V0ldek/Sorcery/tree/master/src/BlogPostCode/SimdCheatCodesForFreePerformance">my GitHub</LinkA>
+                    or on this <LinkA Href="https://sharplab.io/#gist:03ef2822ab66d8c680703ea870526dec">SharpLab demo</LinkA>.
                     So, it's a bit harder to code in this paradigm, but are the performance gains
                     worth it?
                 </Paragraph>
@@ -688,8 +688,8 @@ private int? Simd128Portable(ReadOnlySpan<byte> sensor1, ReadOnlySpan<byte> sens
             </section>
         </section>
         <MudAlert Variant="Variant.Outlined" Class="mb-4">
-            We will discuss juicy details in the next part. To not miss it, subscribe to the <Link Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</Link>,
-            or watch the Discussions in <Link Href="@GitHub.Sorcery">the GitHub repo</Link>!
+            We will discuss juicy details in the next part. To not miss it, subscribe to the <LinkA Href="https://v0ldek.com/feed.rss">RSS feed of Sourcery</LinkA>,
+            or watch the Discussions in <LinkA Href="@GitHub.Sorcery">the GitHub repo</LinkA>!
         </MudAlert>
     </section>
 </BlogPost>

@@ -11,7 +11,7 @@
 <CourseSection Section="@course">
     <MudText>
         We talked about how the .NET Garbage Collector works briefly in
-        <Link Href="@previousGcSection.Route">@previousGcSection.DisplayName</Link>.
+        <LinkA Href="@previousGcSection.Route">@previousGcSection.DisplayName</LinkA>.
         Before we talk about performance, however, we need to dive a little bit deeper into GC internals.
     </MudText>
     <Header2>Talkin' 'bout My Generation</Header2>
@@ -90,7 +90,7 @@
         the free-list algorithm than move the objects around. Therefore, allocating and deallocating large arrays
         can cause LOH fragmentation and degrade performance. To alleviate that, the strategy
         is to allocate big objects up-front and keep them on the LOH, then reuse them instead of reallocating.
-        We cover that in <Link Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</Link>.
+        We cover that in <LinkA Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</LinkA>.
     </Paragraph>
     <Header2>Finalizer</Header2>
     <Paragraph GutterBottom="false">
@@ -99,7 +99,7 @@
         siezes its memory. If it has a finalizer, however, it is first put on the <Highlight>finalization queue</Highlight>.
         The runtime will try its best to run that finalizer. After it is run, the object will be collected.
         Finalizers are hairy and scary, and you should almost never use them. We talk about
-        their intended usage in <Link Href="@finalizersSection.Route">@finalizersSection.DisplayName</Link>.
+        their intended usage in <LinkA Href="@finalizersSection.Route">@finalizersSection.DisplayName</LinkA>.
     </Paragraph>
     <Header2>Summary</Header2>
      <UList>
@@ -113,12 +113,12 @@
         </ListItem>
         <ListItem Icon="@Icons.Material.Filled.ChevronRight">
             The Large Object Heap is best when it's not touched. We will talk on how to achieve that
-            in <Link Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</Link>.
+            in <LinkA Href="@arrayPoolingSection.Route">@arrayPoolingSection.DisplayName</LinkA>.
         </ListItem>
         <ListItem>
             Finalizers have a detrimental effect on GC performance, but are sometimes crucial.
             Rule of thumb number one &ndash; don't declare finalizers. More on that in 
-            <Link Href="@finalizersSection.Route">@finalizersSection.DisplayName</Link>.
+            <LinkA Href="@finalizersSection.Route">@finalizersSection.DisplayName</LinkA>.
         </ListItem>
     </UList>
     <Resources Links=@(new [] {

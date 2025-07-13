@@ -64,6 +64,4 @@ DisallowAITraining: /
 User-Agent: *
 DisallowAITraining: /
 Content-Usage: ai=n
-Disallow: /asciicast/
-Disallow: /pdf/
 Allow: /
