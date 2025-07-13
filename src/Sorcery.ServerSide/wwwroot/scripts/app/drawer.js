@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const layout = document.getElementById("mud-layout");
     const drawer = document.getElementById("nav-drawer");
     const toggleButton = document.getElementById("drawer-toggle-button");
+    let initial = true;
     
     function setDrawerState(open) {
         initial = false;
