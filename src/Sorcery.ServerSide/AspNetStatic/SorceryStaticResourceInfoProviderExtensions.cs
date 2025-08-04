@@ -113,6 +113,8 @@ internal static partial class SorceryStaticResourceInfoProviderExtensions
         provider.Add(new CssResource("/_content/MudBlazor/MudBlazor.min.css"))
             .Add(new CssResource("/Sorcery.ServerSide.styles.css"))
             .Add(new CssResource("/css/bundled/bundle.min.css"))
+            .Add(new CssResource("/css/bundled/giscus.min.css"))
+            .Add(new CssResource("/css/bundled/giscus-light.min.css"))
             .Add(new CssResource("/css/bundled/mud-light.min.css"))
             .Add(new CssResource("/css/bundled/mud-dark.min.css"));
         return provider;

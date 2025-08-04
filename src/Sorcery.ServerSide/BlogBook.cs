@@ -61,6 +61,30 @@ public sealed class BlogBook
                 },
                 Description = Pages.Sourcery.Posts.NoIAmNotAfraidAWizardWillTakeMyJob.Introduction,
                 ShortDescription = "Magic still does not exist.",
+            },
+            new ("Making Languages In Rust (MLIR) – Chapter 0", "making-languages-in-rust-chapter-0", new DateTime(2025, 08, 04, 17, 00, 00, DateTimeKind.Utc))
+            {
+                Tags = new Tag[]
+                {
+                    new ("rust"),
+                    new ("mlir"),
+                    new ("compilers"),
+                    new ("toy tutorial")
+                },
+                Description = Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterZero.Introduction,
+                ShortDescription = "Implementing the MLIR Toy Tutorial in Rust",
+            },
+            new ("Making Languages In Rust (MLIR) – Chapter 1", "making-languages-in-rust-chapter-1", new DateTime(2025, 08, 04, 17, 00, 00, DateTimeKind.Utc))
+            {
+                Tags = new Tag[]
+                {
+                    new ("rust"),
+                    new ("mlir"),
+                    new ("compilers"),
+                    new ("toy tutorial")
+                },
+                Description = Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterOne.Introduction,
+                ShortDescription = "Implementing the MLIR Toy Tutorial in Rust",
             }
         };
     }
@@ -72,4 +96,8 @@ public sealed class BlogBook
     public Post AlphabetDoesNotGoAToZ => _posts[2];
     
     public Post NoIAmNotAfraidAWizardWillTakeMyJob => _posts[3];
+    
+    public Post MakingLanguagesInRustChapterZero => _posts[4];
+    
+    public Post MakingLanguagesInRustChapterOne => _posts[5];
 }

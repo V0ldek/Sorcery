@@ -2,6 +2,18 @@
     float: right;
 }
 
+.sorcery-button-next {
+    max-width: 45%
+}
+
 .sorcery-button-text {
     margin-top: 1px;
+}
+
+.sorcery-button-next .mud-alert {
+    text-align: left;
+}
+
+.sorcery-prev-button-container {
+    max-width: 45%
 }

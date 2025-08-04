@@ -15,6 +15,12 @@
     /// </summary>
     [Parameter]
     public string? Language { get; set; } = "csharp";
+    
+    /// <summary>
+    ///     Optional override for the language name shown in top-right of the block.
+    /// </summary>
+    [Parameter]
+    public string? LanguageString { get; set; }
 
     /// <summary>
     ///     Whether to display line numbers. Defaults to false.
@@ -56,6 +62,11 @@
         if (FileName is not null)
         {
             _preAttributes["data-label"] = FileName;
+        }
+
+        if (LanguageString is not null)
+        {
+            _preAttributes["data-language"] = LanguageString;
         }
 
         if (LineNumbers)

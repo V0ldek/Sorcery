@@ -1,0 +1,389 @@
+﻿@page "/sourcery/making-languages-in-rust-chapter-1"
+@using Sorcery.ServerSide.Components.Blogging;
+@using Sorcery.ServerSide.Components.Footnotes;
+@using Sorcery.Blogging;
+@inject BlogBook BlogBook;
+
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+            In this chapter we introduce the Toy language and write a parser using lalrpop.
+            No MLIR happens here, and everything is nice and Rusty.
+            The calm before the storm&hellip;
+        </Paragraph>
+    };
+}
+
+<BlogPost Post="BlogBook.MakingLanguagesInRustChapterOne">
+
+<ButtonPrevious Link="@BlogBook.MakingLanguagesInRustChapterZero.Route">
+    This post is part of a series.<br/>Previous post: <Highlight>@BlogBook.MakingLanguagesInRustChapterZero.Title</Highlight>.
+</ButtonPrevious>
+@Introduction
+
+<Paragraph>
+    In the <LinkA Href="https://mlir.llvm.org/docs/Tutorials/Toy/Ch-1/">first chapter of the MLIR Toy Tutorial</LinkA>
+    a recursive-descent parser is implemented. It would be a very boring chapter if I redid that &ndash; I wrote like
+    a dozen recursive-descent parsers in my life already.<Footnote>You can find a good intro to lexing and parsing
+        in the excellent (and free!) <LinkA Href="https://craftinginterpreters.com">Crafting Interpreters</LinkA>
+        book.</Footnote> Instead, I will use <LinkA Href="https://github.com/lalrpop/lalrpop/">lalrpop</LinkA>, a Rust
+    crate for generating LR(1) parsers.<Footnote>The name suggests LALR(1), but the LALR(1) backend
+        is no longer available in newest lalrpop. I'm assuming they had a good reason for it.</Footnote>
+</Paragraph>
+<Paragraph GutterBottom="false">
+    All of the code for this tutorial is published in
+    <LinkA Href="https://github.com/V0ldek/mlir-toy-rust">the mlir-toy-rust GitHub repository</LinkA>.
+    The code for this chapter is on the <Code>ch1</Code> branch.
+</Paragraph>
+
+<Header2>The Toy language</Header2>
+
+<Paragraph>
+    Toy is a tensor-based language. The word &ldquo;tensor&rdquo; has precise meaning in mathematics, but for some reason computer
+    scientists abuse that word to mean &ldquo;multi-dimensional&rdquo; array.<Footnote>
+        I'm not sure how and why this happened. Tensors are general mathematical objects. They can be represented
+        as a multi-dimensional matrix if you fix some basis, but if we're talking about that then it's not a tensor
+        &ndash; it's a matrix. The only reason to use the precise term &ldquo;tensor&rdquo; is if you don't want to talk about
+        a single particular corresponding matrix, so why is it used here to refer to a concrete array of numbers?
+        Beats me. On the other hand, Google called their chips &ldquo;Tensor Processing Units&rdquo;, so I think I'm way too late
+        to win this fight.
+    </Footnote>
+    Wherever you see the word &ldquo;tensor&rdquo; going forward,
+    just substitute &ldquo;array&rdquo; instead and you'll be right. However, MLIR uses the word &ldquo;tensor&rdquo;
+    internally for types of values, so I'll be using it as well to avoid confusion.
+</Paragraph>
+<Paragraph>
+    The language allows any-dimensional tensors, but the tutorial only implements codegen for $1$ and $2$-dimensional
+    ones. All numerical values are $64$-bit floating point values (double-precision). All values are immutable.
+    We can define functions, perform basic operations on tensors (addition and element-wise multiplication),
+    and use a builtin <Code>print</Code> function to print results. Here's example Toy code (comments are given by <Code>#</Code>):
+</Paragraph>
+<CodeBlock Language="python" LanguageString="Toy" LineNumbers="true" Code="@(@"
+def main() {
+  # Define a variable `a` with shape <2, 3>, initialized with the literal value.
+  # The shape is inferred from the supplied literal.
+  var a = [[1, 2, 3], [4, 5, 6]];
+
+  # b is identical to a, the literal tensor is implicitly reshaped: defining new
+  # variables is the way to reshape tensors (element count must match).
+  var b<2, 3> = [1, 2, 3, 4, 5, 6];
+
+  # transpose() and print() are the only builtin, the following will transpose
+  # a and b and perform an element-wise multiplication before printing the result.
+  print(transpose(a) * transpose(b));
+}")"></CodeBlock>
+<Paragraph>
+    All tensors are statically typed. The user <em>may</em> specify the type of a declared variable,
+    but function arguments and return types are implicitly typed. Functions are effectively generic,
+    and they are specialised to the specific tensor shapes they are called with.
+</Paragraph>
+<CodeBlock Language="python" LanguageString="Toy" LineNumbers="true" Code="@(@"
+# User defined generic function that operates on unknown shaped arguments.
+def multiply_transpose(a, b) {
+  return transpose(a) * transpose(b);
+}
+
+def main() {
+  # Define a variable `a` with shape <2, 3>, initialized with the literal value.
+  var a = [[1, 2, 3], [4, 5, 6]];
+  var b<2, 3> = [1, 2, 3, 4, 5, 6];
+
+  # This call will specialize `multiply_transpose` with <2, 3> for both
+  # arguments and deduce a return type of <3, 2> in initialization of `c`.
+  var c = multiply_transpose(a, b);
+
+  # A second call to `multiply_transpose` with <2, 3> for both arguments will
+  # reuse the previously specialized and inferred version and return <3, 2>.
+  var d = multiply_transpose(b, a);
+
+  # A new call with <3, 2> (instead of <2, 3>) for both dimensions will
+  # trigger another specialization of `multiply_transpose`.
+  var e = multiply_transpose(c, d);
+
+  # Finally, calling into `multiply_transpose` with incompatible shapes
+  # (<2, 3> and <3, 2>) will trigger a shape inference error.
+  var f = multiply_transpose(a, c);
+}")"></CodeBlock>
+<Paragraph>
+    We need a parser to convert this textual representation to an Abstract Syntax Tree.
+    We diverge from the original tutorial in two ways: first, I will be using <Code>lalrpop</Code> as mentioned
+    in the intro; second, I split the <Code>Expr</Code> node type to distinguish between top-level statements
+    that can occur in a function's body, and generic expressions that can occur e.g. as a side of a binary operator.
+    With those caveats, let's take an example that has all syntax elements and translate it to an AST:
+</Paragraph>
+
+<MudContainer Class="d-flex" Gutters="false">
+    <MudContainer Gutters="false" Class="mr-1">
+        <CodeBlock Language="python" LanguageString="Toy" LineNumbers="true" Code="@(@"
+# Comments are ignored.
+def multiply_transpose(a, b) {
+  return transpose(a) * transpose(b);
+}
+
+def main() {
+  var a = [[1, 2, 3], [4, 5, 6]];
+  var b<2, 3> = [1, 2, 3, 4, 5, 6];
+  var c = multiply_transpose(a, b);
+  print(c + c);
+  return;
+}")"></CodeBlock>
+        <MudPaper Class="mr-3 mb-3 pa-3 d-flex align-center justify-center mud-width-full" Elevation="0">
+            <ThemedImage Alt="diagram visualising the xor trick"
+                         Title="The XOR trick"
+                         Src="img/sorcery/making-languages-in-rust/sourcery-mlir-toy-ast.svg"
+                         Fluid="true"
+                         Width="400"
+                         Height="400"/>
+        </MudPaper>
+    </MudContainer>
+    <MudContainer Gutters="false" Class="ml-1">
+        <CodeBlock Language="plain" LanguageString="Plain text" Code="@(@"
+Module @./toy/valid/ch1.toy@1:1
+|--Function multiply_transpose [args = (a, b)] @./toy/valid/ch1.toy@2:1
+|  |--Return @./toy/valid/ch1.toy@3:3
+|  |  |--BinOp [op = Multiply] @./toy/valid/ch1.toy@3:10
+|  |  |  |--Call [callee = transpose] @./toy/valid/ch1.toy@3:10
+|  |  |  |  |--Var [ident = a] @./toy/valid/ch1.toy@3:20
+|  |  |  |--Call [callee = transpose] @./toy/valid/ch1.toy@3:25
+|  |  |  |  |--Var [ident = b] @./toy/valid/ch1.toy@3:35
+|--Function main [args = ()] @./toy/valid/ch1.toy@6:1
+|  |--VarDecl [ident = a] @./toy/valid/ch1.toy@7:3
+|  |  |--Literal [ty = <2, 3>] @./toy/valid/ch1.toy@7:11
+|  |  |  |--Literal [ty = <3>] @./toy/valid/ch1.toy@7:12
+|  |  |  |  |--Num [value = 1] @./toy/valid/ch1.toy@7:13
+|  |  |  |  |--Num [value = 2] @./toy/valid/ch1.toy@7:16
+|  |  |  |  |--Num [value = 3] @./toy/valid/ch1.toy@7:19
+|  |  |  |--Literal [ty = <3>] @./toy/valid/ch1.toy@7:23
+|  |  |  |  |--Num [value = 4] @./toy/valid/ch1.toy@7:24
+|  |  |  |  |--Num [value = 5] @./toy/valid/ch1.toy@7:27
+|  |  |  |  |--Num [value = 6] @./toy/valid/ch1.toy@7:30
+|  |--VarDecl [ident = b, ty = <2, 3>] @./toy/valid/ch1.toy@8:3
+|  |  |--Literal [ty = <6>] @./toy/valid/ch1.toy@8:17
+|  |  |  |--Num [value = 1] @./toy/valid/ch1.toy@8:18
+|  |  |  |--Num [value = 2] @./toy/valid/ch1.toy@8:21
+|  |  |  |--Num [value = 3] @./toy/valid/ch1.toy@8:24
+|  |  |  |--Num [value = 4] @./toy/valid/ch1.toy@8:27
+|  |  |  |--Num [value = 5] @./toy/valid/ch1.toy@8:30
+|  |  |  |--Num [value = 6] @./toy/valid/ch1.toy@8:33
+|  |--VarDecl [ident = c] @./toy/valid/ch1.toy@9:3
+|  |  |--Call [callee = multiply_transpose] @./toy/valid/ch1.toy@9:11
+|  |  |  |--Var [ident = a] @./toy/valid/ch1.toy@9:30
+|  |  |  |--Var [ident = b] @./toy/valid/ch1.toy@9:33
+|  |--Print @./toy/valid/ch1.toy@10:3
+|  |  |--BinOp [op = Add] @./toy/valid/ch1.toy@10:9
+|  |  |  |--Var [ident = c] @./toy/valid/ch1.toy@10:9
+|  |  |  |--Var [ident = c] @./toy/valid/ch1.toy@10:13
+|  |--Return @./toy/valid/ch1.toy@11:3
+")"></CodeBlock>
+    </MudContainer>    
+</MudContainer>
+<Paragraph GutterBottom="false">
+    Nothing fancy happening here. One important thing to note is that <Highlight>MLIR expects every operation
+        emitted to have a location associated with it</Highlight>. The location information is the source file,
+    line, and column &ndash; standard stuff you might expect for a debugger to match assembly with the source code,
+    or the compiler to use when reporting errors.
+</Paragraph>
+
+<Header2>Parsing Using lalrpop</Header2>
+
+<Paragraph GutterBottom="false">
+    Using lalrpop is not unlike using similar tools, e.g. yacc or Bison. We define the language grammar in a special
+    <Code>.lalrpop</Code> file and lalrpop generates a lexer<Footnote>
+        Lexer, scanner, tokeniser, however you want to call it. I'll consistently use &ldquo;lexer&rdquo;.
+    </Footnote> and a parser. However, the aforementioned location information is why we cannot just use lalrpop's lexer
+    directly &ndash; it only gathers the byte offset within the file with no regard for line/column info<Footnote>
+        This is not a fundamental problem and there is
+        <LinkA Href="https://github.com/lalrpop/lalrpop/issues/666">an issue</LinkA> open for lexing with 
+        more useful source position.
+    </Footnote>. Fortunately, lalrpop allows us to define a custom lexer (which is simple to code) and generate a parser
+    using it (which is considerably more complicated<Footnote>The autogenerated LALR(1) parser at the end of this
+        chapter has $\sim 10\,000$ lines.</Footnote>).
+</Paragraph>
+
+<Header3>Lexer</Header3>
+
+<Paragraph>
+    We scan for all meaningful special characters: <Code>* + < > = , ; ( ) { } [ ]</Code>; the keywords
+    <Code>return var def print</Code>; and string identifiers and numerical values.
+</Paragraph>
+<Paragraph>
+    Implementing this in Rust is quite easy. We split the source into lines using
+    <LinkA Href="https://doc.rust-lang.org/std/primitive.str.html#method.lines"><Code>str::lines</Code></LinkA> and then
+    the current line into individual characters using
+    <LinkA Href="https://doc.rust-lang.org/std/primitive.str.html#method.chars"><Code>str::chars</Code></LinkA>.
+    This properly handles Unicode, although note that a single Unicode character is not necessarily what a user
+    might consider a &ldquo;column&rdquo; visually. After that we just scan character-by-character. Identifiers
+    are matched as anything that contains ASCII alphanumerical characters and underscores and starts with a letter.
+    Numbers are given to <Code>f64::from_str</Code> and invalid values are reported as lexer errors.
+</Paragraph>
+<Paragraph GutterBottom="false">
+    In the end, we map the lexer tokens into lalrpop using an <Code>extern</Code> block in the <Code>.lalrpop</Code>
+    file. Now we can write our parser rules using normal strings and the special <Code>Ident</Code> and <Code>Num</Code>
+    tokens that map to the <Code>Token::Ident(String)</Code> and <Code>Token::Number(f64)</Code> tokens.
+</Paragraph>
+
+<Header3>Parser</Header3>
+
+<Paragraph>
+    Writing a lalrpop parser is a joy. I'm not going to turn this into a lalrpop tutorial, please take a look
+    at <LinkA Href="https://lalrpop.github.io/lalrpop/index.html">their book</LinkA> for details, but in short
+    we can define rules like:
+</Paragraph>
+<CodeBlock Language="rust" LanguageString="lalrpop" Code=@(@"
+pub Mod: ast::ModuleAst = {
+    <Func+> => ast::ModuleAst::new(<>.into_iter().flatten().collect(), Location::new(file.clone(), 1, 1)),
+}
+")></CodeBlock>
+<Paragraph>
+    This defines a public struct <Code>ModParser</Code> in the generated code that parses a string into
+    <Code>ast::ModuleAst</Code>. There is only one rule, one or more matches of the <Code>Func</Code> rule (defined
+    below). We define how to process matches directly with Rust code that gets emitted in the appropriate parser
+    action. The objects created from that rule are passed here as a <Code>Vec</Code> (since we used <Code>+</Code> to
+    match a sequence) and can be accessed via the
+    <Code><></Code> token. We pass it to the <Code>ModuleAst</Code> constructor alongside a dummy location
+    pointing to the start of the file. Here's the <Code>Func</Code> rule:
+</Paragraph>
+<CodeBlock Language="rust" LanguageString="lalrpop" Code=@(@"
+pub Func: Option<ast::FunctionAst> = {
+    <p:Proto> ""{"" <e:(<TopExpr> "";"")*> ""}"" => Some(ast::FunctionAst::new(
+        p, e.into_iter().flatten().collect())),
+    ! => { errors.push(<>.error); None },
+}
+")></CodeBlock>
+<Paragraph>
+    We parse the function prototype and then a sequence of <Code>TopExpr</Code> separated by semicolons.
+    Importantly, our <Code>Func</Code> rule can fail &ndash; it returns an <Code>Option</Code>.
+    There is a global vector of errors accessible to the parser, so when parsing a function fails we don't
+    immediately stop &ndash; we store the error and then tell lalrpop to try and recover
+    to a place where parsing can continue. This is more in line of what you expect from an actual language frontend,
+    where you get all of your red squiggles immediately and not only the first one. The <Code>None</Code> values
+    are simply ignored &ndash; at the top when using the parser we will not return the partially parsed AST
+    if the error vector is not empty.
+</Paragraph>
+<Paragraph>
+    The <Code>!</Code> token matches only on an error. We push the error and return <Code>None</Code> as the function.
+    The function prototype is a good level to provide error recovery, as a single malformed function should not inhibit
+    the parser from processing subsequent functions. You might have noticed that <Code>TopExpr</Code> also can fail:
+</Paragraph>
+<CodeBlock Language="rust" LanguageString="lalrpop" Code=@(@"
+TopExpr: Option<ast::TopLevelExprAst> = {
+    <VarDecl>,
+    <Return>,
+    <Print>,
+    <Expr> => <>.map(|e| ast::TopLevelExprAst::Expr(e)),
+    ! => { errors.push(<>.error); None },
+};
+")></CodeBlock>
+<Paragraph>
+    This is also a sensible error recovery level &ndash; if we fail to parse a top-level expression we can find the next
+    semicolon and continue parsing the function body from there.
+</Paragraph>
+<Paragraph>
+    The rules for <Code>VarDecl</Code>, <Code>Return</Code>, and <Code>Print</Code> are straightforward, and can only
+    fail if the nested expression fails. The <Code>Expr</Code> rule is interesting as it uses precedence:
+</Paragraph>
+<CodeBlock Language="rust" LanguageString="lalrpop" Code=@(@"
+Expr: Option<ast::ExprAst> = {
+    #[precedence(level=""0"")]
+    <Primary>,
+    #[precedence(level=""1"")] #[assoc(side=""left"")]
+    <l:Expr> ""*"" <r:Expr> => l.and_then(|l| r.map(|r| {
+        let loc = l.loc().clone();
+        ast::ExprAst::BinOp(ast::BinOpData::new(ast::Op::Multiply, l.into(), r.into(), loc))
+    })),
+    #[precedence(level=""2"")] #[assoc(side=""left"")]
+    <l:Expr> ""+"" <r:Expr> => l.and_then(|l| r.map(|r| {
+        let loc = l.loc().clone();
+        ast::ExprAst::BinOp(ast::BinOpData::new(ast::Op::Add, l.into(), r.into(), loc))
+    })),
+};
+Primary: Option<ast::ExprAst> = {
+    #[precedence(level=""0"")]
+    <Call>,
+    ""("" <Expr> "")"",
+    <Num> => Some(<>),
+    <BracketedLiteral>,
+    #[precedence(level=""1"")]
+    <Var> => Some(<>),
+};
+")></CodeBlock>
+<Paragraph>
+    Here we tackle the standard problem when parsing nested expressions, giving highest precedence to atomic or
+    parenthesised terms, and then parsing arithmetic operators according to regular arithmetic precedence. We also have
+    to define the associativity: here operators are left-associative, which means we parse e.g. $2 + 2 + 2$ as
+    $(2 + 2) + 2$ and <em>not</em> as $2 + (2 + 2)$. For our operators it makes no difference, but there would be
+    a difference if we had, for example, subtraction.
+</Paragraph>
+<Paragraph>
+    A small nuance there is that we need <Code>Call</Code> to have precedence over <Code>Var</Code>, because otherwise
+    there would be ambiguity on whether <Code>Ident ( Num )</Code> means &ldquo;a call to Ident with a single parameter
+    Num&rdquo; or &ldquo;reference to variable Ident and then a bracketed Num expression&rdquo;.
+</Paragraph>
+<Paragraph>
+    There are two rules that require quite complex processing: <Code>BracketedLiteral</Code> and <Code>VarType</Code>.
+    First of all, a <Code>Literal</Code> has to be a tensor, so we cannot match singular values (those are <Code>Num</Code>).
+    Second, literal shapes have to be consistent, for example <Code>[1, [2, 3]]</Code> is not a valid tensor literal.
+    We handle the first issue by separating our rules into the top-level <Code>BracketedLiteral</Code> that delegates
+    to <Code>NestedLiteral</Code>:
+</Paragraph>
+<CodeBlock Language="rust" LanguageString="lalrpop" Code=@(@"
+BracketedLiteral: Option<ast::ExprAst> = {
+    <l:Loc<""["">> <values:NestedLiteral> ""]"" => // ... snip ...
+};
+NestedLiteral: Vec<ast::ExprAst> = {
+    CommaP<BracketedLiteral> => <>.into_iter().flatten().collect(),
+    CommaP<Num>
+};
+")></CodeBlock>
+<Paragraph>
+    <Code>CommaP</Code> is a macro that I defined matching a comma-separated, non-empty list of elements. <Code>Loc</Code>
+    is also a macro that uses the lexer to return a pair of matched element and location. Now we implement the logic
+    to figure out the dimensions of the tensor and report an error if they are inconsistent:
+</Paragraph>
+<CodeBlock Language="rust" LanguageString="lalrpop" Code=@(@"
+BracketedLiteral: Option<ast::ExprAst> = {
+    <l:Loc<""["">> <values:NestedLiteral> ""]"" => {
+        let mut dims = vec![];
+        dims.push(u64::try_from(values.len()).unwrap());
+        // Gather dimensions of all nested tensor literals.
+        let mut nested_dims = values.iter().filter_map(|e| match e {
+            ast::ExprAst::Literal(l) => Some(l.dims()),
+            _ => None,
+        });
+        // Assert all dimensions are equal.
+        // try_reduce would be best here but it's unstable.
+        if let Some(s) = nested_dims.next() {
+            let nested_dim = s;
+            for dim in nested_dims {
+                if dim != nested_dim {
+                    let err = ParseError::User {
+                      error: SyntaxError::inconsistent_tensor_shape(dim, nested_dim, &l.1)
+                    };
+                    errors.push(err);
+                    return None;
+                }
+            }
+            dims.extend(nested_dim);
+        }
+
+        Some(ast::ExprAst::Literal(ast::LiteralData::new(values, dims, l.1)))
+    }
+};
+")></CodeBlock>
+<Paragraph GutterBottom="false">
+    Finally finally, the <Code>VarType</Code> rule needs to assert that the dimensions inside are valid.
+    Since our lexer happily eats up any numerical values, a declaration like <Code>def x<3.14, -0.1></Code> may get
+    to the parser. Here we make sure the value is actually a valid dimension, i.e. we need to convert <Code>f64</Code>
+    to <Code>u64</Code> by first checking that the number has no fractional part, is not negative, and is not larger
+    than <Code>u64::MAX</Code>.
+</Paragraph>
+<Header3>Putting It All Together</Header3>
+<Paragraph>
+    
+</Paragraph>
+<MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
+<ButtonNextHidden>
+    This post is part of a series.<br/>The next post is work in progress and not yet published.
+</ButtonNextHidden>
+</BlogPost>
