@@ -1,7 +1,5 @@
 ﻿@page "/sourcery/making-languages-in-rust-chapter-0"
 @using Sorcery.ServerSide.Components.Blogging;
-@using Sorcery.ServerSide.Components.Footnotes;
-@using Sorcery.Blogging;
 @inject BlogBook BlogBook;
 
 @code {
@@ -18,7 +16,7 @@
     };
 }
 
-<BlogPost Post="BlogBook.MakingLanguagesInRustChapterZero">
+<BlogPost Post="BlogBook.MakingLanguagesInRust.Posts[0]">
 @Introduction
 
 <Paragraph GutterBottom="false">
@@ -110,10 +108,4 @@
     The text of the blog post, including the vivid descriptions of my
     pain and suffering, are based on the original Toy tutorial, but constitute original work.
 </Paragraph>
-
-<MudDivider Class="mt-6 mb-2" DividerType="DividerType.FullWidth" Vertical="false" />
-
-<ButtonNext Link="@BlogBook.MakingLanguagesInRustChapterOne.Route">
-    This post is part of a series.<br/>Next up: <Highlight>@BlogBook.MakingLanguagesInRustChapterOne.Title</Highlight>!
-</ButtonNext> 
 </BlogPost>

@@ -1,0 +1,28 @@
+﻿@page "/sourcery/making-languages-in-rust-chapter-2"
+@using Sorcery.ServerSide.Components.Blogging;
+@using Sorcery.ServerSide.Components.Footnotes;
+@inject BlogBook BlogBook;
+
+@code {
+    public static readonly RenderFragment Introduction = __builder =>
+    {
+        <Paragraph>
+            In this chapter we create a custom MLIR dialect for our Toy language and implement codegen
+            from the AST to the high-level dialect operations. We also start the fun&trade; part
+            &ndash; Rust/C++ interop.
+        </Paragraph>
+    };
+}
+
+<BlogPost Post="BlogBook.MakingLanguagesInRust.Posts[2]">
+    @Introduction
+    
+    <Paragraph>
+        Custom dialects are what MLIR is all about. The MLIR infrastructure is designed to accommodate essentially
+        arbitrary IR extensions, as long as they are in SSA form<Footnote>
+            Static Single Assignment. Essentially, every value has a single place (lexically) where it is defined.
+            This makes things way easier for transformations on the IR later on.
+        </Footnote>. A custom IR is called a <Highlight>dialect</Highlight> and the core unit in their construction
+        is an <Highlight>operation</Highlight>. 
+    </Paragraph>
+</BlogPost>

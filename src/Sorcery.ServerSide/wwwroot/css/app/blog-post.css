@@ -1,10 +1,15 @@
 .sorcery-blog-post .title-container {
-    width: 80%;
+    width: 100%;
     overflow-wrap: anywhere;
     hyphens: auto;
     display: flex;
     flex-grow: 1;
 }
+
+.sorcery-blog-post .side-title-container {
+    width: 40%;
+}
+
 
 .sorcery-blog-post .metadata-container {
     width: auto;
@@ -16,4 +21,11 @@
 
 .sorcery-blog-post .metadata-container span {
     width: 100%;
+}
+
+.sorcery-blog-post .previous-in-series-container {
+    width: auto;
+    margin-left: auto;
+    display: flex;
+    flex-grow: 1;
 }

@@ -2,7 +2,7 @@
 @using Sorcery.Blogging;
 @using Sorcery.ServerSide.Components.Footnotes;
 
-<SourceryTitle Title="@Title" />
+<SourceryTitle Title="@Title"/>
 
 <MudContainer MaxWidth="MaxWidth.Large">
     <MudPaper id="content-paper" Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4 render-latex">
@@ -14,40 +14,70 @@
                             <span>@Title</span>
                         </MudText>
                     </div>
-                    <div class="metadata-container">
-                        <MudText Typo="Typo.caption" Class="blog-post-metadata">
-                            Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")
-                            <br/>
-                            Tags: <BlogPostTags Tags="@Post.Tags" />
-                        </MudText>
+                    <div class="side-title-container">
+                        <div class="metadata-container">
+                            <MudText Typo="Typo.caption" Class="blog-post-metadata">
+                                Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")
+                                <br/>
+                                Tags:
+                                <BlogPostTags Tags="@Post.Tags"/>
+                            </MudText>
+                        </div>
+                        @if (Post.Series is not null && Post.PreviousInSeries is not null)
+                        {
+                            <div class="previous-in-series-container">
+                                <ButtonPrevious Link="@Post.PreviousInSeries.Route">
+                                    This post is part of a series.<br/>Previous post:
+                                    <Highlight>@Post.PreviousInSeries.Title</Highlight>
+                                    .
+                                </ButtonPrevious>
+                            </div>
+                        }
                     </div>
                 </div>
                 <div class="d-block d-sm-none gap-4">
                     <MudText Typo="Typo.caption" Class="blog-post-metadata my-2">
                         Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")
                         <br/>
-                        Tags: <BlogPostTags Tags="@Post.Tags" />
+                        Tags:
+                        <BlogPostTags Tags="@Post.Tags"/>
                     </MudText>
                     <MudText Typo="Typo.h1">
                         <span>@Title</span>
                     </MudText>
                 </div>
-                <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false" />
+                <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false"/>
 
                 @ChildContent
+
+                @if (Post.Series is not null && Post.NextInSeries is not null)
+                {
+                    if (Post.NextInSeries.IsPublished)
+                    {
+                        <ButtonNext Link="@Post.NextInSeries.Route">
+                            This post is part of a series.<br/>Next up:
+                            <Highlight>@Post.NextInSeries.Title</Highlight>!
+                        </ButtonNext>
+                    }
+                    else
+                    {
+                        <ButtonNextHidden>
+                            This post is part of a series.<br/>The next post is work in progress and not yet published.
+                        </ButtonNextHidden>
+                    }
+
+                    <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false"/>
+                }
             </FootnoteContainer>
         </article>
-        <CommentBox />
+        <CommentBox/>
     </MudPaper>
 </MudContainer>
 
 @code {
-    [Parameter]
-    [EditorRequired]
-    public Post Post { get; set; } = null!;
+    [Parameter] [EditorRequired] public Post Post { get; set; } = null!;
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = null!;
+    [Parameter] public RenderFragment ChildContent { get; set; } = null!;
 
     private string Title => HttpUtility.HtmlDecode(Post.Title);
 }
