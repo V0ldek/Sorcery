@@ -39,7 +39,7 @@
     public bool Clickable { get; set; }
 
     [CascadingParameter] protected bool Dense { get; set; }
-    private Typo Typo => Dense ? Typo.body2 : Typo.body1;
+    private Typo Typo => Typo.body1;
     
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object> Attributes { get; set; } = new();

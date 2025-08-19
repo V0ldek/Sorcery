@@ -45,6 +45,9 @@
     [EditorRequired]
     public string Code { get; set; } = null!;
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+
     private readonly Dictionary<string, object> _preAttributes = new();
 
     private string _codeClass = "";
@@ -58,6 +61,11 @@
         _codeClass = $"language-{Language}";
         _displayCode = Code?.Trim()!;
         _preClass = $"language-{Language}";
+
+        foreach (var kvp in Attributes)
+        {
+            _preAttributes.Add(kvp.Key, kvp.Value);
+        }
 
         if (FileName is not null)
         {

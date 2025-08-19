@@ -18,7 +18,7 @@ public sealed class BlogBook
         from series in _series
         let firstPublished = series.Posts.FirstOrDefault(p => p.IsPublished)
         where firstPublished is not null
-        orderby firstPublished.DateOfPublication.Value descending
+        orderby firstPublished.DateOfPublication!.Value descending
         select series;
 
     public IEnumerable<Tag> AllTags =>

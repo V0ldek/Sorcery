@@ -1,0 +1,11 @@
+﻿@media(max-width: 599px) {
+    .mud-main-content {
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+    }
+    
+    .mud-main-content > .mud-container {
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+    }
+}

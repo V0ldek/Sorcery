@@ -1,8 +1,33 @@
 .mud-main-content {
-    --mud-typography-h1-size: 2rem;
+    --mud-typography-h1-size: 2.5rem;
     --mud-typography-h2-size: 1.875rem;
     --mud-typography-h3-size: 1.5rem;
     --mud-typography-h4-size: 1.0625rem;
+    --mud-typography-body1-size: 0.875rem;
+    --mud-typography-button-size: 0.75rem;
+    --mud-typography-caption-size: 0.5rem;
+}
+
+.mud-main-content code[class*="language-"] {
+    font-size: var(--mud-typography-body1-size);
+}
+
+:not(pre) > code[class*="language-"] {
+    font-size: 0.9var(--mud-typography-body1-size);
+}
+
+@media (max-width: 599px) {
+    pre[class*="language-"].line-numbers {
+        padding-left: 1rem;   
+    }
+    .mud-main-content .line-numbers .line-numbers-rows {
+        display: none;
+    }
+
+    pre > code[class*="language-"] {
+        display: block;
+        font-size: 0.75rem !important;
+    }
 }
 
 @media (min-width: 600px) {
@@ -11,6 +36,12 @@
         --mud-typography-h2-size: 3.75rem;
         --mud-typography-h3-size: 3rem;
         --mud-typography-h4-size: 2.125rem;
+        --mud-typography-body1-size: 1rem;
+        --mud-typography-button-size: 0.875rem;
+        --mud-typography-caption-size: 0.75rem;
+    }
+    .mud-main-content .line-numbers .line-numbers-rows {
+        font-size: 1rem;
     }
 }
 
@@ -41,3 +72,15 @@
 .sorcery-typography-nowrap {
     white-space: nowrap;
 }
+
+sup, sub
+{
+    height: 0;
+    line-height: 1;
+    vertical-align: baseline;
+    _vertical-align: bottom;
+    position: relative;
+}
+
+sup { bottom: 1ex; }
+sub { top: .5ex; }

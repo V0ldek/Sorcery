@@ -4,6 +4,7 @@
 @inject BlogBook BlogBook;
 
 @code {
+
     public static readonly RenderFragment Introduction = __builder =>
     {
         <Paragraph>
@@ -12,17 +13,713 @@
             &ndash; Rust/C++ interop.
         </Paragraph>
     };
+
 }
 
 <BlogPost Post="BlogBook.MakingLanguagesInRust.Posts[2]">
     @Introduction
-    
+
     <Paragraph>
         Custom dialects are what MLIR is all about. The MLIR infrastructure is designed to accommodate essentially
-        arbitrary IR extensions, as long as they are in SSA form<Footnote>
+        arbitrary IR extensions, as long as they are in SSA form.
+        <Footnote>
             Static Single Assignment. Essentially, every value has a single place (lexically) where it is defined.
             This makes things way easier for transformations on the IR later on.
-        </Footnote>. A custom IR is called a <Highlight>dialect</Highlight> and the core unit in their construction
-        is an <Highlight>operation</Highlight>. 
+        </Footnote>
+        A custom IR is called a
+        <Highlight>dialect</Highlight>
+        and the core unit in their construction
+        is an
+        <Highlight>operation</Highlight>
+        .
     </Paragraph>
+    <Paragraph>
+        There are essentially two ways to define custom dialects and operations: manually inheriting from C++ classes
+        <Code Language="cpp">mlir::Dialect</Code> and <Code Language="cpp">mlir::Op</Code>, or using the declarative
+        <LinkA Href="https://mlir.llvm.org/docs/DefiningDialects/Operations/">Operation Definition Specification</LinkA>
+        framework where we provide a TableGen
+        <Footnote>
+            <LinkA Href="https://llvm.org/docs/TableGen/">TableGen</LinkA>
+            is an in-house LLVM solution for code generation.
+            It turns out that for any sufficiently complex project the chance people invent a declarative DSL
+            to make their lives easier tends towards $1$ with time.
+        </Footnote>
+        definition and then use a code generator
+        to create the appropriate structures. It should go without saying which one of these is considered more pleasing
+        in the eyes of the gods.
+    </Paragraph>
+
+    <Paragraph GutterBottom="false">
+        Melior contains a
+        <LinkA Href="https://mlir-rs.github.io/melior/melior/macro.dialect.html"><Code Language="rust">dialect</Code>
+        </LinkA>
+        macro which generates Rust code from <Code>.td</Code> definition files. This is an excellent idea, although
+        it will quickly turn out the existing generator is lackluster. In the end, we will be generating both Rust
+        and C++ code from TableGen and then gluing them together &ndash; the C++ side is needed to register our dialect
+        and integrate it into the larger MLIR framework, while the Rust side will be used to implement actual logic for
+        Toy.
+    </Paragraph>
+
+    <Header2>The Toy Dialect</Header2>
+
+    <Paragraph>
+        Let's briefly go through the operations we expect from our dialect. The point of MLIR and custom dialects
+        is that we can create an IR at an abstraction level very close to the source language; this enables
+        optimisations that would be hard or impossible on either the raw AST or a lower level IR (e.g. the LLVM IR),
+        and then allows us to progressively lower from this dialect until we reach the output representation.
+    </Paragraph>
+    <Paragraph>
+        As an example, a <Code Language="llvm">toy.transpose</Code> operation which transposes a tensor (reverses
+        the list of dimensions) might be represented in MLIR assembly as:
+    </Paragraph>
+    <CodeBlock Language="llvm" LanguageString="MLIR" Code=@(@"
+%0 = ""toy.transpose""(%arg0) : (tensor<*xf64>) -> tensor<*xf64> loc(""toy/valid/ch2.toy"":6:10)
+")>
+    </CodeBlock>
+    <Paragraph>
+        The left-hand-side is a value. In SSA each value has a unique name in a given code region and cannot be
+        reassigned. We then have the operation name, list of arguments, and the <em>type</em>, which describes
+        the types of all
+        <Highlight>operands</Highlight>
+        on the left of the arrow and the types of all
+        <Highlight>results</Highlight>
+        on the right. In this case, the type is an <em>unranked</em> tensor of
+        <Code>f64</Code> elements, which means we don't know the concrete shape at this point. <em>Ranked</em> tensors
+        will have an explicit shape. Finally, as mentioned, all operations have location information. Operations can
+        also have
+        <Highlight>attributes</Highlight>
+        and <Code>regions</Code> associated with it, for example this
+        operation which declares a function with a given name and operations:
+        <Footnote>
+            It is perhaps counterintuitive (it was for me!) that a function is a single operation. In MLIR
+            <em>everything</em> is an operation. We will emit all our Toy operations inside a
+            <Code>builtin.module</Code> operation representing a module. Functions are operations that have a
+            code region attached which represents their body. In fact, since MLIR imposes very few restrictions
+            on the ops, you could have an operation that has many code regions and give it whatever semantics
+            you want. How to lower those operations to sensible low-level code is a separate concern.
+        </Footnote>
+    </Paragraph>
+    <CodeBlock Language="llvm" LanguageString="MLIR" Code=@(@"
+""toy.func""() ({
+  ^bb0(%arg0: tensor<*xf64> loc(""toy/valid/ch2-empty.toy"":1:16), %arg1: tensor<*xf64> loc(""toy/valid/ch2-empty.toy"":1:19)):
+    ""toy.return""(%2) : (tensor<*xf64>) -> () loc(""test/Examples/Toy/Ch2/codegen.toy"":5:3)
+}) {sym_name = ""do_nothing"", type = (tensor<*xf64>, tensor<*xf64>) -> ()} : () -> () loc(""toy/valid/ch2-empty.toy"":1:1)
+")>
+    </CodeBlock>
+    <Paragraph>
+        This is the standard assembly format that works with arbitrary operations &ndash; remember that MLIR's set of
+        operations is fully extensible &ndash; and we will want to get a less verbose format later on. That being said,
+        let's design our dialect by figuring out what operations we will need.
+    </Paragraph>
+    <OList>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.func</Code> &ndash; declares a function with a given identifier and parameter
+            list, and holds the block of Toy operations representing the body;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.generic_call</Code> &ndash; calls a function with a given identifier, passing
+            its operands as the arguments;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.constant</Code> &ndash; representation of a <Code>Literal</Code> which results
+            in a single ranked tensor representing the constant;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.transpose</Code> &ndash; mentioned above, takes a single tensor operand and
+            returns it transposed as the result;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.reshape</Code> &ndash; reinterprets a tensor into a different shape;
+            for example, we can reinterpret <Code>[[1, 2], [3, 4]]&lt;2,2&gt;</Code> as
+            <Code>[1, 2, 3, 4]&lt;4&gt;</Code>, or <Code>[[1], [2], [3], [4]]&lt;4,1&gt;</Code>, or
+            <Code>[[1, 2, 3, 4]]&lt;1,4&gt;</Code>, or <Code>[[[1], [2]], [[3], [4]]]&lt;2,2,1&gt;</Code>, etc. as long
+            as the number of elements matches;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.add</Code> &ndash; adds two operands whose shapes match and returns the result;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.mul</Code> &ndash; as above, but for element-wise multiplication;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.print</Code> &ndash; takes a single tensor and prints it; this is the only
+            operation that has a side-effect;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.print</Code> &ndash; takes a single tensor and prints it; this is the only
+            operation that has a side-effect;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code Language="llvm">toy.return</Code> &ndash; takes either a single operand and returns it from the
+            owning <Code Language="llvm">toy.func</Code>, or no operands (for &ldquo;void&rdquo; functions).
+        </ListItem>
+    </OList>
+    <Paragraph>
+        To this end, we create a TableGen file &ndash; <Code>toy.td</Code> &ndash; and define the dialect and the
+        base class for our operations:
+    </Paragraph>
+    <CodeBlock Language="rust" LanguageString="TableGen" FileName="src/dialect/toy.td" Code=@(@"
+// Provide a definition of the 'toy' dialect in the ODS framework so that we
+// can define our operations.
+def Toy_Dialect : Dialect {
+  let name = ""toy"";
+  let cppNamespace = ""::mlir::toy"";
+}
+
+// Base class for toy dialect operations. This operation inherits from the base
+// `Op` class in OpBase.td, and provides:
+//   * The parent dialect of the operation.
+//   * The mnemonic for the operation, or the name without the dialect prefix.
+//   * A list of traits for the operation.
+class Toy_Op<string mnemonic, list<Trait> traits = []> :
+    Op<Toy_Dialect, mnemonic, traits>;
+")></CodeBlock>
+    <Paragraph>
+        We can now try to define an operation, for example the <Code>toy.transpose</Code>:
+    </Paragraph>
+    <CodeBlock Language="TableGen" FileName="src/dialect/toy.td" Code=@(@"
+def TransposeOp : Toy_Op<""transpose""> {
+  let summary = ""transpose operation"";
+
+  let arguments = (ins F64Tensor:$input);
+  let results = (outs F64Tensor);
+
+  let assemblyFormat = [{
+    `(` $input `:` type($input) `)` attr-dict `to` type(results)
+  }];
+
+  // Allow building a TransposeOp from the input operand.
+  let builders = [
+    OpBuilder<(ins ""Value"":$input)>
+  ];
+
+  // Invoke a static verify method to verify this transpose operation.
+  let hasVerifier = 1;
+}
+")></CodeBlock>
+    <Paragraph>
+        A couple of things here:
+    </Paragraph>
+    <OList Dense="true">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            we declare a single operand and a single result, and the operand gets a name &ndash; <Code>input</Code>;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            the <Code>assemblyFormat</Code> section specifies a pretty-printing format; the code for that will be
+            auto-generated to make the assembly output nicer;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            <Code>builders</Code> defines constructors, declaring a specific C++ function on the generated class that
+            we are supposed to implement;
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            finally, we specify at the end that our class will have a <Code Language="cpp">verify()</Code> function,
+            which will be called by the MLIR machinery to make sure the operation is well-formed; in case of transpose
+            we want the types of the input and output match like one would expect from a tensor transposition.
+        </ListItem>
+    </OList>
+    <Paragraph>
+        TableGen definitions by themselves aren't anything, you need a code generator to actually turn it into useful
+        definitions. MLIR comes with a C++ backend, but we've avoided looking at C++ thus far so let's live in that
+        world a bit longer. Melior comes with a <Code>dialect</Code> macro that generates Rust code for TableGen,
+        so let's see what we get by running it (I cleaned up the autogenerated code to be more readable):
+    </Paragraph>
+    <CodeBlock Language="rust" Code=@(@"
+mod melior_gen {
+    melior::dialect! {
+        name: ""toy"",
+        files: [""src/dialect/toy2.td""]
+    }
+}
+")></CodeBlock>
+    <CodeBlock Language="rust" FileName="src/dialect/toy.td" Code=@(@"
+mod melior_gen {
+    pub mod toy {
+        use melior::{Context, Error};
+        use melior::ir::{Location, Value};
+        use melior::ir::operation::{Operation, OperationBuilder, OperationLike, OperationMutLike};
+        use std::marker::PhantomData;
+        ///A [`transpose`](TransposeOperation) operation. Transpose operation.
+        pub struct TransposeOperation<'c> {
+            operation: Operation<'c>,
+        }
+        impl<'c> TransposeOperation<'c> {
+            /// Returns a name.
+            pub fn name() -> &'static str {
+                ""toy.transpose""
+            }
+            /// Returns a generic operation.
+            pub fn as_operation(&self) -> &Operation<'c> {
+                &self.operation
+            }
+            /// Creates a builder.
+            pub fn builder(context: &'c Context, location: Location<'c>) -> TransposeOperationBuilder<
+                'c,
+                ::melior::dialect::ods::__private::Unset,
+            > {
+                TransposeOperationBuilder::new(context, location)
+            }
+            pub fn input(&self) -> Result<Value<'c, '_>, Error> {
+                self.operation.operand(0)
+            }
+        }
+        ///A builder for a [`transpose`](TransposeOperation) operation.
+        pub struct TransposeOperationBuilder<'c, O0> {
+            builder: OperationBuilder<'c>,
+            context: &'c Context,
+            _state: PhantomData<(O0)>,
+        }
+        impl<'c> TransposeOperationBuilder<'c, ::melior::dialect::ods::__private::Unset> {
+            pub fn new(context: &'c Context, location: Location<'c>) -> Self {
+                Self {
+                    context,
+                    builder: OperationBuilder::new(""toy.transpose"", location),
+                    _state: PhantomData,
+                }
+            }
+        }
+        impl<'c> TransposeOperationBuilder<'c, ::melior::dialect::ods::__private::Unset> {
+            pub fn input(self, input: Value<'c, '_>) -> TransposeOperationBuilder<
+                'c,
+                ::melior::dialect::ods::__private::Set,
+            > {
+                TransposeOperationBuilder {
+                    context: self.context,
+                    builder: self.builder.add_operands(&[input]),
+                    _state: Default::default(),
+                }
+            }
+        }
+        impl<'c> TransposeOperationBuilder<'c, ::melior::dialect::ods::__private::Set> {
+            pub fn build(self) -> TransposeOperation<'c> {
+                self.builder
+                    .build()
+                    .expect(""valid operation"")
+                    .try_into()
+                    .expect(""should be a valid TransposeOperation"")
+            }
+        }
+        #[allow(clippy::too_many_arguments)]
+        ///Creates a [`transpose`](TransposeOperation) operation.
+        pub fn transpose<'c>(
+            context: &'c Context,
+            input: Value<'c, '_>,
+            location: Location<'c>,
+        ) -> TransposeOperation<'c> {
+            TransposeOperation::builder(context, location).input(input).build()
+        }
+        impl<'c> TryFrom<Operation<'c>>
+        for TransposeOperation<'c> {
+            type Error = Error;
+            fn try_from(operation: Operation<'c>) -> Result<Self, Self::Error> {
+                Ok(Self { operation })
+            }
+        }
+        impl<'c> From<TransposeOperation<'c>> for Operation<'c> {
+            fn from(operation: TransposeOperation<'c>) -> Self {
+                operation.operation
+            }
+        }
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        Sooo&hellip; Ye, I don't like quite a few things here.
+    </Paragraph>
+    <OList Dense="true">
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            The <Code>hasVerifier</Code> field is ignored &ndash; this will turn out to be the main issue we'll
+            have to solve in this post.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            The <Code>input</Code> argument is not verified. In the definition we bound it to be of the
+            <Code>F64Tensor</Code> type, but that is not checked anywhere in the builder code.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            You can't see it on this example, but the <Code>builder</Code> field from TableGen is also ignored
+            &ndash; melior always generates a single standard builder function, it just so happens in this case it's
+            the same one we wanted.
+        </ListItem>
+        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+            There is a <em>big</em> issue that is not immediately visible, but makes those builders actually useless
+            &ndash; the operation has no results! The builders should configure the operation to have a single result
+            of the <Code>F64Tensor</Code> type, but currently they create an operation with zero results. This makes
+            codegen essentially impossible, since MLIR will not bind any values to the transpose.
+        </ListItem>
+    </OList>
+    <Paragraph>
+        We're off to a bad start, aren't we? Fortunately, the issues with builder can be fixed by implementing
+        our own builder function that sets the results correctly:
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/dialect/toy.rs" LineNumbers="true" LineNumbersStartAt="83" Code=@(@"
+/// Create a `toy.transpose` operation.
+pub(crate) fn transpose<'c>(
+    context: &'c melior::Context,
+    input: ir::Value<'c, '_>,
+    location: ir::Location<'c>,
+) -> ir::Operation<'c> {
+    ir::operation::OperationBuilder::new(""toy.transpose"", location)
+        .add_operands(&[input])
+        .add_results(&[codegen::unranked_tensor_type(context)])
+        .build()
+        .unwrap()
+}")>
+    </CodeBlock>
+    <Paragraph>
+        We'll have to do it for every operation that has any results. We'll deal with verification later.
+        Let's setup the other ops, the definitions are taken directly from the MLIR tutorial. Starting with
+        the simplest ones:
+    </Paragraph>
+    <CodeBlock Language="rust" LanguageString="TableGen" FileName="src/dialect/toy.td" Code=@(@"
+def AddOp : Toy_Op<""add""> {
+  let summary = ""element-wise addition operation"";
+  let description = [{
+    The ""add"" operation performs element-wise addition between two tensors.
+    The shapes of the tensor operands are expected to match.
+  }];
+
+  let arguments = (ins F64Tensor:$lhs, F64Tensor:$rhs);
+  let results = (outs F64Tensor);
+
+  // Indicate that the operation has a custom parser and printer method.
+  let hasCustomAssemblyFormat = 1;
+
+  // Allow building an AddOp with from the two input operands.
+  let builders = [
+    OpBuilder<(ins ""Value"":$lhs, ""Value"":$rhs)>
+  ];
+}
+
+def MulOp : Toy_Op<""mul""> {
+  let summary = ""element-wise multiplication operation"";
+  let description = [{
+    The ""mul"" operation performs element-wise multiplication between two
+    tensors. The shapes of the tensor operands are expected to match.
+  }];
+
+  let arguments = (ins F64Tensor:$lhs, F64Tensor:$rhs);
+  let results = (outs F64Tensor);
+
+  // Indicate that the operation has a custom parser and printer method.
+  let hasCustomAssemblyFormat = 1;
+
+  // Allow building a MulOp with from the two input operands.
+  let builders = [
+    OpBuilder<(ins ""Value"":$lhs, ""Value"":$rhs)>
+  ];
+}
+
+def PrintOp : Toy_Op<""print""> {
+  let summary = ""print operation"";
+  let description = [{
+    The ""print"" builtin operation prints a given input tensor, and produces
+    no results.
+  }];
+
+  // The print operation takes an input tensor to print.
+  let arguments = (ins F64Tensor:$input);
+
+  let assemblyFormat = ""$input attr-dict `:` type($input)"";
+}
+
+def ReshapeOp : Toy_Op<""reshape""> {
+  let summary = ""tensor reshape operation"";
+  let description = [{
+    Reshape operation is transforming its input tensor into a new tensor with
+    the same number of elements but different shapes. For example:
+
+    ```mlir
+       %0 = toy.reshape (%arg1 : tensor<10xf64>) to tensor<5x2xf64>
+    ```
+  }];
+
+  let arguments = (ins F64Tensor:$input);
+
+  // We expect that the reshape operation returns a statically shaped tensor.
+  let results = (outs StaticShapeTensorOf<[F64]>);
+
+  let assemblyFormat = [{
+    `(` $input `:` type($input) `)` attr-dict `to` type(results)
+  }];
+}
+def ConstantOp : Toy_Op<""constant"", [Pure]> {
+  // Provide a summary and description for this operation. This can be used to
+  // auto-generate documentation of the operations within our dialect.
+  let summary = ""constant"";
+  let description = [{
+    Constant operation turns a literal into an SSA value. The data is attached
+    to the operation as an attribute. For example:
+
+    ```mlir
+      %0 = toy.constant dense<[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]>
+                        : tensor<2x3xf64>
+    ```
+  }];
+
+  // The constant operation takes an attribute as the only input.
+  let arguments = (ins F64ElementsAttr:$value);
+
+  // The constant operation returns a single value of TensorType.
+  let results = (outs F64Tensor);
+
+  // Indicate that the operation has a custom parser and printer method.
+  let hasCustomAssemblyFormat = 1;
+
+  // Add custom build methods for the constant operation. These method populates
+  // the `state` that MLIR uses to create operations, i.e. these are used when
+  // using `builder.create<ConstantOp>(...)`.
+  let builders = [
+    // Build a constant with a given constant tensor value.
+    OpBuilder<(ins ""DenseElementsAttr"":$value), [{
+      build($_builder, $_state, value.getType(), value);
+    }]>,
+
+    // Build a constant with a given constant floating-point value.
+    OpBuilder<(ins ""double"":$value)>
+  ];
+
+  // Indicate that additional verification for this operation is necessary.
+  let hasVerifier = 1;
+}
+
+def GenericCallOp : Toy_Op<""generic_call""> {
+  let summary = ""generic call operation"";
+  let description = [{
+    Generic calls represent calls to a user defined function that needs to
+    be specialized for the shape of its arguments. The callee name is attached
+    as a symbol reference via an attribute. The arguments list must match the
+    arguments expected by the callee. For example:
+
+    ```mlir
+     %4 = toy.generic_call @my_func(%1, %3)
+           : (tensor<2x3xf64>, tensor<2x3xf64>) -> tensor<*xf64>
+    ```
+
+    This is only valid if a function named ""my_func"" exists and takes two
+    arguments.
+  }];
+
+  // The generic call operation takes a symbol reference attribute as the
+  // callee, and inputs for the call.
+  let arguments = (ins FlatSymbolRefAttr:$callee, Variadic<F64Tensor>:$inputs);
+
+  // The generic call operation returns a single value of TensorType.
+  let results = (outs F64Tensor);
+
+  // Specialize assembly printing and parsing using a declarative format.
+  let assemblyFormat = [{
+    $callee `(` $inputs `)` attr-dict `:` functional-type($inputs, results)
+  }];
+
+  // Add custom build methods for the generic call operation.
+  let builders = [
+    OpBuilder<(ins ""StringRef"":$callee, ""ArrayRef<Value>"":$arguments)>
+  ];
+}")>
+    </CodeBlock>
+    <Paragraph>
+        The additional values in the definition, like <Code>[Pure]</Code> in the <Code>ConstantOp</Code>, are
+        <em>traits</em>. In C++ these are implemented by multiple-inheritance, but conceptually they're close to Rust
+        traits. They're used by MLIR for various things &ndash; the <Code>Pure</Code> trait will be useful during
+        optimisation, as it tells MLIR these operations can be removed if their values are unused; the
+        <Code>Terminator</Code> trait we'll put on <Code>toy.return</Code> to notify MLIR that this operation exits
+        from the current code block; and <Code>HasParent&lt;"SomeOp"&gt;</Code> enforces that the owner of the region
+        in which the operation is located is <Code>SomeOp</Code>.
+    </Paragraph>
+    <Paragraph>
+        Now there are two operations that contain the <Code>extraClassDeclaration</Code> field.
+        This tells MLIR to generate additional functions in the C++ header defining the operation.
+        We, of course, have no C++ headers, and melior does the most sensible thing here and just ignores this field.
+        If we want those functions we'll have to implement them ourselves. &ldquo;Custom C++ code in the TableGen&rdquo;
+        is going to be a villain of this series, unfortunately. The <Code>FuncOp</Code> additionally contains an
+        arbitrary region as its body.
+    </Paragraph>
+    <CodeBlock Language="rust" LanguageString="TableGen" FileName="src/dialect/toy.td" Code=@(@"
+def FuncOp : Toy_Op<""func"", [
+    FunctionOpInterface, IsolatedFromAbove
+  ]> {
+  let summary = ""user defined function operation"";
+  let description = [{
+    The ""toy.func"" operation represents a user defined function. These are
+    callable SSA-region operations that contain toy computations.
+
+    Example:
+
+    ```mlir
+    toy.func @main() {
+      %0 = toy.constant dense<5.500000e+00> : tensor<f64>
+      %1 = toy.reshape(%0 : tensor<f64>) to tensor<2x2xf64>
+      toy.print %1 : tensor<2x2xf64>
+      toy.return
+    }
+    ```
+  }];
+
+  let arguments = (ins
+    SymbolNameAttr:$sym_name,
+    TypeAttrOf<FunctionType>:$function_type,
+    OptionalAttr<DictArrayAttr>:$arg_attrs,
+    OptionalAttr<DictArrayAttr>:$res_attrs
+  );
+  let regions = (region AnyRegion:$body);
+
+  let builders = [OpBuilder<(ins
+    ""StringRef"":$name, ""FunctionType"":$type,
+    CArg<""ArrayRef<NamedAttribute>"", ""{}"">:$attrs)
+  >];
+
+  let extraClassDeclaration = [{
+    //===------------------------------------------------------------------===//
+    // FunctionOpInterface Methods
+    //===------------------------------------------------------------------===//
+
+    /// Returns the argument types of this function.
+    ArrayRef<Type> getArgumentTypes() { return getFunctionType().getInputs(); }
+
+    /// Returns the result types of this function.
+    ArrayRef<Type> getResultTypes() { return getFunctionType().getResults(); }
+
+    Region *getCallableRegion() { return &getBody(); }
+  }];
+
+  let hasCustomAssemblyFormat = 1;
+  let skipDefaultBuilders = 1;
+}
+
+def ReturnOp : Toy_Op<""return"", [Pure, HasParent<""FuncOp"">,
+                                 Terminator]> {
+  let summary = ""return operation"";
+  let description = [{
+    The ""return"" operation represents a return operation within a function.
+    The operation takes an optional tensor operand and produces no results.
+    The operand type must match the signature of the function that contains
+    the operation. For example:
+
+    ```mlir
+      toy.func @foo() -> tensor<2xf64> {
+        ...
+        toy.return %0 : tensor<2xf64>
+      }
+    ```
+  }];
+
+  // The return operation takes an optional input operand to return. This
+  // value must match the return type of the enclosing function.
+  let arguments = (ins Variadic<F64Tensor>:$input);
+
+  // The return operation only emits the input in the format if it is present.
+  let assemblyFormat = ""($input^ `:` type($input))? attr-dict "";
+
+  // Allow building a ReturnOp with no return operand.
+  let builders = [
+    OpBuilder<(ins), [{ build($_builder, $_state, {}); }]>
+  ];
+
+  // Provide extra utility definitions on the c++ operation class definition.
+  let extraClassDeclaration = [{
+    bool hasOperand() { return getNumOperands() != 0; }
+  }];
+
+  // Invoke a static verify method to verify this return operation.
+  let hasVerifier = 1;
+}")></CodeBlock>
+    <Paragraph>
+        Now there's one more issue with the <Code>dialect</Code> macro and the melior API. Since MLIR is fully
+        extensible, all dialects that are used need to be loaded into an MLIR Context to actually enable verification,
+        optimisation passes, etc. In the C++ API this is done via registering all operations into a class inheriting
+        from <Code>Dialect</Code> (<Code>ToyDialect</Code> in our case) and then loading it into the context with:
+    </Paragraph>
+    <CodeBlock Language="cpp" Code="context.loadDialect<toy::ToyDialect>()">
+    </CodeBlock>
+    <Paragraph GutterBottom="false">
+        Now the problem here is that melior did not generate a <Code>ToyDialect</Code> struct for us. Indeed, how on
+        earth are we supposed to actually load our dialect with melior?
+    </Paragraph>
+    <Header2>Let the Hacks Begin</Header2>
+    <Paragraph>
+        We need to register the dialect, which means we need to generate the <Code>ToyDialect</Code> class in C++,
+        create a function that registers it to an MLIR Context, and call it from Rust. If you're not familiar with
+        Rust-C++ interop, well you're about to be. I'm not going to be using any fancy tools for bindings &ndash;
+        ideally, all of the hacky glue code we're about to see would be autogenerated anyway. We'll use standard
+        C FFI.<Footnote>Foreign Function Interface. Turns out, calling functions is actually hard work and different
+            languages do it differently. In particular, Rust doesn't even have a stable FFI, which means the way
+            functions are exposed and arguments are passed can change between Rust versions. When communicating between
+            languages people tend to use the C FFI, because it's relatively simple and well-defined. In both C++ and
+            Rust we define those functions in an <Code>extern "C"</Code> block; they are limited to simple numeric
+            types, pointers, and structs with a fixed C layout.
+        </Footnote>
+    </Paragraph>
+    <Paragraph>
+        By the guiding principle of minimising pain, let's get a minimal solution that will allow us to register
+        the dialect and start the codegen. We need a C++ project with a CMakeLists that will perform the usual MLIR
+        TableGen into C++ classes and emit a library that we can link from Rust. If you've never done C++ interop
+        before, well, this is a pretty foolproof method that you can apply, but for more complicated projects
+        you probably want to use <LinkA Href="https://github.com/rust-lang/rust-bindgen">bindgen</LinkA>. Here's the
+        CMake configuration:
+    </Paragraph>
+    <CodeBlock Language="cmake" FileName="src/dialect/CMakeLists.txt" LineNumbers="true" Code=@(@"
+cmake_minimum_required(VERSION 3.20.0)
+project(toy-dialect)
+
+set(CMAKE_CXX_STANDARD 23)
+
+find_package(LLVM REQUIRED)
+set(MLIR_DIR ""${LLVM_DIR}/../mlir"")
+find_package(MLIR REQUIRED)
+
+set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/bin)
+set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/lib)
+set(MLIR_BINARY_DIR ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_MODULE_PATH ""${MLIR_CMAKE_DIR}"")
+list(APPEND CMAKE_MODULE_PATH ""${LLVM_CMAKE_DIR}"")
+include(TableGen)
+include(AddLLVM)
+include(AddMLIR)
+include_directories(${LLVM_INCLUDE_DIRS})
+include_directories(${MLIR_INCLUDE_DIRS})
+link_directories(${LLVM_BUILD_LIBRARY_DIR})
+add_definitions(${LLVM_DEFINITIONS})
+
+add_mlir_dialect(ToyOps toy)
+add_mlir_doc(ToyOps ToyDialect Dialects/ -gen-dialect-doc)
+
+set(LLVM_TARGET_DEFINITIONS toy.td)
+mlir_tablegen(Ops.h.inc -gen-op-decls)
+mlir_tablegen(Ops.cpp.inc -gen-op-defs)
+mlir_tablegen(Dialect.h.inc -gen-dialect-decls)
+mlir_tablegen(Dialect.cpp.inc -gen-dialect-defs)
+add_public_tablegen_target(ToyIncGen)
+
+include_directories(${PROJECT_BINARY_DIR})
+
+add_dependencies(mlir-headers ToyIncGen)
+add_library(Toy toy.cpp)
+llvm_update_compile_flags(Toy)
+add_dependencies(Toy ToyIncGen)
+target_link_libraries(Toy
+  PRIVATE
+    MLIRAnalysis
+    MLIRFunctionInterfaces
+    MLIRIR
+    MLIRParser
+    MLIRSideEffectInterfaces
+    MLIRTransforms)
+")></CodeBlock>
+    <Paragraph>
+        Most of these are magic spells required to make LLVM, MLIR, and TableGen work at all. They're not really
+        documented anywhere<Footnote>Because why would they be, you're a C++ user, you like pain, right?</Footnote>,
+        but in short we add all of the required libraries, point towards our <Code>toy.td</Code> file, ask MLIR to
+        to generate a bunch of files (<Code>Ops</Code> and <Code>Dialect</Code>, both header and <Code>cpp</Code> file),
+        create a <Code>Toy</Code> library target from our <Code>toy.cpp</Code> file (see below), and finally link
+        all that together with MLIR. This should produce a <Code>libtoy.a</Code> shared library we'll be able
+        to link from Rust.
+    </Paragraph>
+    <Paragraph>
+        To have that done for us automatically and not have to use two separate build systems, we use the
+        <LinkA Href="https://github.com/rust-lang/cmake-rs">cmake</LinkA> crate to trigger the C++ build from
+        <Code>build.rs</Code> and have all files  put in the usual cargo output. We expand the <Code>build.rs</Code>
+        to generate both the lalrpop parser, and build and link the C++ library.
+    </Paragraph>
+    <CodeBlock Language="rust" LineNumbers="true" FileName="build.rs" Code=@(@"
+")></CodeBlock>
 </BlogPost>

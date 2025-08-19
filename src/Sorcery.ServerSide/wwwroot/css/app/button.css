@@ -2,8 +2,10 @@
     float: right;
 }
 
-.sorcery-button-next {
-    max-width: 45%
+@media(min-width: 600px) {
+    .sorcery-button-next {
+        max-width: 45%
+    }    
 }
 
 .sorcery-button-text {

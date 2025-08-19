@@ -36,15 +36,31 @@
                     </div>
                 </div>
                 <div class="d-block d-sm-none gap-4">
-                    <MudText Typo="Typo.caption" Class="blog-post-metadata my-2">
-                        Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")
-                        <br/>
-                        Tags:
-                        <BlogPostTags Tags="@Post.Tags"/>
-                    </MudText>
-                    <MudText Typo="Typo.h1">
-                        <span>@Title</span>
-                    </MudText>
+                    <span class="metadata-container">
+                        <MudText Typo="Typo.caption" Class="blog-post-metadata my-2 d-flex">
+                            <span class="blog-post-metadata-small-published">
+                                Published: @Post.DateOfPublication?.ToString("yyyy-MM-dd")
+                            </span>
+                            <span class="blog-post-metadata-small-tags">
+                                Tags:
+                                <BlogPostTags Tags="@Post.Tags"/>    
+                            </span>
+                        </MudText>
+                    </span>
+                    <div class="title-container-small my-2">
+                        <MudText Typo="Typo.h1">
+                            <span>@Title</span>
+                        </MudText>    
+                    </div>
+                    @if (Post.Series is not null && Post.PreviousInSeries is not null)
+                    {
+                        <div class="previous-in-series-container-small">
+                            <ButtonPrevious Link="@Post.PreviousInSeries.Route">
+                                This post is part of a series.<br/>Previous post:
+                                <Highlight>@Post.PreviousInSeries.Title</Highlight>.
+                            </ButtonPrevious>
+                        </div>
+                    }
                 </div>
                 <MudDivider Class="my-6" DividerType="DividerType.FullWidth" Vertical="false"/>
 

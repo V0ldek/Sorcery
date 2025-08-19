@@ -1,5 +1,5 @@
 ﻿@page "/404"
-<SourceryTitle Title="Not found" />
+<SourceryTitle Title="Not found"/>
 <MudContainer MaxWidth="MaxWidth.Large">
     <MudPaper Height="100%" Width="100%" Class="pa-sm-16 pa-4 my-4">
         <MudText Typo="Typo.h1">
@@ -9,17 +9,19 @@
             <MudText GutterBottom="true">
                 You're here either because you typed this URL directly, or you just found a dead link
                 that should've been fixed before I deployed the new version of the page.
-            </MudText>            
+            </MudText>
             <MudText GutterBottom="true">
-                If you're sure this page is ought to be, but it isn't, I'd appreciate if you could file an issue on 
-                <LinkA Href="@GitHub.Sorcery">GitHub</LinkA> telling me how you got here.
-            </MudText>            
+                If you're sure this page is ought to be, but it isn't, I'd appreciate if you could file an issue on
+                <LinkA Href="@GitHub.Sorcery">GitHub</LinkA>
+                telling me how you got here.
+            </MudText>
             <MudText>
                 Other than that, enjoy this cute picture of Dexter trying to be Not Found.
             </MudText>
-        </MudAlert>            
+        </MudAlert>
         <MudPaper MaxHeight="500px" MaxWidth="800px" Class="ma-auto pa-3" Elevation="1">
-            <MudImage Alt="Dexter the white-orange cat hiding in a backpack" title="Dexter Not Found" Src="img/dexter-not-found.webp" 
+            <MudImage Alt="Dexter the white-orange cat hiding in a backpack" title="Dexter Not Found"
+                      Src="img/dexter-not-found.webp"
                       Height="500"
                       Width="800"
                       ObjectFit="ObjectFit.Contain"/>
@@ -28,5 +30,5 @@
 </MudContainer>
 
 @code {
-    
+
 }

@@ -10,7 +10,6 @@
     width: 40%;
 }
 
-
 .sorcery-blog-post .metadata-container {
     width: auto;
     text-align: left;
@@ -19,8 +18,24 @@
     flex-grow: 1;
 }
 
-.sorcery-blog-post .metadata-container span {
+.sorcery-blog-post .metadata-container .blog-post-metadata {
     width: 100%;
+}
+
+.sorcery-blog-post .blog-post-metadata span {
+    width: 100%;
+}
+
+.sorcery-blog-post .blog-post-metadata .blog-post-metadata-small-published {
+    align-self: flex-start;
+    margin-right: auto;
+    max-width: 25%;
+}
+
+.sorcery-blog-post .blog-post-metadata .blog-post-metadata-small-tags {
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: end;
 }
 
 .sorcery-blog-post .previous-in-series-container {
@@ -28,4 +43,18 @@
     margin-left: auto;
     display: flex;
     flex-grow: 1;
+}
+
+.sorcery-blog-post .previous-in-series-container-small {
+    margin-top: 16px;
+    margin-bottom: 2px;
+}
+
+.sorcery-blog-post .previous-in-series-container-small .sorcery-prev-button-container {
+    margin-top: 0 !important;
+    margin-bottom: 4px !important;
+}
+
+.sorcery-blog-post .previous-in-series-container-small .sorcery-prev-button-container .mud-button {
+    padding: 4px !important;
 }

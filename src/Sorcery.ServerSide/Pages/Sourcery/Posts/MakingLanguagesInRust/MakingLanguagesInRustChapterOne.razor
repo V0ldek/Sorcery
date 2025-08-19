@@ -20,13 +20,11 @@
     <Paragraph>
         In the <LinkA Href="https://mlir.llvm.org/docs/Tutorials/Toy/Ch-1/">first chapter of the MLIR Toy Tutorial</LinkA>
         a recursive-descent parser is implemented. It would be a very boring chapter if I redid that &ndash; I wrote like
-        a dozen recursive-descent parsers in my life already.
-        <Footnote>You can find a good intro to lexing and parsing
+        a dozen recursive-descent parsers in my life already.<Footnote>You can find a good intro to lexing and parsing
             in the excellent (and free!) <LinkA Href="https://craftinginterpreters.com">Crafting Interpreters</LinkA>
             book I've mentioned in Chapter 0.</Footnote>
         Instead, I will use <LinkA Href="https://github.com/lalrpop/lalrpop/">lalrpop</LinkA>, a Rust
-        crate for generating LR(1) parsers
-        <Footnote>The name suggests LALR(1), but the LALR(1) backend
+        crate for generating LR(1) parsers<Footnote>The name suggests LALR(1), but the LALR(1) backend
             is no longer available in newest lalrpop. I'm assuming they had a good reason for it.</Footnote> that
         I have never used before.
     </Paragraph>
@@ -40,8 +38,7 @@
 
     <Paragraph>
         Toy is a tensor-based language. The word &ldquo;tensor&rdquo; has precise meaning in mathematics, but for some reason computer
-        scientists abuse that word to mean &ldquo;multi-dimensional array&rdquo;.
-        <Footnote>
+        scientists abuse that word to mean &ldquo;multi-dimensional array&rdquo;.<Footnote>
             I'm not sure how and why this happened. Tensors are general mathematical objects. They can be represented
             as a multi-dimensional matrix if you fix some basis, but if we're talking about that then it's not a tensor
             &ndash; it's a matrix. The only reason to use the precise term &ldquo;tensor&rdquo; is if you don't want to talk about
@@ -118,9 +115,10 @@ def main() {
         With those caveats, let's take an example that has all syntax elements and translate it to an AST:
     </Paragraph>
 
-    <MudContainer Class="d-flex" Gutters="false">
-        <MudContainer Gutters="false" Class="mr-1">
-            <CodeBlock Language="python" LanguageString="Toy" LineNumbers="true" FileName="ch1-2.toy" Code="@(@"
+    <MudGrid Justify="@Justify.Center">
+        <MudItem xs="12" md="5">
+            <CodeBlock Language="python" LanguageString="Toy" LineNumbers="true" 
+                       FileName="ch1-2.toy" Code="@(@"
 # Comments are ignored.
 def multiply_transpose(a, b) {
   return transpose(a) * transpose(b);
@@ -133,16 +131,17 @@ def main() {
   print(c + c);
   return;
 }")"></CodeBlock>
-            <MudPaper Class="mr-3 mb-3 pa-3 d-flex align-center justify-center mud-width-full" Elevation="0">
-                <ThemedImage Alt="diagram visualising the xor trick"
-                             Title="The XOR trick"
-                             Src="img/sorcery/making-languages-in-rust/sourcery-mlir-toy-ast.svg"
-                             Fluid="true"
-                             Width="400"
-                             Height="400"/>
-            </MudPaper>
-        </MudContainer>
-        <MudContainer Gutters="false" Class="ml-1">
+        <MudPaper Class="mb-3 pa-3 d-flex align-center justify-center mud-width-full" Elevation="0">
+            <ThemedImage Alt="diagram visualising the abstract syntax tree,
+contains the same information as the listing but as a diagram"
+                         Title="The Abstract Syntax Tree"
+                         Src="img/sorcery/making-languages-in-rust/sourcery-mlir-toy-ast.svg"
+                         Fluid="true"
+                         Width="400"
+                         Height="400"/>
+        </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="7">
             <CodeBlock Language="plain" LanguageString="Plain text" Code="@(@"
 Module @./toy/valid/ch1-2.toy@1:1
 |--Function multiply_transpose [args = (a, b)] @./toy/valid/ch1-2.toy@2:1
@@ -181,8 +180,8 @@ Module @./toy/valid/ch1-2.toy@1:1
 |  |  |  |--Var [ident = c] @./toy/valid/ch1-2.toy@10:13
 |  |--Return @./toy/valid/ch1-2.toy@11:3
 ")"></CodeBlock>
-        </MudContainer>
-    </MudContainer>
+        </MudItem>
+    </MudGrid>
     <Paragraph GutterBottom="false">
         Nothing fancy happening here. One important thing to note is that
         <Highlight>MLIR expects every operation
@@ -195,18 +194,15 @@ Module @./toy/valid/ch1-2.toy@1:1
 
     <Paragraph GutterBottom="false">
         Using lalrpop is not unlike using similar tools, e.g. yacc or Bison. We define the language grammar in a special
-        <Code>.lalrpop</Code> file and lalrpop generates a lexer
-        <Footnote>
+        <Code>.lalrpop</Code> file and lalrpop generates a lexer<Footnote>
             Lexer, scanner, tokeniser, however you want to call it. I'll consistently use &ldquo;lexer&rdquo;.
         </Footnote> and a parser. However, the aforementioned location information is why we cannot just use lalrpop's lexer
-        directly &ndash; it only gathers the byte offset within the file with no regard for line/column info.
-        <Footnote>
+        directly &ndash; it only gathers the byte offset within the file with no regard for line/column info.<Footnote>
             This is not a fundamental problem and there is
             <LinkA Href="https://github.com/lalrpop/lalrpop/issues/666">an issue</LinkA> open for lexing with
             more useful source position.
         </Footnote> Fortunately, lalrpop allows us to define a custom lexer (which is simple to code) and generate a parser
-        using it (which is considerably more complicated.
-        <Footnote>The autogenerated LALR(1) parser at the end of this
+        using it (which is considerably more complicated.<Footnote>The autogenerated LALR(1) parser at the end of this
             chapter has $\sim 10\,000$ lines.</Footnote>)
     </Paragraph>
 
@@ -392,8 +388,6 @@ BracketedLiteral: Option<ast::ExprAst> = {
         in our crate hierarchy. I also needed to put a bunch of clippy silencers on the mod declaration because
         the autogenerated code does not exactly follow best style practices.
     </Paragraph>
-    <MudContainer Gutters="false" Class="d-flex">
-        <MudContainer Gutters="false" Class="ml-1">
             <CodeBlock Language="rust" FileName="build.rs" LineNumbers="true" Code=@(@"
 //! Setup the code generation for the crate:
 //!   - lalrpop parser generation from `.lalrpop`.
@@ -407,8 +401,6 @@ fn setup_lalrpop() -> Result<(), Box<dyn std::error::Error>> {
     lalrpop::process_src()
 }
 ")></CodeBlock>
-        </MudContainer>
-        <MudContainer Gutters="false" Class="mr-1">
             <CodeBlock Language="rust" FileName="src/parser.rs" LineNumbers="true" Code=@(@"
 //! Definition of the [`parse`] function that turns a .toy source file into an [`ast::ModuleAst`].
 //!
@@ -430,8 +422,6 @@ lalrpop_mod!(
     pub syntax,
     ""/parser/syntax.rs"");
 ")></CodeBlock>
-        </MudContainer>
-    </MudContainer>
     <Paragraph>
         We can now use the <Code>ModParser</Code> to get the AST.
     </Paragraph>
@@ -469,8 +459,8 @@ pub fn parse(source: &str, filename: &Arc<String>) -> Result<ast::ModuleAst, Syn
         I wrapped it into a simple CLI binary, <Code>toyp</Code>, that takes the input from a file or standard input
         and dumps the AST. I've already shown you output for a correct file, so let's showcase the error reporting here.
     </Paragraph>
-    <MudContainer Gutters="false" Class="d-flex">
-        <MudContainer Gutters="false" Class="mr-1">
+        <MudGrid Justify="@Justify.Center">
+        <MudItem xs="12" md="5">
             <CodeBlock Language="python" FileName="ch1-parse-errors.toy" LineNumbers="true" LanguageString="Toy" Code=@(@"
 fn invalid_function_def() { }
 
@@ -484,8 +474,8 @@ def invalid_function_args(a, 1) {
   return a;
 }
 ")></CodeBlock>
-        </MudContainer>
-        <MudContainer Gutters="false" Class="ml-1 mw-60">
+        </MudItem>
+        <MudItem xs="12" md="7">
             <CodeBlock Language="plain" LanguageString="Plain text" Code=@(@"
 Error: Encountered 5 syntax errors.
 
@@ -499,8 +489,8 @@ Expected one of ""+"" or "";""
 Unrecognized token `1` found at 9:30:9:30
 Expected one of ""Ident""
 ")></CodeBlock>
-        </MudContainer>
-    </MudContainer>
+        </MudItem>
+    </MudGrid>
     <Paragraph>
         The error handling is not really production-grade, especially because we're mixing our custom errors with lalrpop
         errors (that have incomplete location information). However, lalrpop errors are well-structured,
