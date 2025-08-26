@@ -783,7 +783,8 @@ mlir::toy::ToyDialect *toyLoadDialect(mlir::MLIRContext *context) {
             Absolutely nasty stuff, but it is the idiomatic way to do this with MLIR &hellip;
         </Footnote>
         but it simply registers all Toy ops to the Toy dialect. In <Code>toy.rs</Code> we now put the Rust side of the
-        equation:<Footnote>Note the SAFETY comment above the <Code>unsafe</Code> block. Putting those is enforced
+        equation:
+        <Footnote>Note the SAFETY comment above the <Code>unsafe</Code> block. Putting those is enforced
             by an optional Clippy lint, <Code>undocumented_unsafe_blocks</Code>, that I've set to warn. This makes
             sure that you are aware of all the invariants needed for soundness when using unsafe operations &ndash;
             since you need to justify it in the comment &ndash; and also indirectly
@@ -885,6 +886,12 @@ impl<'c> Codegen<'c> {
         let module = ir::Module::new(location.mlir_loc(context));
         Self { context, module }
     }
+
+    /// Entrypoint for codegen - take [`ModuleAst`], generate MLIR, return the module and consume
+    /// this [`Codegen`] instance.
+    pub(crate) fn generate_module(mut self, module_ast: &ModuleAst) -> Result<ir::Module<'c>, CodegenError> {
+        todo!()
+    }
 }
 ")></CodeBlock>
     <Paragraph>
@@ -905,30 +912,36 @@ impl Location {
         We have no control flow in our language other than function calls, so all functions will consist of a single
         block. We need a symbol table (known as an <em>environment</em>) to be able to resolve previously
         declared variables, including function parameters.
-        A simple hashmap would do, but I always prefer to use an <em>immutable</em> (a.k.a. <em>>persistent</em>)<Footnote>
+        A simple hashmap would do, but I always prefer to use an <em>immutable</em> (a.k.a. <em>>persistent</em>)
+        <Footnote>
             A persistent data structure supports updates by creating a new copy of the structure whenever it is updated,
             and keeping the original intact. This sounds inefficient, but we can implement it using sharing, e.g. most
             nodes of a binary-tree-based map remain the same after an insertion and can be shared between older copies.
             Effectively implemented persistent hashmap will have $\mathcal{O}(\log n)$ access time.
         </Footnote>
         to allow scoping. In our case there are only two scopes &ndash; global module scope and function scope,
-        and the former is empty.<Footnote>Technically, the global scope contains symbols for all the functions.
+        and the former is empty.
+        <Footnote>Technically, the global scope contains symbols for all the functions.
             However, we are not going to be binding function names in this first codegen pass. The
             <Code>toy.generic_call</Code> can be generated without knowing anything about the callee,
             so we don't care if they even exist. We <em>could</em> check if the name is declared, but that
             responsibility is better left to later stages of codegen where the call is actually bound and we would have
-            to ensure it exists for the second time anyway.</Footnote>
+            to ensure it exists for the second time anyway.
+        </Footnote>
         When entering a function we create a new scope and declare all
         parameters. When we're finished, we simply drop the scope, and everything works out automagically due to the
-        immutable data structure underneath. We use the <LinkA Href="https://github.com/bodil/im-rs"><Code>im</Code></LinkA>
+        immutable data structure underneath. We use the
+        <LinkA Href="https://github.com/bodil/im-rs"><Code>im</Code></LinkA>
         crate for this<Footnote>The <Code>im::HashMap</Code> is actually <em>not</em> immutable in the Rust sense,
             as it has methods that take a mutable reference and do modify the underlying structure.
             Under the hood it keeps the structure persistent, though, and modifications in one copy are not visible
             to any other copies. This actually makes it more ergonomic; in our case we can keep a single environment
             for the current scope and add newly declared variables as we go using a regular mutable interface.
-            Since our language doesn't have nested scopes we could just use a regular <Code>std::collections::HashMap</Code>
+            Since our language doesn't have nested scopes we could just use a regular
+            <Code>std::collections::HashMap</Code>
             here, but this way adding more complex scoping to Toy would be very straightforward. The official MLIR
-            Toy tutorial also uses a stack of scopes, so we're keeping with the source material.</Footnote>
+            Toy tutorial also uses a stack of scopes, so we're keeping with the source material.
+        </Footnote>
     </Paragraph>
     <CodeBlock Language="Rust" FileName="src/codegen/env.rs" LineNumbers="true" Code=@(@"
 //! Environment for declaring variables in a scope during codegen.
@@ -975,5 +988,522 @@ impl<'a, 'c> Env<'c, 'a> {
         self.0.get(var)
     }
 }
+")></CodeBlock>
+    <Paragraph>
+        To generate the module we just generate <Code>toy.func</Code> ops one by one, and then run
+        <Highlight>MLIR passes</Highlight>
+        on the generated code. Passes are what optimises and gradually changes the
+        IR into the end result. For now, the only pass is going to be the
+        <Highlight>verifier</Highlight>
+        , which
+        will verify (duh) that all operations we generate conform to restrictions specified in the TableGen
+        (e.g. <Code>toy.return</Code> must have a <Code>toy.func</Code> parent), as well as running the
+        <Code>verify</Code> functions that are currently defined in <Code>toy.cpp</Code>.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+    /// Entrypoint for codegen - take [`ModuleAst`], generate MLIR, return the module and consume
+    /// this [`Codegen`] instance.
+    pub(crate) fn generate_module(mut self, module_ast: &ModuleAst) -> Result<ir::Module<'c>, CodegenError> {
+        for f_ast in module_ast.functions() {
+            self.generate_function(f_ast)?;
+        }
+
+        let pass_manager = melior::pass::PassManager::new(self.context);
+        pass_manager.enable_verifier(true);
+
+        pass_manager.run(&mut self.module)?;
+
+        if !self.module.as_operation().verify() {
+            return Err(CodegenError::verify_module_failed(module_ast.loc()));
+        }
+
+        Ok(self.module)
+    }
+}")></CodeBlock>
+    <Paragraph>
+        To generate a function we need to look at the prototype and compute the initial function type. The actual
+        function type depends on the <Code>toy.return</Code> function within the body &ndash; if it has an operand,
+        then the operand's type is the return type; otherwise, it's void. Therefore, we need to generate the op first,
+        remember the argument types, and then modify the type after we go through the body and find the return
+        statement.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+/// Intermediate function prototype.
+///
+/// This is required because we need to generate the toy.func operation first based on parameter
+/// types, then the body, and then come back and figure out the result type of the func based
+/// on `toy.return` found in the body.
+struct FuncProto<'c> {{
+    context: &'c melior::Context,
+    func_op: toy::FuncOperation<'c>,
+    arg_types: Vec<ir::Type<'c>>,
+}}
+
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+
+    /// Generate a toy.func instance with an empty body and a single entry block.
+    /// The type of the function is void initially, but can be later changed via the returned
+    /// [`FuncProto`].
+    fn generate_prototype(&mut self, proto_ast: &PrototypeAst) -> Result<FuncProto<'c>, CodegenError> {
+        use ir::{
+            attribute::{StringAttribute, TypeAttribute},
+            r#type::FunctionType,
+        };
+
+        let loc = proto_ast.loc().mlir_loc(self.context);
+        let args = proto_ast
+            .args()
+            .iter()
+            .map(|a| (self.mlir_type_from(&vec![]), a.loc().mlir_loc(self.context)))
+            .collect::<Vec<_>>();
+        let arg_types = args.iter().map(|(a, _)| *a).collect::<Vec<_>>();
+        let f_type = FunctionType::new(self.context, &arg_types, &[]);
+        let entry_block = ir::Block::new(&args);
+        let region = ir::Region::new();
+        region.append_block(entry_block);
+
+        let f_op = toy::func(
+            self.context,
+            region,
+            StringAttribute::new(self.context, proto_ast.name()),
+            TypeAttribute::new(f_type.into()),
+            loc,
+        );
+
+        Ok(FuncProto::new(self.context, f_op, arg_types))
+    }
+
+    /// Get the type corresponding to the given shape.
+    /// This is UnrankedTensorType for empty shapes, RankedTensorType of given dimensions
+    /// for a non-empty shape.
+    fn mlir_type_from(&self, shape: &Shape) -> ir::Type<'c> {
+        if shape.is_empty() {
+            unranked_tensor_type(self.context)
+        } else {
+            ir::r#type::RankedTensorType::new(shape, f64_type(self.context), None).into()
+        }
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        For the actual function we need to prepare the environment to contain all parameters, then generate the body
+        and investigate the return statement. We can find the return by checking the terminator of its only block.
+        Recall that each block must have exactly one terminator, so if there was no explicit return statement in the
+        Toy source we need to generate a void return op manually.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+
+    /// Generate all code for a given function.
+    fn generate_function(&mut self, f_ast: &FunctionAst) -> Result<(), CodegenError> {
+        let mut func_proto = self.generate_prototype(f_ast.proto())?;
+        let block = func_proto.func_op.body()?.first_block().expect(""function to have body"");
+        let args = f_ast.proto().args();
+        {
+            let mut env = Env::new();
+            for (arg, value) in args.iter().zip(block.arguments()) {
+                env.declare(arg.name().clone(), value.into(), arg.loc())?;
+            }
+
+            self.generate_function_body(f_ast.body(), &env, block)?;
+            drop(env); // Forget all values in the block so that we can modify it now.
+
+            match block.terminator() {
+                Some(t) if t.operand_count() > 0 => {
+                    func_proto.set_return_type(unranked_tensor_type(self.context));
+                }
+                Some(_) => (),
+                None => {
+                    let op = toy::r#return(self.context, &[], f_ast.proto().loc().mlir_loc(self.context));
+                    block.append_operation(op.into());
+                }
+            }
+        }
+
+        self.module.body().append_operation(func_proto.func_op.into());
+
+        Ok(())
+    }
+
+    /// Generate code for the `exprs` of a function. The `env` should have all function formal
+    /// parameters declared, and `block` should be the functions entry point.
+    fn generate_function_body<'a>(
+        &mut self,
+        exprs: &[TopLevelExprAst],
+        env: &Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<(), CodegenError> {
+        let mut body_scope = env.clone();
+        for expr in exprs {
+            match expr {
+                TopLevelExprAst::VarDecl(d) => self.generate_var_decl(d, &mut body_scope, block)?,
+                TopLevelExprAst::Return(d) => self.generate_return(d, &body_scope, block)?,
+                TopLevelExprAst::Print(d) => self.generate_print(d, &body_scope, block)?,
+                TopLevelExprAst::Expr(expr) => {
+                    self.generate_generic_expr(expr, &body_scope, block)?;
+                }
+            }
+        }
+
+        Ok(())
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        For a variable declaration we generate the value from the initialisation expression and then register it in the
+        environment. Additionally, if an explicit type was given we emit a reshape to match that type. Return and print
+        are straightforward, while for expressions we branch based on the exact expr type.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+
+    /// Generate a variable declaration and put it into `env`.
+    fn generate_var_decl<'a>(
+        &mut self,
+        data: &VarDeclData,
+        env: &mut Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<(), CodegenError> {
+        let mut val = self.generate_generic_expr(data.init_val(), env, block)?;
+
+        // If the variable has an explicit type, emit a `toy.reshape` to coerce to that type.
+        // Unnecessary reshapes will be removed by optimization passes later.
+        if let Some(ty) = data.ty() {
+            let op = toy::reshape(
+                self.context,
+                val,
+                self.mlir_type_from(ty.shape()),
+                data.loc().mlir_loc(self.context),
+            );
+            val = op.result(0)?.into();
+            block.append_operation(op);
+        }
+
+        env.declare(data.name(), val, data.loc())?;
+
+        Ok(())
+    }
+
+    /// Generate a return operation.
+    fn generate_return<'a>(
+        &mut self,
+        data: &ReturnData,
+        env: &Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<(), CodegenError> {
+        let op = if let Some(ret_expr) = data.expr() {
+            // return <expr>;
+            let val = self.generate_generic_expr(ret_expr, env, block)?;
+            toy::r#return(self.context, &[val], data.loc().mlir_loc(self.context))
+        } else {
+            // return;
+            toy::r#return(self.context, &[], data.loc().mlir_loc(self.context))
+        };
+        block.append_operation(op.into());
+
+        Ok(())
+    }
+
+    /// Generate a call to the builtin `print`.
+    fn generate_print<'a>(
+        &mut self,
+        data: &PrintData,
+        env: &Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<(), CodegenError> {
+        // `print` is handled via a special operation.
+        let arg = self.generate_generic_expr(data.arg(), env, block)?;
+        let op = toy::print(self.context, arg, data.loc().mlir_loc(self.context));
+
+        block.append_operation(op.into());
+
+        Ok(())
+    }
+
+    /// Generate a generic expression, i.e. something that evaluates to a value and is not
+    /// a declaration, return, or print.
+    fn generate_generic_expr<'a>(
+        &mut self,
+        expr: &ExprAst,
+        env: &Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<ir::Value<'c, 'a>, CodegenError> {
+        match expr {
+            ExprAst::Num(data) => self.generate_num_expr(data, block),
+            ExprAst::Literal(data) => self.generate_literal_expr(data, block),
+            ExprAst::Var(data) => Self::generate_var_expr(data, env),
+            ExprAst::BinOp(data) => self.generate_binop(data, env, block),
+            ExprAst::Call(data) => self.generate_call(data, env, block),
+        }
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        Numerical expressions are straightforward, there's just a lot of busywork required to construct the appropriate
+        attribute for MLIR. Binary operations recursively create the lhs and rhs values and then combine them.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+
+    /// Generate a constant numerical expression.
+    fn generate_num_expr<'a>(
+        &mut self,
+        data: &NumData,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<ir::Value<'c, 'a>, CodegenError> {
+        use melior::ir::attribute::FloatAttribute;
+        use melior::ir::r#type::RankedTensorType;
+
+        // Single-number constants are still represented as RankedTensorType values, just with
+        // no dimensions.
+        let f64_ty = f64_type(self.context);
+        let ty = RankedTensorType::new(&[], f64_ty, None);
+        let f64_attr = FloatAttribute::new(self.context, f64_ty, data.value());
+        let op = toy::constant(self.context, ty, &[f64_attr.into()], data.loc().mlir_loc(self.context));
+        let val = block.append_operation(op).result(0)?;
+        Ok(val.into())
+    }    
+
+    /// Generate code for a binary operation.
+    fn generate_binop<'a>(
+        &mut self,
+        data: &BinOpData,
+        env: &Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<ir::Value<'c, 'a>, CodegenError> {
+        // First generate the left- and right-hand-side values.
+        let lhs = self.generate_generic_expr(data.lhs(), env, block)?;
+        let rhs = self.generate_generic_expr(data.rhs(), env, block)?;
+
+        // Emit the correct operation depending on the operator.
+        match data.op() {
+            Op::Add => {
+                let op = toy::add(self.context, lhs, rhs, data.loc().mlir_loc(self.context));
+                let val = op.result(0)?;
+                block.append_operation(op);
+                Ok(val.into())
+            }
+            Op::Multiply => {
+                let op = toy::mul(self.context, lhs, rhs, data.loc().mlir_loc(self.context));
+                let val = op.result(0)?;
+                block.append_operation(op);
+                Ok(val.into())
+            }
+        }
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        For calls we need to generate the values for all arguments. We also special-case the <Code>transpose</Code>
+        function.<Footnote></Footnote>
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+
+    /// Generate a function call.
+    fn generate_call<'a>(
+        &mut self,
+        data: &CallData,
+        env: &Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<ir::Value<'c, 'a>, CodegenError> {
+        // First we generate values for all arguments.
+        let mut operands = Vec::with_capacity(data.args().len());
+        for arg in data.args() {
+            let val = self.generate_generic_expr(arg, env, block)?;
+            operands.push(val);
+        }
+
+        // `transpose` has special handling and maps to toy.transpose
+        if data.callee().as_ref() == ""transpose"" {
+            // `transpose` is unary.
+            if operands.len() > 1 {
+                Err(CodegenError::invalid_transpose_arguments(operands.len(), data.loc()))
+            } else {
+                let op = toy::transpose(self.context, operands[0], data.loc().mlir_loc(self.context));
+                let val = op.result(0)?;
+                block.append_operation(op);
+                Ok(val.into())
+            }
+        } else {
+            // generate a generic call
+            let op = toy::generic_call(
+                self.context,
+                &operands,
+                data.callee().as_ref(),
+                data.loc().mlir_loc(self.context),
+            );
+            let val = op.result(0)?;
+            block.append_operation(op);
+            Ok(val.into())
+        }
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        Literal expressions are more tedious than anything. We need to create a separate <Code>FloatAttribute</Code>
+        for each individual numerical value, which we need to gather recursively through the literal AST. We also need 
+        the type attribute for the overall literal value, and finally emit the constant op.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+
+    /// Generate a function call.
+    fn generate_call<'a>(
+        &mut self,
+        data: &CallData,
+        env: &Env<'c, 'a>,
+        block: ir::BlockRef<'c, 'a>,
+    ) -> Result<ir::Value<'c, 'a>, CodegenError> {
+        // First we generate values for all arguments.
+        let mut operands = Vec::with_capacity(data.args().len());
+        for arg in data.args() {
+            let val = self.generate_generic_expr(arg, env, block)?;
+            operands.push(val);
+        }
+
+        // `transpose` has special handling and maps to toy.transpose
+        if data.callee().as_ref() == ""transpose"" {
+            // `transpose` is unary.
+            if operands.len() > 1 {
+                Err(CodegenError::invalid_transpose_arguments(operands.len(), data.loc()))
+            } else {
+                let op = toy::transpose(self.context, operands[0], data.loc().mlir_loc(self.context));
+                let val = op.result(0)?;
+                block.append_operation(op);
+                Ok(val.into())
+            }
+        } else {
+            // generate a generic call
+            let op = toy::generic_call(
+                self.context,
+                &operands,
+                data.callee().as_ref(),
+                data.loc().mlir_loc(self.context),
+            );
+            let val = op.result(0)?;
+            block.append_operation(op);
+            Ok(val.into())
+        }
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        Finally, referencing a declared variable is delightfully simple &ndash; it actually generates no code at all!
+        We just refer to a value that was defined in the block before and was saved in our environment.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
+impl<'c> Codegen<'c> {
+    /* ... ✂️ snip ... */
+
+    /// Generate a reference to a variable.
+    ///
+    /// This does not generate any new code, just refers to an existing MLIR value declared
+    /// in `env`.
+    fn generate_var_expr<'a>(data: &VarData, env: &Env<'c, 'a>) -> Result<ir::Value<'c, 'a>, CodegenError> {
+        if let Some((var, _)) = env.lookup(data.name().as_ref()) {
+            Ok(*var)
+        } else {
+            Err(CodegenError::undeclared_variable(data.name().as_ref(), data.loc()))
+        }
+    }
+}
+")></CodeBlock>
+    <Paragraph>
+        Now we just need to glue it all together. We create a new binary, <Code>toyc</Code>,
+        that takes some Toy code, parses it, and then generates the MLIR code. In melior we can print an entire
+        module by using its <Code>Display</Code> impl, like Ferris intended.
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/tools/toyc.rs" Code=@(@"
+//! Codegen entry point that can read .toy source or toy IR.
+use anyhow::{Result, bail};
+use clap::{Parser, ValueEnum};
+use mlir_toy_rust::{codegen::MlirGenerator, parser::parse};
+use std::io::Read;
+use std::path::PathBuf;
+
+/// Type of the input source.
+#[derive(ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
+enum InputType {
+    /// High-level .toy source code.
+    Toy,
+    /// MLIR bytecode using the Toy dialect.
+    Mlir,
+}
+
+#[derive(Parser, Debug)]
+struct Args {
+    /// Path to the source file.
+    ///
+    /// If not provided reads from standard input.
+    file_path: Option<String>,
+    /// Input type - either source .toy or pregenerated .mlir.
+    #[clap(long)]
+    input_type: Option<InputType>,
+}
+
+fn main() -> Result<()> {
+    let args = Args::parse();
+
+    let (file_name, source, ext) = if let Some(file_path) = args.file_path {
+        let path = PathBuf::from(&file_path);
+        let source = std::fs::read_to_string(&path)?;
+        let ext = path.extension().map(std::ffi::OsStr::to_owned);
+        (file_path, source, ext)
+    } else {
+        let mut string = String::new();
+        std::io::stdin().lock().read_to_string(&mut string)?;
+        (""<stdin>"".to_string(), string, None)
+    };
+
+    let input_type = match args.input_type {
+        Some(it) => it,
+        None => {
+            if let Some(ext) = ext.as_ref() {
+                if ext == ""mlir"" {
+                    InputType::Mlir
+                } else if ext == ""toy"" {
+                    InputType::Toy
+                } else {
+                    bail!(""cannot infer input type from extension; specify with --input-type"")
+                }
+            } else {
+                bail!(""cannot infer input type when using stdin; specify with --input-type"")
+            }
+        }
+    };
+
+    match input_type {
+        InputType::Toy => {
+            let ast = parse(&source, &file_name.into())?;
+
+            let codegen = MlirGenerator::new();
+            let mlir_module = codegen.generate_mlir(&ast)?;
+
+            let code = mlir_module.as_operation().to_string();
+
+            println!(""{code}"");
+        }
+        InputType::Mlir => {
+            let codegen = MlirGenerator::new();
+            let mlir_module = codegen.parse_mlir(&source)?;
+
+            let code = mlir_module.as_operation().to_string();
+
+            println!(""{code}"");
+        }
+    }
+
+    Ok(())
+}
+
 ")></CodeBlock>
 </BlogPost>
