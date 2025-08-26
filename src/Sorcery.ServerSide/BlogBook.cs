@@ -86,10 +86,10 @@ public sealed class BlogBook
                 new("Making Languages In Rust (MLIR) – Chapter 3", "making-languages-in-rust-chapter-3",
                     null)
                 {
-                    Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
+                    Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("cpp"), new("toy tutorial") },
                     Description =
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
-                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Snapshot testing",
+                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Talking with C++",
                 },
                 new("Making Languages In Rust (MLIR) – Chapter 4", "making-languages-in-rust-chapter-4",
                     null)
@@ -97,7 +97,7 @@ public sealed class BlogBook
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
-                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – MLIR canonicalization patterns",
+                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Snapshot testing",
                 },
                 new("Making Languages In Rust (MLIR) – Chapter 5", "making-languages-in-rust-chapter-5",
                     null)
@@ -105,7 +105,7 @@ public sealed class BlogBook
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
-                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – MLIR interfaces",
+                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – MLIR canonicalization patterns",
                 },
                 new("Making Languages In Rust (MLIR) – Chapter 6", "making-languages-in-rust-chapter-6",
                     null)
@@ -113,7 +113,7 @@ public sealed class BlogBook
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
-                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Lowering",
+                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – MLIR interfaces",
                 },
                 new("Making Languages In Rust (MLIR) – Chapter 7", "making-languages-in-rust-chapter-7",
                     null)
@@ -121,7 +121,7 @@ public sealed class BlogBook
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
-                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – LLVM, JIT",
+                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Lowering",
                 },
                 new("Making Languages In Rust (MLIR) – Chapter 8", "making-languages-in-rust-chapter-8",
                     null)
@@ -129,9 +129,17 @@ public sealed class BlogBook
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
-                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Rust TableGen",
+                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – LLVM, JIT",
                 },
                 new("Making Languages In Rust (MLIR) – Chapter 9", "making-languages-in-rust-chapter-9",
+                    null)
+                {
+                    Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
+                    Description =
+                        Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
+                    ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Rust TableGen",
+                },
+                new("Making Languages In Rust (MLIR) – Chapter 10", "making-languages-in-rust-chapter-10",
                     null)
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },

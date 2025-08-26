@@ -1,4 +1,4 @@
-﻿@page "/sourcery/making-languages-in-rust-chapter-2"
+﻿@page "/sourcery/making-languages-in-rust-chapter-3"
 @using Sorcery.ServerSide.Components.Blogging;
 @using Sorcery.ServerSide.Components.Footnotes;
 @inject BlogBook BlogBook;
@@ -8,15 +8,14 @@
     public static readonly RenderFragment Introduction = __builder =>
     {
         <Paragraph>
-            In this chapter we go over some compilation basics and create a custom MLIR dialect
-            for our Toy language and implement codegenfrom the AST to the high-level dialect operations.
-            We keep ignoring the whole C++ thing for a while.
+            In this chapter we bridge the Rust side of the dialect with the MLIR infrastructure and transfer
+            the whole logic from MLIR Toy Tutorial Chapter 2 into Rust code. 
         </Paragraph>
     };
 
 }
 
-<BlogPost Post="BlogBook.MakingLanguagesInRust.Posts[2]">
+<BlogPost Post="BlogBook.MakingLanguagesInRust.Posts[3]">
     @Introduction
 
     <Paragraph>
@@ -24,257 +23,27 @@
         when I use terms like "SSA" or "IR". We'll then have what it takes to create the Toy dialect and generate some
         code, although fully integrating with the MLIR framework will need to wait until next chapter.
     </Paragraph>
-
-    <Header2>So You Want to Write a Compiler</Header2>
-
+    
     <Paragraph>
-        Compilers take some program in a high-level representation and convert it to a low-level representation,
-        such as machine code.
-        <Footnote>We could be debating the exact definition of &ldquo;compiler&rdquo; the whole day,
-            this one works for us here. Don't at me with whether or not a transpiler is a compiler.
-        </Footnote>
-        For example, you might write a <Code>for</Code> loop in a source language:
-    </Paragraph>
-    <CodeBlock Language="rust" Code=@(@"
-fn loopx(n: u64) {
-  for i in 0..n {
-    doStuff(i);
-  }
-}")>
-    </CodeBlock>
-    <Paragraph>
-        In the end, you want to compile to, for example, x86 machine code, which might get you assembly like:
-    </Paragraph>
-    <CodeBlock Language="asm" Code=@(@"
-rust_playground::loopx:
-	testq	%rdi, %rdi
-	je	.LBB1_4
-	pushq	%r15
-	pushq	%r14
-	pushq	%rbx
-	movq	%rdi, %rbx
-	xorl	%edi, %edi
-	movq	rust_playground::doStuff@GOTPCREL(%rip), %r14
-
-.LBB1_2:
-	leaq	1(%rdi), %r15
-	callq	*%r14
-	movq	%r15, %rdi
-	cmpq	%r15, %rbx
-	jne	.LBB1_2
-	popq	%rbx
-	popq	%r14
-	popq	%r15
-
-.LBB1_4:
-	retq
-")></CodeBlock>
-    <Paragraph GutterBottom="false">
-        Much lower level of abstraction, not something you'd want to write by hand. To achieve this job, the compiler
-        usually goes through at least one
-        <Highlight>intermediate representation (IR)</Highlight>
-        . In some sense,
-        the AST is already an intermediate representation &ndash; pretty close to source code, but less human-friendly
-        and more machine-friendly. However, when we say &ldquo;IR&rdquo; in a compiler context we usually mean something
-        like LLVM IR.
-    </Paragraph>
-    <Header3>LLVM IR</Header3>
-    <Paragraph>
-        LLVM IR is a generic IR that can be targeted by many compilers, for example clang compiles C++ through LLVM IR
-        while rustc compiles Rust through LLVM IR.
-        For example, when Rust compiles the above it generates something like:
-    </Paragraph>
-    <CodeBlock Language="llvm" Code=@(@"
-; rust_playground::loopx
-; Function Attrs: noinline nonlazybind uwtable
-define void @_ZN10rust_playground5loopx17h4f38567e5b8723edE(i64 noundef %n) unnamed_addr #0 {
-start:
-  %_52.not = icmp eq i64 %n, 0
-  br i1 %_52.not, label %bb4, label %bb3
-
-bb4:                                              ; preds = %bb3, %start
-  ret void
-
-bb3:                                              ; preds = %start, %bb3
-  %iter.sroa.0.03 = phi i64 [ %_7, %bb3 ], [ 0, %start ]
-  %_7 = add nuw i64 %iter.sroa.0.03, 1
-; call rust_playground::doStuff
-  tail call void @_ZN10rust_playground7doStuff17h654e5ff735743970E(i64 noundef %iter.sroa.0.03)
-  %exitcond.not = icmp eq i64 %_7, %n
-  br i1 %exitcond.not, label %bb4, label %bb3
-}
-")></CodeBlock>
-    <Paragraph>
-        This is on a higher level of abstraction than the assembly code before, even if it looks worse due to verbosity.
-        For example, it has a conditional branch with two targets at the end instead of the usual assembly
-        where we have only one jump target. There are no arbitrary labels &ndash; instead, all code is organised into
-        <Highlight>basic blocks</Highlight>
-        . A basic block has an entry, executes some code, and then has a single
-        <Highlight>terminator</Highlight>
-        which determines where the control goes. In the example above, the basic
-        blocks defined are <Code>start</Code>, <Code>bb3</Code>, and <Code>bb4</Code>; the
-        <Code>br</Code> operation is a terminator that follows to some other basic block, while the <Code>ret</Code>
-        terminator exits the entire function. This constrained structure is very useful, as it allows us to talk
-        about a function as a
-        <Highlight>Control Flow Graph (CFG)</Highlight>
-        , where basic blocks are vertices
-        and the terminators define the edges. One can do all kinds of fun static analysis on such a graph, tracking
-        uses and definitions of a given value, etc.
-    </Paragraph>
-    <Paragraph>
-        An important property of LLVM IR is that it's in
-        <Highlight>Static Single Assignment (SSA) form</Highlight>
-        .
-        It means that each value (the names prefixed with <Code>%</Code>) is defined in exactly one lexical place.
-        Contrast it with the assembly where the value residing in the <Code>r15</Code> register gets modified in each
-        iteration. To achieve mutation, we can use explicit memory operations (stores and loads), or the
-        <Code>phi</Code> function which resolves to a different value based on the basic block we entered from.
-        This function is magical, in the sense that there's no corresponding machine-level instruction that would
-        implement it &ndash; the compiler has to eliminate those phis at some stage during code generation.
-    </Paragraph>
-    <Header3>Intermediate Intermediate Representations</Header3>
-    <Paragraph>
-        Now I don't know about you, but for me there is still a gigantic gap between the Rust source we saw first
-        and the LLVM IR. The LLVM IR is quite close to the x86 assembly &ndash; I can believe you could turn
-        one into the other given lots of time and coffee &ndash; but to turn an AST directly into the IR seems harder.
-        Rust actually goes through another IR before the LLVM IR, called the Mid-level IR (MIR).
-    </Paragraph>
-    <CodeBlock Language="rust" LanguageString="MIR" Code=@(@"
-// WARNING: This output format is intended for human consumers only
-// and is subject to change without notice. Knock yourself out.
-// HINT: See also -Z dump-mir for MIR at specific points during compilation.
-fn loopx(_1: u64) -> () {
-    debug n => _1;
-    let mut _0: ();
-    let mut _2: std::option::Option<u64>;
-    let _4: ();
-    let mut _9: u64;
-    scope 1 {
-        debug ((iter: std::ops::Range<u64>).0: u64) => _9;
-        debug ((iter: std::ops::Range<u64>).1: u64) => _1;
-        let _3: u64;
-        scope 2 {
-            debug i => _3;
-        }
-        scope 4 (inlined iter::range::<impl Iterator for std::ops::Range<u64>>::next) {
-            scope 5 (inlined <std::ops::Range<u64> as iter::range::RangeIteratorImpl>::spec_next) {
-                let mut _5: bool;
-                let _6: u64;
-                let mut _7: u64;
-                scope 6 {
-                    scope 8 (inlined <u64 as Step>::forward_unchecked) {
-                        scope 9 (inlined #[track_caller] core::num::<impl u64>::unchecked_add) {
-                            scope 10 (inlined core::ub_checks::check_language_ub) {
-                                scope 11 (inlined core::ub_checks::check_language_ub::runtime) {
-                                }
-                            }
-                        }
-                    }
-                }
-                scope 7 (inlined std::cmp::impls::<impl PartialOrd for u64>::lt) {
-                    let mut _8: u64;
-                }
-            }
-        }
-    }
-    scope 3 (inlined <std::ops::Range<u64> as IntoIterator>::into_iter) {
-    }
-
-    bb0: {
-        StorageLive(_9);
-        _9 = const 0_u64;
-        goto -> bb1;
-    }
-
-    bb1: {
-        StorageLive(_2);
-        StorageLive(_5);
-        StorageLive(_8);
-        _8 = copy _9;
-        _5 = Lt(move _8, copy _1);
-        StorageDead(_8);
-        switchInt(move _5) -> [0: bb4, otherwise: bb3];
-    }
-
-    bb2: {
-        StorageDead(_2);
-        goto -> bb1;
-    }
-
-    bb3: {
-        _6 = copy _9;
-        StorageLive(_7);
-        _7 = AddUnchecked(copy _6, const 1_u64);
-        _9 = move _7;
-        StorageDead(_7);
-        _2 = Option::<u64>::Some(copy _6);
-        StorageDead(_5);
-        _3 = copy ((_2 as Some).0: u64);
-        _4 = doStuff(move _3) -> [return: bb2, unwind continue];
-    }
-
-    bb4: {
-        StorageDead(_5);
-        StorageDead(_2);
-        StorageDead(_9);
-        return;
-    }
-}
-")></CodeBlock>
-    <Paragraph>
-        If you ignore the liveness tracking with <Code>StorageLive</Code>/<Code>StorageDead</Code> it's actually quite
-        understandable if you know Rust. It's much closer to the actual Rust source, but makes many things more
-        explicit and verbose &ndash; it already separates the code into basic blocks, makes branching explicit, etc.
-        There's actually one more IR (High-level IR, HIR) before this:
-    </Paragraph>
-    <CodeBlock Language="rust" LanguageString="HIR" Code=@(@"
-fn loopx(n:
-        u64) {
-    {
-        let _t =
-            match #[lang = ""into_iter""](#[lang = ""Range""] { start: 0, end: n
-                        }) {
-                mut iter =>
-                    loop {
-                        match #[lang = ""next""](&mut iter) {
-                            #[lang = ""None""] {} => break,
-                            #[lang = ""Some""] {  0: i } => { unsafe { doStuff(i); } }
-                        }
-                    },
-            };
-        _t
-    }
-}")></CodeBlock>
-    <Paragraph>
-        Now it's a bit easier how we can go from Rust to assembly &ndash; we actually go Rust &#8594; AST &#8594; HIR &#8594; MIR
-        &#8594; LLVM IR &#8594; x86 assembly. Each step along the way is called a <Highlight>lowering</Highlight>.
-    </Paragraph>
-    <Header3>Why Do This?</Header3>
-    <Paragraph>
-        Aside from the clear fact that it's easier to lower gradually than go straight for machine code, it also makes
-        optimisations much easier. For example, at the HIR level it's still clear that we have a for loop &ndash;
-        an iterator over a <Code>Range</Code> from <Code>0</Code> to <Code>n</Code>. The same loop exists at the LLVM IR
-        level, but the compiler would have to do work to recognise it as a loop, identify the induction variable
-        (<Code>i</Code>), infer its bounds, etc. In general, some optimisations are easier to perform at the high-level,
-        while language-specific constructs are still clearly defined, while some optimisations make the most sense
-        near the end of the pipeline. If we had a more domain-specific language than Rust, we would gain even more
-        from high-level analysis. Because of this, basically any optimising compiler for a high-level language
-        first goes through some kind of IR. This is the key insight behind MLIR.
-    </Paragraph>
-    <Header2>MLIR</Header2>
-    <Paragraph>
-        Custom IRs are what MLIR is all about. The MLIR infrastructure is designed to accommodate essentially
+        Custom dialects are what MLIR is all about. The MLIR infrastructure is designed to accommodate essentially
         arbitrary IR extensions, as long as they are in SSA form.
+        <Footnote>
+            Static Single Assignment. Essentially, every value has a single place (lexically) where it is defined.
+            This makes things way easier for transformations on the IR later on.
+        </Footnote>
         A custom IR is called a
         <Highlight>dialect</Highlight>
         and the core unit in their construction
-        is an <Highlight>operation</Highlight>.
+        is an
+        <Highlight>operation</Highlight>
+        .
     </Paragraph>
     <Paragraph>
         There are essentially two ways to define custom dialects and operations: manually inheriting from C++ classes
         <Code Language="cpp">mlir::Dialect</Code> and <Code Language="cpp">mlir::Op</Code>, or using the declarative
         <LinkA Href="https://mlir.llvm.org/docs/DefiningDialects/Operations/">Operation Definition Specification</LinkA>
-        framework where we provide a TableGen<Footnote>
+        framework where we provide a TableGen
+        <Footnote>
             <LinkA Href="https://llvm.org/docs/TableGen/">TableGen</LinkA>
             is an in-house LLVM solution for code generation.
             It turns out that for any sufficiently complex project the chance people invent a declarative DSL
@@ -293,8 +62,7 @@ fn loopx(n:
         it will quickly turn out the existing generator is lackluster. In the end, we will be generating both Rust
         and C++ code from TableGen and then gluing them together &ndash; the C++ side is needed to register our dialect
         and integrate it into the larger MLIR framework, while the Rust side will be used to implement actual logic for
-        Toy. In this chapter, however, we will just create our custom dialect and generate some code in it without
-        worrying about the rest of MLIR framework or touching any C++. Enjoy it while it lasts!
+        Toy.
     </Paragraph>
 
     <Header2>The Toy Dialect</Header2>
@@ -345,8 +113,7 @@ fn loopx(n:
     </CodeBlock>
     <Paragraph>
         This is the standard assembly format that works with arbitrary operations &ndash; remember that MLIR's set of
-        operations is fully extensible &ndash; and we will want to get a less verbose format later on
-        (next chapter, more specifically). That being said,
+        operations is fully extensible &ndash; and we will want to get a less verbose format later on. That being said,
         let's design our dialect by figuring out what operations we will need.
     </Paragraph>
     <OList>
@@ -567,7 +334,7 @@ mod melior_gen {
     <OList Dense="true">
         <ListItem Icon="@Icons.Material.Filled.ChevronRight">
             The <Code>hasVerifier</Code> field is ignored &ndash; this will turn out to be the main issue we'll
-            have to solve in the next chapter.
+            have to solve in this post.
         </ListItem>
         <ListItem Icon="@Icons.Material.Filled.ChevronRight">
             The <Code>input</Code> argument is not verified. In the definition we bound it to be of the
@@ -760,8 +527,8 @@ def GenericCallOp : Toy_Op<""generic_call""> {
         <em>traits</em>. In C++ these are implemented by multiple-inheritance, but conceptually they're close to Rust
         traits. They're used by MLIR for various things &ndash; the <Code>Pure</Code> trait will be useful during
         optimisation, as it tells MLIR these operations can be removed if their values are unused; the
-        <Code>Terminator</Code> trait we'll put on <Code>toy.return</Code> to notify MLIR that this operation is a 
-        basic block terminator; and <Code>HasParent&lt;"SomeOp"&gt;</Code> enforces that the owner of the region
+        <Code>Terminator</Code> trait we'll put on <Code>toy.return</Code> to notify MLIR that this operation exits
+        from the current code block; and <Code>HasParent&lt;"SomeOp"&gt;</Code> enforces that the owner of the region
         in which the operation is located is <Code>SomeOp</Code>.
     </Paragraph>
     <Paragraph>
@@ -861,16 +628,206 @@ def ReturnOp : Toy_Op<""return"", [Pure, HasParent<""FuncOp"">,
   // Invoke a static verify method to verify this return operation.
   let hasVerifier = 1;
 }")></CodeBlock>
+    <Paragraph>
+        Now there's one more issue with the <Code>dialect</Code> macro and the melior API. Since MLIR is fully
+        extensible, all dialects that are used need to be loaded into an MLIR Context to actually enable verification,
+        optimisation passes, etc. In the C++ API this is done via registering all operations into a class inheriting
+        from <Code>Dialect</Code> (<Code>ToyDialect</Code> in our case) and then loading it into the context with:
+    </Paragraph>
+    <CodeBlock Language="cpp" Code="context.loadDialect<toy::ToyDialect>()">
+    </CodeBlock>
     <Paragraph GutterBottom="false">
-        Now there's one more issue with the <Code>dialect</Code> macro and the melior API, namely that there is no
-        hook to register our dialect with the MLIR Context used to generate code. This is an issue for the next chapter,
-        and we actually don't need it to generate some code.
+        Now the problem here is that melior did not generate a <Code>ToyDialect</Code> struct for us. Indeed, how on
+        earth are we supposed to actually load our dialect with melior?
+    </Paragraph>
+    <Header2>Let the Hacks Begin</Header2>
+    <Paragraph>
+        We need to register the dialect, which means we need to generate the <Code>ToyDialect</Code> class in C++,
+        create a function that registers it to an MLIR Context, and call it from Rust. If you're not familiar with
+        Rust-C++ interop, well you're about to be. I'm not going to be using any fancy tools for bindings &ndash;
+        ideally, all of the hacky glue code we're about to see would be autogenerated anyway. We'll use standard
+        C FFI.
+        <Footnote>Foreign Function Interface. Turns out, calling functions is actually hard work and different
+            languages do it differently. In particular, Rust doesn't even have a stable FFI, which means the way
+            functions are exposed and arguments are passed can change between Rust versions. When communicating between
+            languages people tend to use the C FFI, because it's relatively simple and well-defined. In both C++ and
+            Rust we define those functions in an <Code>extern "C"</Code> block; they are limited to simple numeric
+            types, pointers, and structs with a fixed C layout.
+        </Footnote>
+    </Paragraph>
+    <Paragraph>
+        By the guiding principle of minimising pain, let's get a minimal solution that will allow us to register
+        the dialect and start the codegen. We need a C++ project with a CMakeLists that will perform the usual MLIR
+        TableGen into C++ classes and emit a library that we can link from Rust. If you've never done C++ interop
+        before, well, this is a pretty foolproof method that you can apply, but for more complicated projects
+        you probably want to use
+        <LinkA Href="https://github.com/rust-lang/rust-bindgen">bindgen</LinkA>
+        . Here's the
+        CMake configuration:
+    </Paragraph>
+    <CodeBlock Language="cmake" FileName="src/dialect/CMakeLists.txt" LineNumbers="true" Code=@(@"
+cmake_minimum_required(VERSION 3.20.0)
+project(toy-dialect)
+
+set(CMAKE_CXX_STANDARD 23)
+
+find_package(LLVM REQUIRED)
+set(MLIR_DIR ""${LLVM_DIR}/../mlir"")
+find_package(MLIR REQUIRED)
+
+set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/bin)
+set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/lib)
+set(MLIR_BINARY_DIR ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_MODULE_PATH ""${MLIR_CMAKE_DIR}"")
+list(APPEND CMAKE_MODULE_PATH ""${LLVM_CMAKE_DIR}"")
+include(TableGen)
+include(AddLLVM)
+include(AddMLIR)
+include_directories(${LLVM_INCLUDE_DIRS})
+include_directories(${MLIR_INCLUDE_DIRS})
+link_directories(${LLVM_BUILD_LIBRARY_DIR})
+add_definitions(${LLVM_DEFINITIONS})
+
+add_mlir_dialect(ToyOps toy)
+add_mlir_doc(ToyOps ToyDialect Dialects/ -gen-dialect-doc)
+
+set(LLVM_TARGET_DEFINITIONS toy.td)
+mlir_tablegen(Ops.h.inc -gen-op-decls)
+mlir_tablegen(Ops.cpp.inc -gen-op-defs)
+mlir_tablegen(Dialect.h.inc -gen-dialect-decls)
+mlir_tablegen(Dialect.cpp.inc -gen-dialect-defs)
+add_public_tablegen_target(ToyIncGen)
+
+include_directories(${PROJECT_BINARY_DIR})
+
+add_dependencies(mlir-headers ToyIncGen)
+add_library(Toy toy.cpp)
+llvm_update_compile_flags(Toy)
+add_dependencies(Toy ToyIncGen)
+target_link_libraries(Toy
+  PRIVATE
+    MLIRAnalysis
+    MLIRFunctionInterfaces
+    MLIRIR
+    MLIRParser
+    MLIRSideEffectInterfaces
+    MLIRTransforms)
+")></CodeBlock>
+    <Paragraph>
+        Most of these are magic spells required to make LLVM, MLIR, and TableGen work at all. They're not really
+        documented anywhere
+        <Footnote>Because why would they be, you're a C++ user, you like pain, right?</Footnote>
+        ,
+        but in short we add all of the required libraries, point towards our <Code>toy.td</Code> file, ask MLIR to
+        to generate a bunch of files (<Code>Ops</Code> and <Code>Dialect</Code>, both header and <Code>cpp</Code> file),
+        create a <Code>Toy</Code> library target from our <Code>toy.cpp</Code> file (see below), and finally link
+        all that together with MLIR. This should produce a <Code>libtoy.a</Code> shared library we'll be able
+        to link from Rust.
+    </Paragraph>
+    <Paragraph>
+        To have that done for us automatically and not have to use two separate build systems, we use the
+        <LinkA Href="https://github.com/rust-lang/cmake-rs">cmake</LinkA>
+        crate to trigger the C++ build from
+        <Code>build.rs</Code> and have all files put in the usual cargo output. We expand the <Code>build.rs</Code>
+        to generate both the lalrpop parser, and build and link the C++ library.
+    </Paragraph>
+    <CodeBlock Language="rust" LineNumbers="true" FileName="build.rs" Code=@(@"
+//! Setup the code generation for the crate:
+//!   - MLIR dialect generation using cmake;
+//!   - lalrpop parser generation from `.lalrpop`.
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    setup_mlir_dialect();
+    setup_lalrpop()?;
+    Ok(())
+}
+
+fn setup_lalrpop() -> Result<(), Box<dyn std::error::Error>> {
+    println!(""cargo::rerun-if-changed=src/parser/syntax.lalrpop"");
+    lalrpop::process_src()
+}
+
+fn setup_mlir_dialect() {
+    let dst = cmake::Config::new(""src/dialect"").build_target(""Toy"").build();
+    println!(""cargo:rustc-link-search=native={}/build"", dst.display());
+    println!(""cargo:rustc-link-lib=static=Toy"");
+
+    println!(""cargo::rerun-if-changed=src/dialect.rs"");
+    println!(""cargo::rerun-if-changed=src/dialect"");
+}
+")></CodeBlock>
+    <Paragraph>
+        In the <Code>toy.cpp</Code> file I am &ndash; for the time being &ndash; putting the exact same implementations
+        of <Code>verify</Code>, <Code>print</Code>, and <Code>parse</Code> for all ops as in the Toy tutorial.
+        We will move this logic from C++ to Rust in the next chapter of this blog. First things first, we expose a
+        <Code>toyLoadDialect</Code> function that takes an MLIR Context and registers the dialect for us:
+    </Paragraph>
+    <CodeBlock Language="cpp" FileName="src/dialect/toy.cpp" Code=@(@"
+void mlir::toy::ToyDialect::initialize() {
+  addOperations<
+#define GET_OP_LIST
+#include ""Ops.cpp.inc""
+
+      >();
+}
+
+// Exported to Rust.
+extern ""C"" {
+mlir::toy::ToyDialect *toyLoadDialect(mlir::MLIRContext *context) {
+  auto dialect = context->getOrLoadDialect<mlir::toy::ToyDialect>();
+  dialect->rustDialect().initialize(mlir::toy::ToyNumOps);
+  return dialect;
+}")>
+    </CodeBlock>
+    <Paragraph>
+        The <Code>initialize</Code> function is some eldritch C++ magic,
+        <Footnote>The <Code>Ops.cpp.inc</Code> file
+            contains a magical <Code>ifdef</Code> that checks for the <Code>GET_OP_LIST</Code> directive
+            and then causes the file to just contain a comma-separated list of operation class names. Since <Code>#include</Code>
+            in C++ just textually pastes the contents of the file wherever it occurs, this automatically resolves to
+            an <Code>addOperations</Code> call with the template parameters being all the operation class names.
+            Absolutely nasty stuff, but it is the idiomatic way to do this with MLIR &hellip;
+        </Footnote>
+        but it simply registers all Toy ops to the Toy dialect. In <Code>toy.rs</Code> we now put the Rust side of the
+        equation:
+        <Footnote>Note the SAFETY comment above the <Code>unsafe</Code> block. Putting those is enforced
+            by an optional Clippy lint, <Code>undocumented_unsafe_blocks</Code>, that I've set to warn. This makes
+            sure that you are aware of all the invariants needed for soundness when using unsafe operations &ndash;
+            since you need to justify it in the comment &ndash; and also indirectly
+            discourages using <Code>unsafe</Code> blocks &ndash; cause you have to type those comments and that's
+            annoying.
+        </Footnote>
+    </Paragraph>
+    <CodeBlock Language="rust" FileName="src/dialect/toy.rs" Code=@(@"
+/// Glue code for registering the dialect and verification functions with C++.
+mod ffi {
+    use std::ffi::c_void;
+
+    unsafe extern ""C"" {
+        pub(super) fn toyLoadDialect(context: *mut c_void) -> *mut c_void;
+    }
+}
+
+/// Load the Toy dialect to enable use within the given context.
+///
+/// This is a one-shot full initialization, the dialect and all its operations are usable
+/// after this function returns.
+pub(crate) fn load_dialect(context: &melior::Context) -> melior::dialect::Dialect {
+    // SAFETY: the ptr inside melior::Context is guaranteed to be valid
+    unsafe {
+        let ptr = ffi::toyLoadDialect(context.to_raw().ptr);
+        melior::dialect::Dialect::from_raw(mlir_sys::MlirDialect { ptr })
+    }
+}")>
+    </CodeBlock>
+    <Paragraph>
+        We can't really strongly type the <Code>extern</Code> pointers, so this will do. Now we can actually do some
+        codegen!
     </Paragraph>
     <Header2>Codegen!</Header2>
     <Paragraph>
         We can now create the codegen module that will take an AST of Toy and convert it into MLIR bytecode using
         the Toy dialect. MLIR requires a Context to be constructed first. Every other MLIR object is tied to the
-        context, which means its lifetime is pervasive across all values, operations, blocks, etc. We are going
+        context, which means its lifetime is consistently used by all values, operations, blocks, etc. We are going
         to consistently use <Code>'c</Code> for the captured Context lifetime.
     </Paragraph>
     <Paragraph>
@@ -908,6 +865,15 @@ impl MlirGenerator {
 
         context.append_dialect_registry(&registry);
         context.load_all_available_dialects();
+        // This should technically disallow using unregistered dialects, but it seems to have no
+        // effect, i.e. even without loading toy we can generate all the toy operations and pass
+        // verification ¯\_(ツ)_/¯.
+        context.set_allow_unregistered_dialects(false);
+
+        // Load our dialect and perform all the sorcery required to connect Rust and C++ code.
+        toy::load_dialect(&context);
+        // Make sure the context recognizes operations from our dialect.
+        assert!(context.is_registered_operation(""toy.constant""));
 
         Self { context }
     }
@@ -971,8 +937,7 @@ impl Location {
         parameters. When we're finished, we simply drop the scope, and everything works out automagically due to the
         immutable data structure underneath. We use the
         <LinkA Href="https://github.com/bodil/im-rs"><Code>im</Code></LinkA>
-        crate for this
-        <Footnote>The <Code>im::HashMap</Code> is actually <em>not</em> immutable in the Rust sense,
+        crate for this<Footnote>The <Code>im::HashMap</Code> is actually <em>not</em> immutable in the Rust sense,
             as it has methods that take a mutable reference and do modify the underlying structure.
             Under the hood it keeps the structure persistent, though, and modifications in one copy are not visible
             to any other copies. This actually makes it more ergonomic; in our case we can keep a single environment
@@ -1034,7 +999,8 @@ impl<'a, 'c> Env<'c, 'a> {
         <Highlight>MLIR passes</Highlight>
         on the generated code. Passes are what optimises and gradually changes the
         IR into the end result. For now, the only pass is going to be the
-        <Highlight>verifier</Highlight>, which
+        <Highlight>verifier</Highlight>
+        , which
         will verify (duh) that all operations we generate conform to restrictions specified in the TableGen
         (e.g. <Code>toy.return</Code> must have a <Code>toy.func</Code> parent), as well as running the
         <Code>verify</Code> functions that are currently defined in <Code>toy.cpp</Code>.
@@ -1340,8 +1306,7 @@ impl<'c> Codegen<'c> {
 ")></CodeBlock>
     <Paragraph>
         For calls we need to generate the values for all arguments. We also special-case the <Code>transpose</Code>
-        function.
-        <Footnote></Footnote>
+        function.<Footnote></Footnote>
     </Paragraph>
     <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
 impl<'c> Codegen<'c> {
@@ -1389,7 +1354,7 @@ impl<'c> Codegen<'c> {
 ")></CodeBlock>
     <Paragraph>
         Literal expressions are more tedious than anything. We need to create a separate <Code>FloatAttribute</Code>
-        for each individual numerical value, which we need to gather recursively through the literal AST. We also need
+        for each individual numerical value, which we need to gather recursively through the literal AST. We also need 
         the type attribute for the overall literal value, and finally emit the constant op.
     </Paragraph>
     <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
