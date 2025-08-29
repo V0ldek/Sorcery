@@ -2,13 +2,30 @@
     @ChildContent
 </CascadingValue>
 
-@if (Footnotes.Any())
+@if (_footnotes.Any() || _refFootnotes.Any())
 {
-    <MudDivider Class="mt-2 mb-6" DividerType="DividerType.FullWidth" Vertical="false" />
+    <MudDivider Class="mt-2 mb-6" DividerType="DividerType.FullWidth" Vertical="false"/>
+}
+@if (_footnotes.Any())
+{
     <OList Dense="true">
-        @foreach (var footnote in Footnotes)
+        @foreach (var footnote in _footnotes)
         {
             <ListItem class="footnote" id="@footnote.TargetId">
+                <span class="mud-typography-caption">
+                    <Intralink Id="@footnote.Id">@footnote.Number</Intralink>. @footnote.ChildContent
+                </span>
+            </ListItem>
+        }
+    </OList>
+}
+@if (_refFootnotes.Any())
+{
+    <Header4>References</Header4>
+    <OList Dense="true">
+        @foreach (var footnote in _refFootnotes)
+        {
+            <ListItem class="ref-footnote" id="@footnote.TargetId">
                 <span class="mud-typography-caption">
                     <Intralink Id="@footnote.Id">[@footnote.Number]</Intralink>. @footnote.ChildContent
                 </span>
@@ -18,18 +35,29 @@
 }
 
 @code {
-    [Parameter]
-    [EditorRequired]
-    public RenderFragment ChildContent { get; set; } = null!;
+    [Parameter] [EditorRequired] public RenderFragment ChildContent { get; set; } = null!;
 
-    private readonly List<Footnote> Footnotes = new();
+    private readonly List<Footnote> _footnotes = new();
+
+    private readonly List<Footnote> _refFootnotes = new();
 
     public void AddFootnote(Footnote footnote)
     {
-        footnote.Id = $"footnote-{Footnotes.Count}-source";
-        footnote.TargetId = $"footnote-{Footnotes.Count}";
-        footnote.Number = Footnotes.Count;
-        Footnotes.Add(footnote);
+        if (footnote.IsRef)
+        {
+            footnote.Id = $"footnote-ref-{_refFootnotes.Count}-source";
+            footnote.TargetId = $"footnote-ref-{_refFootnotes.Count}";
+            footnote.Number = _refFootnotes.Count;
+            _refFootnotes.Add(footnote);
+        }
+        else
+        {
+            footnote.Id = $"footnote-{_footnotes.Count}-source";
+            footnote.TargetId = $"footnote-{_footnotes.Count}";
+            footnote.Number = _footnotes.Count;
+            _footnotes.Add(footnote);
+        }
         StateHasChanged();
     }
+
 }

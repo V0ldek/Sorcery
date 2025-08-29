@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     let currentIntralinkFocus = null;
 
-    for (let intralink of document.getElementsByClassName("sorcery-footnote-intralink")) {
+    for (let intralink of document.getElementsByClassName("sorcery-intralink")) {
         const container = document.getElementById(intralink.dataset.targetId);
         intralink.addEventListener("click", (event) => {
             container.scrollIntoView({block: "center"});

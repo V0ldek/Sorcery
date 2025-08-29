@@ -1,120 +1,149 @@
 ﻿@page "/sourcery/making-languages-in-rust-chapter-0"
 @using Sorcery.ServerSide.Components.Blogging;
+@using Sorcery.ServerSide.Components.Footnotes;
 @inject BlogBook BlogBook;
 
 @code {
+
     public static readonly RenderFragment Introduction = __builder =>
     {
         <Paragraph>
             I've been recently learning MLIR, which promises a more, let's say, <em>sane</em> way to write intermediate
             representations and compilers. It has one important disadvantage, though, which is that it's written in
             C++; not only that, it is deeply entwined with C++ and its idioms such as inheritance and template magic.
-            So I asked the obvious question &ndash; how viable is it to use MLIR from Rust? To that end, I implemented
-            the <LinkA Href="https://mlir.llvm.org/docs/Tutorials/Toy/">MLIR Toy Tutorial</LinkA> with the explicit
-            goal of minimising pain and lines of C++ written.
+            So I asked the obvious question &ndash; <Highlight>how viable is it to use MLIR from Rust?</Highlight>
+            To that end, I implemented the MLIR Toy Tutorial with the explicit goal of minimising pain and lines of C++ written.
         </Paragraph>
     };
+
 }
 
 <BlogPost Post="BlogBook.MakingLanguagesInRust.Posts[0]">
-@Introduction
+    <Paragraph>
+        I've been recently learning MLIR, which promises a more, let's say, <em>sane</em> way to write intermediate
+        representations and compilers. It has one important disadvantage, though, which is that it's written in
+        C++; not only that, it is deeply entwined with C++ and its idioms such as inheritance and template magic.
+        So I asked the obvious question &ndash; <Highlight>how viable is it to use MLIR from Rust?</Highlight>
+        To that end, I implemented the MLIR Toy Tutorial<Footnote IsRef="true">
+            <LinkA Href="https://mlir.llvm.org/docs/Tutorials/Toy/">MLIR Docs: Toy Tutorial</LinkA>
+        </Footnote> with the explicit goal of minimising pain and lines of C++ written.
+    </Paragraph>
 
-<Paragraph GutterBottom="false">
-    While there are ways to use MLIR outside of C++ &ndash; MLIR exposes a C API and we will be making extensive use
-    of it through <LinkA Href="https://github.com/mlir-rs/melior">melior</LinkA> &ndash; they very quickly turned out
-    to be&hellip; lackluster, to say the least. It also doesn't help that MLIR's documentation is overall sparse and,
-    frankly, quite terrible. It almost feels as if the docs assume you're already familiar with MLIR and just need
-    a refresher.
-</Paragraph>
+    <Paragraph GutterBottom="false">
+        While there are ways to use MLIR outside of C++ &ndash; MLIR exposes a C API and we will be making extensive use
+        of it through Melior<Footnote IsRef="true">
+            <LinkA Href="https://github.com/mlir-rs/melior">Github: mlir-rs/melior</LinkA>
+        </Footnote>
+        &ndash; they very quickly turned out
+        to be&hellip; lackluster, to say the least. It also doesn't help that MLIR's documentation is overall sparse
+        and,
+        frankly, quite terrible. It almost feels as if the docs assume you're already familiar with MLIR and just need
+        a refresher.
+    </Paragraph>
 
-<Header2>Target Audience</Header2>
+    <Header2>Target Audience</Header2>
 
-<Paragraph>
-    Unfortunately I am (was?) not familiar with MLIR, or the underlying LLVM framework. I mean, I know what LLVM
-    <em>is</em>, I indirectly used it all my life, I even saw LLVM IR somewhere on a slide, but I never used it as a
-    library. This series of blog posts is targeting a similar demographic &ndash; <Highlight>people who are interested
-        in making programming languages and compilers, who kinda know how a compiler is shaped, but have little or no
-        experience with LLVM and MLIR.</Highlight> And, obviously, who prefer writing Rust to C++, because otherwise
-    what's the purpose of the exercise.
-</Paragraph>
-<Paragraph>
-    If you're not that familiar with building programming languages, my sincere recommendation is to take a look at
-    the (free!) <LinkA Href="https://craftinginterpreters.com/">Crafting Interpreters book</LinkA> by Robert Nystrom.
-    It's an excellent introduction to the PL world, and although it doesn't touch on compilers it is nonetheless valuable
-    &ndash; there's a reason we teach students interpreters first.
-</Paragraph>
-<Paragraph GutterBottom="false">
-    If you're already an MLIR expert but are nonetheless interested in using it from Rust then this will be valuable
-    as well, you will probably just be annoyed at me being dumb and not understanding MLIR.
-    If you decide to read through I'd appreciate your feedback in the comments, especially if you find a way
-    to simplify some of the wizardry I had to perform to make this work.
-</Paragraph>
+    <Paragraph>
+        Unfortunately I am (was?) not familiar with MLIR, or the underlying LLVM framework. I mean, I know what LLVM
+        <em>is</em>, I indirectly used it all my life, I even saw LLVM IR somewhere on a slide, but I never used it as a
+        library. This series of blog posts is targeting a similar demographic &ndash;
+        <Highlight>people who are interested
+            in making programming languages and compilers, who kinda know how a compiler is shaped, but have little or
+            no
+            experience with LLVM and MLIR.
+        </Highlight>
+        And, obviously, who prefer writing Rust to C++, because otherwise
+        what's the purpose of the exercise.
+    </Paragraph>
+    <Paragraph>
+        If you're not that familiar with building programming languages, my sincere recommendation is to take a look at
+        the (free!) Crafting Interpreters book
+        by Robert Nystrom.<Footnote IsRef="true"><LinkA Href="https://craftinginterpreters.com/">Robert Nystrom, Crafting Interpreters</LinkA></Footnote>
+        It's an excellent introduction to the PL world, and although it doesn't touch on compilers it is nonetheless
+        valuable
+        &ndash; there's a reason we teach students interpreters first.
+    </Paragraph>
+    <Paragraph GutterBottom="false">
+        If you're already an MLIR expert but are nonetheless interested in using it from Rust then this will be valuable
+        as well, you will probably just be annoyed at me being dumb and not understanding MLIR.
+        If you decide to read through I'd appreciate your feedback in the comments, especially if you find a way
+        to simplify some of the wizardry I had to perform to make this work.
+    </Paragraph>
 
-<Header2>Goals</Header2>
+    <Header2>Goals</Header2>
 
-<Paragraph>
-    I want to recreate the full Toy Tutorial but in Rust. Toy is, well, a toy language that allows some simple numerical
-    operations and illustrates the power of MLIR and its custom dialects quite well. You don't need to know the original
-    tutorial, I want to make this series self-contained. 
-</Paragraph>
-<Paragraph GutterBottom="false">
-    I am not interested in settling ideological disputes, so let's make one thing perfectly clear at the outset:
-    <b>Rust good; C++ bad</b>. You may disagree, and I may not care. The goal of this exercise is to put as much of
-    the required logic as possible into Rust, and use C++ as little as possible. In particular, from my perspective
-    there are four kinds of systems-level code, in decreasing order of preference:
-    
-    <OList Dense="true" Class="my-2">
-        <ListItem Icon="fas fa-1">Rust code &ndash; this one sparks joy;</ListItem>
-        <ListItem Icon="fas fa-2">C++ code generated by tools;</ListItem>
-        <ListItem Icon="fas fa-3">C++ code written by someone else and packaged in a library;</ListItem>
-        <ListItem Icon="fas fa-4">C++ code I have to write &ndash; does not spark joy.</ListItem>
-    </OList>
-    
-    In this tutorial I am treating the Rust project as the core codebase, and MLIR and the C++ API as an incidental necessity.
-    We want as much Type 1 code and as little Type 4 code as possible.
-    If we can make meaningful contributions to <Code>melior</Code> or MLIR along the way to make using it outside of C++
-    easier, that's great.
-</Paragraph>
+    <Paragraph>
+        I want to recreate the full Toy Tutorial but in Rust. Toy is, well, a toy language that allows some simple
+        numerical
+        operations and illustrates the power of MLIR and its custom dialects quite well. You don't need to know the
+        original
+        tutorial, I want to make this series self-contained.
+    </Paragraph>
+    <Paragraph GutterBottom="false">
+        I am not interested in settling ideological disputes, so let's make one thing perfectly clear at the outset:
+        <b>Rust good; C++ bad</b>. You may disagree, and I may not care. The goal of this exercise is to put as much of
+        the required logic as possible into Rust, and use C++ as little as possible. In particular, from my perspective
+        there are four kinds of systems-level code, in decreasing order of preference:
 
-<Header2>Chapters</Header2>
+        <OList Dense="true" Class="my-2">
+            <ListItem Icon="fas fa-1">Rust code &ndash; this one sparks joy;</ListItem>
+            <ListItem Icon="fas fa-2">C++ code generated by tools;</ListItem>
+            <ListItem Icon="fas fa-3">C++ code written by someone else and packaged in a library;</ListItem>
+            <ListItem Icon="fas fa-4">C++ code I have to write &ndash; does not spark joy.</ListItem>
+        </OList>
 
-<Paragraph>
-    The original tutorial has seven chapters. This one will probably have more, but it is work in progress.
-    The rough plan is this (highlighted means the blog post is published):
-    <OList Dense="true" Class="my-2">
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <LinkA Href="/sorcery/making-languages-in-rust-chapter-1">
-                Chapter 1: Toy Language Definition and lalrpop Parser
-            </LinkA>;
-        </ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <LinkA Href="/sorcery/making-languages-in-rust-chapter-2">
-                Chapter 2: Basic MLIR Codegen;
-            </LinkA>
-        </ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">
-            <LinkA Href="/sorcery/making-languages-in-rust-chapter-3">
-                Chapter 3: Sweeping C++ Under the Carpet;
-            </LinkA>
-        </ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 4: Snapshot Testing;</ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 5: MLIR Canonicalization Passes;</ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 6: Hooking into MLIR Generic Interface Transformations;</ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 7: Lowering to Builtin Dialects;</ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 8: Lowering to LLVM, Codegen, JIT;</ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 9: Improving Rust TableGen Generation;</ListItem>
-        <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 10: Extending Toy with a Composite Type.</ListItem>
-    </OList>
-</Paragraph>
+        In this tutorial I am treating the Rust project as the core codebase, and MLIR and the C++ API as an incidental
+        necessity.
+        We want as much Type 1 code and as little Type 4 code as possible.
+        If we can make meaningful contributions to Melior or MLIR along the way to make using it outside of C++
+        easier, that's great.
+    </Paragraph>
 
-<Header2>Copyright Notice</Header2>
+    <Header2>Chapters</Header2>
 
-<Paragraph>
-    By design, this tutorial is not entirely my original work. The Toy language, Toy code examples, and the ideas
-    for things covered during the tutorial are intellectual property of the LLVM Project. All the Rust code and
-    additional Toy examples were created by me. When in doubt, refer to the
-    <LinkA Href="https://github.com/V0ldek/mlir-toy-rust">code repository</LinkA> and the licenses contained within. 
-    The text of the blog post, including the vivid descriptions of my
-    pain and suffering, are based on the original Toy tutorial, but constitute original work.
-</Paragraph>
+    <Paragraph>
+        The original tutorial has seven chapters. This one will probably have more, but it is work in progress.
+        The rough plan is this (highlighted means the blog post is published):
+        <OList Dense="true" Class="my-2">
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <LinkA Href="/sorcery/making-languages-in-rust-chapter-1">
+                    Chapter 1: Toy Language Definition and lalrpop Parser
+                </LinkA>;
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <LinkA Href="/sorcery/making-languages-in-rust-chapter-2">
+                    Chapter 2: Basic MLIR Codegen
+                </LinkA>;
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">
+                <LinkA Href="/sorcery/making-languages-in-rust-chapter-3">
+                    Chapter 3: Sweeping C++ Under the Carpet
+                </LinkA>;
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 4: Snapshot Testing;</ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 5: MLIR Canonicalization Passes;</ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 6: Hooking into MLIR Generic Interface
+                Transformations;
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 7: Lowering to Builtin Dialects;</ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 8: Lowering to LLVM, Codegen, JIT;</ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 9: Improving Rust TableGen Generation;
+            </ListItem>
+            <ListItem Icon="@Icons.Material.Filled.ChevronRight">Chapter 10: Extending Toy with a Composite Type.
+            </ListItem>
+        </OList>
+    </Paragraph>
+
+    <Header2>Copyright Notice</Header2>
+
+    <Paragraph>
+        By design, this tutorial is not entirely my original work. The Toy language, Toy code examples, and the ideas
+        for things covered during the tutorial are intellectual property of the LLVM Project. All the Rust code and
+        additional Toy examples were created by me. When in doubt, refer to the
+        code repository and the licenses contained within.<Footnote IsRef="true">
+            <LinkA Href="https://github.com/V0ldek/mlir-toy-rust">GitHub: V0ldek/mlir-toy-rust</LinkA>
+        </Footnote>
+        The text of the blog post, including the vivid descriptions of my
+        pain and suffering, are based on the original Toy tutorial, but constitute original work.
+    </Paragraph>
 </BlogPost>

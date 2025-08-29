@@ -2,6 +2,18 @@
     border: solid 1px;
 }
 
-.sorcery-footnote-intralink {
+.sorcery-ref-footnote[data-intralink-focused]:focus {
+    border: solid 1px;
+}
+
+.sorcery-intralink {
     cursor: pointer;
+}
+
+.footnote {
+    width: 100%;
+}
+
+.ref-footnote {
+    width: 100%;
 }

@@ -9,7 +9,7 @@
     {
         <Paragraph>
             In this chapter we go over some compilation basics and create a custom MLIR dialect
-            for our Toy language and implement codegenfrom the AST to the high-level dialect operations.
+            for our Toy language and implement codegen from the AST to the high-level dialect operations.
             We keep ignoring the whole C++ thing for a while.
         </Paragraph>
     };
@@ -21,16 +21,16 @@
 
     <Paragraph>
         Before we generate code we'll briefly go over your Compiler 101 material to make sure we're on the same page
-        when I use terms like "SSA" or "IR". We'll then have what it takes to create the Toy dialect and generate some
-        code, although fully integrating with the MLIR framework will need to wait until next chapter.
+        when I use terms like &ldquo;SSA&rdquo; or &ldquo;IR&rdquo;.
+        We'll then have what it takes to create the Toy dialect and generate some code,
+        although fully integrating with the MLIR framework will need to wait until next chapter.
     </Paragraph>
 
     <Header2>So You Want to Write a Compiler</Header2>
 
     <Paragraph>
         Compilers take some program in a high-level representation and convert it to a low-level representation,
-        such as machine code.
-        <Footnote>We could be debating the exact definition of &ldquo;compiler&rdquo; the whole day,
+        such as machine code.<Footnote>We could be debating the exact definition of &ldquo;compiler&rdquo; the whole day,
             this one works for us here. Don't at me with whether or not a transpiler is a compiler.
         </Footnote>
         For example, you might write a <Code>for</Code> loop in a source language:
@@ -45,7 +45,7 @@ fn loopx(n: u64) {
     <Paragraph>
         In the end, you want to compile to, for example, x86 machine code, which might get you assembly like:
     </Paragraph>
-    <CodeBlock Language="asm" Code=@(@"
+    <CodeBlock Language="nasm" LanguageString="x86 asm" Code=@(@"
 rust_playground::loopx:
 	testq	%rdi, %rdi
 	je	.LBB1_4
@@ -82,7 +82,7 @@ rust_playground::loopx:
     <Paragraph>
         LLVM IR is a generic IR that can be targeted by many compilers, for example clang compiles C++ through LLVM IR
         while rustc compiles Rust through LLVM IR.
-        For example, when Rust compiles the above it generates something like:
+        For the above, rustc generates something like:
     </Paragraph>
     <CodeBlock Language="llvm" Code=@(@"
 ; rust_playground::loopx
@@ -123,8 +123,7 @@ bb3:                                              ; preds = %start, %bb3
     </Paragraph>
     <Paragraph>
         An important property of LLVM IR is that it's in
-        <Highlight>Static Single Assignment (SSA) form</Highlight>
-        .
+        <Highlight>Static Single Assignment (SSA) form</Highlight>.
         It means that each value (the names prefixed with <Code>%</Code>) is defined in exactly one lexical place.
         Contrast it with the assembly where the value residing in the <Code>r15</Code> register gets modified in each
         iteration. To achieve mutation, we can use explicit memory operations (stores and loads), or the
@@ -257,9 +256,13 @@ fn loopx(n:
         level, but the compiler would have to do work to recognise it as a loop, identify the induction variable
         (<Code>i</Code>), infer its bounds, etc. In general, some optimisations are easier to perform at the high-level,
         while language-specific constructs are still clearly defined, while some optimisations make the most sense
-        near the end of the pipeline. If we had a more domain-specific language than Rust, we would gain even more
-        from high-level analysis. Because of this, basically any optimising compiler for a high-level language
-        first goes through some kind of IR. This is the key insight behind MLIR.
+        near the end of the pipeline. If we weren't compiling Rust but a more domain-specific language,
+        high-level analysis of some IR would enable many more optimisation opportunities than looking at LLVM IR
+        or assembly.Because of this, basically any optimising compiler for a high-level language
+        first goes through some kind of IR. Turns out, those IRs share many characteristics,
+        and some analysis passes are needed virtually always &ndash; e.g. dead code pruning, liveness analysis.
+        This is the key insight behind MLIR &ndash; can we have a shared platform for building your own IRs without
+        reinventing the wheel each time?
     </Paragraph>
     <Header2>MLIR</Header2>
     <Paragraph>
@@ -273,24 +276,24 @@ fn loopx(n:
     <Paragraph>
         There are essentially two ways to define custom dialects and operations: manually inheriting from C++ classes
         <Code Language="cpp">mlir::Dialect</Code> and <Code Language="cpp">mlir::Op</Code>, or using the declarative
-        <LinkA Href="https://mlir.llvm.org/docs/DefiningDialects/Operations/">Operation Definition Specification</LinkA>
-        framework where we provide a TableGen<Footnote>
-            <LinkA Href="https://llvm.org/docs/TableGen/">TableGen</LinkA>
-            is an in-house LLVM solution for code generation.
+        Operation Definition Specification
+        framework (ODS)<Footnote IsRef="true"><LinkA Href="https://mlir.llvm.org/docs/DefiningDialects/Operations/">MLIR docs: Operation Definition Specification (ODS)</LinkA></Footnote>
+        where we provide a TableGen<Footnote IsRef="true"><LinkA Href="https://llvm.org/docs/TableGen/">LLVM docs: TableGen</LinkA></Footnote>
+        definition and then use a code generator
+        to create the appropriate structures.<Footnote>
+            TableGen is an in-house LLVM solution for code generation.
             It turns out that for any sufficiently complex project the chance people invent a declarative DSL
             to make their lives easier tends towards $1$ with time.
-        </Footnote>
-        definition and then use a code generator
-        to create the appropriate structures. It should go without saying which one of these is considered more pleasing
+        </Footnote> It should go without saying which one of these is considered more pleasing
         in the eyes of the gods.
     </Paragraph>
 
     <Paragraph GutterBottom="false">
-        Melior contains a
-        <LinkA Href="https://mlir-rs.github.io/melior/melior/macro.dialect.html"><Code Language="rust">dialect</Code>
-        </LinkA>
-        macro which generates Rust code from <Code>.td</Code> definition files. This is an excellent idea, although
-        it will quickly turn out the existing generator is lackluster. In the end, we will be generating both Rust
+        Melior contains a <Code Language="rust">dialect</Code>
+        macro which generates Rust code from <Code>.td</Code> definition
+        files.<Footnote IsRef="true"><LinkA Href="https://mlir-rs.github.io/melior/melior/macro.dialect.html">Melior docs: <Code Language="Rust">melior::dialect</Code> macro</LinkA></Footnote>
+        This is an excellent idea, although it will quickly turn out the existing generator is lackluster.
+        In the end, we will be generating both Rust
         and C++ code from TableGen and then gluing them together &ndash; the C++ side is needed to register our dialect
         and integrate it into the larger MLIR framework, while the Rust side will be used to implement actual logic for
         Toy. In this chapter, however, we will just create our custom dialect and generate some code in it without
@@ -339,7 +342,7 @@ fn loopx(n:
     <CodeBlock Language="llvm" LanguageString="MLIR" Code=@(@"
 ""toy.func""() ({
   ^bb0(%arg0: tensor<*xf64> loc(""toy/valid/ch2-empty.toy"":1:16), %arg1: tensor<*xf64> loc(""toy/valid/ch2-empty.toy"":1:19)):
-    ""toy.return""(%2) : (tensor<*xf64>) -> () loc(""test/Examples/Toy/Ch2/codegen.toy"":5:3)
+    ""toy.return""(%2) : (tensor<*xf64>) -> () loc(""toy/valid/ch2-empty.toy"":5:3)
 }) {sym_name = ""do_nothing"", type = (tensor<*xf64>, tensor<*xf64>) -> ()} : () -> () loc(""toy/valid/ch2-empty.toy"":1:1)
 ")>
     </CodeBlock>
@@ -415,7 +418,7 @@ class Toy_Op<string mnemonic, list<Trait> traits = []> :
     <Paragraph>
         We can now try to define an operation, for example the <Code>toy.transpose</Code>:
     </Paragraph>
-    <CodeBlock Language="TableGen" FileName="src/dialect/toy.td" Code=@(@"
+    <CodeBlock Language="rust" LanguageString="TableGen" FileName="src/dialect/toy.td" Code=@(@"
 def TransposeOp : Toy_Op<""transpose""> {
   let summary = ""transpose operation"";
 
@@ -575,7 +578,7 @@ mod melior_gen {
         </ListItem>
         <ListItem Icon="@Icons.Material.Filled.ChevronRight">
             You can't see it on this example, but the <Code>builder</Code> field from TableGen is also ignored
-            &ndash; melior always generates a single standard builder function, it just so happens in this case it's
+            &ndash; Melior always generates a single standard builder function, it just so happens in this case it's
             the same one we wanted.
         </ListItem>
         <ListItem Icon="@Icons.Material.Filled.ChevronRight">
@@ -767,7 +770,7 @@ def GenericCallOp : Toy_Op<""generic_call""> {
     <Paragraph>
         Now there are two operations that contain the <Code>extraClassDeclaration</Code> field.
         This tells MLIR to generate additional functions in the C++ header defining the operation.
-        We, of course, have no C++ headers, and melior does the most sensible thing here and just ignores this field.
+        We, of course, have no C++ headers, and Melior does the most sensible thing here and just ignores this field.
         If we want those functions we'll have to implement them ourselves. &ldquo;Custom C++ code in the TableGen&rdquo;
         is going to be a villain of this series, unfortunately. The <Code>FuncOp</Code> additionally contains an
         arbitrary region as its body.
@@ -862,7 +865,7 @@ def ReturnOp : Toy_Op<""return"", [Pure, HasParent<""FuncOp"">,
   let hasVerifier = 1;
 }")></CodeBlock>
     <Paragraph GutterBottom="false">
-        Now there's one more issue with the <Code>dialect</Code> macro and the melior API, namely that there is no
+        Now there's one more issue with the <Code>dialect</Code> macro and the Melior API, namely that there is no
         hook to register our dialect with the MLIR Context used to generate code. This is an issue for the next chapter,
         and we actually don't need it to generate some code.
     </Paragraph>
@@ -906,6 +909,8 @@ impl MlirGenerator {
         let registry = DialectRegistry::new();
         register_all_dialects(&registry);
 
+        // Allow using the Toy dialect even though we don't register it with the context.
+        context.set_allow_unregistered_dialects(true);
         context.append_dialect_registry(&registry);
         context.load_all_available_dialects();
 
@@ -951,16 +956,14 @@ impl Location {
         We have no control flow in our language other than function calls, so all functions will consist of a single
         block. We need a symbol table (known as an <em>environment</em>) to be able to resolve previously
         declared variables, including function parameters.
-        A simple hashmap would do, but I always prefer to use an <em>immutable</em> (a.k.a. <em>>persistent</em>)
-        <Footnote>
+        A simple hashmap would do, but I always prefer to use an <em>immutable</em> (a.k.a. <em>persistent</em>)<Footnote>
             A persistent data structure supports updates by creating a new copy of the structure whenever it is updated,
             and keeping the original intact. This sounds inefficient, but we can implement it using sharing, e.g. most
             nodes of a binary-tree-based map remain the same after an insertion and can be shared between older copies.
             Effectively implemented persistent hashmap will have $\mathcal{O}(\log n)$ access time.
         </Footnote>
         to allow scoping. In our case there are only two scopes &ndash; global module scope and function scope,
-        and the former is empty.
-        <Footnote>Technically, the global scope contains symbols for all the functions.
+        and the former is empty.<Footnote>Technically, the global scope contains symbols for all the functions.
             However, we are not going to be binding function names in this first codegen pass. The
             <Code>toy.generic_call</Code> can be generated without knowing anything about the callee,
             so we don't care if they even exist. We <em>could</em> check if the name is declared, but that
@@ -971,14 +974,14 @@ impl Location {
         parameters. When we're finished, we simply drop the scope, and everything works out automagically due to the
         immutable data structure underneath. We use the
         <LinkA Href="https://github.com/bodil/im-rs"><Code>im</Code></LinkA>
-        crate for this
-        <Footnote>The <Code>im::HashMap</Code> is actually <em>not</em> immutable in the Rust sense,
+        crate<Footnote IsRef="true"><LinkA Href="https://github.com/bodil/im-rs">GitHub: bodil/im-rs</LinkA></Footnote>
+        for this<Footnote>The <Code>im::HashMap</Code> is actually <em>not</em> immutable in the Rust sense,
             as it has methods that take a mutable reference and do modify the underlying structure.
             Under the hood it keeps the structure persistent, though, and modifications in one copy are not visible
             to any other copies. This actually makes it more ergonomic; in our case we can keep a single environment
             for the current scope and add newly declared variables as we go using a regular mutable interface.
             Since our language doesn't have nested scopes we could just use a regular
-            <Code>std::collections::HashMap</Code>
+            <Code Language="rust">std::collections::HashMap</Code>
             here, but this way adding more complex scoping to Toy would be very straightforward. The official MLIR
             Toy tutorial also uses a stack of scopes, so we're keeping with the source material.
         </Footnote>
@@ -1340,8 +1343,11 @@ impl<'c> Codegen<'c> {
 ")></CodeBlock>
     <Paragraph>
         For calls we need to generate the values for all arguments. We also special-case the <Code>transpose</Code>
-        function.
-        <Footnote></Footnote>
+        function.<Footnote>In my opinion
+            it'd be better to make <Code>transpose</Code> a keyword at the syntax level, just like <Code>print</Code>
+            is. Right now there's nothing stopping a user from creating their own <Code>transpose</Code> function
+            or defining a variable called <Code>transpose</Code>, which would lead to confusion. I'm sticking
+            to how the original Toy tutorial does it here, though.</Footnote>
     </Paragraph>
     <CodeBlock Language="rust" FileName="src/codegen.rs" Code=@(@"
 impl<'c> Codegen<'c> {
@@ -1459,91 +1465,124 @@ impl<'c> Codegen<'c> {
 ")></CodeBlock>
     <Paragraph>
         Now we just need to glue it all together. We create a new binary, <Code>toyc</Code>,
-        that takes some Toy code, parses it, and then generates the MLIR code. In melior we can print an entire
+        that takes some Toy code, parses it, and then generates the MLIR code. In Melior we can print an entire
         module by using its <Code>Display</Code> impl, like Ferris intended.
     </Paragraph>
     <CodeBlock Language="rust" FileName="src/tools/toyc.rs" Code=@(@"
-//! Codegen entry point that can read .toy source or toy IR.
-use anyhow::{Result, bail};
-use clap::{Parser, ValueEnum};
+//! Codegen entry point that can read .toy source.
+use anyhow::Result;
+use clap::Parser;
 use mlir_toy_rust::{codegen::MlirGenerator, parser::parse};
 use std::io::Read;
 use std::path::PathBuf;
 
-/// Type of the input source.
-#[derive(ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
-enum InputType {
-    /// High-level .toy source code.
-    Toy,
-    /// MLIR bytecode using the Toy dialect.
-    Mlir,
-}
-
+/// Generate code from .toy source.
 #[derive(Parser, Debug)]
 struct Args {
     /// Path to the source file.
     ///
     /// If not provided reads from standard input.
     file_path: Option<String>,
-    /// Input type - either source .toy or pregenerated .mlir.
-    #[clap(long)]
-    input_type: Option<InputType>,
 }
 
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    let (file_name, source, ext) = if let Some(file_path) = args.file_path {
+    let (file_name, source) = if let Some(file_path) = args.file_path {
         let path = PathBuf::from(&file_path);
         let source = std::fs::read_to_string(&path)?;
-        let ext = path.extension().map(std::ffi::OsStr::to_owned);
-        (file_path, source, ext)
+        (file_path, source)
     } else {
         let mut string = String::new();
         std::io::stdin().lock().read_to_string(&mut string)?;
-        (""<stdin>"".to_string(), string, None)
+        (""<stdin>"".to_string(), string)
     };
 
-    let input_type = match args.input_type {
-        Some(it) => it,
-        None => {
-            if let Some(ext) = ext.as_ref() {
-                if ext == ""mlir"" {
-                    InputType::Mlir
-                } else if ext == ""toy"" {
-                    InputType::Toy
-                } else {
-                    bail!(""cannot infer input type from extension; specify with --input-type"")
-                }
-            } else {
-                bail!(""cannot infer input type when using stdin; specify with --input-type"")
-            }
-        }
-    };
+    let ast = parse(&source, &file_name.into())?;
 
-    match input_type {
-        InputType::Toy => {
-            let ast = parse(&source, &file_name.into())?;
+    let codegen = MlirGenerator::new();
+    let mlir_module = codegen.generate_mlir(&ast)?;
 
-            let codegen = MlirGenerator::new();
-            let mlir_module = codegen.generate_mlir(&ast)?;
+    let code = mlir_module.as_operation().to_string();
 
-            let code = mlir_module.as_operation().to_string();
-
-            println!(""{code}"");
-        }
-        InputType::Mlir => {
-            let codegen = MlirGenerator::new();
-            let mlir_module = codegen.parse_mlir(&source)?;
-
-            let code = mlir_module.as_operation().to_string();
-
-            println!(""{code}"");
-        }
-    }
+    println!(""{code}"");
 
     Ok(())
 }
-
 ")></CodeBlock>
+    <Paragraph>
+        We can now take the example code that defines the <Code>multiply_transpose</Code> function
+        and generate code for it with <Code>cargo run --bin toyc -- ./toy/valid/ch2.toy</Code>:
+    </Paragraph>
+    <CodeBlock Language="python" LanguageString="Toy" FileName="toy/valid/ch2.toy" LineNumbers="true" Code=@(@"
+# This file is part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+
+# User defined generic function that operates on unknown shaped arguments.
+def multiply_transpose(a, b) {
+  return transpose(a) * transpose(b);
+}
+
+def main() {
+  var a<2, 3> = [[1, 2, 3], [4, 5, 6]];
+  var b<2, 3> = [1, 2, 3, 4, 5, 6];
+  var c = multiply_transpose(a, b);
+  var d = multiply_transpose(b, a);
+  print(d);
+}")></CodeBlock>
+    <CodeBlock Language="llvm" LanguageString="MLIR" Code=@(@"
+module {
+  ""toy.func""() ({
+  ^bb0(%arg0: tensor<*xf64>, %arg1: tensor<*xf64>):
+    %0 = ""toy.transpose""(%arg0) : (tensor<*xf64>) -> tensor<*xf64>
+    %1 = ""toy.transpose""(%arg1) : (tensor<*xf64>) -> tensor<*xf64>
+    %2 = ""toy.mul""(%0, %1) : (tensor<*xf64>, tensor<*xf64>) -> tensor<*xf64>
+    ""toy.return""(%2) : (tensor<*xf64>) -> ()
+    ""toy.return""() : () -> ()
+  }) {function_type = (tensor<*xf64>, tensor<*xf64>) -> (), sym_name = ""multiply_transpose""} : () -> ()
+  ""toy.func""() ({
+    %0 = ""toy.constant""() {value = dense<[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]> : tensor<2x3xf64>} : () -> tensor<2x3xf64>
+    %1 = ""toy.reshape""(%0) : (tensor<2x3xf64>) -> tensor<2x3xf64>
+    %2 = ""toy.constant""() {value = dense<[1.000000e+00, 2.000000e+00, 3.000000e+00, 4.000000e+00, 5.000000e+00, 6.000000e+00]> : tensor<6xf64>} : () -> tensor<6xf64>
+    %3 = ""toy.reshape""(%2) : (tensor<6xf64>) -> tensor<2x3xf64>
+    %4 = ""toy.generic_call""(%1, %3) {callee = @multiply_transpose} : (tensor<2x3xf64>, tensor<2x3xf64>) -> tensor<*xf64>
+    %5 = ""toy.generic_call""(%3, %1) {callee = @multiply_transpose} : (tensor<2x3xf64>, tensor<2x3xf64>) -> tensor<*xf64>
+    ""toy.print""(%5) : (tensor<*xf64>) -> ()
+    ""toy.return""() : () -> ()
+  }) {function_type = () -> (), sym_name = ""main""} : () -> ()
+}")></CodeBlock>
+    <Paragraph>
+        And there we go! The output is as we expect, even if it's hella verbose. If you look through it then the code is
+        equivalent to this less verbose output:
+    </Paragraph>
+    <CodeBlock Language="llvm" LanguageString="MLIR" Code=@(@"
+module {
+  toy.func @multiply_transpose(%arg0: tensor<*xf64>, %arg1: tensor<*xf64>) -> tensor<*xf64> {
+    %0 = toy.transpose(%arg0 : tensor<*xf64>) to tensor<*xf64>
+    %1 = toy.transpose(%arg1 : tensor<*xf64>) to tensor<*xf64>
+    %2 = toy.mul %0, %1 : tensor<*xf64>
+    toy.return %2 : tensor<*xf64>
+  }
+  toy.func @main() {
+    %0 = toy.constant dense<[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]> : tensor<2x3xf64>
+    %1 = toy.reshape(%0 : tensor<2x3xf64>) to tensor<2x3xf64>
+    %2 = toy.constant dense<[1.000000e+00, 2.000000e+00, 3.000000e+00, 4.000000e+00, 5.000000e+00, 6.000000e+00]> : tensor<6xf64>
+    %3 = toy.reshape(%2 : tensor<6xf64>) to tensor<2x3xf64>
+    %4 = toy.generic_call @multiply_transpose(%1, %3) : (tensor<2x3xf64>, tensor<2x3xf64>) -> tensor<*xf64>
+    %5 = toy.generic_call @multiply_transpose(%3, %1) : (tensor<2x3xf64>, tensor<2x3xf64>) -> tensor<*xf64>
+    toy.print %5 : tensor<*xf64>
+    toy.return
+  }
+}")></CodeBlock>
+    <Paragraph GutterBottom="false">
+        We will see how to make MLIR pretty-print our dialect in the next chapter.
+    </Paragraph>
+    <Header2>Summary</Header2>
+    <Paragraph>
+        We have codegen, but for the time being we're basically
+        generating opaque operations &ndash; MLIR has no idea about any semantics of the dialect since we didn't
+        register it with the framework. To be able to pretty-print our assembly, verify operations, and later define
+        optimisation passes, we need to hook those ops into the MLIR context. This will require C++ interop and we'll
+        cover it in the next chapter.
+    </Paragraph>
 </BlogPost>

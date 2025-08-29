@@ -1,6 +1,15 @@
-﻿<span id="@Id" class="sorcery-footnote" tabindex="0">
-    <sup><Intralink Id="@TargetId"><MudText Typo="Typo.caption">@Number</MudText></Intralink></sup>
-</span>
+﻿@if (IsRef)
+{
+    <span id="@Id" class="sorcery-footnote-ref" tabindex="0">
+        <sup><Intralink Id="@TargetId"><MudText Typo="Typo.caption">[@Number]</MudText></Intralink></sup>
+    </span>
+}
+else
+{
+    <span id="@Id" class="sorcery-footnote" tabindex="0">
+        <sup><Intralink Id="@TargetId"><MudText Typo="Typo.caption">@Number</MudText></Intralink></sup>
+    </span>
+}
 
 @code {
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -25,7 +34,7 @@
         }
     }
 
-    [Parameter]
-    [EditorRequired]
-    public RenderFragment ChildContent { get; set; } = null!;
+    [Parameter] public bool IsRef { get; set; }
+
+    [Parameter] [EditorRequired] public RenderFragment ChildContent { get; set; } = null!;
 }

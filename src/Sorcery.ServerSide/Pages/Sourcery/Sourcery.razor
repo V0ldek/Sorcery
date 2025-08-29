@@ -15,12 +15,18 @@
 
         <Header2>Latest posts</Header2>
 
-        @foreach (var post in BlogBook.Posts.Take(3))
+        @foreach (var post in BlogBook.Posts)
         {
             <div class="my-2">
                 <BlogPostCard Post="@post"/>
             </div>
         }
+        
+        <Header2>All tags</Header2>
+        
+        <div class="my-2">
+            <BlogPostTags Tags="@BlogBook.AllTags.OrderBy(x => x.Value).ToArray()"/>
+        </div>
     </MudPaper>
 </MudContainer>
 

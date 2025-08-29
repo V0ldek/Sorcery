@@ -22,7 +22,7 @@ public sealed class BlogBook
         select series;
 
     public IEnumerable<Tag> AllTags =>
-        _standalonePosts.SelectMany(p => p.Tags).Distinct();
+        Posts.SelectMany(p => p.Tags).Distinct();
 
     public BlogBook()
     {
@@ -59,7 +59,7 @@ public sealed class BlogBook
         _series =
         [
             new Series([
-                new("Making Languages In Rust (MLIR) – Chapter 0", "making-languages-in-rust-chapter-0",
+                new("Making Languages In Rust (MLIR) Chapter 0 – Introduction", "making-languages-in-rust-chapter-0",
                     new DateTime(2025, 08, 04, 17, 00, 00, DateTimeKind.Utc))
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
@@ -67,7 +67,7 @@ public sealed class BlogBook
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterZero.Introduction,
                     ShortDescription = "Implementing the MLIR Toy Tutorial in Rust",
                 },
-                new("Making Languages In Rust (MLIR) – Chapter 1", "making-languages-in-rust-chapter-1",
+                new("Making Languages In Rust (MLIR) Chapter 1 – Parser", "making-languages-in-rust-chapter-1",
                     new DateTime(2025, 08, 04, 17, 00, 01, DateTimeKind.Utc))
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
@@ -75,7 +75,7 @@ public sealed class BlogBook
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterOne.Introduction,
                     ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Toy parser",
                 },
-                new("Making Languages In Rust (MLIR) – Chapter 2", "making-languages-in-rust-chapter-2",
+                new("Making Languages In Rust (MLIR) Chapter 2 – Basic Codegen", "making-languages-in-rust-chapter-2",
                     new DateTime(2025, 08, 04, 17, 00, 02, DateTimeKind.Utc))
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
@@ -83,7 +83,7 @@ public sealed class BlogBook
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterTwo.Introduction,
                     ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Toy codegen",
                 },
-                new("Making Languages In Rust (MLIR) – Chapter 3", "making-languages-in-rust-chapter-3",
+                new("Making Languages In Rust (MLIR) Chapter 3 – Dealing with C++", "making-languages-in-rust-chapter-3",
                     null)
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("cpp"), new("toy tutorial") },
