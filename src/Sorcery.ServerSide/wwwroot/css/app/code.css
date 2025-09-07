@@ -3,5 +3,15 @@ div.code-toolbar > .toolbar {
 }
 
 div.code-toolbar > .toolbar > .toolbar-item > button {
-    top: -0.01em
+    top: -0.05em
+}
+@media(min-width: 600px) {
+    pre.sorcery-code-block {
+        padding-top: 1.5em
+    }   
+}
+@media(max-width: 599px) {
+    pre.sorcery-code-block {
+        padding-top: 2em
+    }
 }
