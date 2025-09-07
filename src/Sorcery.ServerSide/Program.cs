@@ -36,4 +36,3 @@ app.MapRazorComponents<App>()
 
 var outputDirectory = Environment.GetEnvironmentVariable("SOURCERY_STATIC_CONTENT_DIR");
 app.GenerateStaticContent(outputDirectory ?? "./static-content");
-app.Run();

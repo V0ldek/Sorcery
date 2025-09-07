@@ -4,18 +4,18 @@ using System.Text;
 using System.Xml;
 using Sorcery.Shared;
 
-var v0ldek = new SyndicationPerson("mat@gienieczko.com", "Mat Gienieczko", "https://v0ldek.com");
+var v0ldek = new SyndicationPerson("mat@gienieczko.com", "Mat Gienieczko", "https://gienieczko.com");
 var feed = new SyndicationFeed(
     "Sourcery",
     "Software and Computer Science wizardry blog by Mat Gienieczko",
-    new Uri("https://v0ldek.com"),
-    "https://v0ldek.com/sourcery",
+    new Uri("https://gienieczko.com"),
+    "https://gienieczko.com/sourcery",
     DateTime.Now)
 {
     Authors = { v0ldek },
     Copyright = new TextSyndicationContent($"{ComputeCopyright()} Mateusz Gienieczko"),
     Language = "en-GB",
-    ImageUrl = new Uri("https://v0ldek.com/img/icon.png"),
+    ImageUrl = new Uri("https://gienieczko.com/img/icon.png"),
     Categories =
     {
         new SyndicationCategory("software"),
@@ -29,7 +29,7 @@ var posts = blogBook.Posts.OrderBy(p => p.DateOfPublication);
 
 feed.Items = posts.Select(p =>
 {
-    var uri = new Uri($"https://v0ldek.com{p.Route}");
+    var uri = new Uri($"https://gienieczko.com{p.Route}");
     return new SyndicationItem(p.Title, p.ShortDescription, uri, uri.ToString(), p.DateOfPublication!.Value)
     {
         Authors = { v0ldek },

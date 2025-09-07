@@ -60,7 +60,7 @@ public sealed class BlogBook
         [
             new Series([
                 new("Making Languages In Rust (MLIR) Chapter 0 – Introduction", "making-languages-in-rust-chapter-0",
-                    new DateTime(2025, 08, 04, 17, 00, 00, DateTimeKind.Utc))
+                    new DateTime(2025, 09, 01, 17, 00, 00, DateTimeKind.Utc))
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
@@ -68,15 +68,14 @@ public sealed class BlogBook
                     ShortDescription = "Implementing the MLIR Toy Tutorial in Rust",
                 },
                 new("Making Languages In Rust (MLIR) Chapter 1 – Parser", "making-languages-in-rust-chapter-1",
-                    new DateTime(2025, 08, 04, 17, 00, 01, DateTimeKind.Utc))
+                    new DateTime(2025, 09, 04, 14, 30, 00, DateTimeKind.Utc))
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
                         Pages.Sourcery.Posts.MakingLanguagesInRust.MakingLanguagesInRustChapterOne.Introduction,
                     ShortDescription = "Implementing the MLIR Toy Tutorial in Rust – Toy parser",
                 },
-                new("Making Languages In Rust (MLIR) Chapter 2 – Basic Codegen", "making-languages-in-rust-chapter-2",
-                    new DateTime(2025, 08, 04, 17, 00, 02, DateTimeKind.Utc))
+                new("Making Languages In Rust (MLIR) Chapter 2 – Basic Codegen", "making-languages-in-rust-chapter-2", null)
                 {
                     Tags = new Tag[] { new("rust"), new("mlir"), new("compilers"), new("toy tutorial") },
                     Description =
