@@ -2,7 +2,7 @@
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Xml;
-using Sorcery.Shared;
+using Sorcery.ServerSide;
 
 var v0ldek = new SyndicationPerson("mat@gienieczko.com", "Mat Gienieczko", "https://gienieczko.com");
 var feed = new SyndicationFeed(

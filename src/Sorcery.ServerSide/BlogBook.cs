@@ -47,8 +47,7 @@ public sealed class BlogBook
                 Tags = new Tag[] { new("unicode"), new("i18n"), new("regex"), },
                 Description = Pages.Sourcery.Posts.AlphabetDoesNotGoAToZ.Introduction,
                 ShortDescription = "Checking if a character is a letter is harder than you think.",
-            },
-            new("No, I Am Not Afraid A Wizard Will Take My Job", "no-i-am-not-afraid-a-wizard-will-take-my-job",
+            },            new("No, I Am Not Afraid A Wizard Will Take My Job", "no-i-am-not-afraid-a-wizard-will-take-my-job",
                 null)
             {
                 Tags = new Tag[] { new("meta"), new("industry"), new("programming"), },
